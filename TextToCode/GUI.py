@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import ImageTk, Image
+from templateWindow import templateWindow
 #from BlazeBlack2Redux import BlazeBlack2Redux
 #from RenegadePlatinum import RenegadePlatinum
 
@@ -10,35 +11,26 @@ class SelectGameWindow():
         self.debugMode = 0
         self.listOfGames = ["Blaze Black Redux 2", "Renegade Platinum"]
 
-        self.window = Tk()
-        self.windowx = 962
-        self.windowy = 601
+        self.tempWindow = templateWindow(400, 500)
+        self.window = self.tempWindow.master
         self.window.title('game selection')
-        self.window.geometry(str(self.windowx) + 'x' + str(self.windowy))
-        self.window.iconbitmap("nuzlocke.ico")
-        self.window.resizable(1,1)
-
-        self.backgroundFrame = Frame(self.window, width = self.windowx, height = self.windowy)
-        self.backgroundFrame.place(x=0,y=0,relheight=1,relwidth=1)
-
-        #make the background as big as the screen
-        self.photo = ImageTk.PhotoImage(Image.open("bg.jpg").resize([self.windowx, self.windowy]),Image.BOX)
-        self.photoLabel = Label(self.backgroundFrame, image = self.photo)
-        self.photoLabel.grid(row=0,column=0, rowspan=2, columnspan=2)
+        #self.backgroundFrame = Frame(self.window, width = self.tempWindow.masterX, height = self.tempWindow.masterY)
+        #self.backgroundFrame.grid(row=0, column=0)
 
         self.chosen = StringVar()
         self.chosen.set("which game?")
-        self.chosenGameMenu = OptionMenu(self.backgroundFrame, self.chosen , *self.listOfGames)
+        self.chosenGameMenu = OptionMenu(self.window, self.chosen , *self.listOfGames)
         self.chosenGameMenu.grid(row = 0, column = 1, sticky = NE)
 
-        self.continueButton = Button(self.backgroundFrame, text = "continue", command = self.nextWindow)
+        self.continueButton = Button(self.window, text = "continue", command = self.nextWindow)
         self.continueButton.grid(row = 1, column = 1, sticky = SE)
 
-        self.exitButton = Button(self.backgroundFrame, text = "Exit", command = self.window.destroy)
+        self.exitButton = Button(self.window, text = "Exit", command = self.window.destroy)
         self.exitButton.grid(row = 1, column = 0, sticky = SW)
         
         #call function to resize image to GUI scale
-        self.resizeImage = self.window.after(300, self.update)
+        self.resizeImage = self.window.after(300, self.tempWindow.update)
+        #self.tempWindow.stop()
         self.window.mainloop()
 
     def nextWindow(self):
@@ -51,22 +43,10 @@ class SelectGameWindow():
                 print(f"selected {self.chosenGame}")
             #make the update loop stop
             self.window.after_cancel(self.resizeImage)
+            self.tempWindow.stop()
             self.window.destroy()
             #call to next window
-            MainWindow(self.windowx, self.windowy, self.chosenGame, self.debugMode)
-
-    def update(self):
-        self.window.update()
-        self.windowy = self.window.winfo_height()
-        self.windowx = self.window.winfo_width()
-        if self.debugMode:
-            print(f"windowx: {self.windowx}, windowy: {self.windowy}")
-        #update the bg to fully cover the adjusted area
-        photo = ImageTk.PhotoImage(Image.open("bg.jpg").resize([self.windowx, self.windowy]))
-        self.photoLabel.configure(image = photo)
-        self.resizeImage = self.window.after(100, self.update)
-        #needed otherwise image is disposed due to garbage collection
-        self.photoLabel.image = photo
+            MainWindow(self.tempWindow.masterX, self.tempWindow.masterY, self.chosenGame, self.debugMode)
 
 if __name__ == "__main__":
     x = SelectGameWindow()

@@ -1,9 +1,12 @@
 from tkinter import *
 from PIL import ImageTk, Image
+from templateWindow import templateWindow
 
 class MainWindow():
     def __init__(self, x, y, game, debugMode):
-        self.master = Tk()
+        
+        self.tempWindow = templateWindow(x, y)
+        self.master = self.tempWindow.master
         self.masterX = x
         self.masterY = y
         self.game = game
@@ -12,9 +15,6 @@ class MainWindow():
         self.listOfAreas = ["route 20", "route 21"]
 
         self.master.title(f"{self.game}")
-        self.master.geometry(str(self.masterX) + 'x' + str(self.masterY))
-        self.master.iconbitmap("nuzlocke.ico")
-        self.master.resizable(1,1)
 
         self.widgetFrame = Frame(self.master, width = self.masterX, height = self.masterY)
         self.widgetFrame.place(x=0,y=0,relheight=1,relwidth=1)
@@ -55,7 +55,7 @@ class MainWindow():
         self.backButton.grid(row=4, column=4, sticky=SE)
 
         #let the window stay and rescale image
-        self.resizeImage = self.master.after(300, self.update)
+        self.resizeImage = self.master.after(300, self.tempWindow.update)
         self.master.mainloop()
     
     def createExitButton(self):
@@ -64,24 +64,10 @@ class MainWindow():
 
     def createGameMenu(self):
         from GUI import SelectGameWindow
-        self.master.after_cancel(self.resizeImage)
+        self.tempWindow.stop()
         self.master.destroy()
         SelectGameWindow()
 
-
-
-    def update(self):
-        self.master.update()
-        self.masterY = self.master.winfo_height()
-        self.masterX = self.master.winfo_width()
-        if self.debugMode:
-            print(f"windowx: {self.masterX}, windowy: {self.masterY}")
-        #update the bg to fully cover the adjusted area
-        photo = ImageTk.PhotoImage(Image.open("bg.jpg").resize([self.masterX, self.masterY]))
-        self.photoLabel.configure(image = photo)
-        self.resizeImage = self.master.after(100, self.update)
-        #needed otherwise image is disposed due to garbage collection
-        self.photoLabel.image = photo
 
 
 
