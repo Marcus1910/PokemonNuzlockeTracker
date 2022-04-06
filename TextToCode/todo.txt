@@ -1,0 +1,3 @@
+-add new template for background, icon etc
+-recreate picture with place, mainWindow
+-disable encounters and available till area and badges have been selected respectively

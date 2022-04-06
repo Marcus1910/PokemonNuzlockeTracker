@@ -14,46 +14,22 @@ class SelectGameWindow():
         self.windowx = 962
         self.windowy = 601
         self.window.title('game selection')
+
+        
         self.window.geometry(str(self.windowx) + 'x' + str(self.windowy))
         self.window.iconbitmap("nuzlocke.ico")
         self.window.resizable(1,1)
 
-        self.backgroundFrame = Frame(self.window, width = self.windowx, height = self.windowy)
-        self.backgroundFrame.place(x=0,y=0,relheight=1,relwidth=1)
-
         #make the background as big as the screen
         self.photo = ImageTk.PhotoImage(Image.open("bg.jpg").resize([self.windowx, self.windowy]),Image.BOX)
-        self.photoLabel = Label(self.backgroundFrame, image = self.photo)
-        self.photoLabel.grid(row=0,column=0, rowspan=2, columnspan=2)
+        self.photoLabel = Label(self.window, image = self.photo)
+        self.photoLabel.grid(row=0, column=0, rowspan=5, columnspan=5)
 
-        self.chosen = StringVar()
-        self.chosen.set("which game?")
-        self.chosenGameMenu = OptionMenu(self.backgroundFrame, self.chosen , *self.listOfGames)
-        self.chosenGameMenu.grid(row = 0, column = 1, sticky = NE)
-
-        self.continueButton = Button(self.backgroundFrame, text = "continue", command = self.nextWindow)
+        self.continueButton = Button(self.window, text = "continue")
         self.continueButton.grid(row = 1, column = 1, sticky = SE)
 
-        self.exitButton = Button(self.backgroundFrame, text = "Exit", command = self.window.destroy)
-        self.exitButton.grid(row = 1, column = 0, sticky = SW)
-        
-        #call function to resize image to GUI scale
         self.resizeImage = self.window.after(300, self.update)
         self.window.mainloop()
-
-    def nextWindow(self):
-        self.chosenGame = self.chosen.get()
-        if self.chosenGame not in self.listOfGames:
-            self.chosenGameMenu.config(bg = 'Red')
-        else:
-            from mainWindow import MainWindow 
-            if self.debugMode:
-                print(f"selected {self.chosenGame}")
-            #make the update loop stop
-            self.window.after_cancel(self.resizeImage)
-            self.window.destroy()
-            #call to next window
-            MainWindow(self.windowx, self.windowy, self.chosenGame, self.debugMode)
 
     def update(self):
         self.window.update()
@@ -67,6 +43,8 @@ class SelectGameWindow():
         self.resizeImage = self.window.after(100, self.update)
         #needed otherwise image is disposed due to garbage collection
         self.photoLabel.image = photo
+
+
 
 if __name__ == "__main__":
     x = SelectGameWindow()
