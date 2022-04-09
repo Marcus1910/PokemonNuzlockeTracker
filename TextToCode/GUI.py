@@ -11,7 +11,7 @@ class SelectGameWindow():
         self.debugMode = 0
         self.listOfGames = ["Blaze Black Redux 2", "Renegade Platinum"]
 
-        self.tempWindow = templateWindow(400, 500)
+        self.tempWindow = templateWindow(600, 500)
         self.window = self.tempWindow.master
         self.window.title('game selection')
         #self.backgroundFrame = Frame(self.window, width = self.tempWindow.masterX, height = self.tempWindow.masterY)

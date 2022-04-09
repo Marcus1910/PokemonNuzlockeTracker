@@ -18,8 +18,4 @@ class testWindow():
         self.wind.update()
 
 
-    def updateWidgets(self):
-        #function to resize widgets according to size of window
-        pass
-
 x = testWindow()
