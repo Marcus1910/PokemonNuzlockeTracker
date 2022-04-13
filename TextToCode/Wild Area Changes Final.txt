@@ -1,22 +1,3 @@
-
-~~~~~ Route 20 - Spring ~~~~~
-
-Grass, Normal:                           Grass, Doubles:
----------------------------------------- ----------------------------------------
-Pidove Lv. 05-07 20%                     Sunkern Lv. 11-14 20%
-Sewaddle Lv. 05-07 20%                   Venipede Lv. 11-14 20%
-Cubone Lv. 05-07 10%                     Wurmple Lv. 11-14 10%
-Lotad Lv. 05-07 10%                      Caterpie Lv. 11-14 10%
-Seedot Lv. 05-07 10%                     Weedle Lv. 11-14 10%
-Bellsprout Lv. 05-07 10%                 Sewaddle Lv. 11-14 10%
-Ralts Lv. 05-07 05%                      Bonsly Lv. 11-14 05%
-Shroomish Lv. 05-07 05%                  Mime Jr. Lv. 11-14 05%
-Mankey Lv. 05-07 04%                     Shroomish Lv. 11-14 04%
-Bagon Lv. 05-07 04%                      Venonat Lv. 11-14 04%
-Meowth Lv. 05-07 02%                     Bagon Lv. 11-14 02%
-
-~~~~~ Victory Road - Connecting Caves II ~~~~~ 
-
 ~~~~~ Aspertia City ~~~~~
 
 Surf, Normal:                            Surf, Dark Spot:
@@ -27,15 +8,15 @@ Poliwag  Lv. 30-40 10%                   Poliwhirl Lv. 30-40 35%
 
 Fish, Normal:                            Fish, Dark Spot:
 ---------------------------------------- ----------------------------------------
-Remoraid Lv. 02-08 60%                   Feebas Lv. 06-14 60%
+Remoraid Lv. 02-08 60%                   Remoraid Lv. 06-14 60%
 Poliwag Lv. 02-08 30%                    Poliwag Lv. 06-14 30%
-Feebas Lv. 02-08 10%                     Remoraid Lv. 06-14 10%
+Feebas Lv. 02-08 10%                     Feebas Lv. 06-14 10%
 
 
 
 
 
-~~~~~ Route 19 ~~~~~
+~~~~~ Route 19 ~~~~~ 
 
 Grass, Normal:
 ----------------------------------------
@@ -71,7 +52,7 @@ Staryu Lv. 05 05%
 
 
 
-~~~~~ Route 20 - Spring ~~~~~
+~~~~~ Route 20 - Spring ~~~~~ 
 
 Grass, Normal:                           Grass, Doubles:
 ---------------------------------------- ----------------------------------------
@@ -244,10 +225,11 @@ Houndour Lv. 07-09 05%
 
 Grass, Shaking Spots:                    Hidden Grotto:
 ---------------------------------------- ----------------------------------------
-Audino Lv. 10-12 70%                     Search 'Hidden Grotto Guide' - (End of Document)
-Dunsparce Lv. 10-12 10%
-Happiny Lv. 10-12 10%
-Togepi Lv. 10-12 10%
+Audino Lv. 10-12 40%                     Search 'Hidden Grotto Guide' - (End of Document)
+Dunsparce Lv. 10-12 30%
+Teddiursa Lv. 10-12 20%
+Happiny Lv. 10-12 05%
+Togepi Lv. 10-12 05%
 
 Surf, Normal:                            Surf, Dark Spot:
 ---------------------------------------- ----------------------------------------
@@ -441,7 +423,7 @@ Fish, Normal:                            Fish, Dark Spot:
 ---------------------------------------- ----------------------------------------
 Clamperl Lv. 10-20 90%                   Clamperl Lv. 15-25 60%
 Luvdisc Lv. 10-20 05%                    Luvdisc Lv. 15-25 30%
-Relicanth Lv. 15-25 05%
+Relicanth Lv. 15-25 05%                  Relicanth Lv. 15-25 10%
 
 
 
@@ -495,8 +477,8 @@ Blitzle Lv. 27-29 10%                    Blitzle Lv. 27-30 10%
 Natu Lv. 27-29 10%                       Farfetch'd Lv. 27-30 10%
 Plusle Lv. 27-29 05%                     Miltank Lv. 27-30 05%
 Minun Lv. 27-29 05%                      Tauros Lv. 27-30 05%
-Bouffalant Lv. 27-29 05%                 Pachirisu Lv. 27-30 05%
-Pikachu Lv. 27-29 05%                    Smeargle Lv. 27-30 05%
+Bouffalant Lv. 27-29 05%                 Pikachu Lv. 27-30 05%
+Pachirisu Lv. 27-29 05%                  Smeargle Lv. 27-30 05%
 
 Grass, Shaking Spots:                    Hidden Grotto:
 ---------------------------------------- ----------------------------------------
@@ -662,10 +644,10 @@ Seel Lv. 30 30%                          Dewgong Lv. 30 10%
 
 Fish, Normal:                            Fish, Dark Spot:
 ---------------------------------------- ----------------------------------------
-Shellder Lv. 25 60%                      Shellder Lv. 30 60%
-Tentacool Lv. 25 30%                     Chinchou Lv. 30 30%
-Chinchou Lv. 25 05%                      Cloyster Lv. 30 05%
-Barboach Lv. 25 05%                      Lanturn Lv. 30 05%
+Tentacool Lv. 25 60%                     Tentacool Lv. 30 60%
+Shellder Lv. 25 30%                      Shellder Lv. 30 30%
+Chinchou Lv. 25 05%                      Chinchou Lv. 30 05%
+Barboach Lv. 25 05%                      Whiscash Lv. 30 05%
 
 
 
@@ -675,14 +657,13 @@ Barboach Lv. 25 05%                      Lanturn Lv. 30 05%
 
 Cave, Normal:                            Cave, Dust Cloud:
 ---------------------------------------- ----------------------------------------
-Boldore Lv. 33-36 20%                    Excadrill Lv. 34-37 90%
+Boldore Lv. 33-36 25%                    Excadrill Lv. 34-37 90%
 Woobat Lv. 33-36 20%                     Onix Lv. 34-37 10%
 Golbat Lv. 33-36 10%                         
 Lairon Lv. 33-36 10%
 Durant Lv. 33-36 10%
 Nosepass Lv. 33-36 10%
 Onix Lv. 33-36 10%
-Boldore Lv. 33-36 05%
 Azumarill Lv. 33-36 05%
 
 Surf, Normal:                            Surf, Dark Spot:
@@ -1383,13 +1364,13 @@ Gallade Lv. 53-56 05%
 
 ~~~~~ Route 21 ~~~~~
 
-Surf, Normal, Seigaiha City:             Surf, Dark Spot, Seigaiha City:
+Surf, Normal, Route 21:                  Surf, Dark Spot, Route 21:
 ---------------------------------------- ----------------------------------------
 Shellder Lv. 50-55 60%                   Shellder Lv. 50-55 60%
 Staryu Lv. 50-55 30%                     Basculin-B Lv. 50-55 30%
 Basculin-B Lv. 50-55 10%                 Cloyster Lv. 50-55 10%
 
-Fish, Normal, Seigaiha City:             Fish, Dark Spot, Seigaiha City:
+Fish, Normal, Route 21:                  Fish, Dark Spot, Route 21:
 ---------------------------------------- ----------------------------------------
 Shellder Lv. 50-55 60%                   Cloyster Lv. 50-55 70%
 Staryu Lv. 50-55 30%                     Relicanth Lv. 50-55 30%
@@ -1401,13 +1382,13 @@ Cloyster Lv. 50-55 10%
 
 ~~~~~ Humilau City ~~~~~ 
 
-Surf, Normal, Route 21:                  Surf, Dark Spot, Route 21:
+Surf, Normal, Humilau City:              Surf, Dark Spot, Humilau City:
 ---------------------------------------- ----------------------------------------
 Clamperl Lv. 50-55 60%                   Alomomola Lv. 50-55 90%
 Tentacool Lv. 50-55 30%                  Tentacruel Lv. 50-55 10%
 Tentacruel Lv. 50-55 10%
 
-Fish, Normal, Route 21:                  Fish, Dark Spot, Route 21:
+Fish, Normal, Humilau City:              Fish, Dark Spot, Humilau City:
 ---------------------------------------- ----------------------------------------
 Luvdisc Lv. 50-55 70%                    Clamperl Lv. 50-55 60%
 Clamperl Lv. 50-55 30%                   Luvdisc Lv. 50-55 30%

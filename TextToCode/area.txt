@@ -1,40 +1,24 @@
-~~~~~ Route 20 - Spring ~~~~~ 
+~~~~~ Route 19 ~~~~~
 
-Grass, Normal:                           Grass, Doubles:
----------------------------------------- ----------------------------------------
-Pidove Lv. 05-07 20%                     Sunkern Lv. 11-14 20%
-Sewaddle Lv. 05-07 20%                   Venipede Lv. 11-14 20%
-Cubone Lv. 05-07 10%                     Wurmple Lv. 11-14 10%
-Lotad Lv. 05-07 10%                      Caterpie Lv. 11-14 10%
-Seedot Lv. 05-07 10%                     Weedle Lv. 11-14 10%
-Bellsprout Lv. 05-07 10%                 Sewaddle Lv. 11-14 10%
-Ralts Lv. 05-07 05%                      Bonsly Lv. 11-14 05%
-Shroomish Lv. 05-07 05%                  Mime Jr. Lv. 11-14 05%
-Mankey Lv. 05-07 04%                     Shroomish Lv. 11-14 04%
-Bagon Lv. 05-07 04%                      Venonat Lv. 11-14 04%
-Meowth Lv. 05-07 02%                     Bagon Lv. 11-14 02%
-
-Grass, Shaking Spots:
+Grass, Normal:
 ----------------------------------------
-Audino Lv. 04 50%
-Dunsparce Lv. 04 10%
-Audino Lv. 05 30%
-Audino Lv. 06 10%
-
-Surf, Normal:                            Surf, Dark Spot:
----------------------------------------- ----------------------------------------
-Marill Lv. 30-40 70%                     Surskit Lv. 35-45 70%
-Surskit Lv. 30-40 30%                    Azumarill Lv. 35-45 30%
+Spearow Lv. 14-15 20%
+Ekans Lv. 14-15 20%
+Electrike Lv. 14-15 10%
+Zigzagoon Lv. 14-15 10%
+Nidoran♂ Lv. 14-15 10%
+Nidoran♀ Lv. 14-15 10%
+Shellos-W Lv. 14-15 05%
+Makuhita Lv. 14-15 05%
+Tyrogue Lv. 14-15 05%    
+Buizel Lv. 14-15 05%
 
 Fish, Normal:                            Fish, Dark Spot:
 ---------------------------------------- ----------------------------------------
-Basculin-R Lv. 05 90%                    Basculin-R Lv. 05-15 70%
-Poliwag Lv. 05 05%                       Poliwag Lv. 05-15 30%
-Staryu Lv. 05 05%
+Poliwag Lv. 05-15 70%                    Goldeen Lv. 05-15 60%
+Goldeen Lv. 05-15 30%                    Poliwag Lv. 05-15 40%
+Makuhita Lv. 14-15 05%
+Tyrogue Lv. 14-15 05%    
+Buizel Lv. 14-15 05%
 
-~~~~~ Aspertia City ~~~~~
-~~~~~ Route 20 - Spring ~~~~~ 
-~~~~~ Aspertia City ~~~~~
-~~~~~ Route 20 - Spring ~~~~~ 
-~~~~~ Route 20 - Spring ~~~~~ 
-~~~~~ Aspertia City ~~~~~
+Postgame Locations
