@@ -2,9 +2,8 @@ from tkinter import *
 from PIL import ImageTk, Image
 from templateWindow import templateWindow
 
-class MainWindow():
+class MainWindow(templateWindow):
     def __init__(self, x, y, game, debugMode):
-        
         self.tempWindow = templateWindow(x, y)
         self.master = self.tempWindow.master
         self.masterX = x
@@ -37,7 +36,7 @@ class MainWindow():
         self.itemFrame.grid(row=1, column=1,rowspan=3, sticky=NSEW)
 
         self.trainerFrame = Frame(self.widgetFrame)
-        self.trainerFrame.grid(row=1, column=3, rowspan=3, sticky=NSEW)
+        self.trainerFrame.grid(row=1, column=3, rowspan=3, columnspan = 3, sticky=NSEW)
 
         self.itemButton = Button(self.itemFrame, text="Items komen hier terecht")
         self.itemButton.grid(row=0,column=0,sticky=N)
@@ -53,6 +52,10 @@ class MainWindow():
 
         self.backButton = Button(self.widgetFrame, text = "back", command = self.createGameMenu)
         self.backButton.grid(row=4, column=4, sticky=SE)
+
+        #frame resizes after window is resized
+        self.widgetFrame.columnconfigure(0, weight=2)
+        self.widgetFrame.rowconfigure(0, weight=2)
 
         #let the window stay and rescale image
         self.resizeImage = self.master.after(300, self.tempWindow.update)

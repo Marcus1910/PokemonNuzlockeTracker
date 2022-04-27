@@ -1,5 +1,3 @@
-from asyncio.windows_events import NULL
-from tkinter import E
 from area import Area
 from trainer import Trainer
 from pokemon import Pokemon
