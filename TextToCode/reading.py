@@ -1,6 +1,6 @@
-import time
 from area import Area
-
+from encounterPokemon import EncounterPokemon
+import re
 
 class BlazeBlack2ReduxReader():
     def __init__(self):
@@ -8,77 +8,138 @@ class BlazeBlack2ReduxReader():
         self.seasons = ["Spring", "Autumn", "Summer", "Winter"]
         self.areaNames = ["Route", "City", "Town", "Ranch", "Tower", "Shrine", "Bay", "Mountain", "Road", \
             "Castle", "Complex", "Sewers", "Passage", "Resort", "Forest", "Bridge", "Tunnel", "Cave", "House"]
+        self.extraNames = ["Fish", "Surf", "Special Event", "Dust", "Spots", "Normal", "Cloud", "Normal"]
         self.finalLine = 0
+
 
     def openFile(self, textFile):
         with open(textFile) as file:  
             self.data = file.readlines()
     
     def removeEmptyLines(self):
-        for readLine in self.data:
-            if "--" in readLine:
+        popList = []
+        for index, readLine in enumerate(self.data):
+            #remove filler lines and \n lines
+            if "--" in readLine or "==" in readLine or len(readLine) == 1:
                 self.data.remove(readLine)
-            #remove newline characters
-            if len(readLine) == 1:
-                self.data.remove(readLine)
+            #remove all newline characters and remove double spaces
+            self.data[index] = self.data[index].replace('\n', '').replace("  ", "")
+            #remove leftover ""
+            if len(self.data[index]) == 0:
+                #removing index
+                popList.append(index)
+        popList.reverse()
+        for item in popList:
+            self.data.pop(item)    
+    
+    def createSeperateLists(self):
+        mainStart =0
+        postStart =0
+        grottoStart =0
+        createrList = []
+        for index, readLine in enumerate(self.data):
+            if "Main Story" in readLine:
+                mainStart = index
+                createrList.append(mainStart)
+            if "Postgame" in readLine:
+                postStart = index
+                createrList.append(postStart)
+            if "Hidden Grotto Guide" in readLine:
+                #need only the last
+                grottoStart = index      
+        createrList.append(grottoStart)
+        createrList.append(len(self.data))
+        createrList.sort()
+        for item in range(len(createrList)-1):
+            for index in range(createrList[item], createrList[item+1]):
+                print(self.data[index])
+    #TODO create Main, post and grotto lists
+
+        print(createrList)
+            
+            #put in list, sort list on size, create lists
 
     def createAreas(self):
         #create area objects and give them a name and lineNumber attribute
-        readLineNumber = 0
-        for readLine in self.data:
+        for index, readLine in enumerate(self.data):  
             if "Postgame" in readLine:
-                self.finalLine = readLineNumber
-                break
+                self.finalLine = index
             for area in self.areaNames:
                 if area in readLine:
-                    if "Fish" in readLine or "Surf" in readLine or "Special Event" in readLine or "Dust" in readLine or "Spots" in readLine or "Normal" in readLine:
-                        #not needed, documentation fucked up
-                        pass
-                    else:
-                        #fuck those spaces at the end
-                        place = readLine.replace("~", "").replace("\n", "")[:-1]
-                        areaObject = Area(place)
-                        areaObject.line = readLineNumber
+                    #skip over lines that contain "cave" but are about encounters
+                    if ":" not in readLine:# and index < self.finalLine:
+                        #found correct area
+                        #remove spaces aroudn the name
+                        place = readLine.replace("~", "")[1:-1]
+                        line = index
+                        areaObject = Area(place, line)
                         self.places.append(areaObject)
-            readLineNumber += 1
+                        #print(f"{index} : {place}")
+        #for place in self.places:
+        #    print(place.name)
 
     
     def createPokemonBlocks(self):
-        #print(f"len places: {len(self.places)}")
-        cleanUpList = []
-        for place in range(len(self.places)):
-            placeName = self.places[place]
-            start = self.places[place].line
-            nextPlace = place
-            nextPlace += 1
+        #grab lines between areas to make correct encounter tables
+        for index in range(len(self.places)):
+            pokemonBlock = []
+            nextIndex = index + 1
+            startingLine = self.places[index].startingLine
+            try: 
+                #dont grab name line
+                lastLine = self.places[nextIndex].startingLine
+            except IndexError:
+                lastLine = self.finalLine
             
-            if nextPlace == len(self.places):
-                #print("yes")
-                end = self.finalLine
-            else:
-                end = self.places[nextPlace].line
-            #    pass
-            #print(f"nextPlace: {nextPlace}")
+            print(f"take {startingLine} untill {lastLine}")
+            for index in range(startingLine, lastLine):
+                pokemonBlock.append(self.data[index])
+            print(pokemonBlock)
+
+    def writeDataToFile(self):
+        with open("data.txt", "w") as file:
+            file.truncate()
+            for index, readLine in enumerate(self.data):
+                file.write(f"{index}, {readLine}\n")
+        #remove all lines which do not contain any data
+
+        # cleanUpList = []
+        # for place in range(len(self.places)):
+        #     placeName = self.places[place]
+        #     start = self.places[place].line
+        #     nextPlace = place
+        #     nextPlace += 1
             
-            difference = end - start
-            #remove duplicate names which have no encounters within them, got created because they contained 2 keywords
-            if difference == 0:
-                cleanUpList.append(start)
-            #print(f"start: {start}, end: {end}, difference: {difference}")
-            encounterBlock = []
-            for encounters in range(start,end,1):
-                encounterBlock.append(self.data[encounters])
+        #     if nextPlace == len(self.places):
+        #         #print("yes")
+        #         end = self.finalLine
+        #     else:
+        #         end = self.places[nextPlace].line
+        #     #    pass
+        #     #print(f"nextPlace: {nextPlace}")
+            
+        #     difference = end - start
+        #     #remove duplicate names which have no encounters within them, got created because they contained 2 keywords
+        #     if difference == 0:
+        #         cleanUpList.append(start)
+        #     #print(f"start: {start}, end: {end}, difference: {difference}")
+        #     encounterBlock = []
+        #     for encounters in range(start,end,1):
+        #         encounterBlock.append(self.data[encounters])
 
-            #put correct pokemon in the lists
-            self.createEncounterList(encounterBlock, placeName)
+        #     #put correct pokemon in the lists
+        #     self.createEncounterList(encounterBlock, placeName)
 
-        for index in range(len(cleanUpList)):
-            self.places.pop(index)
+        # for index in range(len(cleanUpList)):
+        #     self.places.pop(index)
            
 
 
     def createEncounterList(self, encounterBlock, placeName):
         # ':' twice or % twice == double row
+        # if len(readLine) == 0:
+        #             removeList.append(index)
+        #         else:
         name = placeName
         encounters = []
         lists = -1
@@ -121,17 +182,33 @@ class BlazeBlack2ReduxReader():
     
             else:
                 pass
+        #give area object all available pokemon in a encounterlist
+        name.encountersList = encounters
 
-        name.allEncounters = encounters
-        print(name.allEncounters)
-            
+    def createPokemonObjectList(self):
+        for place in range(len(self.places)):
+            #amount of lists in encounters
+            list = self.places[place].encountersList
+            for type in range(len(list)):
+                areaType = self.places[place].encountersList[type]
+                #don't need areaName
+                for pokemon in range(1,len(areaType)):
+                    #print(f"place: {place}, areatype: {type}, pokemon: {pokemon}")
+                    #print(areaType[pokemon])
+                    line = list[type][pokemon]
+                    separatedLine = re.split("Lv. |" ",", line)
+                    name = separatedLine[0]
+                    name = name.replace(" ", "")
+                    #remove whitespaces
+                    while separatedLine[1][-1:] == " ":
+                        separatedLine[1] = separatedLine[1][:-1]
+                    levels = separatedLine[1][0:-4]
+                    rarity = separatedLine[1][-4:]
+                    encounterPokemon = EncounterPokemon(name, levels, rarity)
 
-        for i in range(len(encounters)):
-            print(encounters[i])
-        
-
-        #check if list is empty apart from name otherwise dispose of it
-   
+                    #update places list to contain pokemon objects
+                    self.places[place].encountersList[type][pokemon] = encounterPokemon
+                    
 
 
 
@@ -142,14 +219,34 @@ class BlazeBlack2ReduxReader():
         return "\n".join(returnString)
 
 
-textfile = "area.txt"
-textfile1 = "Wild Area Changes.txt"
-textfile2 = "Wild Area Changes Final.txt"
-x = BlazeBlack2ReduxReader()
-x.openFile(textfile)
-x.removeEmptyLines()
-x.createAreas()
-x.createPokemonBlocks()
-#print(x.data)
-#print(x)
+#     if "Postgame" in readLine:
+        #         postgame = True
+        #         postgameLine = index
+
+        #     if "Grotto Guide" in readLine:
+        #         print("grotto")
+        #         grotto = True
+        #         grottoLine = index
+        # #remove lines between postgame an hidden grotto
+        # if postgame == True and grotto == True:
+        #     print("deleting")
+        #     popList = []
+        #     #remove lines between
+        #     deleteLines = abs(grottoLine - postgameLine)
+
+        #     if grottoLine < postgameLine:
+        #         startingValue = grottoLine
+        #     else:
+        #         startingValue = postgameLine
+
+        #     for index in range(deleteLines):
+        #         popIndex = index + startingValue
+        #         popList.append(popIndex)
+        #     #remove last line first
+        #     popList.reverse()
+
+        #     for index in popList:
+        #         print(f"popped index : {index}")
+        #         self.data.pop(index)
+
 

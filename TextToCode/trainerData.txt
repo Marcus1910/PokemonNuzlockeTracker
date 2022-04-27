@@ -1,0 +1,121 @@
+[
+ {
+  "_name": "kutzooi",
+  "_startLine": 2,
+  "_encounters": [],
+  "_trainers": [
+   {
+    "_name": "george",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": [
+     {
+      "_name": "hoppip",
+      "_level": 30,
+      "_gender": null,
+      "_moves": [
+       "tackle"
+      ],
+      "_ability": null,
+      "_heldItem": null
+     }
+    ]
+   },
+   {
+    "_name": "jerry",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": [
+     {
+      "_name": "pokemon",
+      "_level": 25,
+      "_gender": null,
+      "_moves": [
+       "homo"
+      ],
+      "_ability": "sheer force",
+      "_heldItem": "life orb"
+     },
+     {
+      "_name": "quilava",
+      "_level": 50,
+      "_gender": null,
+      "_moves": [
+       "nu",
+       "gaan"
+      ],
+      "_ability": null,
+      "_heldItem": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "_name": "Route 2",
+  "_startLine": 6,
+  "_encounters": [],
+  "_trainers": [
+   {
+    "_name": "baklava",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": [
+     {
+      "_name": "quilava",
+      "_level": 50,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "_name": "Route 1",
+  "_startLine": 2,
+  "_encounters": [],
+  "_trainers": [
+   {
+    "_name": "george",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": [
+     {
+      "_name": "hoppip",
+      "_level": 30,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     }
+    ]
+   },
+   {
+    "_name": "jerry",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": [
+     {
+      "_name": "pokemon",
+      "_level": 25,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_name": "quilava",
+      "_level": 50,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     }
+    ]
+   }
+  ]
+ }
+]

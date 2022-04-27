@@ -1,24 +1,110 @@
-~~~~~ Route 19 ~~~~~
+=========================================================
+Main Story
+=========================================================
 
-Grass, Normal:
-----------------------------------------
-Spearow Lv. 14-15 20%
-Ekans Lv. 14-15 20%
-Electrike Lv. 14-15 10%
-Zigzagoon Lv. 14-15 10%
-Nidoran♂ Lv. 14-15 10%
-Nidoran♀ Lv. 14-15 10%
-Shellos-W Lv. 14-15 05%
-Makuhita Lv. 14-15 05%
-Tyrogue Lv. 14-15 05%    
-Buizel Lv. 14-15 05%
+~~~~~ Aspertia City ~~~~~
+
+Surf, Normal:                            Surf, Dark Spot:
+---------------------------------------- ----------------------------------------
+Ducklett Lv. 30-40 90%                   Ducklett Lv. 30-40 60%
+Poliwag  Lv. 30-40 10%                   Poliwhirl Lv. 30-40 35%
+                                         Politoed Lv. 30-40 05%
 
 Fish, Normal:                            Fish, Dark Spot:
 ---------------------------------------- ----------------------------------------
-Poliwag Lv. 05-15 70%                    Goldeen Lv. 05-15 60%
-Goldeen Lv. 05-15 30%                    Poliwag Lv. 05-15 40%
-Makuhita Lv. 14-15 05%
-Tyrogue Lv. 14-15 05%    
-Buizel Lv. 14-15 05%
+Remoraid Lv. 02-08 60%                   Remoraid Lv. 06-14 60%
+Poliwag Lv. 02-08 30%                    Poliwag Lv. 06-14 30%
+Feebas Lv. 02-08 10%                     Feebas Lv. 06-14 10%
+
+
+
+
+
+~~~~~ Route 19 ~~~~~ 
+
+Grass, Normal:
+----------------------------------------
+Patrat Lv. 03-05 20%
+Purrloin Lv. 03-05 20%
+Starly Lv. 03-05 10%
+Pidgey Lv. 03-05 10%
+Kricketot Lv. 03-05 10%
+Sentret Lv. 03-05 10%
+Venonat Lv. 03-05 05%
+Bidoof Lv. 03-05 05%
+Ledyba Lv. 03-05 05%
+Hoppip Lv. 03-05 05%
+
+Grass, Shaking Spots:
+----------------------------------------
+Audino Lv. 02 60%
+Audino Lv. 03 30%
+Audino Lv. 04 10%
+
+Surf, Normal:                            Surf, Dark Spot:
+---------------------------------------- ----------------------------------------
+Marill Lv. 30-40 70%                     Surskit Lv. 35-45 70%
+Surskit Lv. 30-40 30%                    Azumarill Lv. 35-45 30%
+
+Fish, Normal:                            Fish, Dark Spot:
+---------------------------------------- ----------------------------------------
+Basculin-R Lv. 05 90%                    Basculin-R Lv. 05-15 70%
+Poliwag Lv. 05 05%                       Poliwag Lv. 05-15 30%
+Staryu Lv. 05 05%
+
+
+
+
+
+~~~~~ Route 20 - Spring ~~~~~ 
+
+Grass, Normal:                           Grass, Doubles:
+---------------------------------------- ----------------------------------------
+Pidove Lv. 05-07 20%                     Sunkern Lv. 11-14 20%
+Sewaddle Lv. 05-07 20%                   Venipede Lv. 11-14 20%
+Cubone Lv. 05-07 10%                     Wurmple Lv. 11-14 10%
+Lotad Lv. 05-07 10%                      Caterpie Lv. 11-14 10%
+Seedot Lv. 05-07 10%                     Weedle Lv. 11-14 10%
+Bellsprout Lv. 05-07 10%                 Sewaddle Lv. 11-14 10%
+Ralts Lv. 05-07 05%                      Bonsly Lv. 11-14 05%
+Shroomish Lv. 05-07 05%                  Mime Jr. Lv. 11-14 05%
+Mankey Lv. 05-07 04%                     Shroomish Lv. 11-14 04%
+Bagon Lv. 05-07 04%                      Venonat Lv. 11-14 04%
+Meowth Lv. 05-07 02%                     Bagon Lv. 11-14 02%
+
+Grass, Shaking Spots:
+----------------------------------------
+Audino Lv. 04 50%
+Dunsparce Lv. 04 10%
+Audino Lv. 05 30%
+Audino Lv. 06 10%
+
+Surf, Normal:                            Surf, Dark Spot:
+---------------------------------------- ----------------------------------------
+Azurill Lv. 05-35 65%                    Surskit Lv. 30-40 60%
+Surskit Lv. 05-35 30%                    Marill Lv. 30-40 30%
+Dratini Lv. 05-35 05%                    Dratini Lv. 30-40 05%
+Dragonair Lv. 35-45 05%
+
+Fish, Normal:                            Fish, Dark Spot:
+---------------------------------------- ----------------------------------------
+Basculin-B Lv. 05-15 70%                 Basculin-B Lv. 05-15 70%
+Dratini Lv. 05-15 30%                    Dratini Lv. 05-15 30%
 
 Postgame Locations
+
+Grass, Shaking Spots:
+----------------------------------------
+Audino Lv. 05 50%
+Dunsparce Lv. 05 10%
+Audino Lv. 05 30%
+Audino Lv. 06 10%
+
+Hidden Grotto Guide
+
+Grass, Shaking Spots:
+----------------------------------------
+Audino Lv. 05 60%
+Dunsparce Lv. 05 10%
+Audino Lv. 05 20%
+Audino Lv. 06 10%
