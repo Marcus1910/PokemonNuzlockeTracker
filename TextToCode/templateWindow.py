@@ -1,38 +1,55 @@
 from tkinter import *
 from PIL import Image, ImageTk
 
-class templateWindow():
+class TemplateWindow():
     def __init__(self, x, y, parent = None):
+        """create template for gui, every window is inherited from this one"""
         if parent == None:
-            self.master = Tk()
+            self._master = Tk()
         else:
-            self.master = Toplevel(parent)
-        self.masterX = x
-        self.masterY = y
-        self.image = "bg.jpg"
+            self._master = Toplevel(parent)
+        
+        self._debugMode = 0
+        self._numberOfBadges = 0
+        self._game = None
 
-        self.master.geometry(str(self.masterX) + 'x' + str(self.masterY))
-        self.master.iconbitmap("nuzlocke.ico")
-        self.master.resizable(1,1)
+        self._masterX = x
+        self._masterY = y
+        self._image = "bg.jpg"
 
-        self.photo = ImageTk.PhotoImage(Image.open(self.image).resize([self.masterX, self.masterY]),Image.BOX)
-        self.photoLabel = Label(self.master, image = self.photo)
-        self.photoLabel.configure(image = self.photo)
-        self.photoLabel.place(x=0, y=0)
-        self.photoLabel.image = self.photo
+        self._master.geometry(str(self._masterX) + 'x' + str(self._masterY))
+        self._master.iconbitmap("nuzlocke.ico")
+        self._master.resizable(1,1)
 
+        self._photo = ImageTk.PhotoImage(Image.open(self._image).resize([self._masterX, self._masterY]),Image.BOX)
+        self._photoLabel = Label(self._master, image = self._photo)
+        self._photoLabel.configure(image = self._photo)
+        self._photoLabel.place(x=0, y=0)
+        self._photoLabel.image = self._photo
+        #make widgets resize with window
+        self._master.rowconfigure(0, weight = 2)
+        self._master.columnconfigure(0, weight = 2)
     
 
     def update(self):
-        self.master.update()
-        self.masterY = self.master.winfo_height()
-        self.masterX = self.master.winfo_width()
+        """update image relative to window size"""
+        self._master.update()
+        self._masterY = self._master.winfo_height()
+        self._masterX = self._master.winfo_width()
         #update the bg to fully cover the adjusted area
-        photo = ImageTk.PhotoImage(Image.open("bg.jpg").resize([self.masterX, self.masterY]))
-        self.photoLabel.configure(image = photo)
-        self.resizeImage = self.master.after(300, self.update)
+        photo = ImageTk.PhotoImage(Image.open("bg.jpg").resize([self._masterX, self._masterY]))
+        self._photoLabel.configure(image = photo)
+        self._resizeImage = self._master.after(300, self.update)
         #needed otherwise image is disposed due to garbage collection
-        self.photoLabel.image = photo
+        self._photoLabel.image = photo
     
     def stop(self):
-        self.master.after_cancel(self.resizeImage)
+        """stop the update cycle else an error can occur"""
+        self._master.after_cancel(self._resizeImage)
+
+    def run(self):
+        """function to actually run the window"""
+        self._master.mainloop()
+    
+    def exit(self):
+        self._master.destroy()

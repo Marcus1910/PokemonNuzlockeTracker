@@ -1,6 +1,6 @@
 [
  {
-  "_name": "kutzooi",
+  "_name": "Route 3",
   "_startLine": 2,
   "_encounters": [],
   "_trainers": [
@@ -27,11 +27,11 @@
     "_gender": null,
     "_pokemon": [
      {
-      "_name": "pokemon",
+      "_name": "Rattata",
       "_level": 25,
       "_gender": null,
       "_moves": [
-       "homo"
+       "Flamethrower"
       ],
       "_ability": "sheer force",
       "_heldItem": "life orb"
@@ -41,8 +41,8 @@
       "_level": 50,
       "_gender": null,
       "_moves": [
-       "nu",
-       "gaan"
+       "Growl",
+       "leer"
       ],
       "_ability": null,
       "_heldItem": null

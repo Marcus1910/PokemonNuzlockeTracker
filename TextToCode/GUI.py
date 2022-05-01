@@ -1,51 +1,45 @@
 from tkinter import *
-from templateWindow import templateWindow
+from templateWindow import TemplateWindow
 #from BlazeBlack2Redux import BlazeBlack2Redux
 #from RenegadePlatinum import RenegadePlatinum
 
 
-class SelectGameWindow():
+class SelectGameWindow(TemplateWindow):
 
     def __init__(self):
-        self.debugMode = 0
-        self.listOfGames = ["Blaze Black Redux 2", "Renegade Platinum", "Sacred Gold"]
+        super().__init__(900, 570)
 
-        self.tempWindow = templateWindow(600, 500)
-        self.window = self.tempWindow.master
-        self.window.title('game selection')
+        self._listOfGames = ["Blaze Black Redux 2", "Renegade Platinum", "Sacred Gold"]
 
-        self.chosen = StringVar()
-        self.chosen.set("which game?")
-        self.chosenGameMenu = OptionMenu(self.window, self.chosen , *self.listOfGames)
-        self.chosenGameMenu.grid(row = 0, column = 0, columnspan = 3, sticky = N)
+        self._master.title('game selection')
+        self._chosen = StringVar()
+        self._chosen.set("which game?")
+        self._chosenGameMenu = OptionMenu(self._master, self._chosen , *self._listOfGames)
+        self._chosenGameMenu.grid(row = 0, column = 0, columnspan = 3, sticky = N)
 
-        self.continueButton = Button(self.window, text = "continue", command = self.nextWindow)
-        self.continueButton.grid(row = 5, column = 5, sticky = SE)
+        self._continueButton = Button(self._master, text = "continue", command = self.nextWindow)
+        self._continueButton.grid(row = 5, column = 5, sticky = SE)
 
-        self.exitButton = Button(self.window, text = "Exit", command = self.window.destroy)
-        self.exitButton.grid(row = 5, column = 0, sticky = SW)
-        
-        #resizes window
-        self.window.rowconfigure(0, weight = 2)
-        self.window.columnconfigure(0, weight = 2)
-        #call function to resize image to GUI scale
-        self.resizeImage = self.window.after(300, self.tempWindow.update)
-        self.window.mainloop()
+        self._exitButton = Button(self._master, text = "Exit", command = self.exit)
+        self._exitButton.grid(row = 5, column = 0, sticky = SW)
+
+        self.update()
+        self.run()
 
     def nextWindow(self):
-        self.chosenGame = self.chosen.get()
-        if self.chosenGame not in self.listOfGames:
-            self.chosenGameMenu.config(bg = 'Red')
+        self._chosenGame = self._chosen.get()
+        if self._chosenGame not in self._listOfGames:
+            self._chosenGameMenu.config(bg = 'Red')
         else:
-            from mainWindow import MainWindow 
-            if self.debugMode:
-                print(f"selected {self.chosenGame}")
+            from mainWindow import MainWindow
+            if self._debugMode:
+                print(f"selected {self._chosenGame}")
+            
             #make the update loop stop
-            #self.window.after_cancel(self.resizeImage)
-            self.tempWindow.stop()
-            self.window.destroy()
+            self.stop()
+            self.exit()
             #call to next window
-            MainWindow(self.tempWindow.masterX, self.tempWindow.masterY, self.chosenGame, self.debugMode)
+            MainWindow(self._masterX, self._masterY, self._chosenGame)
 
 if __name__ == "__main__":
     x = SelectGameWindow()

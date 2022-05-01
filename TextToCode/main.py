@@ -5,8 +5,8 @@ from pokemon import Pokemon
 import json
 txtfile = "trainerData.txt"
 class MainGame():
-    def __init__(self, file):
-        self.file = file
+    def __init__(self):
+        self.file = None
         self.areaList = []
         self.readData = None
 
@@ -55,13 +55,15 @@ class MainGame():
             self.areaList.append(wildArea)
 
 class SacredGold(MainGame):
-    def __init__(self, file):
-        super().__init__(file)
+    def __init__(self):
+        super().__init__()
+        self.file = "trainerData.txt"
+        self.readFromFile()
 
 # game = MainGame()
 # game.readFromFile()
 # game.writeToFile()
 
-game1 = SacredGold(txtfile)
-game1.readFromFile()
-print(game1.readData)
+#game1 = SacredGold()
+#print(game1.readData)
+#print(game1.areaList[1])
