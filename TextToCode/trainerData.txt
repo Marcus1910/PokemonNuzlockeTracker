@@ -1,48 +1,22 @@
 [
  {
-  "_name": "Route 3",
-  "_startLine": 2,
+  "_name": "Route 1",
+  "_startLine": 5,
   "_encounters": [],
   "_trainers": [
    {
-    "_name": "george",
+    "_name": "Falkner",
     "_trainerType": null,
     "_gender": null,
     "_pokemon": [
      {
-      "_name": "hoppip",
-      "_level": 30,
+      "_name": "squirtle",
+      "_level": 75,
+      "_dexNo": null,
       "_gender": null,
       "_moves": [
-       "tackle"
-      ],
-      "_ability": null,
-      "_heldItem": null
-     }
-    ]
-   },
-   {
-    "_name": "jerry",
-    "_trainerType": null,
-    "_gender": null,
-    "_pokemon": [
-     {
-      "_name": "Rattata",
-      "_level": 25,
-      "_gender": null,
-      "_moves": [
-       "Flamethrower"
-      ],
-      "_ability": "sheer force",
-      "_heldItem": "life orb"
-     },
-     {
-      "_name": "quilava",
-      "_level": 50,
-      "_gender": null,
-      "_moves": [
-       "Growl",
-       "leer"
+       "Pound",
+       "Surf"
       ],
       "_ability": null,
       "_heldItem": null
@@ -53,64 +27,54 @@
  },
  {
   "_name": "Route 2",
-  "_startLine": 6,
+  "_startLine": 16,
   "_encounters": [],
   "_trainers": [
    {
-    "_name": "baklava",
+    "_name": "Maarten",
     "_trainerType": null,
     "_gender": null,
     "_pokemon": [
      {
-      "_name": "quilava",
-      "_level": 50,
+      "_name": "charmander",
+      "_level": 60,
+      "_dexNo": null,
       "_gender": null,
-      "_moves": [],
+      "_moves": [
+       "Tackle",
+       "Flamethrower"
+      ],
       "_ability": null,
       "_heldItem": null
-     }
-    ]
-   }
-  ]
- },
- {
-  "_name": "Route 1",
-  "_startLine": 2,
-  "_encounters": [],
-  "_trainers": [
-   {
-    "_name": "george",
-    "_trainerType": null,
-    "_gender": null,
-    "_pokemon": [
+     },
      {
-      "_name": "hoppip",
-      "_level": 30,
+      "_name": "squirtle",
+      "_level": 75,
+      "_dexNo": null,
       "_gender": null,
-      "_moves": [],
+      "_moves": [
+       "Pound",
+       "Surf"
+      ],
       "_ability": null,
       "_heldItem": null
      }
     ]
    },
    {
-    "_name": "jerry",
+    "_name": "Falkner",
     "_trainerType": null,
     "_gender": null,
     "_pokemon": [
      {
-      "_name": "pokemon",
-      "_level": 25,
+      "_name": "squirtle",
+      "_level": 75,
+      "_dexNo": null,
       "_gender": null,
-      "_moves": [],
-      "_ability": null,
-      "_heldItem": null
-     },
-     {
-      "_name": "quilava",
-      "_level": 50,
-      "_gender": null,
-      "_moves": [],
+      "_moves": [
+       "Pound",
+       "Surf"
+      ],
       "_ability": null,
       "_heldItem": null
      }

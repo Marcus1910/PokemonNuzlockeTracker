@@ -3,6 +3,7 @@ class Pokemon():
     def __init__(self, name, level):
         self._name = name
         self._level = level
+        self._dexNo = None
         self._gender = None
         self._moves = []
         self._ability = None

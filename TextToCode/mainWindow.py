@@ -11,7 +11,7 @@ class MainWindow(TemplateWindow):
         self._game = game
         self._master.title(f"{self._game}")
         self._listOfAreas = []
-        self._areaNames = []
+        self._areaNames = ["area x"]
         self._listOfTrainers = []
         self._trainerNames = ["choose an area first"]
         self.getAreas()
@@ -103,7 +103,8 @@ class MainWindow(TemplateWindow):
     def displayPokemon(self, pokemon, index):
         """look for photo of the pokemon and at the pokemon data to the gui"""
         photo = "66.png"
-        pokemonImg = ImageTk.PhotoImage(PIL.Image.open(photo))
+        pokemonImg = PhotoImage(file = photo)
+        #pokemonImg = ImageTk.PhotoImage(PIL.Image.open(photo))
         pokemonPhoto = Label(self._indivTrainerFrame, image = pokemonImg)
         pokemonPhoto.grid(row = index, column = 0, sticky = N)
         
