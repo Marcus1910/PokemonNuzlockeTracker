@@ -1,6 +1,7 @@
 from PIL import ImageTk
 import PIL.Image
 from tkinter import *
+import os
 
 from templateWindow import TemplateWindow
 
@@ -102,7 +103,8 @@ class MainWindow(TemplateWindow):
 
     def displayPokemon(self, pokemon, index):
         """look for photo of the pokemon and at the pokemon data to the gui"""
-        photo = "66.png"
+        folderPath = os.path.join(os.getcwd(), 'sprites/pokemon')
+        photo = os.path.join(folderPath, pokemon._name + '.png')
         pokemonImg = PhotoImage(file = photo)
         #pokemonImg = ImageTk.PhotoImage(PIL.Image.open(photo))
         pokemonPhoto = Label(self._indivTrainerFrame, image = pokemonImg)

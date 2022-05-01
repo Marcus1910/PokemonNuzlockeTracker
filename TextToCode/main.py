@@ -61,7 +61,7 @@ class SacredGold(MainGame):
         self.file = "trainerData.txt"
 
         self.readFromFile()
-        self.writeToFile()
+        #self.writeToFile()
 
 
 
@@ -94,37 +94,34 @@ class SacredGold(MainGame):
 
 
 # game1.writeToFile()
-import os
-import requests
-imageUrl = "https://play.pokemonshowdown.com/sprites/gen5/"
+# import os
+# import requests
+# imageUrl = "https://play.pokemonshowdown.com/sprites/gen5/"
 
-r = requests.get(imageUrl).content
+# r = requests.get(imageUrl).content
 
+# with open('abra.txt', 'wb') as handler:
+#     handler.write(r)
 
-with open('abra.txt', 'wb') as handler:
-    handler.write(r)
+# with open('abra.txt', 'r') as file:
+#     global readData
+#     readData = file.readlines()
 
-with open('abra.txt', 'r') as file:
-    global readData
-    readData = file.readlines()
-
-
-
-with open('abra.txt', 'w') as writer:
-    for line in readData:
-        if "a href" in line and ".png" in line:
-            line = line.split('"')
-            writer.write(line[7] + '\n')
+# with open('abra.txt', 'w') as writer:
+#     for line in readData:
+#         if "a href" in line and ".png" in line:
+#             line = line.split('"')
+#             writer.write(line[7] + '\n')
     
-with open('abra.txt', 'r') as file:
-    data = file.readlines(5)
-    for index, line in enumerate(data):
-        data[index] = line.replace('\n', '')
+# with open('abra.txt', 'r') as file:
+#     data = file.readlines()
+#     for index, line in enumerate(data):
+#         data[index] = line.replace('\n', '')
     
-    for index, line in enumerate(data):
-        pokemon = str(imageUrl + line)
-        w = requests.get(pokemon).content
-        correctFolder = os.getcwd()
-        print(correctFolder)
-        
-        #open(correctFolder, 'wb').write(w)
+#     for index, line in enumerate(data):
+#         pokemon = str(imageUrl + line)
+#         w = requests.get(pokemon).content
+#         correctFolder = str(os.getcwd()+ '\sprites\pokemon')
+#         correctFile = os.path.join(correctFolder, line)
+#         #print(correctFile)
+#         open(correctFile, 'wb').write(w)
