@@ -24,17 +24,8 @@ class MainWindow(TemplateWindow):
         self._listOfAreas = []
         self._areaNames = []
         self._listOfTrainers = []
-        self._trainerNames = [None]
-        p = Item("Pecha Berry")
-        p.description = "Heal poison"
-        p.location = "Left top of route"
-        h = Item("Master ball")
-        h.description = "Kanker op"
-        h.location = "Elm's laboratory"
         self._listOfItems = []
-        for x in range(15):
-            self._listOfItems.append(h)
-            self._listOfItems.append(p)
+        self._trainerNames = [None]
         self.getAreas()
         """number of badges"""
         self._numberOfBadges = IntVar()
@@ -95,7 +86,7 @@ class MainWindow(TemplateWindow):
         self._selectedArea = StringVar()
         self._selectedArea.set("choose an Area")
         #area is the _selectedArea variable
-        self._areaMenu = OptionMenu(self._master, self._selectedArea, *self._areaNames, command = lambda area: [self.getTrainers(area), self.displayItems()])
+        self._areaMenu = OptionMenu(self._master, self._selectedArea, *self._areaNames, command = lambda area: [self.getTrainers(area), self.getItems(area)])
         self._areaMenu.grid(row=0, column=5, sticky=NW)
 
         """exit buttons and main loop"""
@@ -127,8 +118,6 @@ class MainWindow(TemplateWindow):
         """empty and update trainerlist for the option menu depending on the selected area"""
         #enable to select trainer and export buttons
         self.changeTrainerButtonState(NORMAL)
-        #delete previous pokemon
-        #self.deletePokemonDisplay()
         menu = self._trainerMenu["menu"]
         #reset lists
         self._trainerNames = []
@@ -158,12 +147,20 @@ class MainWindow(TemplateWindow):
                     self.deletePokemonDisplay()
                     for index, pokemon in enumerate(trainer.pokemon):
                         self.displayPokemon(pokemon, index)
+    
+    def getItems(self, areaName):
+        self._listOfItems = []
+        for area in self._listOfAreas:
+            if areaName == area.name:
+                self.deleteItemDisplay()
+                self._listOfItems = area._items
+                self.displayItems()
 
     def deletePokemonDisplay(self):
         """delete all listboxs etc in indivtrainerframe"""
         for label in self._indivTrainerFrame.winfo_children():
             label.destroy()
-
+        
     def displayPokemon(self, pokemon, index):
         """look for photo of the pokemon and at the pokemon data to the gui"""
         folderPath = os.path.join(os.getcwd(), 'sprites/pokemon')
@@ -194,7 +191,8 @@ class MainWindow(TemplateWindow):
         pokemonPhoto.image = pokemonImg
     
     def deleteItemDisplay(self):
-        pass
+        for label in self._indivItemFrame.winfo_children():
+            label.destroy()
 
     def displayItems(self):
         itemScrollbar = Scrollbar(self._indivItemFrame)
@@ -204,23 +202,6 @@ class MainWindow(TemplateWindow):
         for item in self._listOfItems:
             itemBox.insert(END, item.name)
         itemScrollbar.configure(command = itemBox.yview)
-
-
-        pass
-        # for index, item in enumerate(self._listOfItems):
-        #     folderPath = os.path.join(os.getcwd(), 'sprites/pokemon')
-        #     photo = os.path.join(folderPath, 'abra.png')
-        #     itemImg = PhotoImage(file = photo)
-        #     photoLabel = Label(self._indivItemFrame, image = itemImg)
-        #     photoLabel.grid(row = index, column = 0)
-        #     dataBox = Listbox(self._indivItemFrame, height = 2)
-        #     dataBox.grid(row = index, column = 1, sticky = N)
-        #     dataBox.insert(1, f"name: {item.name}")
-        #     dataBox.insert(2, f"{item.location}")
-
-            
-            
-
 
     def addDeleteAttribute(self, button, list, delete, windowtype, itemType):
         button.configure(state = DISABLED)

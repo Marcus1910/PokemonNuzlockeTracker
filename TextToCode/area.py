@@ -8,6 +8,7 @@ class Area():
         self._startLine = line
         self._encounters = []
         self._trainers = []
+        self._items = []
     #TODO area is not supposed to write and write
     
     @property
@@ -46,6 +47,22 @@ class Area():
     def trainers(self, trainer):
         #TODO append correct trainer and no duplicates
         self._trainers.append(trainer)
+
+    @property
+    def item(self):
+        return self._items
+
+    @item.setter
+    def item(self, item):
+        if len(self._items) == 0:
+            self._items.append(item)
+            print("appended item")
+        else:
+            for index, items in enumerate(self._items):
+                if item.name == items.name:
+                    break
+                elif index == len(self._items)-1:
+                    self._items.append(item)
     
     def __str__(self):
         returnString = f"{self._name} has {len(self._trainers)} trainers\n"

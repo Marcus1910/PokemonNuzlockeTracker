@@ -1,6 +1,7 @@
 from area import Area
 from trainer import Trainer
 from pokemon import Pokemon
+from item import Item
 
 import json
 txtfile = "trainerData.txt"
@@ -31,14 +32,24 @@ class MainGame():
             startLine = area["_startLine"]
             wildArea = Area(areaName, startLine)
 
-            #trainer data and amount of trainers
+            """retrieve all area attributes"""
+            items = area["_items"]
+            for item in items:
+                itemName = item["_name"]
+                areaItem = Item(itemName)
+                areaItem.description = item["_description"]
+                areaItem.location = item["_location"]
+                wildArea.item = areaItem
+            
+            """retrieve all trainer attributes"""
             trainers = area["_trainers"]
             for trainer in trainers:
                 trainerName = trainer["_name"]
                 pokemonTrainer = Trainer(trainerName)
                 pokemonTrainer.trainerType = trainer["_trainerType"]
                 pokemonTrainer.gender = trainer["_gender"]
-                #grab all atributes a pokemon could have
+                
+                """retrieve pokemon attributes"""
                 for pokemon in trainer["_pokemon"]:
                     pokemonName = pokemon["_name"]
                     pokemonLevel = pokemon["_level"]
@@ -64,36 +75,46 @@ class SacredGold(MainGame):
         self.writeToFile()
 
 
-
-# game = MainGame()
-# game.readFromFile()
-# game.writeToFile()
-
 # game1 = SacredGold()
 # route1 = Area("Route 1", 5)
 # route2 = Area("Route 2", 16)
+
 # trainer1 = Trainer("Falkner")
 # trainer2 = Trainer("Maarten")
 # pokemon1 = Pokemon("charmander", 60)
 # pokemon2 = Pokemon("squirtle", 75)
+# pokemon3 = Pokemon("Alakazam", 15)
+
 # pokemon1.moves = "Tackle"
 # pokemon1.moves = "Flamethrower"
 # pokemon2.moves = "Pound"
 # pokemon2.moves = "Surf"
+# pokemon3.moves = "psychic"
 
 # trainer1.pokemon = pokemon2
+# trainer1.pokemon = pokemon3
 # trainer2.pokemon = pokemon1
 # trainer2.pokemon = pokemon2
+
+# item1 = Item("Master Ball")
+# item2 = Item("Oran Berry")
+# item3 = Item("Choice Scarf")
 
 # route1.trainers = trainer1
 # route2.trainers = trainer2
 # route2.trainers = trainer1
 
+# route1.item = item1
+# route1.item = item3
+# route2.item = item2
+
+
 # game1.areaList.append(route1)
 # game1.areaList.append(route2)
 
-
+# print(route1._items)
 # game1.writeToFile()
+
 
 
 # import os

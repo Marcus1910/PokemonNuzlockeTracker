@@ -10,7 +10,7 @@
     "_gender": null,
     "_pokemon": [
      {
-      "_name": "Venusaur",
+      "_name": "squirtle",
       "_level": 75,
       "_dexNo": null,
       "_gender": null,
@@ -20,8 +20,31 @@
       ],
       "_ability": null,
       "_heldItem": null
+     },
+     {
+      "_name": "Alakazam",
+      "_level": 15,
+      "_dexNo": null,
+      "_gender": null,
+      "_moves": [
+       "psychic"
+      ],
+      "_ability": null,
+      "_heldItem": null
      }
     ]
+   }
+  ],
+  "_items": [
+   {
+    "_name": "Master Ball",
+    "_description": null,
+    "_location": null
+   },
+   {
+    "_name": "Choice Scarf",
+    "_description": null,
+    "_location": null
    }
   ]
  },
@@ -36,7 +59,7 @@
     "_gender": null,
     "_pokemon": [
      {
-      "_name": "Charmander",
+      "_name": "charmander",
       "_level": 60,
       "_dexNo": null,
       "_gender": null,
@@ -77,8 +100,26 @@
       ],
       "_ability": null,
       "_heldItem": null
+     },
+     {
+      "_name": "Alakazam",
+      "_level": 15,
+      "_dexNo": null,
+      "_gender": null,
+      "_moves": [
+       "psychic"
+      ],
+      "_ability": null,
+      "_heldItem": null
      }
     ]
+   }
+  ],
+  "_items": [
+   {
+    "_name": "Oran Berry",
+    "_description": null,
+    "_location": null
    }
   ]
  }
