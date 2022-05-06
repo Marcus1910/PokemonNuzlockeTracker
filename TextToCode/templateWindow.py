@@ -12,6 +12,7 @@ class TemplateWindow():
         self._debugMode = 0
         self._numberOfBadges = 0
         self._game = None
+        self._font = "Helvetica 10 italic"
 
         self._masterX = x
         self._masterY = y

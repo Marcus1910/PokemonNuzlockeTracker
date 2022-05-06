@@ -61,7 +61,7 @@ class SacredGold(MainGame):
         self.file = "trainerData.txt"
 
         self.readFromFile()
-        #self.writeToFile()
+        self.writeToFile()
 
 
 
@@ -94,6 +94,8 @@ class SacredGold(MainGame):
 
 
 # game1.writeToFile()
+
+
 # import os
 # import requests
 # imageUrl = "https://play.pokemonshowdown.com/sprites/gen5/"

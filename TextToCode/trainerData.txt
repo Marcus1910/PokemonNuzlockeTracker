@@ -10,7 +10,7 @@
     "_gender": null,
     "_pokemon": [
      {
-      "_name": "squirtle",
+      "_name": "Venusaur",
       "_level": 75,
       "_dexNo": null,
       "_gender": null,
@@ -36,7 +36,7 @@
     "_gender": null,
     "_pokemon": [
      {
-      "_name": "charmander",
+      "_name": "Charmander",
       "_level": 60,
       "_dexNo": null,
       "_gender": null,
