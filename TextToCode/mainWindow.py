@@ -1,9 +1,10 @@
 from tkinter import *
 import os
+from attributeWindow import AttributeWindow
 
 from templateWindow import TemplateWindow
-from trainer import Trainer
-from attributeWindow import TrainerWindow, ItemWindow
+from games.trainer import Trainer
+#from attributeWindow import TrainerWindow, ItemWindow
 from item import Item
 
 '''
@@ -27,6 +28,7 @@ class MainWindow(TemplateWindow):
         self._listOfItems = []
         self._trainerNames = [None]
         self.getAreas()
+
         """number of badges"""
         self._numberOfBadges = IntVar()
         self._numberOfBadges.set(0)
@@ -45,7 +47,7 @@ class MainWindow(TemplateWindow):
         self._indivItemFrame.columnconfigure(0, weight = 2)
 
 
-        self._itemLabel = Label(self._itemFrame, text="Items komen hier terecht")
+        self._itemLabel = Label(self._itemFrame, text="Available Items")
         self._itemLabel.grid(row=0,column=0,sticky=N)
 
         """trainer frames"""
@@ -69,10 +71,10 @@ class MainWindow(TemplateWindow):
         self._addTrainerButton = Button(self._trainerFrame, text = "add a trainer", bd = 3, font = self._font, command = self.addTrainer)
         self._addTrainerButton.grid(row = 8, column = 0, sticky = NSEW)
 
-        self._editTrainerButton = Button(self._trainerFrame, text = "edit a trainer", bd = 3, font = self._font, command =self.editTrainer)
+        self._editTrainerButton = Button(self._trainerFrame, text = "edit a trainer", bd = 3, font = self._font)#, command =self.editTrainer)
         self._editTrainerButton.grid(row = 8, column = 1, sticky = NSEW)
 
-        self._deleteTrainerButton = Button(self._trainerFrame, text = "delete a trainer", bd = 3, font = self._font, command = self.deleteTrainer)
+        self._deleteTrainerButton = Button(self._trainerFrame, text = "delete a trainer", bd = 3, font = self._font)#, command = self.deleteTrainer)
         self._deleteTrainerButton.grid(row = 8, column = 2, sticky = NSEW)
 
         """showdown buttons"""
@@ -97,12 +99,12 @@ class MainWindow(TemplateWindow):
         self._backButton.grid(row=4, column=5, sticky=SE)
 
         self._exportToShowdownButton.configure(state = DISABLED)
-        self.changeTrainerButtonState(DISABLED)
+        #self.changeTrainerButtonState(DISABLED)
         self.update()
         self.run()
 
     def getAreas(self):
-        """determine which game should be called and retrieve the correct information"""
+        """determine which game should be called and retrieve the correct information TODO replace with call to /games/game"""
         from main import SacredGold
         self._game = SacredGold()
         self._listOfAreas = self._game.areaList
@@ -117,7 +119,7 @@ class MainWindow(TemplateWindow):
     def getTrainers(self, areaName):
         """empty and update trainerlist for the option menu depending on the selected area"""
         #enable to select trainer and export buttons
-        self.changeTrainerButtonState(NORMAL)
+        #self.changeTrainerButtonState(NORMAL)
         menu = self._trainerMenu["menu"]
         #reset lists
         self._trainerNames = []
@@ -202,30 +204,17 @@ class MainWindow(TemplateWindow):
         for item in self._listOfItems:
             itemBox.insert(END, item.name)
         itemScrollbar.configure(command = itemBox.yview)
-
-    def addDeleteAttribute(self, button, list, delete, windowtype, itemType):
-        button.configure(state = DISABLED)
-        newWindow = windowtype(self._master, list, delete)
-        #TODO find better way to do this
-        newWindow._submitButton.wait_variable(newWindow._validated)
-        newTrainerName = newWindow._newAttribute.get()
-        newTrainer = itemType(newTrainerName)
-        newWindow.destroy()
-        button.configure(state = NORMAL)
-        return newTrainer
-
-    def addTrainer(self):
-        trainer = self.addDeleteAttribute(self._addTrainerButton, self._listOfTrainers, False, TrainerWindow, Trainer)
-        self._listOfTrainers.append(trainer)
-        #update optionmenu list
-        self.getTrainers(self._selectedArea.get())
     
-    def deleteTrainer(self):
-        trainer = self.addDeleteAttribute(self._deleteTrainerButton, self._listOfTrainers, True, TrainerWindow, Trainer)
-        for index ,trainers in enumerate(self._listOfTrainers):
-            if trainer.name == trainers.name:
-                self._listOfTrainers.pop(index)
-        self.getTrainers(self._selectedArea.get())
+    def addTrainer(self):
+        """add a trainer to trainer list"""
+        #disable add/ edit and delete button
+        #open new window which containes current trainers
+        #back button which closes window
+        #send name to main program
+        newWindow = AttributeWindow(self._master, self._listOfTrainers)
+        print("adding Trainer")
+        pass
+    
 
     def editTrainer(self):
         #self._newWindow = TrainerWindow(self._master, self._listOfTrainers)
@@ -244,13 +233,6 @@ class MainWindow(TemplateWindow):
                     #TODO rewrite to showdown format
                     pass
                 break
-    
-    def changeTrainerButtonState(self, newState):
-        self._trainerMenu.configure(state = newState)
-        self._addTrainerButton.configure(state = newState)
-        self._editTrainerButton.configure(state = newState)
-        self._deleteTrainerButton.configure(state = newState)
-
 
     def createGameMenu(self):
         from GUI import SelectGameWindow
@@ -261,3 +243,26 @@ class MainWindow(TemplateWindow):
 
 
 
+# def addDeleteAttribute(self, button, list, delete, windowtype, itemType):
+    #     button.configure(state = DISABLED)
+    #     newWindow = windowtype(self._master, list, delete)
+    #     #TODO find better way to do this
+    #     newWindow._submitButton.wait_variable(newWindow._validated)
+    #     newTrainerName = newWindow._newAttribute.get()
+    #     newTrainer = itemType(newTrainerName)
+    #     newWindow.destroy()
+    #     button.configure(state = NORMAL)
+    #     return newTrainer
+
+    # def addTrainer(self):
+    #     trainer = self.addDeleteAttribute(self._addTrainerButton, self._listOfTrainers, False, TrainerWindow, Trainer)
+    #     self._listOfTrainers.append(trainer)
+    #     #update optionmenu list
+    #     self.getTrainers(self._selectedArea.get())
+    
+    # def deleteTrainer(self):
+    #     trainer = self.addDeleteAttribute(self._deleteTrainerButton, self._listOfTrainers, True, TrainerWindow, Trainer)
+    #     for index ,trainers in enumerate(self._listOfTrainers):
+    #         if trainer.name == trainers.name:
+    #             self._listOfTrainers.pop(index)
+    #     self.getTrainers(self._selectedArea.get())

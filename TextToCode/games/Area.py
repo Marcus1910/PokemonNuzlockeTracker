@@ -1,66 +1,74 @@
-class Area:
-    def __init__(self, name, gym = 0):
-        self.name = name
-        #integer after which gym the area is unlocked
-        self.gym = gym
-        self.pokemonList = ['Purrloin']
-        self.trainerList = ['Tristan']
-        self.itemList = ['max repel']
-    
+from games.trainer import Trainer
+from games.pokemon import Pokemon
+import json
 
-    def changeGym(self):
-        #should be asked in [game]
-        #name = input(f'give the name of the area you want to change: \n')
-        newBadge = input(f'after which badge can you access {self.name}?\n')
-        self.gym = newBadge
-        print(f'changed the availability of {self.name} to {newBadge}')
+class Area():
+    def __init__(self, name):
+        self._name = name
+        self._startLine = None
+        self._encounters = []
+        self._trainers = []
+        self._items = []
+    #TODO area is not supposed to write and write
     
-    def addPokemon(self, pokemon):
-        if pokemon in self.pokemonList:
-            print(f'{pokemon} has already been noted')
+    @property
+    def name(self):
+        return self._name
+    
+    @name.setter
+    def name(self, name):
+        self._name = name
+    
+    @property
+    def startLine(self):
+        return self._startLine
+    
+    @startLine.setter
+    def startLine(self, line):
+        self._startLine = line
+    
+    @property
+    def encounters(self):
+        return self._encounters
+    
+    @encounters.setter
+    def encounters(self, encounter):
+        self.encounters.append(encounter)
+    
+    def removeEncounter(self, encounter):
+        #TODO remove correct encounter
+        self._encounters.remove(encounter)
+    
+    @property
+    def trainers(self):
+        return self._trainers
+    
+    @trainers.setter
+    def trainers(self, trainer):
+        #TODO append correct trainer and no duplicates
+        self._trainers.append(trainer)
+
+    @property
+    def item(self):
+        return self._items
+
+    @item.setter
+    def item(self, item):
+        if len(self._items) == 0:
+            self._items.append(item)
         else:
-            self.pokemonList.append(pokemon)
-        print(f'succesfully added {pokemon} to {self.name}') 
-    def deletePokemon(self, pokemon):
-        if pokemon in self.pokemonList:
-            self.pokemonList.remove(pokemon)
-            print(f'succesfully removed {pokemon}')
-        else:
-            print(f'{pokemon} not in {self.name}')
+            for index, items in enumerate(self._items):
+                if item.name == items.name:
+                    break
+                elif index == len(self._items)-1:
+                    self._items.append(item)
     
-    def addTrainer(self, trainer):
-        #make a new trainer object
-        pass
-
-    def deleteTrainer(self,trainer):
-        #show list of available trainers
-        pass
-
-    def print(self):
-        print(f'current Area is {self.name}')  
-    def printGym(self):
-        return(f'{self.name} can be found after gym {self.gym}.')
-    def printAvailablePokemon(self):
-        print(f'{self.name} has {len(self.pokemonList)} pokemon available.\n{self.pokemonList}')
-    def printTrainers(self):
-        print(f'{self.name} has {len(self.trainerList)} trainer.\n{self.trainerList}')
-    def printItems(self):
-        print(f'{self.name} has {len(self.itemList)} item.\n{self.itemList}')
+    def __str__(self):
+        returnString = f"{self._name} has {len(self._trainers)} trainers\n"
+        for trainer in self._trainers:
+            returnString += trainer.__str__()
+        return returnString
 
 
-#Route19 = Area("Route 19") 
-#Route19.print()
 
-'''
-#add and remove pokemon
-Route19.addPokemon('Dialga')
-Route19.printAvailablePokemon()
-Route19.deletePokemon('Purrloin')
-Route19.printAvailablePokemon()
-'''
 
-'''
-#change badge   
-Route19.changeGym()   
-Route19.print()
-'''

@@ -1,2 +1,0 @@
--disable encounters and available till area and badges have been selected respectively
--seasons

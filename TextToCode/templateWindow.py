@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import Image, ImageTk
+import os
 
 class TemplateWindow():
     def __init__(self, x, y, parent = None):
@@ -17,9 +18,10 @@ class TemplateWindow():
         self._masterX = x
         self._masterY = y
         self._image = "bg.jpg"
+        self._icon = os.path.join(os.getcwd(), "sprites/icons/nuzlocke.ico")
 
         self._master.geometry(str(self._masterX) + 'x' + str(self._masterY))
-        self._master.iconbitmap("nuzlocke.ico")
+        self._master.iconbitmap(self._icon)
         self._master.resizable(1,1)
 
         self._photo = ImageTk.PhotoImage(Image.open(self._image).resize([self._masterX, self._masterY]),Image.BOX)

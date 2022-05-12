@@ -1,5 +1,5 @@
-from area import Area
-from encounterPokemon import EncounterPokemon
+from games.area import Area
+from games.encounterPokemon import EncounterPokemon
 import re
 
 class BlazeBlack2ReduxReader():

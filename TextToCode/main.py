@@ -1,6 +1,6 @@
-from area import Area
-from trainer import Trainer
-from pokemon import Pokemon
+from games.area import Area
+from games.trainer import Trainer
+from games.pokemon import Pokemon
 from item import Item
 
 import json
@@ -30,7 +30,8 @@ class MainGame():
         for area in self.readData:
             areaName = area["_name"]
             startLine = area["_startLine"]
-            wildArea = Area(areaName, startLine)
+            wildArea = Area(areaName)
+            wildArea.startLine(startLine)
 
             """retrieve all area attributes"""
             items = area["_items"]
