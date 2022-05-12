@@ -31,7 +31,7 @@ class MainGame():
             areaName = area["_name"]
             startLine = area["_startLine"]
             wildArea = Area(areaName)
-            wildArea.startLine(startLine)
+            wildArea.startLine = startLine
 
             """retrieve all area attributes"""
             items = area["_items"]
