@@ -5,6 +5,7 @@ from item import Item
 
 import json
 txtfile = "trainerData.txt"
+
 class MainGame():
     def __init__(self):
         self.file = None

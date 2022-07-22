@@ -10,6 +10,12 @@ class SacredGoldWriter():
         self._areaList = []
         self._data = None
         pass
+
+    def areaList(self):
+        returnString = ""
+        for area in self._areaList:
+            returnString += f"{area.name} {area.startLine}\n"
+        return returnString
     
     def openPdf(self):
         with pdfplumber.open("Pokemon Locations.pdf") as pdf:
@@ -17,6 +23,7 @@ class SacredGoldWriter():
             file.truncate()
             for page in pdf.pages:
                 text = page.extract_text()
+                #pdf extract gives word as wwwwoooorrrrdddd so remove every character that repeats itself 4 times
                 duplicateChars = re.findall(r"(.)\1{3}", text)
                 for char in duplicateChars:
                     if char * 4 in text:
@@ -72,7 +79,7 @@ class SacredGoldWriter():
         for index, line in enumerate(self._data):
             for area in self._areaTypes:
                 if area in line:
-                    if ":" not in line and "," not in line and "[" not in line and "(" not in line:
+                    if ":" not in line and "," not in line and "(" not in line: #and "[" not in line
                         while "  " in line:
                             line = line.replace("  ", " ")
                         if line[-1:] == " ":
@@ -85,7 +92,7 @@ class SacredGoldWriter():
         #     print(area)
         # print(len(self._areaList))
     
-    def formatDataEncounters(self):
+    def putEncounterOnOneLine(self):
         #sort list on startline
         removeList = []
         x = 0
@@ -125,13 +132,24 @@ class SacredGoldWriter():
                 finalLine = len(self._data)
             difference = finalLine - startLine
             #skip name of area
-            for line in range(1, difference):
-                currentLine = startLine + line
-                data = self._data[currentLine]
-                if ":" not in data:
-                    print(data, currentLine)
-                #print(self._data[startLine + line])
-                pass
+            #print(self._data[startLine])
+            # for line in range(1, difference):
+            #     currentLine = startLine + line
+            #     data = self._data[currentLine]
+            #     if ":" not in data:
+            #         pass
+            #         #print(data, currentLine)
+            #     #print(self._data[startLine + line])
+            #     pass
+    def test(self):
+        for index, line in enumerate(self._data):
+            if ":" in line and "[" in line:
+                #remove [] from line
+                #make new area with same name as previous area
+                nextLine = index + 1
+                print(line)
+                print(self._data[nextLine])
+                return
 
 
 
@@ -144,8 +162,12 @@ game = SacredGoldWriter()
 game.readFile()
 game.formatData()
 game.indexAreas()
-game.formatDataEncounters()
+game.putEncounterOnOneLine()
+#give [3f] correct names
+#game.addFloors()
 #give correct starting lines
 game.indexAreas()
 game.createEncounters()
 game.writeToFile()
+game.test()
+#print(game.areaList())

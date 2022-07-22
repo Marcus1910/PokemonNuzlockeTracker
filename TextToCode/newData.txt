@@ -506,7 +506,8 @@ Pastoral Sound: Chimecho [ 2F ]
 Wild Levels: 48 – 50 
 Cave: Golbat (24%), Clefairy (20%), Graveler (14%), Sandslash (10%), Parasect (10%), Chimecho (10%), Solrock (5%), Lunatone (5%), Clefable (1%) 
 Meridian Sound: Clefable 
-Pastoral Sound: Chimecho [ Outside ] 
+Pastoral Sound: Chimecho 
+[ Outside ] 
 Wild Levels: 40 – 50 
 Surf: Wooper (63%), Poliwhirl (32%), Quagsire (5%) 
 Old Rod: Magikarp (100%) 
@@ -814,6 +815,7 @@ Old Rod: Luvdisc (90%), Poliwag (10%)
 Good Rod: Luvdisc (60%), Poliwag (30%), Poliwhirl (10%) 
 Super Rod: Poliwhirl (60%), Luvdisc (30%), Gyarados (10%) 
 Mt. Silver   
+[ 1F – Entrance Room ] 
 Wild Levels: 50 – 64 
 Cave, Morning / Day: Phanpy (20%), Teddiursa (20%), Donphan (15%), Ursaring (15%), Quagsire (10%), Magmar (10%), Larvitar (5%), Graveler (5%) 
 Cave, Night: Quagsire (20%), Golbat (20%), Golduck (20%), Graveler (20%), Donphan (5%),  Ursaring (5%), Larvitar (5%), Misdreavus (5%) 
@@ -822,32 +824,38 @@ Pastoral Sound: Larvitar
 Surf: Golbat (60%), Seadra (30%), Horsea (10%) 
 Old Rod: Goldeen (60%), Krabby (30%), Corphish (10%) 
 Good Rod: Goldeen (60%), Krabby (30%), Corphish (10%) 
-Super Rod: Seaking (60%), Kingler (30%), Crawdaunt (10%) [ 1F – Side Room ] 
+Super Rod: Seaking (60%), Kingler (30%), Crawdaunt (10%) 
+[ 1F – Side Room ] 
 Wild Levels: 50 – 64 
 Cave, Morning / Day: Parasect (45%), Golduck (20%), Quagsire (15%), Shelgon (15%), Bagon (5%) 
 Cave, Night: Parasect (35%), Golduck (20%), Quagsire (15%), Shelgon (15%), Misdreavus (10%),  Bagon (5%) 
 Meridian Sound: Shelgon 
-Pastoral Sound: Paras, Bagon [ 1F – Back Room ] 
+Pastoral Sound: Paras, Bagon 
+[ 1F – Back Room ] 
 Wild Levels: 64 – 68 
 Cave, Morning / Day: Golbat (20%), Graveler (20%), Steelix (20%), Rhydon (20%), Quagsire (10%), Pupitar (10%) 
 Cave, Night: Golbat (20%), Graveler (20%), Steelix (20%), Rhydon (20%), Misdreavus (10%),  Quagsire (5%), Pupitar (5%),  
 Meridian Sound: Rhyperior 
-Pastoral Sound: Pupitar [ 2F – Spiral Cave ] 
+Pastoral Sound: Pupitar 
+[ 2F – Spiral Cave ] 
 Wild Levels: 62 – 66 
 Cave, Morning / Day: Golbat (25%), Graveler (25%), Magneton (20%), Mawile (10%), Sableye (10%), Solrock (10%) 
 Cave, Night: Golbat (25%), Graveler (20%), Dusclops (10%), Magneton (10%), Mawile (10%),  Sableye (10%), Lunatone (10%), Misdreavus (5%) 
 Meridian Sound: Magnezone 
-Pastoral Sound: Solrock, Lunatone [ Outside – Snowy Area ] 
+Pastoral Sound: Solrock, Lunatone 
+[ Outside – Snowy Area ] 
 Wild Levels: 54 - 65 
 Grass, Morning / Day: Abomasnow (30%), Medicham (20%), Loudred (20%), Sneasel (10%),  Piloswine (10%), Snover (5%), Absol (5%) 
 Grass, Night: Abomasnow (20%), Loudred (20%), Medicham (10%), Noctowl (10%), Golbat (10%), Sneasel (10%), Piloswine (10%), Snover (5%), Absol (5%) 
 Meridian Sound: Mamoswine, Weavile 
-Pastoral Sound: Absol  [ Outside – Mountainous Area ] 
+Pastoral Sound: Absol 
+ [ Outside – Mountainous Area ] 
 Wild Levels: 60 – 64 
 Grass, Morning / Day: Onix (30%), Gligar (20%), Graveler (20%), Lairon (10%), Machoke (10%),  Skarmory (5%) 
 Grass, Night: Golbat (40%), Gligar (10%), Onix (10%), Graveler (10%), Lairon (10%), Machoke (5%), Vibrava (5%), Skarmory (5%) 
 Meridian Sound: Gliscor, Flygon 
-Pastoral Sound: Skarmory [ 3F – Final Cave ] 
+Pastoral Sound: Skarmory 
+[ 3F – Final Cave ] 
 Wild Levels: 64 – 68 
 Cave, Morning / Day: Golbat (25%), Gabite (20%), Bronzong (15%), Mawile (10%), Sableye (10%), Magneton (10%), Machoke (10%) 
 Cave, Night: Golbat (25%), Gabite (20%), Bronzong (15%), Mawile (10%), Sableye (10%), Machoke (10%), Magneton (5%), Dusclops (5%) 

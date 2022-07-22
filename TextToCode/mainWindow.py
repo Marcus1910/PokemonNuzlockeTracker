@@ -81,7 +81,7 @@ class MainWindow(TemplateWindow):
         self._exportToShowdownButton = Button(self._trainerFrame, text = "export current trainer to showdown", bd = 5, font = self._font, command = self.showdownExport)
         self._exportToShowdownButton.grid(row = 9, column =0, columnspan = 3, sticky = NSEW)
 
-        self._exportAllToShowdownButton = Button(self._trainerFrame, text = "export everything to showdown", bd = 5, font = self._font)
+        self._exportAllToShowdownButton = Button(self._trainerFrame, text = "export all available trainer data to showdown", bd = 5, font = self._font)
         self._exportAllToShowdownButton.grid(row = 10, column =0, columnspan = 3, sticky = NSEW)
 
         """selected Area"""
