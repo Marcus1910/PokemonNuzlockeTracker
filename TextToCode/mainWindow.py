@@ -1,11 +1,11 @@
 from tkinter import *
 import os
-from attributeWindow import AttributeWindow
+from AddDeleteAttributeWindows import AddDeleteTrainerWindow
 
 from templateWindow import TemplateWindow
 from games.trainer import Trainer
 #from attributeWindow import TrainerWindow, ItemWindow
-from item import Item
+from games.item import Item
 
 '''
 TODO add state so trainers cannot be clicked
@@ -74,7 +74,7 @@ class MainWindow(TemplateWindow):
         self._editTrainerButton = Button(self._trainerFrame, text = "edit a trainer", bd = 3, font = self._font)#, command =self.editTrainer)
         self._editTrainerButton.grid(row = 8, column = 1, sticky = NSEW)
 
-        self._deleteTrainerButton = Button(self._trainerFrame, text = "delete a trainer", bd = 3, font = self._font)#, command = self.deleteTrainer)
+        self._deleteTrainerButton = Button(self._trainerFrame, text = "delete a trainer", bd = 3, font = self._font, command = self.deleteTrainer)
         self._deleteTrainerButton.grid(row = 8, column = 2, sticky = NSEW)
 
         """showdown buttons"""
@@ -127,12 +127,17 @@ class MainWindow(TemplateWindow):
         for area in self._listOfAreas:
             if areaName in area.name:
                 self._listOfTrainers = area.trainers
+
+                if len(area.trainers) == 0:
+                    self._selectedTrainer.set("this route has no trainers, please add one with the add trainer button")
+
                 for trainer in area._trainers:
                     self._trainerNames.append(trainer.name)
         #empty the optionmenu
         menu.delete(0, "end")
         for trainer in self._trainerNames:
             menu.add_command(label = trainer, command = lambda value = trainer: self._selectedTrainer.set(value))
+        
     
     def getPokemon(self, *args):
         """get the pokemon from a selected trainer"""
@@ -164,7 +169,7 @@ class MainWindow(TemplateWindow):
             label.destroy()
         
     def displayPokemon(self, pokemon, index):
-        """look for photo of the pokemon and at the pokemon data to the gui"""
+        """look for photo of the pokemon and add the pokemon to the gui"""
         folderPath = os.path.join(os.getcwd(), 'sprites/pokemon')
         photo = os.path.join(folderPath, pokemon.name + '.png')
         #check if pokemon name is correct else display '?' png
@@ -211,8 +216,8 @@ class MainWindow(TemplateWindow):
         #open new window which containes current trainers
         #back button which closes window
         #send name to main program
-        newWindow = AttributeWindow(self._master, self._listOfTrainers)
-        print("adding Trainer")
+        newWindow = AddDeleteTrainerWindow(self._master, self._listOfTrainers, self._selectedArea.get(), False, "trainer")
+        print(f"adding Trainer to {self._selectedArea.get()}")
         pass
     
 
@@ -220,9 +225,11 @@ class MainWindow(TemplateWindow):
         #self._newWindow = TrainerWindow(self._master, self._listOfTrainers)
         pass
 
+    def deleteTrainer(self):
+        """delete a trainer from trainer list"""
+        newWindow = AddDeleteTrainerWindow(self._master, self._listOfTrainers, self._selectedArea.get(), True, "trainer")
+        print(f"deleting trainer")
 
-
-        pass
 
     def showdownExport(self):
         """grabs current trainer selected and converts its data to showdown format"""

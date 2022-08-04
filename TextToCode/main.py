@@ -1,7 +1,7 @@
 from games.area import Area
 from games.trainer import Trainer
 from games.pokemon import Pokemon
-from item import Item
+from games.item import Item
 
 import json
 txtfile = "trainerData.txt"

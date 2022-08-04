@@ -9,7 +9,6 @@ class Area():
         self._encounters = []
         self._trainers = []
         self._items = []
-    #TODO area is not supposed to write and write
     
     @property
     def name(self):

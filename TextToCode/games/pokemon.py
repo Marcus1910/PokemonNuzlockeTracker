@@ -38,7 +38,6 @@ class Pokemon():
             self._gender = None
         else:
             gender = str(gender).upper()
-            #print(f"gender: {gender}")
             if gender == "F" or gender == "M":
                 self._gender = gender
             else:
