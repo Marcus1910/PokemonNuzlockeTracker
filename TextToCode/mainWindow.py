@@ -90,8 +90,10 @@ class MainWindow(TemplateWindow):
         self._selectedArea = StringVar()
         self._selectedArea.set("choose an Area")
         #area is the _selectedArea variable
-        self._areaMenu = OptionMenu(self._master, self._selectedArea, *self._areaNames, command = lambda area: [self.getTrainers(area), self.getItems(area)])
+        self._areaMenu = ttk.Combobox(self._master, textvariable = self._selectedArea, values = self._areaNames)#, command = lambda area: [self.getTrainers(area), self.getItems(area)])
         self._areaMenu.grid(row=0, column=5, sticky=NW)
+        self._areaMenu['state'] = 'readonly'
+        self._areaMenu.bind("<<ComboboxSelected>>", lambda area = self._areaMenu.get(): [self.getTrainers(area), self.getItems(area)])
 
         """exit buttons and main loop"""
         self._exitButton = Button(self._master, text = "exit", command = self.exit)
@@ -118,10 +120,11 @@ class MainWindow(TemplateWindow):
         #TODO sort list on number of badges
         pass
     
-    def getTrainers(self, areaName):
+    def getTrainers(self, event):
         """empty and update trainerlist for the option menu depending on the selected area"""
         #enable to select trainer and export buttons
         #self.changeTrainerButtonState(NORMAL)
+        areaName = event.widget.get()
         menu = self._trainerMenu["menu"]
         #reset lists
         self._trainerNames = []
@@ -157,7 +160,8 @@ class MainWindow(TemplateWindow):
                     for index, pokemon in enumerate(trainer.pokemon):
                         self.displayPokemon(pokemon, index)
     
-    def getItems(self, areaName):
+    def getItems(self, event):
+        areaName = event.widget.get()
         self._listOfItems = []
         for area in self._listOfAreas:
             if areaName == area.name:
