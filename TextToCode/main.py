@@ -2,6 +2,7 @@ from games.area import Area
 from games.trainer import Trainer
 from games.pokemon import Pokemon
 from games.item import Item
+from readFormattedData import readFormattedData
 
 import json
 txtfile = "trainerData.txt"
@@ -25,6 +26,9 @@ class MainGame():
                 self.convertDataToObjects()
             except json.JSONDecodeError:
                 print("no save data found")
+    
+    def retrieveEncounterData(self):
+        self.areaList = readFormattedData('sacredGoldCorrectData').returnAreaList()
                 
     def convertDataToObjects(self):
         #get all the data from the text file
@@ -33,6 +37,7 @@ class MainGame():
             startLine = area["_startLine"]
             wildArea = Area(areaName)
             wildArea.startLine = startLine
+
 
             """retrieve all area attributes"""
             items = area["_items"]
@@ -72,12 +77,13 @@ class SacredGold(MainGame):
     def __init__(self):
         super().__init__()
         self.file = "trainerData.txt"
+        self.retrieveEncounterData()
 
-        self.readFromFile()
-        self.writeToFile()
+        #self.readFromFile()
+        #self.writeToFile()
 
 
-# game1 = SacredGold()
+game1 = SacredGold()
 # route1 = Area("Route 1", 5)
 # route2 = Area("Route 2", 16)
 

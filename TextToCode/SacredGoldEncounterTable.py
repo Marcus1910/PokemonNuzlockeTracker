@@ -114,7 +114,7 @@ class SacredGoldWriter():
                 lineNumber = startLine + line
                 dataLine = self._data[lineNumber]
                 previousLine = self._data[lineNumber - 1]
-                if ":" not in dataLine:
+                if ":" not in dataLine and '[' not in dataLine:
                     previousLine += dataLine
                     self._data[lineNumber - 1] = previousLine
                     removeList.append((lineNumber))
@@ -168,6 +168,7 @@ game.putEncounterOnOneLine()
 #give correct starting lines
 game.indexAreas()
 game.createEncounters()
+
 game.writeToFile()
-game.test()
-#print(game.areaList())
+# game.test()
+print(game.areaList())

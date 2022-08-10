@@ -33,12 +33,16 @@ check if moves are valid, option in settings
 when adding or deleting, disable everything except route and select trainer
 
 clear trainer data when switching routes
+add / delete routes
 update trainermenu when switching areas
 
 subclasses AddDeleteWindow -> AddDeletetrainerWindow, AddDeleteItemWindow
 
 popup message, x removed
 
-NOW
-edit button- pop up, saying edit trainer to add pokemon
+edit button- pop up, saying edit trainer to add pokemon -> call edit trainer immediatly
+
+sort route list option, own choice
+
+.bat file or .exe
 

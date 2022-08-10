@@ -1,0 +1,8 @@
+Route 29 
+Wild Levels: 3 � 5 
+Grass, Morning / Day: Pidgey (20%), Sentret (20%), Starly (15%), Rattata (15%), Zigzagoon (10%), Bidoof 
+(10%), Hoppip (5%), Wurmple (5%) 
+Grass, Night: Hoothoot (20%), Rattata (20%), Poochyena (15%), Zigzagoon (15%), Bidoof (15%), 
+Wurmple (15%) 
+Meridian Sound: Furret, Raticate 
+Pastoral Sound: Plusle, Minun 

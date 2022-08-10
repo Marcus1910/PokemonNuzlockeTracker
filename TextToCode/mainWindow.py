@@ -1,5 +1,7 @@
 from tkinter import *
 import os
+from tkinter import ttk
+
 from AddDeleteAttributeWindows import AddDeleteTrainerWindow
 
 from templateWindow import TemplateWindow
