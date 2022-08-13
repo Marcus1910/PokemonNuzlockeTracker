@@ -87,13 +87,19 @@ class MainWindow(TemplateWindow):
         self._exportAllToShowdownButton.grid(row = 10, column =0, columnspan = 3, sticky = NSEW)
 
         """selected Area"""
+        self._areaFrame = Frame(self._master)
+        self._areaFrame.grid(row = 0, column = 5, sticky = N)
+
         self._selectedArea = StringVar()
         self._selectedArea.set("choose an Area")
         #area is the _selectedArea variable
-        self._areaMenu = ttk.Combobox(self._master, textvariable = self._selectedArea, values = self._areaNames)#, command = lambda area: [self.getTrainers(area), self.getItems(area)])
-        self._areaMenu.grid(row=0, column=5, sticky=NW)
+        self._areaMenu = ttk.Combobox(self._areaFrame, textvariable = self._selectedArea, values = self._areaNames)#, command = lambda area: [self.getTrainers(area), self.getItems(area)])
+        self._areaMenu.grid(row=0, column=5, sticky=NSEW)
         self._areaMenu['state'] = 'readonly'
         self._areaMenu.bind("<<ComboboxSelected>>", lambda area = self._areaMenu.get(): [self.getTrainers(area), self.getItems(area)])
+
+        self._showWildEncounterButton = Button(self._areaFrame, text = "Encounters", command = self.showEncounters)
+        self._showWildEncounterButton.grid(row = 1, column = 5, sticky = NSEW)
 
         """exit buttons and main loop"""
         self._exitButton = Button(self._master, text = "exit", command = self.exit)
@@ -106,6 +112,11 @@ class MainWindow(TemplateWindow):
         #self.changeTrainerButtonState(DISABLED)
         self.update()
         self.run()
+
+    def showEncounters(self):
+        currentArea = self._areaMenu.get()
+        print(currentArea)
+        print("showing")
 
     def getAreas(self):
         """determine which game should be called and retrieve the correct information TODO replace with call to /games/game"""
