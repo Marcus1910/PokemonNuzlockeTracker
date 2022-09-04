@@ -1,6 +1,6 @@
 from AddDeleteWindow import AddDeleteWindow
 from games.trainer import Trainer
-from games.pokemon import Pokemon
+from games.trainerPokemon import TrainerPokemon
 from games.encounterPokemon import EncounterPokemon
 from games.area import Area
 from games.item import Item

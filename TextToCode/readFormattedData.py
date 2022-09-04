@@ -70,7 +70,8 @@ class readFormattedData():
                 #create pokemon object loop
                 for index, pokemon in enumerate(pokemons):
                     pokemon = pokemon.split("(", 1)
-                    species = pokemon[0]
+                    #remove left-over spaces from pokemon species
+                    species = pokemon[0].strip()
                     try:
                         percentage = pokemon[1].split(')')[0]
                     except IndexError:

@@ -25,6 +25,7 @@ figure out how to change typings/ base stats in showdown
 
 option to change wallpaper
 check image(s) for copyright
+option to change updateTime for wallpaper
 
 add list of moves
 check if moves are valid, option in settings

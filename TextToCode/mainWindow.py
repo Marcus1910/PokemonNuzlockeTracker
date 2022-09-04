@@ -111,8 +111,7 @@ class MainWindow(TemplateWindow):
         print("showing")
         for area in self._listOfAreas:
             if area.name == currentArea:
-                print(area.encounters)
-                encounterWindow = EncounterWindow(area.encounters, self._master)
+                encounterWindow = EncounterWindow(self._master, area)
                 break
         #print(self._listOfAreas)
 

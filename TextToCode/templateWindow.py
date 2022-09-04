@@ -4,7 +4,7 @@ import os
 
 class TemplateWindow():
     def __init__(self, x, y, parent = None):
-        """create template for gui, every window is inherited from this one"""
+        """create template for gui"""
         if parent == None:
             self._master = Tk()
         else:
@@ -18,6 +18,7 @@ class TemplateWindow():
         self._previousY = y
         self._masterX = x
         self._masterY = y
+        self._updateTime = 500
         self._image = "bg.jpg"
         self._icon = os.path.join(os.getcwd(), "sprites/icons/nuzlocke.ico")
 
@@ -50,7 +51,7 @@ class TemplateWindow():
             self._previousY = self._masterY
             #needed otherwise image is disposed due to garbage collection
             self._photoLabel.image = photo
-        self._resizeImage = self._master.after(300, self.update)
+        self._resizeImage = self._master.after(self._updateTime, self.update)
     
     def stop(self):
         """stop the update cycle else an error can occur"""

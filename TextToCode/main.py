@@ -1,6 +1,6 @@
 from games.area import Area
 from games.trainer import Trainer
-from games.pokemon import Pokemon
+from games.trainerPokemon import TrainerPokemon
 from games.item import Item
 from readFormattedData import readFormattedData
 

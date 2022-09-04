@@ -1,5 +1,5 @@
 from games.trainer import Trainer
-from games.pokemon import Pokemon
+from games.trainerPokemon import TrainerPokemon
 import json
 
 class Area():
