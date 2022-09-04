@@ -107,13 +107,9 @@ class MainWindow(TemplateWindow):
 
     def showEncounters(self):
         currentArea = self._areaMenu.get()
-        print(currentArea)
-        print("showing")
         for area in self._listOfAreas:
             if area.name == currentArea:
-                encounterWindow = EncounterWindow(self._master, area)
-                break
-        #print(self._listOfAreas)
+                EncounterWindow(self._master, area)
 
     def getAreas(self):
         """determine which game should be called and retrieve the correct information TODO replace with call to /games/game"""

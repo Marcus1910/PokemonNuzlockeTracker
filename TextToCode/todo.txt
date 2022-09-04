@@ -3,6 +3,8 @@ show all available pokemon per route vanilla games, new window
 show all available trainer data vanilla games
 show all available items per route
 
+add iconbitmap to encounterWindow depending on areaName
+
 settings button front page
     show available areas per badge - option on or off (default off)
     message if 2 or more pokemon caught same route (default on) "you have already caught pokemon x on this route"
