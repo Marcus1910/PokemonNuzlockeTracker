@@ -2,33 +2,29 @@ from tkinter import *
 from tkinter import ttk
 import os
 
+
 class EncounterWindow():
     def __init__(self, parent, area):
         self.area = area
         self._encounterList = area.encounters
         self._areaName = area.name
-
         self._master = Toplevel(parent)
-        #self._master.resizable(False, False)
+        self._master.resizable(False, False)
         self._master.attributes("-topmost", True)
-        self._master.geometry("400x600")
+        self._master.geometry("450x600")
         self._master.title(self._areaName)
         self._master.columnconfigure(0, weight = 1)
         self._master.rowconfigure(0, weight = 1)
-        self._masterFrame = Frame(self._master, bg = "green")
-        self._masterFrame.grid(row = 0, column = 0, sticky = NSEW)
-
-        #self._canvas = Canvas(self._masterFrame, bg ="red")
-        #self._canvas.grid(row = 0, column = 0, sticky = NS)
+        self._masterCanvas = Canvas(self._master)
+        self._masterCanvas.grid(row = 0, column = 0, sticky = NSEW)
         
-        
-        #scrollbar = ttk.Scrollbar(self._masterFrame, orient = VERTICAL, command = self._canvas.yview)
-        #scrollbar.grid(row = 0, column = 5, sticky = NS)
+        scrollbar = Scrollbar(self._master, orient = VERTICAL, command = self._masterCanvas.yview)
+        scrollbar.grid(row = 0, column = 5, sticky = NS)
 
-        #self._canvas.configure(yscrollcommand = scrollbar.set)
-        #self._canvas.bind('<Configure>', lambda e: self._canvas.configure(scrollregion = self._canvas.bbox("all")))
-        #self._secondFrame = Frame(self._masterFrame, bg = "blue")
-        #self._canvas.create_window((0,0), window = self._secondFrame, anchor = NW)
+        self._masterCanvas.configure(yscrollcommand = scrollbar.set)
+        self._masterCanvas.bind('<Configure>', lambda e: self._masterCanvas.configure(scrollregion = self._masterCanvas.bbox("all")))
+        self._canvasFrame = Frame(self._masterCanvas)
+        self._masterCanvas.create_window((0,0), window = self._canvasFrame, anchor = NW)
 
         self.makeAreas()
 
@@ -44,15 +40,9 @@ class EncounterWindow():
                     row += max(len(areaType[1]), len(self._encounterList[index-1]))
             else:
                 placement = 2
-                
-
-                
-
             
-            
-            areaTypeFrame = Frame(self._masterFrame, borderwidth = 1, relief = "solid")
+            areaTypeFrame = Frame(self._canvasFrame, borderwidth = 1, relief = "solid")
             areaTypeFrame.grid(row = row, column = column + placement, columnspan = 2, sticky = NSEW)
-            print(f"placing label {index} at row: {row} and column: {column + placement}")
 
             typeLabel = Label(areaTypeFrame, text = areaType[0], borderwidth = 1, relief = "raised", fg = "blue")
             typeLabel.grid(row = 0, column=1, columnspan = 5, sticky = NSEW)
@@ -60,7 +50,6 @@ class EncounterWindow():
             SpritesPath = os.path.join(os.getcwd(), "sprites/pokemon")
             for index, encounter in enumerate(areaType[1]):
                 #get correct pokemon picture
-                #print(encounter.name)
                 image = os.path.join(SpritesPath, (encounter.name + ".png"))
 
                 try:
