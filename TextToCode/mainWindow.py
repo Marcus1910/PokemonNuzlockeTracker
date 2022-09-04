@@ -5,19 +5,10 @@ from tkinter import ttk
 from AddDeleteAttributeWindows import AddDeleteTrainerWindow
 
 from templateWindow import TemplateWindow
+from encounterWindow import EncounterWindow
 from games.trainer import Trainer
 #from attributeWindow import TrainerWindow, ItemWindow
 from games.item import Item
-
-'''
-TODO add state so trainers cannot be clicked
-TODO add edit options to edit pokemon
-TODO get added data from child
-Add encounters
-sort arealist by badges
-showdown format
-show items
-'''
 
 class MainWindow(TemplateWindow):
     def __init__(self, x, y, game):
@@ -28,6 +19,7 @@ class MainWindow(TemplateWindow):
         self._areaNames = []
         self._listOfTrainers = []
         self._listOfItems = []
+        #optionmenu needs list with a minimum of 1 item
         self._trainerNames = [None]
         self.getAreas()
 
@@ -117,6 +109,12 @@ class MainWindow(TemplateWindow):
         currentArea = self._areaMenu.get()
         print(currentArea)
         print("showing")
+        for area in self._listOfAreas:
+            if area.name == currentArea:
+                print(area.encounters)
+                encounterWindow = EncounterWindow(area.encounters, self._master)
+                break
+        #print(self._listOfAreas)
 
     def getAreas(self):
         """determine which game should be called and retrieve the correct information TODO replace with call to /games/game"""

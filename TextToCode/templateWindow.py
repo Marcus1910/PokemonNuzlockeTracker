@@ -9,12 +9,13 @@ class TemplateWindow():
             self._master = Tk()
         else:
             self._master = Toplevel(parent)
-        
         self._debugMode = 0
         self._numberOfBadges = 0
         self._game = None
         self._font = "Helvetica 10 italic"
 
+        self._previousX = x
+        self._previousY = y
         self._masterX = x
         self._masterY = y
         self._image = "bg.jpg"
@@ -39,12 +40,17 @@ class TemplateWindow():
         self._master.update()
         self._masterY = self._master.winfo_height()
         self._masterX = self._master.winfo_width()
-        #update the bg to fully cover the adjusted area
-        photo = ImageTk.PhotoImage(Image.open("bg.jpg").resize([self._masterX, self._masterY]))
-        self._photoLabel.configure(image = photo)
+        if (self._masterX != self._previousX) or (self._masterY != self._previousY):
+            print("updating")
+            #update the bg to fully cover the adjusted area
+            photo = ImageTk.PhotoImage(Image.open("bg.jpg").resize([self._masterX, self._masterY]))
+            self._photoLabel.configure(image = photo)
+            #update values after resize
+            self._previousX = self._masterX
+            self._previousY = self._masterY
+            #needed otherwise image is disposed due to garbage collection
+            self._photoLabel.image = photo
         self._resizeImage = self._master.after(300, self.update)
-        #needed otherwise image is disposed due to garbage collection
-        self._photoLabel.image = photo
     
     def stop(self):
         """stop the update cycle else an error can occur"""

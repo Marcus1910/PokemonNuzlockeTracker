@@ -29,6 +29,8 @@ check image(s) for copyright
 add list of moves
 check if moves are valid, option in settings
 
+new run option, clears all data and starts with clean slate
+
 
 when adding or deleting, disable everything except route and select trainer
 
