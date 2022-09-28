@@ -90,7 +90,21 @@ class EncounterWindow():
     
     def updateCapturedPokemon(self):
         print("updating")
+        newList = []
+        for key, value in self._intvarList.items():
+            if value.get():
+                newList.append(key)
+        for pokemon in newList:
+            print(pokemon)
+            if pokemon not in self._caughtPokemon:
+                print("adding pokemon to caughtList")
+                self._caughtPokemon[pokemon] = self._areaName
+            else:
+                print("already caught")
+                
+        newList = []
     
+        print(self._caughtPokemon)
             
 
     
