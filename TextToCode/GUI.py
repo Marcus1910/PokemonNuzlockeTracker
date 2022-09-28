@@ -28,9 +28,15 @@ class SelectGameWindow(TemplateWindow):
 
     def nextWindow(self):
         self._chosenGame = self._chosen.get()
+        #print(f"wrong : {wrongInput}")
         if self._chosenGame not in self._listOfGames:
+            #wrongInput += 1
+            #if wrongInput == 3:
+            #    print("ja toch")
+            #    pass
             self._chosenGameMenu.config(bg = 'Red')
         else:
+            #wrongInput = 0
             from mainWindow import MainWindow
             if self._debugMode:
                 print(f"selected {self._chosenGame}")

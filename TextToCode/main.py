@@ -28,6 +28,7 @@ class MainGame():
                 print("no save data found")
     
     def retrieveEncounterData(self):
+        #only needed once
         self.areaList = readFormattedData('sacredGoldCorrectData').returnAreaList()
                 
     def convertDataToObjects(self):
@@ -37,7 +38,6 @@ class MainGame():
             startLine = area["_startLine"]
             wildArea = Area(areaName)
             wildArea.startLine = startLine
-
 
             """retrieve all area attributes"""
             items = area["_items"]
@@ -60,7 +60,7 @@ class MainGame():
                 for pokemon in trainer["_pokemon"]:
                     pokemonName = pokemon["_name"]
                     pokemonLevel = pokemon["_level"]
-                    trainerPokemon = Pokemon(pokemonName, pokemonLevel)
+                    trainerPokemon = trainerPokemon(pokemonName, pokemonLevel)
                     trainerPokemon._gender = pokemon["_gender"]
                     trainerPokemon._ability = pokemon["_ability"]
                     trainerPokemon._heldItem = pokemon["_heldItem"]
@@ -76,7 +76,7 @@ class MainGame():
 class SacredGold(MainGame):
     def __init__(self):
         super().__init__()
-        self.file = "trainerData.txt"
+        self.file = "SacredGoldGameData.txt"
         self.retrieveEncounterData()
 
         #self.readFromFile()
@@ -84,6 +84,7 @@ class SacredGold(MainGame):
 
 
 game1 = SacredGold()
+game1.writeToFile()
 # route1 = Area("Route 1", 5)
 # route2 = Area("Route 2", 16)
 

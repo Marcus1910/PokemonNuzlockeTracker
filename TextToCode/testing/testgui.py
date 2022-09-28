@@ -11,7 +11,11 @@ specialCharacters = ["*", "-", "+", "="]
 answerLabel = Label(root, text = answer, height = 5)
 answerLabel.grid(row=0, column=0, columnspan=3)
 #print(answerLabel.cget("text"))
-
+yes = IntVar()
+yes.set(1)
+print(yes.get())
+yes.set(1)
+print(yes.get())
 def showNumber(number):
     global answer
     answer += str(number)

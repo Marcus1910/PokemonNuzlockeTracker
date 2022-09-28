@@ -1,10 +1,19 @@
-
+---MAIN---
 show all available pokemon per route vanilla games, new window
 show all available trainer data vanilla games
 show all available items per route
 
-add iconbitmap to encounterWindow depending on areaName
+add button that adds trainer to route X
+add button that edits a trainer from route X
+correct states for buttons
 
+---ENCOUNTERPOKEMON---
+use list to store individual frames
+make same pokemon point to same checkbox variable
+    sort frames on %
+
+
+---SETTINGS---
 settings button front page
     show available areas per badge - option on or off (default off)
     message if 2 or more pokemon caught same route (default on) "you have already caught pokemon x on this route"
@@ -13,21 +22,31 @@ settings button front page
     remember all caught pokemon, collected items and defeated trainers (default on) each own setting
     use a movelist to validate moves used
     amount of saves kept.
+    option to change wallpaper
+        check image(s) for copyright
+        option to change updateTime for wallpaper
 
+---ROM HACKS / LOGIC---
 basic logic for getting encounters from rom hack documentation
+checkbutton for encounterwindow
 
-add button that adds trainer to route X
-add button that edits a trainer from route X
-correct states for buttons
 
-export Trainer to showdown format
-export route to showdown format
-export all trainers to showdown format
-figure out how to change typings/ base stats in showdown
 
-option to change wallpaper
-check image(s) for copyright
-option to change updateTime for wallpaper
+
+---EXTRAS---
+read encountertable data from rom
+add classes to make adding games easier, no programming knowledge needed
+add iconbitmap to encounterWindow depending on areaName
+
+    ---SHOWDOWN---
+    export Trainer to showdown format
+    export route to showdown format
+    export all trainers to showdown format
+    figure out how to change typings/ base stats in showdown
+
+    ---INTERACTABLE MAP---
+    add map to display encounters, in correlation with number of badges, colour coding
+    add nickname, shiny, level etc from caught pokemon
 
 add list of moves
 check if moves are valid, option in settings

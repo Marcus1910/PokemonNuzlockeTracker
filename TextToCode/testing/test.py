@@ -1,18 +1,15 @@
-from tkinter import Y
+from tkinter import *
+root = Tk()
+pidgeyVar = IntVar()
 
+dict = {"pidgey" : pidgeyVar,
+        "get": IntVar(),
+        "pidgeot" : pidgeyVar}
 
-z = []
-v = "Jan"
-class x():
-    def __init__(self):
-        self.name = "Jan"
+for key, value in dict.items():
+    print(key, value.get())
 
-for i in range(3):
-    y = x()
-    z.append(y)
+dict["pidgey"].set(1)
 
-for i in range(3):
-    if z[i].name in v:
-        print("yes")
-    else:
-        print("Nouri Gaan")
+for key, value in dict.items():
+    print(key, value.get())

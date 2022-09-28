@@ -13,12 +13,12 @@ class readFormattedData():
     def readFile(self):
         with open(f"{self._file}.txt") as file:
             self._data = file.readlines()
-    
+
     def indexAreas(self):
         for index, line in enumerate(self._data):
             for area in self._areaTypes:
                 if area in line:
-                    if ":" not in line and "," not in line and "(" not in line: #and "[" not in line
+                    if ":" not in line and "," not in line and "(" not in line:
                         while "  " in line:
                             line = line.replace("  ", " ")
                         if line[-1:] == " ":
@@ -37,6 +37,11 @@ class readFormattedData():
         alreadySeen = []
         newAreaList = []
         for area in self._areaList:
+            if "\n" in area.name:
+                #print(f"{area.name} has '\n' in it")
+                area.name = area.name.replace("\n", "")
+                if area.name[-1] == " ":
+                    area.name = area.name.rstrip()
             if area.name not in alreadySeen:
                 alreadySeen.append(area.name)
                 newAreaList.append(area)
@@ -48,7 +53,7 @@ class readFormattedData():
             formattedList = []
             #areaname is already known
             beginLine = area.startLine + 1
-
+            #create boundaries for each area
             try:
                 nextLine = self._areaList[areaNumber + 1].startLine
             except IndexError:
@@ -62,10 +67,12 @@ class readFormattedData():
                 terrainType = separatedLine[0]
                 if "Wild Level" in separatedLine[0]:
                     level = separatedLine[1]
-                    #skip this iteration
+                    if "ï¿½" in level:
+                        level = level.replace(" ï¿½ " , " - " )
+                    else:
+                        level = "N/A"
+                    #continue otherwise wild levels will be seen as an encounter type
                     continue
-                else:
-                    level = "N/A"
                 pokemons = separatedLine[1].split(',')
                 #create pokemon object loop
                 for index, pokemon in enumerate(pokemons):
@@ -77,15 +84,9 @@ class readFormattedData():
                     except IndexError:
                         percentage = "N\A"
                     encounter = EncounterPokemon(species, level, percentage)
-                    #print(terrainType)
-                    #print(species, level, percentage)
-
                     encounterList.append(encounter)
-                #print(len(encounterList))
                 formattedList.append([terrainType, encounterList])
-            #print(formattedList)
-
-            self._areaList[areaNumber]._encounters = copy.deepcopy(formattedList)  
+            self._areaList[areaNumber]._encounters = copy.deepcopy(formattedList) 
 
 
     def returnAreaList(self):
