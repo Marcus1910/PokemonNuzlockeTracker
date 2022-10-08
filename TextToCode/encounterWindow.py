@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import ttk
+from PIL import Image, ImageTk
 import os
 
 
@@ -40,6 +40,8 @@ class EncounterWindow():
         row = 0
         column = 0
         placement = 0
+        SpritesPath = os.path.join(os.getcwd(), "sprites/pokemon")
+        ballSpriteFolder = os.path.join(os.getcwd(), "sprites\icons\pokeballSprites")
         for index, areaType in enumerate(self._encounterList):
             #determine position for the next label, next to it and/or below it
             if (index % 2) == 0:
@@ -56,14 +58,14 @@ class EncounterWindow():
             typeLabel = Label(areaTypeFrame, text = areaType[0], borderwidth = 1, relief = "raised", fg = "blue")
             typeLabel.grid(row = 0, column=1, columnspan = 5, sticky = NSEW)
 
-            SpritesPath = os.path.join(os.getcwd(), "sprites/pokemon")
+            
 
             #draw everything inside areaTypeFrame
             for index, encounter in enumerate(areaType[1]): 
                 if encounter.name  not in self._intvarList:
                     self._intvarList[encounter.name] = BooleanVar() 
 
-                #checkbuttons             
+                #checkbutton          
                 checkButton = Checkbutton(areaTypeFrame, variable = self._intvarList[encounter.name])
                 checkButton.grid(row = index + 1, column = 0)
 
@@ -105,6 +107,9 @@ class EncounterWindow():
         newList = []
     
         print(self._caughtPokemon)
+
+    def yes(self):
+        print("yes")
             
 
     

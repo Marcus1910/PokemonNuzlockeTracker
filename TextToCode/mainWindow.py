@@ -94,7 +94,7 @@ class MainWindow(TemplateWindow):
         self._showWildEncounterButton.grid(row = 1, column = 5, sticky = NSEW)
 
         """exit buttons and main loop"""
-        self._exitButton = Button(self._master, text = "exit", command = self.exit)
+        self._exitButton = Button(self._master, text = "save & exit", command = self.saveAndExit)
         self._exitButton.grid(row=4, column = 0, sticky=SW)
 
         self._backButton = Button(self._master, text = "back", command = self.createGameMenu)
@@ -257,6 +257,9 @@ class MainWindow(TemplateWindow):
         self.exit()
         SelectGameWindow()
 
+    def saveAndExit(self):
+        self._game.writeToFile()
+        self.exit()
 
 
 

@@ -74,7 +74,44 @@
     ]
    ]
   ],
-  "_trainers": [],
+  "_trainers": [
+   {
+    "_name": "Falkner",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": [
+     {
+      "_name": "squirtle",
+      "_level": 75,
+      "_dexNo": null,
+      "_gender": null,
+      "_moves": [
+       "Pound",
+       "Surf"
+      ],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_name": "Alakazam",
+      "_level": 15,
+      "_dexNo": null,
+      "_gender": null,
+      "_moves": [
+       "psychic"
+      ],
+      "_ability": null,
+      "_heldItem": null
+     }
+    ]
+   },
+   {
+    "_name": "Morty",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": []
+   }
+  ],
   "_items": []
  },
  {
@@ -315,7 +352,14 @@
     ]
    ]
   ],
-  "_trainers": [],
+  "_trainers": [
+   {
+    "_name": "Gengar",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": []
+   }
+  ],
   "_items": []
  },
  {

@@ -12,6 +12,7 @@ class MainGame():
         self.file = None
         self.areaList = []
         self.readData = None
+        self.areaNames = []
 
 
     def writeToFile(self):
@@ -31,12 +32,21 @@ class MainGame():
         #only needed once
         self.areaList = readFormattedData('sacredGoldCorrectData').returnAreaList()
                 
-    def convertDataToObjects(self):
+    def convertDataToObjects(self):  
         #get all the data from the text file
+        
         for area in self.readData:
+            alreadyexists = False
             areaName = area["_name"]
             startLine = area["_startLine"]
-            wildArea = Area(areaName)
+            for route in self.areaList:
+                if areaName == route.name:
+                    wildArea = route
+                    alreadyexists = True
+                    break
+                else:
+                    wildArea = Area(areaName)
+                
             wildArea.startLine = startLine
 
             """retrieve all area attributes"""
@@ -60,7 +70,7 @@ class MainGame():
                 for pokemon in trainer["_pokemon"]:
                     pokemonName = pokemon["_name"]
                     pokemonLevel = pokemon["_level"]
-                    trainerPokemon = trainerPokemon(pokemonName, pokemonLevel)
+                    trainerPokemon = TrainerPokemon(pokemonName, pokemonLevel)
                     trainerPokemon._gender = pokemon["_gender"]
                     trainerPokemon._ability = pokemon["_ability"]
                     trainerPokemon._heldItem = pokemon["_heldItem"]
@@ -71,20 +81,25 @@ class MainGame():
                         trainerPokemon.moves = moves[move]
                     pokemonTrainer.pokemon = trainerPokemon
                 wildArea.trainers = pokemonTrainer
-            self.areaList.append(wildArea)
+            if not alreadyexists:
+                self.areaList.append(wildArea)
 
 class SacredGold(MainGame):
     def __init__(self):
         super().__init__()
         self.file = "SacredGoldGameData.txt"
+        #returns a list with [area[areatype etc]]
         self.retrieveEncounterData()
+        self.readFromFile()
+        #print(self.areaList)
+        #add trainer and item list to area objects
 
         #self.readFromFile()
         #self.writeToFile()
 
 
-game1 = SacredGold()
-game1.writeToFile()
+# game1 = SacredGold()
+# game1.writeToFile()
 # route1 = Area("Route 1", 5)
 # route2 = Area("Route 2", 16)
 

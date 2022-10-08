@@ -8,8 +8,6 @@ add button that edits a trainer from route X
 correct states for buttons
 
 ---ENCOUNTERPOKEMON---
-use list to store individual frames
-make same pokemon point to same checkbox variable
     sort frames on %
 
 

@@ -101,11 +101,11 @@ class readFormattedData():
 
 
 
-x = readFormattedData('sacredGoldCorrectData')
-x.readFile()
-x.indexAreas()
-x.removeDuplicateNames()
-x.createEncounterLists()
+# x = readFormattedData('sacredGoldCorrectData')
+# x.readFile()
+# x.indexAreas()
+# x.removeDuplicateNames()
+# x.createEncounterLists()
 
 
     
