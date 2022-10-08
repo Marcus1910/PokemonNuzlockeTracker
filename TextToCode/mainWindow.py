@@ -2,7 +2,7 @@ from tkinter import *
 import os
 from tkinter import ttk
 
-from AddDeleteAttributeWindows import AddDeleteTrainerWindow
+from AddDeleteAttributeWindows import AddDeleteTrainerWindow, AddItemWindow
 
 from templateWindow import TemplateWindow
 from encounterWindow import EncounterWindow
@@ -43,6 +43,17 @@ class MainWindow(TemplateWindow):
 
         self._itemLabel = Label(self._itemFrame, text="Available Items")
         self._itemLabel.grid(row=0,column=0,sticky=N)
+
+        """item buttons"""
+        self._addItemButton = Button(self._itemFrame, text = "add an item", bd = 3, font = self._font, command = self.addItem)
+        self._addItemButton.grid(row = 25, column = 0, sticky = NSEW)
+        
+        self._deleteItemButton = Button(self._itemFrame, text = "delete an item", bd = 3, font = self._font, command = self.deleteItem)
+        self._deleteItemButton.grid(row = 25, column = 1, sticky = NSEW)
+        #self._addTrainerButton = Button(self._trainerFrame, text = "add a trainer", bd = 3, font = self._font, command = self.addTrainer)
+        #self._addTrainerButton.grid(row = 8, column = 0, sticky = NSEW)
+
+
 
         """trainer frames"""
         self._trainerFrame = Frame(self._master)
@@ -239,6 +250,14 @@ class MainWindow(TemplateWindow):
         """delete a trainer from trainer list"""
         newWindow = AddDeleteTrainerWindow(self._master, self._listOfTrainers, self._selectedArea.get(), True, "trainer")
         print(f"deleting trainer")
+    
+    def addItem(self):
+        newWindow = AddItemWindow(self._master, self._listOfItems, self._selectedArea.get(), True, "Item")
+        print(f"adding item to {self._selectedArea.get()}")
+    
+    def deleteItem(self):
+        newWindow = AddItemWindow(self._master, self._listOfItems, self._selectedArea.get(), True, "Item")
+        print(f"deleting item")
 
 
     def showdownExport(self):

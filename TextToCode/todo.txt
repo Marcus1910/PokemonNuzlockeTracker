@@ -3,7 +3,6 @@ show all available pokemon per route vanilla games, new window
 show all available trainer data vanilla games
 show all available items per route
 
-add button that adds trainer to route X
 add button that edits a trainer from route X
 correct states for buttons
 

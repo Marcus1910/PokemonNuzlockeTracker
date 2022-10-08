@@ -104,12 +104,6 @@
       "_heldItem": null
      }
     ]
-   },
-   {
-    "_name": "Morty",
-    "_trainerType": null,
-    "_gender": null,
-    "_pokemon": []
    }
   ],
   "_items": []

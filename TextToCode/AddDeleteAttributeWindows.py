@@ -17,3 +17,17 @@ class AddDeleteTrainerWindow(AddDeleteWindow):
     def deleteNewAttribute(self, input):
         self._list.remove(input)
         self._parent._listOfTrainers = self._list
+    
+
+class AddItemWindow(AddDeleteWindow):
+    def __init__(self, parent, list, currentRoute, delete, attribute):
+        super().__init__(parent, list, currentRoute, delete, attribute)
+    
+    def createNewAttribute(self, input):
+        newItem = Item(input)
+        self._list.append(newItem)
+        self._parent._listOfItems = self._list
+    
+    def deleteNewAttribute(self, input):
+        self._list.remove(input)
+        self._parent._listOfItems = self._list
