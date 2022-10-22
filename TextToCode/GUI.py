@@ -3,22 +3,43 @@ from templateWindow import TemplateWindow
 #from BlazeBlack2Redux import BlazeBlack2Redux
 #from RenegadePlatinum import RenegadePlatinum
 
-
 class SelectGameWindow(TemplateWindow):
 
     def __init__(self):
         super().__init__(900, 570)
 
+        #determine how many rows and columns the window has
+        self.configureWindow(5,5)
+
         self._listOfGames = ["Blaze Black Redux 2", "Renegade Platinum", "Sacred Gold"]
+        self._saveFiles = ["1", "2", "new"]
 
         self._master.title('game selection')
-        self._chosen = StringVar()
-        self._chosen.set("which game?")
-        self._chosenGameMenu = OptionMenu(self._master, self._chosen , *self._listOfGames)
-        self._chosenGameMenu.grid(row = 0, column = 0, columnspan = 3, sticky = N)
+
+        self._setupFrame = Frame(self._master)
+        self._setupFrame.grid(row = 0, column = 2, sticky = N)
+        
+        self._chosenGame = StringVar()
+        self._chosenGame.set("which game?")
+        self._chosenGame.trace_add("write", self.validateGame)
+        self._gameMenu = OptionMenu(self._setupFrame, self._chosenGame , *self._listOfGames)
+        self._gameMenu.grid(row = 0, column = 0, sticky = N)
+        
+        self._chosenSaveFile = StringVar()
+        self._chosenSaveFile.set("which saveFile?")
+        self._chosenSaveFile.trace_add("write", self.validateSaveFile)
+        self._saveFile = OptionMenu(self._setupFrame, self._chosenSaveFile, *self._saveFiles)
+        self._saveFile.grid(row = 1, column = 0, sticky = EW)
+        self._saveFile.configure(state = DISABLED)
+
+        """forward creation"""
+        self._saveFileDataFrame = Frame(self._setupFrame)
+        self._saveFileDataFrame.grid(row = 3, column = 0, sticky = NSEW)
+
 
         self._continueButton = Button(self._master, text = "continue", command = self.nextWindow)
         self._continueButton.grid(row = 5, column = 5, sticky = SE)
+        self._continueButton.configure(state = DISABLED)
 
         self._exitButton = Button(self._master, text = "Exit", command = self.exit)
         self._exitButton.grid(row = 5, column = 0, sticky = SW)
@@ -26,26 +47,73 @@ class SelectGameWindow(TemplateWindow):
         self.update()
         self.run()
 
-    def nextWindow(self):
-        self._chosenGame = self._chosen.get()
-        #print(f"wrong : {wrongInput}")
-        if self._chosenGame not in self._listOfGames:
-            #wrongInput += 1
-            #if wrongInput == 3:
-            #    print("ja toch")
-            #    pass
-            self._chosenGameMenu.config(bg = 'Red')
-        else:
-            #wrongInput = 0
-            from mainWindow import MainWindow
-            if self._debugMode:
-                print(f"selected {self._chosenGame}")
+    def resetSaveFileOption(self):
+        self._saveFileDataFrame.grid_remove()
+        self._chosenSaveFile.set("which saveFile?")
+
+    def validateGame(self, *args):
+        """validates the game chosen"""
+        #checks if self._game already exists
+        try:
+            if self._game != self._chosenGame.get():
+                self.resetSaveFileOption()
+        except AttributeError as e:
+            #first time changing games from default position
+            pass
             
-            #make the update loop stop
-            self.stop()
-            self.exit()
-            #call to next window
-            MainWindow(self._masterX, self._masterY, self._chosenGame)
+
+        self._game = self._chosenGame.get()
+
+        if self._game in self._listOfGames:
+            #get all the savefiles from that game
+            self._saveFile.configure(state = NORMAL)
+            return 1
+        else:
+            self._gameMenu.config(bg = 'Red')
+            self._saveFile.configure(state = DISABLED)
+            return 0
+        
+    def validateSaveFile(self, *args):
+        self._save = self._chosenSaveFile.get()
+        if self._save in self._saveFiles:
+            self._continueButton.configure(state = NORMAL)
+            self.showSaveFileData()
+            return 1
+        else:
+            self._continueButton.configure(state = DISABLED)
+            return 0
+
+    def showSaveFileData(self):
+        for label in self._saveFileDataFrame.winfo_children():
+            label.destroy()
+        if self._save != "new":
+            self._saveFileDataFrame.grid()
+            #add actual badges etc
+            badge = 3
+            caughtPokemon = 15
+            deadPokemon = 2
+            remainingEncounters = 9
+            self.createDisplayLabel(f"badges: {badge}", 0)
+            self.createDisplayLabel(f"caughtPokemon: {caughtPokemon}", 1)
+            self.createDisplayLabel(f"dead pokemon: {deadPokemon}", 2)
+            self.createDisplayLabel(f"remaining encounters: {remainingEncounters}", 3)
+        else:
+            self._saveFileDataFrame.grid_remove()
+
+
+    def createDisplayLabel(self, text, row, column = 0):
+        label = Label(self._saveFileDataFrame, text = text)
+        label.grid(row = row, column = column)
+
+    def nextWindow(self):
+        from mainWindow import MainWindow
+        
+        #make the update loop stop
+        self.stop()
+        self.exit()
+        #call to next window
+
+        MainWindow(self._masterX, self._masterY, self._game, self._save)
 
 if __name__ == "__main__":
     x = SelectGameWindow()

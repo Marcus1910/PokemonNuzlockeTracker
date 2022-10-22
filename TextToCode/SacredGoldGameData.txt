@@ -106,7 +106,13 @@
     ]
    }
   ],
-  "_items": []
+  "_items": [
+   {
+    "_name": "Master ball",
+    "_description": null,
+    "_location": null
+   }
+  ]
  },
  {
   "_name": "Route 29",
@@ -224,7 +230,13 @@
    ]
   ],
   "_trainers": [],
-  "_items": []
+  "_items": [
+   {
+    "_name": "Choice band",
+    "_description": null,
+    "_location": null
+   }
+  ]
  },
  {
   "_name": "Route 46",

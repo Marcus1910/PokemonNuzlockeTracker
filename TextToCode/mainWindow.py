@@ -11,10 +11,11 @@ from games.trainer import Trainer
 from games.item import Item
 
 class MainWindow(TemplateWindow):
-    def __init__(self, x, y, game):
+    def __init__(self, x, y, game, save):
         super().__init__(x, y)   
         self._game = game
-        self._master.title(f"{self._game}")
+        self._save = save
+        self._master.title(f"{self._game} attempt {self._save}")
         self._listOfAreas = []
         self._areaNames = []
         self._listOfTrainers = []
@@ -113,6 +114,9 @@ class MainWindow(TemplateWindow):
 
         self._exportToShowdownButton.configure(state = DISABLED)
         #self.changeTrainerButtonState(DISABLED)
+        #closing window saves the changes made
+        self._master.protocol("WM_DELETE_WINDOW", self.saveAndExit)
+        
         self.update()
         self.run()
 
@@ -279,29 +283,3 @@ class MainWindow(TemplateWindow):
     def saveAndExit(self):
         self._game.writeToFile()
         self.exit()
-
-
-
-# def addDeleteAttribute(self, button, list, delete, windowtype, itemType):
-    #     button.configure(state = DISABLED)
-    #     newWindow = windowtype(self._master, list, delete)
-    #     #TODO find better way to do this
-    #     newWindow._submitButton.wait_variable(newWindow._validated)
-    #     newTrainerName = newWindow._newAttribute.get()
-    #     newTrainer = itemType(newTrainerName)
-    #     newWindow.destroy()
-    #     button.configure(state = NORMAL)
-    #     return newTrainer
-
-    # def addTrainer(self):
-    #     trainer = self.addDeleteAttribute(self._addTrainerButton, self._listOfTrainers, False, TrainerWindow, Trainer)
-    #     self._listOfTrainers.append(trainer)
-    #     #update optionmenu list
-    #     self.getTrainers(self._selectedArea.get())
-    
-    # def deleteTrainer(self):
-    #     trainer = self.addDeleteAttribute(self._deleteTrainerButton, self._listOfTrainers, True, TrainerWindow, Trainer)
-    #     for index ,trainers in enumerate(self._listOfTrainers):
-    #         if trainer.name == trainers.name:
-    #             self._listOfTrainers.pop(index)
-    #     self.getTrainers(self._selectedArea.get())

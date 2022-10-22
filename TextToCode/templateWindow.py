@@ -32,8 +32,8 @@ class TemplateWindow():
         self._photoLabel.place(x=0, y=0)
         self._photoLabel.image = self._photo
         #make widgets resize with window
-        self._master.rowconfigure(0, weight = 2)
-        self._master.columnconfigure(0, weight = 2)
+        self._master.rowconfigure(0, weight = 1)
+        self._master.columnconfigure(0, weight = 1)
     
 
     def update(self):
@@ -52,6 +52,13 @@ class TemplateWindow():
             #needed otherwise image is disposed due to garbage collection
             self._photoLabel.image = photo
         self._resizeImage = self._master.after(self._updateTime, self.update)
+    
+    def configureWindow(self, row, column):
+        """function to update the rowconfigure and column configure"""
+        for i in range(row):
+            self._master.rowconfigure(i, weight = 1)
+        for i in range(column):
+            self._master.columnconfigure(i, weight = 1)
     
     def stop(self):
         """stop the update cycle else an error can occur"""
