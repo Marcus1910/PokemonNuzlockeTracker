@@ -1,7 +1,10 @@
 from tkinter import *
 from templateWindow import TemplateWindow
+from mainWindow import MainWindow
 #from BlazeBlack2Redux import BlazeBlack2Redux
 #from RenegadePlatinum import RenegadePlatinum
+
+#how to comp[ile to exe -> python -m nuitka --standalone --follow-imports --enable-plugin=tk-inter GUI.py
 
 class SelectGameWindow(TemplateWindow):
 
@@ -67,21 +70,17 @@ class SelectGameWindow(TemplateWindow):
         if self._game in self._listOfGames:
             #get all the savefiles from that game
             self._saveFile.configure(state = NORMAL)
-            return 1
         else:
             self._gameMenu.config(bg = 'Red')
             self._saveFile.configure(state = DISABLED)
-            return 0
         
     def validateSaveFile(self, *args):
         self._save = self._chosenSaveFile.get()
         if self._save in self._saveFiles:
             self._continueButton.configure(state = NORMAL)
             self.showSaveFileData()
-            return 1
         else:
             self._continueButton.configure(state = DISABLED)
-            return 0
 
     def showSaveFileData(self):
         for label in self._saveFileDataFrame.winfo_children():
@@ -106,7 +105,7 @@ class SelectGameWindow(TemplateWindow):
         label.grid(row = row, column = column)
 
     def nextWindow(self):
-        from mainWindow import MainWindow
+
         
         #make the update loop stop
         self.stop()

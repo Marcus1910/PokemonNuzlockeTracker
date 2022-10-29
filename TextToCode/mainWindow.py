@@ -41,7 +41,6 @@ class MainWindow(TemplateWindow):
         self._indivItemFrame.rowconfigure(0, weight = 2)
         self._indivItemFrame.columnconfigure(0, weight = 2)
 
-
         self._itemLabel = Label(self._itemFrame, text="Available Items")
         self._itemLabel.grid(row=0,column=0,sticky=N)
 
@@ -53,8 +52,6 @@ class MainWindow(TemplateWindow):
         self._deleteItemButton.grid(row = 25, column = 1, sticky = NSEW)
         #self._addTrainerButton = Button(self._trainerFrame, text = "add a trainer", bd = 3, font = self._font, command = self.addTrainer)
         #self._addTrainerButton.grid(row = 8, column = 0, sticky = NSEW)
-
-
 
         """trainer frames"""
         self._trainerFrame = Frame(self._master)
@@ -127,9 +124,16 @@ class MainWindow(TemplateWindow):
                 EncounterWindow(self._master, area)
 
     def getAreas(self):
-        """determine which game should be called and retrieve the correct information TODO replace with call to /games/game"""
-        from main import SacredGold
-        self._game = SacredGold()
+        """determine which game should be called and retrieve the correct information"""
+        from main import SacredGold, BlazeBlackRedux2, RenegadePlatinum
+
+        if self._game == "Sacred Gold":
+            self._game = SacredGold()
+        if self._game == "Renegade Platinum":
+            self._game = RenegadePlatinum()
+        if self._game == "Blaze Black Redux 2":
+            self._game = BlazeBlackRedux2()
+
         self._listOfAreas = self._game.areaList
         for area in self._listOfAreas:
             self._areaNames.append(area.name)

@@ -5,14 +5,18 @@ from games.item import Item
 from readFormattedData import readFormattedData
 
 import json
+import os
+
 txtfile = "trainerData.txt"
 
 class MainGame():
     def __init__(self):
         self.file = None
+        self.saveFile = None
         self.areaList = []
         self.readData = None
         self.areaNames = []
+        self.gameName = None
 
 
     def writeToFile(self):
@@ -83,20 +87,44 @@ class MainGame():
                 wildArea.trainers = pokemonTrainer
             if not alreadyexists:
                 self.areaList.append(wildArea)
+    
+    def returnSaveFileDirectory(self):
+        savefiles = "saveFiles"
+        saveFileFolderPath = os.path.join(os.getcwd(), savefiles) 
+        saveFilePath = os.path.join(saveFileFolderPath, self.gameName) 
 
-class SacredGold(MainGame):
+        #if directory doesn't exists create directory of the game
+        if not os.path.isdir(saveFileFolderPath):
+            print(f"creating new directory {savefiles}")
+            os.mkdir(saveFileFolderPath)
+        #if doesn't directory exists
+        if not os.path.isdir(saveFilePath):
+            print(f"creating new directory {self.gameName}")
+            os.mkdir(saveFilePath)
+
+        return saveFilePath
+
+class PokemonGame(MainGame):
     def __init__(self):
         super().__init__()
-        self.file = "SacredGoldGameData.txt"
+        self.gameName  = self.__class__.__name__
+        self.file = f"{self.gameName}GameData.txt"
+        self.saveFile = self.returnSaveFileDirectory()
         #returns a list with [area[areatype etc]]
         self.retrieveEncounterData()
         self.readFromFile()
-        #print(self.areaList)
-        #add trainer and item list to area objects
 
-        #self.readFromFile()
-        #self.writeToFile()
+class SacredGold(PokemonGame):
+    def __init__(self):
+        super().__init__()
 
+class BlazeBlackRedux2():
+    def __init__(self):
+        super().__init__()
+
+class RenegadePlatinum():
+    def __init__(self):
+        super().__init__()
 
 # game1 = SacredGold()
 # game1.writeToFile()

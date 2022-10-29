@@ -230,13 +230,7 @@
    ]
   ],
   "_trainers": [],
-  "_items": [
-   {
-    "_name": "Choice band",
-    "_description": null,
-    "_location": null
-   }
-  ]
+  "_items": []
  },
  {
   "_name": "Route 46",
