@@ -1,0 +1,5 @@
+#ignore all logfiles
+*.log
+
+#ignore workspace file
+werk + pokemon.code-workspace
