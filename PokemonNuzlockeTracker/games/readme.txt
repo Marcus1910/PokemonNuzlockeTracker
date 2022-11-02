@@ -1,0 +1,1 @@
+directory to store savefiles and gamedata under the name of the game

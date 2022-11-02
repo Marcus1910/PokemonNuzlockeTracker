@@ -2,7 +2,7 @@ from tkinter import *
 import os
 from tkinter import ttk
 
-from AddDeleteAttributeWindows import AddDeleteTrainerWindow, AddItemWindow
+from addDeleteAttributeWindows import AddDeleteTrainerWindow, AddItemWindow
 
 from templateWindow import TemplateWindow
 from encounterWindow import EncounterWindow

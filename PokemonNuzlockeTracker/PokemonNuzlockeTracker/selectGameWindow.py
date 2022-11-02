@@ -1,10 +1,11 @@
 from tkinter import *
+
 from templateWindow import TemplateWindow
 from mainWindow import MainWindow
 #from BlazeBlack2Redux import BlazeBlack2Redux
 #from RenegadePlatinum import RenegadePlatinum
 
-#how to comp[ile to exe -> python -m nuitka --standalone --follow-imports --enable-plugin=tk-inter GUI.py
+#how to compile to exe -> python -m nuitka --standalone --follow-imports --enable-plugin=tk-inter GUI.py !doesn't work!
 
 class SelectGameWindow(TemplateWindow):
 

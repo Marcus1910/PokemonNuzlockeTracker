@@ -13,6 +13,7 @@ class TemplateWindow():
         self._numberOfBadges = 0
         self._game = None
         self._font = "Helvetica 10 italic"
+        self.currentpath = os.getcwd()
 
         self._previousX = x
         self._previousY = y
@@ -20,7 +21,7 @@ class TemplateWindow():
         self._masterY = y
         self._updateTime = 500
         self._image = "bg.jpg"
-        self._icon = os.path.join(os.getcwd(), "sprites/icons/nuzlocke.ico")
+        self._icon = os.path.join(self.currentpath, "sprites/icons/nuzlocke.ico")
 
         self._master.geometry(str(self._masterX) + 'x' + str(self._masterY))
         self._master.iconbitmap(self._icon)

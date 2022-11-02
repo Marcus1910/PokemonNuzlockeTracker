@@ -1,4 +1,4 @@
-from AddDeleteWindow import AddDeleteWindow
+from addDeleteWindow import AddDeleteWindow
 from games.trainer import Trainer
 from games.trainerPokemon import TrainerPokemon
 from games.encounterPokemon import EncounterPokemon
