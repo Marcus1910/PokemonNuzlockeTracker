@@ -3,3 +3,6 @@
 
 #ignore workspace file
 werk + pokemon.code-workspace
+
+#ignore testing folder
+PokemonNuzlockeTracker/testing/
