@@ -14,14 +14,15 @@ class TemplateWindow():
         self._game = None
         self._font = "Helvetica 10 italic"
         self.currentpath = os.getcwd()
+        self.imagePath = os.path.join(self.currentpath, "../images")
 
         self._previousX = x
         self._previousY = y
         self._masterX = x
         self._masterY = y
         self._updateTime = 500
-        self._image = "bg.jpg"
-        self._icon = os.path.join(self.currentpath, "sprites/icons/nuzlocke.ico")
+        self._image = os.path.join(self.imagePath, "bg.jpg")
+        self._icon = os.path.join(self.imagePath, "sprites/icons/nuzlocke.ico")
 
         self._master.geometry(str(self._masterX) + 'x' + str(self._masterY))
         self._master.iconbitmap(self._icon)

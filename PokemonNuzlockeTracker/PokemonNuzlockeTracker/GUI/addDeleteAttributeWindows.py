@@ -1,9 +1,9 @@
 from addDeleteWindow import AddDeleteWindow
-from games.trainer import Trainer
-from games.trainerPokemon import TrainerPokemon
-from games.encounterPokemon import EncounterPokemon
-from games.area import Area
-from games.item import Item
+from ..Logic.trainer import Trainer
+from ..Logic.trainerPokemon import TrainerPokemon
+from ..Logic.encounterPokemon import EncounterPokemon
+from ..Logic.area import Area
+from ..Logic.item import Item
 
 class AddDeleteTrainerWindow(AddDeleteWindow):
     def __init__(self, parent, list, currentRoute, delete, attribute):

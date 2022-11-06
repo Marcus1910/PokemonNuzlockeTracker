@@ -2,13 +2,13 @@ from tkinter import *
 import os
 from tkinter import ttk
 
-from addDeleteAttributeWindows import AddDeleteTrainerWindow, AddItemWindow
+#from addDeleteAttributeWindows import AddDeleteTrainerWindow, AddItemWindow
 
 from templateWindow import TemplateWindow
 from encounterWindow import EncounterWindow
-from games.trainer import Trainer
+#from ..Logic.trainer import Trainer
 #from attributeWindow import TrainerWindow, ItemWindow
-from games.item import Item
+#from ..Logic.item import Item
 
 class MainWindow(TemplateWindow):
     def __init__(self, x, y, game, save):
@@ -125,7 +125,7 @@ class MainWindow(TemplateWindow):
 
     def getAreas(self):
         """determine which game should be called and retrieve the correct information"""
-        from main import SacredGold, BlazeBlackRedux2, RenegadePlatinum
+        from games import SacredGold, BlazeBlackRedux2, RenegadePlatinum
 
         if self._game == "Sacred Gold":
             self._game = SacredGold()
@@ -145,6 +145,7 @@ class MainWindow(TemplateWindow):
     
     def getTrainers(self, event):
         """empty and update trainerlist for the option menu depending on the selected area"""
+        pass
         #enable to select trainer and export buttons
         #self.changeTrainerButtonState(NORMAL)
         areaName = event.widget.get()
@@ -168,6 +169,7 @@ class MainWindow(TemplateWindow):
         
     
     def getPokemon(self, *args):
+        pass
         """get the pokemon from a selected trainer"""
         trainerName = self._selectedTrainer.get()
         self._exportToShowdownButton.configure(state = NORMAL)
@@ -184,6 +186,7 @@ class MainWindow(TemplateWindow):
                         self.displayPokemon(pokemon, index)
     
     def getItems(self, event):
+        pass
         areaName = event.widget.get()
         self._listOfItems = []
         for area in self._listOfAreas:
@@ -240,6 +243,7 @@ class MainWindow(TemplateWindow):
         itemScrollbar.configure(command = itemBox.yview)
     
     def addTrainer(self):
+        pass
         """add a trainer to trainer list"""
         #disable add/ edit and delete button
         #open new window which containes current trainers
@@ -255,15 +259,18 @@ class MainWindow(TemplateWindow):
         pass
 
     def deleteTrainer(self):
+        pass
         """delete a trainer from trainer list"""
         newWindow = AddDeleteTrainerWindow(self._master, self._listOfTrainers, self._selectedArea.get(), True, "trainer")
         print(f"deleting trainer")
     
     def addItem(self):
+        pass
         newWindow = AddItemWindow(self._master, self._listOfItems, self._selectedArea.get(), True, "Item")
         print(f"adding item to {self._selectedArea.get()}")
     
     def deleteItem(self):
+        pass
         newWindow = AddItemWindow(self._master, self._listOfItems, self._selectedArea.get(), True, "Item")
         print(f"deleting item")
 
@@ -279,7 +286,7 @@ class MainWindow(TemplateWindow):
                 break
 
     def createGameMenu(self):
-        from GUI import SelectGameWindow
+        from selectGameWindow import SelectGameWindow
         self.stop()
         self.exit()
         SelectGameWindow()

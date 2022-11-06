@@ -1,7 +1,7 @@
-from games.area import Area
-from games.trainer import Trainer
-from games.trainerPokemon import TrainerPokemon
-from games.item import Item
+from area import Area
+from trainer import Trainer
+from trainerPokemon import TrainerPokemon
+from item import Item
 from readFormattedData import readFormattedData
 
 import json
