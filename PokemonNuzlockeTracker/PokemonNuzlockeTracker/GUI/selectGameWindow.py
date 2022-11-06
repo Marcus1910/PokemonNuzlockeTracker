@@ -2,6 +2,7 @@ from tkinter import *
 
 from templateWindow import TemplateWindow
 from mainWindow import MainWindow
+#imports every game and checkGames + getGameObject
 from games import *
 
 class SelectGameWindow(TemplateWindow):
@@ -13,7 +14,6 @@ class SelectGameWindow(TemplateWindow):
 
         #TODO replace with function call
         self._listOfGames = checkGames()
-        print(self._listOfGames)
         #forward declaration, empty otherwise option menu cannot be created
         self._saveFiles = [""]
 
@@ -55,7 +55,7 @@ class SelectGameWindow(TemplateWindow):
         self._saveFileDataFrame.grid_remove()
         self._chosenSaveFile.set("which saveFile?")
 
-    #TODO replace to logic folder
+    #TODO replace to logic folder relook code
     def validateGame(self, *args):
         """validates the game chosen"""
         #checks if self._game already exists
@@ -79,7 +79,14 @@ class SelectGameWindow(TemplateWindow):
             self._saveFile.configure(state = DISABLED)
     
     def updateSaveFiles(self, game):
+        """clear the menu, than update it"""
         self._saveFiles = game.getSaveFiles()
+        menu = self._saveFile["menu"]
+        menu.delete(0, "end")
+        for save in self._saveFiles:
+            menu.add_command(label = save, command = lambda value = save: self._chosenSaveFile.set(save))
+
+        print(self._saveFiles)
     
     #TODO replace to logic folder
     def validateSaveFile(self, *args):

@@ -20,7 +20,6 @@ class MainGame():
         self.gameName = self.__class__.__name__
         self.gamePath = os.path.join(os.path.dirname(os.getcwd()), f"games/{self.gameName}")
         self.saveFileFolder = os.path.join(self.gamePath, "saveFiles")
-        print(self.gamePath)
 
     def writeToFile(self):
         with open(self.file, "w") as file:
@@ -94,7 +93,6 @@ class MainGame():
     
     def checkForSaveFileDirectory(self):
         """checks if the directory existst otherwise creates it"""
-        print(self.saveFileFolder)
 
         #if savefile directory doesn't exists
         if not os.path.isdir(self.saveFileFolder):
@@ -103,16 +101,21 @@ class MainGame():
 
     
     def getSaveFiles(self):
+        """returns a list of the attempts made with a 'new' option"""
         self.checkForSaveFileDirectory()
-        print(self.gameName)
-        saveFile = []
-        return saveFile
+        #get every file [0] because it returns a list inside of a list
+        saveFiles = [x[2] for x in os.walk(self.saveFileFolder)][0]
+        #keep files with attempt in its name, and remove the '.txt'
+        saveFiles = [x[:-4] for x in saveFiles if("attempt" in x)] 
+        #give the option to make a new saveFile
+        saveFiles.append("new")
+
+        return saveFiles
 
 class PokemonGame(MainGame):
     def __init__(self):
         super().__init__()
         self.file = f"{self.gameName}GameData.txt"
-        print(self.gamePath)
         
         #returns a list with [area[areatype etc]]
         #self.retrieveEncounterData()

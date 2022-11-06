@@ -22,7 +22,6 @@ def changePath():
     sys.path.append(GUIPath)
     sys.path.append(LogicPath)
     os.chdir(mainPath)
-    print(os.getcwd())
 
 if __name__ == "__main__":
     changePath()
