@@ -2,20 +2,18 @@ from tkinter import *
 
 from templateWindow import TemplateWindow
 from mainWindow import MainWindow
-#from BlazeBlack2Redux import BlazeBlack2Redux
-#from RenegadePlatinum import RenegadePlatinum
-
-#how to compile to exe -> python -m nuitka --standalone --follow-imports --enable-plugin=tk-inter GUI.py !doesn't work!
+from games import checkGames
 
 class SelectGameWindow(TemplateWindow):
 
     def __init__(self):
         super().__init__(900, 570)
-
         #determine how many rows and columns the window has
         self.configureWindow(5,5)
 
-        self._listOfGames = ["Blaze Black Redux 2", "Renegade Platinum", "Sacred Gold"]
+        #TODO replace with function call
+        self._listOfGames = checkGames()
+        print(self._listOfGames)
         self._saveFiles = ["1", "2", "new"]
 
         self._master.title('game selection')
@@ -55,6 +53,7 @@ class SelectGameWindow(TemplateWindow):
         self._saveFileDataFrame.grid_remove()
         self._chosenSaveFile.set("which saveFile?")
 
+    #TODO replace to logic folder
     def validateGame(self, *args):
         """validates the game chosen"""
         #checks if self._game already exists
@@ -74,7 +73,8 @@ class SelectGameWindow(TemplateWindow):
         else:
             self._gameMenu.config(bg = 'Red')
             self._saveFile.configure(state = DISABLED)
-        
+    
+    #TODO replace to logic folder
     def validateSaveFile(self, *args):
         self._save = self._chosenSaveFile.get()
         if self._save in self._saveFiles:
@@ -88,7 +88,7 @@ class SelectGameWindow(TemplateWindow):
             label.destroy()
         if self._save != "new":
             self._saveFileDataFrame.grid()
-            #add actual badges etc
+            #TODO call to logic to add actual badges etc
             badge = 3
             caughtPokemon = 15
             deadPokemon = 2
@@ -106,8 +106,6 @@ class SelectGameWindow(TemplateWindow):
         label.grid(row = row, column = column)
 
     def nextWindow(self):
-
-        
         #make the update loop stop
         self.stop()
         self.exit()

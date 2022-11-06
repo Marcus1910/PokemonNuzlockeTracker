@@ -9,6 +9,15 @@ import os
 
 txtfile = "trainerData.txt"
 
+def checkGames():
+    gameFolder = os.path.join(os.path.dirname(os.getcwd()), "games")
+    #walks down the directory for other directories, retrieves the names an puts them in a list
+    games = [x[1] for x in os.walk(gameFolder)][0]
+    #no games
+    if not games:
+        return ["new"]
+    return games
+
 class MainGame():
     def __init__(self):
         self.file = None
@@ -16,8 +25,10 @@ class MainGame():
         self.areaList = []
         self.readData = None
         self.areaNames = []
-        self.gameName = None
-
+        #get name of the class instance e.g. SacredGold
+        self.gameName = self.__class__.__name__
+        self.gamePath = os.path.join(os.getcwd(), f"games/{self.gameName}")
+        print(self.gamePath)
 
     def writeToFile(self):
         with open(self.file, "w") as file:
@@ -37,7 +48,8 @@ class MainGame():
         self.areaList = readFormattedData('sacredGoldCorrectData').returnAreaList()
                 
     def convertDataToObjects(self):  
-        #get all the data from the text file
+        #get all the data from the json dump
+        #TODO different file?
         
         for area in self.readData:
             alreadyexists = False
@@ -88,31 +100,36 @@ class MainGame():
             if not alreadyexists:
                 self.areaList.append(wildArea)
     
-    def returnSaveFileDirectory(self):
-        savefiles = "saveFiles"
-        saveFileFolderPath = os.path.join(os.getcwd(), savefiles) 
-        saveFilePath = os.path.join(saveFileFolderPath, self.gameName) 
+    def checkForSaveFileDirectory(self):
+        """checks if the directory existst otherwise creates it"""
+        saveFiles = "saveFiles"
+        saveFileFolderPath = os.path.join(self.gamePath, saveFiles)
 
-        #if directory doesn't exists create directory of the game
-        if not os.path.isdir(saveFileFolderPath):
-            print(f"creating new directory {savefiles}")
-            os.mkdir(saveFileFolderPath)
-        #if doesn't directory exists
-        if not os.path.isdir(saveFilePath):
+        #if Game directory doesn't exists create directory of the game
+        if not os.path.isdir(self.gamePath):
             print(f"creating new directory {self.gameName}")
-            os.mkdir(saveFilePath)
+            os.mkdir(saveFileFolderPath)
+        #if savefile directory doesn't exists
+        if not os.path.isdir(saveFileFolderPath):
+            print(f"creating new directory {saveFiles}")
+            os.mkdir(saveFileFolderPath)
 
-        return saveFilePath
+    
+    def getSavefiles(self):
+        print(self.gameName)
+        saveFile = ""
+        return saveFile
 
 class PokemonGame(MainGame):
     def __init__(self):
         super().__init__()
-        self.gameName  = self.__class__.__name__
         self.file = f"{self.gameName}GameData.txt"
-        self.saveFile = self.returnSaveFileDirectory()
+        self.checkForSaveFileDirectory()
+        print(self.gamePath)
+        
         #returns a list with [area[areatype etc]]
-        self.retrieveEncounterData()
-        self.readFromFile()
+        #self.retrieveEncounterData()
+        #self.readFromFile()
 
 class SacredGold(PokemonGame):
     def __init__(self):
@@ -126,7 +143,7 @@ class RenegadePlatinum():
     def __init__(self):
         super().__init__()
 
-# game1 = SacredGold()
+#game1 = SacredGold()
 # game1.writeToFile()
 # route1 = Area("Route 1", 5)
 # route2 = Area("Route 2", 16)
