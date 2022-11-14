@@ -12,11 +12,13 @@ from encounterWindow import EncounterWindow
 
 class MainWindow(TemplateWindow):
     def __init__(self, x, y, game, save):
-        super().__init__(x, y)   
+        super().__init__(x, y) 
+        #self._game is a gameObject  
         self._game = game
+        #path to saveFile
         self._save = save
-        self._master.title(f"{self._game} attempt {self._save}")
-        self._listOfAreas = []
+        self._master.title(f"{self._game.gameName} {self._save}")
+        self._listOfAreas = self._game.retrieveGameData()
         self._areaNames = []
         self._listOfTrainers = []
         self._listOfItems = []
@@ -124,16 +126,7 @@ class MainWindow(TemplateWindow):
                 EncounterWindow(self._master, area)
 
     def getAreas(self):
-        """determine which game should be called and retrieve the correct information"""
-        from games import SacredGold, BlazeBlackRedux2, RenegadePlatinum
-
-        if self._game == "Sacred Gold":
-            self._game = SacredGold()
-        if self._game == "Renegade Platinum":
-            self._game = RenegadePlatinum()
-        if self._game == "Blaze Black Redux 2":
-            self._game = BlazeBlackRedux2()
-
+        """retrieve area list from game object"""
         self._listOfAreas = self._game.areaList
         for area in self._listOfAreas:
             self._areaNames.append(area.name)

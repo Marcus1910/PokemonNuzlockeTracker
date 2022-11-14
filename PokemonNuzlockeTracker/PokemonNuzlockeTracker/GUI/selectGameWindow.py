@@ -3,7 +3,7 @@ from tkinter import *
 from templateWindow import TemplateWindow
 from mainWindow import MainWindow
 #imports every game and checkGames + getGameObject
-from games import *
+import games as gm
 
 class SelectGameWindow(TemplateWindow):
 
@@ -13,7 +13,7 @@ class SelectGameWindow(TemplateWindow):
         self.configureWindow(5,5)
 
         #TODO replace with function call
-        self._listOfGames = checkGames()
+        self._listOfGames = gm.checkGames()
         #forward declaration, empty otherwise option menu cannot be created
         self._saveFiles = [""]
 
@@ -60,6 +60,7 @@ class SelectGameWindow(TemplateWindow):
         """validates the game chosen"""
         #checks if self._game already exists
         try:
+            #checks if the chosengame has changed and resets chosengame to default if it has
             if self._game != self._chosenGame.get():
                 self.resetSaveFileOption()
         except AttributeError as e:
@@ -68,29 +69,29 @@ class SelectGameWindow(TemplateWindow):
             
 
         self._game = self._chosenGame.get()
-        gameObject = getGameObject(self._game)
-        print(gameObject)
+        self._gameObject = gm.MainGame(self._game)
+        
         if self._game in self._listOfGames:
-            self.updateSaveFiles(gameObject)
+            
             #get all the savefiles from that game
             self._saveFile.configure(state = NORMAL)
+            self.updateSaveFiles()
         else:
             self._gameMenu.config(bg = 'Red')
             self._saveFile.configure(state = DISABLED)
     
-    def updateSaveFiles(self, game):
+    def updateSaveFiles(self):
         """clear the menu, than update it"""
-        self._saveFiles = game.getSaveFiles()
+        self._saveFiles = self._gameObject.getSaveFiles()
         menu = self._saveFile["menu"]
         menu.delete(0, "end")
         for save in self._saveFiles:
-            menu.add_command(label = save, command = lambda value = save: self._chosenSaveFile.set(save))
-
-        print(self._saveFiles)
+            menu.add_command(label = save, command = lambda value = save: self._chosenSaveFile.set(value))
     
     #TODO replace to logic folder
     def validateSaveFile(self, *args):
         self._save = self._chosenSaveFile.get()
+        print(self._save)
         if self._save in self._saveFiles:
             self._continueButton.configure(state = NORMAL)
             self.showSaveFileData()
@@ -102,7 +103,7 @@ class SelectGameWindow(TemplateWindow):
             label.destroy()
         if self._save != "new":
             self._saveFileDataFrame.grid()
-            #TODO call to logic to add actual badges etc
+            #TODO call function that reads the savedata from the saveFile
             badge = 3
             caughtPokemon = 15
             deadPokemon = 2
@@ -125,7 +126,7 @@ class SelectGameWindow(TemplateWindow):
         self.exit()
         #call to next window
 
-        MainWindow(self._masterX, self._masterY, self._game, self._save)
+        MainWindow(self._masterX, self._masterY, self._gameObject, self._save)
 
 if __name__ == "__main__":
     x = SelectGameWindow()

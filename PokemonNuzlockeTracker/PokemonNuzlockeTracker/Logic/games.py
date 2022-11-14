@@ -10,43 +10,52 @@ import os
 txtfile = "trainerData.txt"
 
 class MainGame():
-    def __init__(self):
-        self.file = None
+    def __init__(self, gameName):
         self.saveFile = None
         self.areaList = []
         self.readData = None
         self.areaNames = []
         #get name of the class instance e.g. SacredGold
-        self.gameName = self.__class__.__name__
+        self.gameName = gameName
         self.gamePath = os.path.join(os.path.dirname(os.getcwd()), f"games/{self.gameName}")
+        self.dataFolder = os.path.join(self.gamePath, "data")
         self.saveFileFolder = os.path.join(self.gamePath, "saveFiles")
+        self.dataFile = os.path.join(self.dataFolder, f"{self.gameName}GameData.txt")
 
     def writeToFile(self):
-        with open(self.file, "w") as file:
+        with open(self.dataFile, "w") as file:
             file.truncate()
             file.write(json.dumps(self.areaList, default = vars, indent = 1))
 
-    def readFromFile(self):
-        with open(self.file, "r") as file:
-            try:
-                self.readData = json.load(file)
-                self.convertDataToObjects()
-            except json.JSONDecodeError:
-                print("no save data found")
+    def retrieveGameData(self):
+        try:
+            with open(self.dataFile, "r") as file:
+                try:
+                    print("reading")
+                    self.readData = json.load(file)
+                    self.convertDataToObjects()
+                    print(self.readData)
+                except json.JSONDecodeError:
+                    print("no save data found")
+        except FileNotFoundError:
+            print(f"there is no data for {self.gameName}")
     
     def retrieveEncounterData(self):
-        #only needed once
-        self.areaList = readFormattedData('sacredGoldCorrectData').returnAreaList()
+        #only needed once and read from gameLogic
+        self.areaList = readFormattedData(f"{self.gameName}CorrectData.txt").returnAreaList()
                 
     def convertDataToObjects(self):  
         #get all the data from the json dump
-        #TODO different file?
-        
+        #TODO different file for cleaner code?
+        print(len(self.readData))
         for area in self.readData:
             alreadyexists = False
             areaName = area["_name"]
             startLine = area["_startLine"]
+            #check if route exists by looping through entire list
+            print("ik ben hier")
             for route in self.areaList:
+                print(type(route))
                 if areaName == route.name:
                     wildArea = route
                     alreadyexists = True
@@ -54,42 +63,42 @@ class MainGame():
                 else:
                     wildArea = Area(areaName)
                 
-            wildArea.startLine = startLine
-
-            """retrieve all area attributes"""
-            items = area["_items"]
-            for item in items:
-                itemName = item["_name"]
-                areaItem = Item(itemName)
-                areaItem.description = item["_description"]
-                areaItem.location = item["_location"]
-                wildArea.item = areaItem
+            #wildArea.startLine = startLine
             
-            """retrieve all trainer attributes"""
-            trainers = area["_trainers"]
-            for trainer in trainers:
-                trainerName = trainer["_name"]
-                pokemonTrainer = Trainer(trainerName)
-                pokemonTrainer.trainerType = trainer["_trainerType"]
-                pokemonTrainer.gender = trainer["_gender"]
+            # """retrieve all area attributes"""
+            # items = area["_items"]
+            # for item in items:
+            #     itemName = item["_name"]
+            #     areaItem = Item(itemName)
+            #     areaItem.description = item["_description"]
+            #     areaItem.location = item["_location"]
+            #     wildArea.item = areaItem
+            
+            # """retrieve all trainer attributes"""
+            # trainers = area["_trainers"]
+            # for trainer in trainers:
+            #     trainerName = trainer["_name"]
+            #     pokemonTrainer = Trainer(trainerName)
+            #     pokemonTrainer.trainerType = trainer["_trainerType"]
+            #     pokemonTrainer.gender = trainer["_gender"]
                 
-                """retrieve pokemon attributes"""
-                for pokemon in trainer["_pokemon"]:
-                    pokemonName = pokemon["_name"]
-                    pokemonLevel = pokemon["_level"]
-                    trainerPokemon = TrainerPokemon(pokemonName, pokemonLevel)
-                    trainerPokemon._gender = pokemon["_gender"]
-                    trainerPokemon._ability = pokemon["_ability"]
-                    trainerPokemon._heldItem = pokemon["_heldItem"]
-                    trainerPokemon._dexNo = pokemon["_dexNo"]
-                    #give the moves to the pokemon
-                    moves = pokemon["_moves"]
-                    for move in range(len(moves)):
-                        trainerPokemon.moves = moves[move]
-                    pokemonTrainer.pokemon = trainerPokemon
-                wildArea.trainers = pokemonTrainer
-            if not alreadyexists:
-                self.areaList.append(wildArea)
+            #     """retrieve pokemon attributes"""
+            #     for pokemon in trainer["_pokemon"]:
+            #         pokemonName = pokemon["_name"]
+            #         pokemonLevel = pokemon["_level"]
+            #         trainerPokemon = TrainerPokemon(pokemonName, pokemonLevel)
+            #         trainerPokemon._gender = pokemon["_gender"]
+            #         trainerPokemon._ability = pokemon["_ability"]
+            #         trainerPokemon._heldItem = pokemon["_heldItem"]
+            #         trainerPokemon._dexNo = pokemon["_dexNo"]
+            #         #give the moves to the pokemon
+            #         moves = pokemon["_moves"]
+            #         for move in range(len(moves)):
+            #             trainerPokemon.moves = moves[move]
+            #         pokemonTrainer.pokemon = trainerPokemon
+            #     wildArea.trainers = pokemonTrainer
+            # if not alreadyexists:
+            #     self.areaList.append(wildArea)
     
     def checkForSaveFileDirectory(self):
         """checks if the directory existst otherwise creates it"""
@@ -103,7 +112,7 @@ class MainGame():
     def getSaveFiles(self):
         """returns a list of the attempts made with a 'new' option"""
         self.checkForSaveFileDirectory()
-        #get every file [0] because it returns a list inside of a list
+        #get every file, [0] because it returns a list inside of a list
         saveFiles = [x[2] for x in os.walk(self.saveFileFolder)][0]
         #keep files with attempt in its name, and remove the '.txt'
         saveFiles = [x[:-4] for x in saveFiles if("attempt" in x)] 
@@ -111,15 +120,18 @@ class MainGame():
         saveFiles.append("new")
 
         return saveFiles
+    
+    def addNewSaveFile(self):
+        #"new" has purposely not been removed, now len == attempt
+        saveFiles = self.getSaveFiles()
+        number = len(saveFiles)
+        #create the file then close it
+        open(f"{self.saveFileFolder}/attempt {number}.txt", "x").close()
+
 
 class PokemonGame(MainGame):
     def __init__(self):
         super().__init__()
-        self.file = f"{self.gameName}GameData.txt"
-        
-        #returns a list with [area[areatype etc]]
-        #self.retrieveEncounterData()
-        #self.readFromFile()
 
 class SacredGold(PokemonGame):
     def __init__(self):
@@ -134,10 +146,11 @@ class RenegadePlatinum(PokemonGame):
         super().__init__()
 
 
-gameDict = {"SacredGold" : SacredGold(), "BlazeBlackRedux2" : BlazeBlackRedux2(), "RenegadePlatinum" : RenegadePlatinum()}
+
 
 def getGameObject(name):
     #dict for loop and call
+    gameDict = {"SacredGold" : SacredGold(), "BlazeBlackRedux2" : BlazeBlackRedux2(), "RenegadePlatinum" : RenegadePlatinum()}
     game = gameDict[name]
     return game
 
@@ -150,7 +163,8 @@ def checkGames():
         return ["new"]
     return games
 
-#game1 = SacredGold()
+# game1 = SacredGold()
+# game1.retrieveGameData()
 # game1.writeToFile()
 # route1 = Area("Route 1", 5)
 # route2 = Area("Route 2", 16)

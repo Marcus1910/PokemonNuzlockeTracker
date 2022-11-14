@@ -1,5 +1,3 @@
-from games.area import Area
-from games.encounterPokemon import EncounterPokemon
 import pdfplumber
 import re
 
