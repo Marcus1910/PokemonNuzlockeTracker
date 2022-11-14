@@ -11,7 +11,7 @@ class readFormattedData():
         self._areaList = []
 
     def readFile(self):
-        with open(f"{self._file}.txt") as file:
+        with open(f"{self._file}") as file:
             self._data = file.readlines()
 
     def indexAreas(self):

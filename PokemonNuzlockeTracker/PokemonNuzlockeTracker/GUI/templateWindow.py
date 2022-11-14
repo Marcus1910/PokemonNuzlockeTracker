@@ -44,9 +44,8 @@ class TemplateWindow():
         self._masterY = self._master.winfo_height()
         self._masterX = self._master.winfo_width()
         if (self._masterX != self._previousX) or (self._masterY != self._previousY):
-            print("updating")
             #update the bg to fully cover the adjusted area
-            photo = ImageTk.PhotoImage(Image.open("bg.jpg").resize([self._masterX, self._masterY]))
+            photo = ImageTk.PhotoImage(Image.open(self._image).resize([self._masterX, self._masterY]))
             self._photoLabel.configure(image = photo)
             #update values after resize
             self._previousX = self._masterX

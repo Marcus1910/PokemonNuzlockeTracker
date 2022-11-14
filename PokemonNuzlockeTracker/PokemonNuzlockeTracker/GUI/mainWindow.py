@@ -114,7 +114,7 @@ class MainWindow(TemplateWindow):
         self._exportToShowdownButton.configure(state = DISABLED)
         #self.changeTrainerButtonState(DISABLED)
         #closing window saves the changes made
-        self._master.protocol("WM_DELETE_WINDOW", self.saveAndExit)
+        self._master.protocol("WM_DELETE_WINDOW")#, self.saveAndExit
         
         self.update()
         self.run()

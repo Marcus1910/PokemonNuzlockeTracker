@@ -63,7 +63,7 @@ class SelectGameWindow(TemplateWindow):
             #checks if the chosengame has changed and resets chosengame to default if it has
             if self._game != self._chosenGame.get():
                 self.resetSaveFileOption()
-        except AttributeError as e:
+        except AttributeError:
             #first time changing games from default position
             pass
             

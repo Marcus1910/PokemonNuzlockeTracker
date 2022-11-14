@@ -29,7 +29,7 @@ basic logic for getting encounters from rom hack documentation
 
 ---EXTRAS---
 read encountertable data from rom
-add classes to make adding games easier, no programming knowledge needed
+add window to make adding games easier
 add iconbitmap to encounterWindow depending on areaName
 
     ---SHOWDOWN---
