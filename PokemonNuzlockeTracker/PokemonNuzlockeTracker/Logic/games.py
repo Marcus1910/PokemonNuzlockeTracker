@@ -13,8 +13,8 @@ class MainGame():
     def __init__(self, gameName):
         self.areaList = []
         self.readData = None
-        self.areaNamesList = []
         self.areaList = []
+        self.areaNamesList = []
         self.trainerList = []
         self.itemList = []
 
@@ -23,6 +23,13 @@ class MainGame():
         self.dataFolder = os.path.join(self.gamePath, "data")
         self.saveFileFolder = os.path.join(self.gamePath, "saveFiles")
         self.dataFile = os.path.join(self.dataFolder, f"{self.gameName}GameData.txt")
+
+    def getAreaNamesList(self):
+        if len(self.areaNamesList) <= 0:
+            for area in self.areaList:
+                self.areaNamesList.append(area.name)
+                print(area.name)
+        return self.areaNamesList
 
     def writeToFile(self):
         with open(self.dataFile, "w") as file:
@@ -55,54 +62,54 @@ class MainGame():
             alreadyexists = False
             areaName = area["_name"]
             startLine = area["_startLine"]
+            
             #check if route exists by looping through entire list
-            
-            # for route in self.areaList:
-            #     print(type(route))
-            #     if areaName == route.name:
-            #         wildArea = route
-            #         alreadyexists = True
-            #         break
-            #     else:
-            #         wildArea = Area(areaName)
+            for route in self.areaList:
+                if areaName == route.name:
+                    wildArea = route
+                    alreadyexists = True
+                    break
+            #if not found in areaList
+            else:
+                wildArea = Area(areaName)
                 
-            #wildArea.startLine = startLine
+            wildArea.startLine = startLine
             
-            # """retrieve all area attributes"""
-            # items = area["_items"]
-            # for item in items:
-            #     itemName = item["_name"]
-            #     areaItem = Item(itemName)
-            #     areaItem.description = item["_description"]
-            #     areaItem.location = item["_location"]
-            #     wildArea.item = areaItem
+            """retrieve all area attributes"""
+            items = area["_items"]
+            for item in items:
+                itemName = item["_name"]
+                areaItem = Item(itemName)
+                areaItem.description = item["_description"]
+                areaItem.location = item["_location"]
+                wildArea.item = areaItem
             
-            # """retrieve all trainer attributes"""
-            # trainers = area["_trainers"]
-            # for trainer in trainers:
-            #     trainerName = trainer["_name"]
-            #     pokemonTrainer = Trainer(trainerName)
-            #     pokemonTrainer.trainerType = trainer["_trainerType"]
-            #     pokemonTrainer.gender = trainer["_gender"]
+            """retrieve all trainer attributes"""
+            trainers = area["_trainers"]
+            for trainer in trainers:
+                trainerName = trainer["_name"]
+                pokemonTrainer = Trainer(trainerName)
+                pokemonTrainer.trainerType = trainer["_trainerType"]
+                pokemonTrainer.gender = trainer["_gender"]
                 
-            #     """retrieve pokemon attributes"""
-            #     for pokemon in trainer["_pokemon"]:
-            #         pokemonName = pokemon["_name"]
-            #         pokemonLevel = pokemon["_level"]
-            #         trainerPokemon = TrainerPokemon(pokemonName, pokemonLevel)
-            #         trainerPokemon._gender = pokemon["_gender"]
-            #         trainerPokemon._ability = pokemon["_ability"]
-            #         trainerPokemon._heldItem = pokemon["_heldItem"]
-            #         trainerPokemon._dexNo = pokemon["_dexNo"]
-            #         #give the moves to the pokemon
-            #         moves = pokemon["_moves"]
-            #         for move in range(len(moves)):
-            #             trainerPokemon.moves = moves[move]
-            #         pokemonTrainer.pokemon = trainerPokemon
-            #     wildArea.trainers = pokemonTrainer
-            # if not alreadyexists:
-            #     self.areaList.append(wildArea)
-    
+                """retrieve pokemon attributes"""
+                for pokemon in trainer["_pokemon"]:
+                    pokemonName = pokemon["_name"]
+                    pokemonLevel = pokemon["_level"]
+                    trainerPokemon = TrainerPokemon(pokemonName, pokemonLevel)
+                    trainerPokemon._gender = pokemon["_gender"]
+                    trainerPokemon._ability = pokemon["_ability"]
+                    trainerPokemon._heldItem = pokemon["_heldItem"]
+                    trainerPokemon._dexNo = pokemon["_dexNo"]
+                    #give the moves to the pokemon
+                    moves = pokemon["_moves"]
+                    for move in range(len(moves)):
+                        trainerPokemon.moves = moves[move]
+                    pokemonTrainer.pokemon = trainerPokemon
+                wildArea.trainers = pokemonTrainer
+            if not alreadyexists:
+                self.areaList.append(wildArea)
+
     def checkForSaveFileDirectory(self):
         """checks if the directory existst otherwise creates it"""
 
