@@ -25,6 +25,7 @@ settings button front page
 
 ---ROM HACKS / LOGIC---
 basic logic for getting encounters from rom hack documentation
+Opencv to overlay on game
 
 
 ---EXTRAS---

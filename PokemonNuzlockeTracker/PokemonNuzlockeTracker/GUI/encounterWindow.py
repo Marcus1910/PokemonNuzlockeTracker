@@ -10,6 +10,7 @@ class EncounterWindow():
     def __init__(self, parent, area):
         self.area = area
         self._encounterList = area.encounters
+        print(self._encounterList)
         self._areaName = area.name
         self._master = Toplevel(parent)
         #self._master.resizable(False, False)

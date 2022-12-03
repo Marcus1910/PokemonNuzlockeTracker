@@ -90,11 +90,12 @@ class readFormattedData():
 
 
     def returnAreaList(self):
-        """function that reads all encounterdata and returns a list [areaname [ terrainType, [ encounterlist ] ], [ [ ] ] ]"""
+        """function that reads all encounterdata and returns a list of area objects"""
         self.readFile()
         self.indexAreas()
         self.removeDuplicateNames()
         self.createEncounterLists()
+        print(self._areaList)
         return self._areaList
 
 

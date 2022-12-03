@@ -1,6 +1,7 @@
 from area import Area
 from trainer import Trainer
 from trainerPokemon import TrainerPokemon
+from encounterPokemon import EncounterPokemon
 from item import Item
 from readFormattedData import readFormattedData
 
@@ -29,6 +30,8 @@ class MainGame():
             for area in self.areaList:
                 self.areaNamesList.append(area.name)
                 print(area.name)
+        else:
+            print("no area Names")
         return self.areaNamesList
 
     def writeToFile(self):
@@ -54,10 +57,12 @@ class MainGame():
         #TODO correct path
         #only needed to create the json dumps and backup if file cannot be read
         self.areaList = readFormattedData(f"{self.dataFolder}\{self.gameName}CorrectData.txt").returnAreaList()
+        print(self.areaList)
                 
     def convertDataToObjects(self):  
         #get all the data from the json dump
         #TODO different file for cleaner code?
+        #add logic to add encounterpokemon, encounterpokemon window are only available when running from empty 'SacredGoildGameData.txt' file
         for area in self.readData:
             alreadyexists = False
             areaName = area["_name"]
@@ -75,6 +80,23 @@ class MainGame():
                 
             wildArea.startLine = startLine
             
+            '''retrieve encounters from json dump in sacredGoldGameData.txt'''
+            terrainTypes = area["_encounters"]
+            for terrain in terrainTypes:
+                encounterList = []
+                terrainName = terrain[0]
+                pokemonList = terrain[1]
+                for pokemon in pokemonList:
+                    encounterName = pokemon["name"]
+                    encounterLevels = pokemon["levels"]
+                    encounterPercentage = pokemon["percentage"]
+                    encounterPokemon = EncounterPokemon(encounterName, encounterLevels, encounterPercentage)
+                    encounterList.append(encounterPokemon)
+                wildArea._encounters.append([terrainName, encounterList])
+                #print(wildArea.encounters)
+                encounterList = [terrainName, pokemonList]
+            
+
             """retrieve all area attributes"""
             items = area["_items"]
             for item in items:
