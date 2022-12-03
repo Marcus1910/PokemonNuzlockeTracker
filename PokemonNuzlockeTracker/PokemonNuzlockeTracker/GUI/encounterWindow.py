@@ -6,11 +6,12 @@ import os
 class EncounterWindow():
     _caughtPokemon = {}
     _intvarList = {}
+    _spriteFolder = os.path.join(os.path.dirname(os.getcwd()), f"images/sprites")
+    _pokemonSpritesFolder = os.path.join(_spriteFolder, f"pokemon")
 
     def __init__(self, parent, area):
         self.area = area
         self._encounterList = area.encounters
-        print(self._encounterList)
         self._areaName = area.name
         self._master = Toplevel(parent)
         #self._master.resizable(False, False)
@@ -41,8 +42,6 @@ class EncounterWindow():
         row = 0
         column = 0
         placement = 0
-        SpritesPath = os.path.join(os.getcwd(), "sprites/pokemon")
-        ballSpriteFolder = os.path.join(os.getcwd(), "sprites\icons\pokeballSprites")
         for index, areaType in enumerate(self._encounterList):
             #determine position for the next label, next to it and/or below it
             if (index % 2) == 0:
@@ -72,11 +71,11 @@ class EncounterWindow():
 
 
                 #get correct pokemon picture
-                image = os.path.join(SpritesPath, (encounter.name + ".png"))
+                image = os.path.join(self._pokemonSpritesFolder, (encounter.name + ".png"))
                 try:
                     pokemonImage = PhotoImage(file = image)
                 except TclError:
-                    image = os.path.join(SpritesPath, '0.png')
+                    image = os.path.join(self._spriteFolder, '0.png')
                     pokemonImage = PhotoImage(file = image)
 
                 imageLabel = Label(areaTypeFrame, image = pokemonImage, borderwidth = 1, relief = "solid")
