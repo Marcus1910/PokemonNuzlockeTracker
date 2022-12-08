@@ -74,8 +74,26 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": []
+  "_trainers": [
+    {
+        "_name": "Larry",
+        "_trainerType": "Youngster",
+        "_gender" : "M",
+        "_pokemon" :
+        [
+            {
+                "_name": "Charizard",
+                "_level": "58"
+            }
+        ]
+    }
+  ],
+  "_items": 
+  [
+    {
+        "_name": "Oran Berry"
+    }
+  ]
  },
  {
   "_name": "Route 29",

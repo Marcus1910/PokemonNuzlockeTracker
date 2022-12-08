@@ -6,9 +6,11 @@ class Area():
     def __init__(self, name):
         self._name = name
         self._startLine = None
-        self._encounters = []
-        self._trainers = []
-        self._items = []
+        self._encounters = [] #list with encounterpokemon objects
+        self._trainers = [] #list of trainer objects
+        self._items = [] # list of item objects
+        self._accessible = 0
+        self._caughtPokemon = [] #list with pokemon objects
     
     @property
     def name(self):
@@ -51,16 +53,46 @@ class Area():
     def item(self):
         return self._items
 
-    @item.setter
-    def item(self, item):
-        if len(self._items) == 0:
+    def appendItem(self, item):
+        for items in self._items:
+            if item.name == items.name:
+                print("item already exists")
+                break
+        #not found, also works if no items in list
+        else: 
             self._items.append(item)
+    
+    def removeItem(self, item):
+        for items in self._items:
+            if item.name == items.name:
+                print("needs to be deleted")
+                self._items.remove(item)
+                break
         else:
-            for index, items in enumerate(self._items):
-                if item.name == items.name:
-                    break
-                elif index == len(self._items)-1:
-                    self._items.append(item)
+            print("item does not exist")
+
+    @property
+    def accessible(self):
+        return self._accessible
+    
+    @accessible.setter
+    def accessible(self, accessible):
+        if self._accessible < accessible:
+            print(f"current gym badges required are {self._accessible}, changed it to {accessible}")
+        else:
+            self._accessible = accessible
+    
+    @property
+    def caughtPokemon(self):
+        return self._caughtPokemon
+
+    @caughtPokemon.setter
+    def caughtPokemon(self, pokemon): #pokemon object
+        #create caughtPokemon object
+        self._caughtPokemon.append(pokemon)
+        print(f"added {pokemon}")
+        return
+
     
     def __str__(self):
         returnString = f"{self._name} has {len(self._trainers)} trainers\n"

@@ -25,13 +25,14 @@ settings button front page
 
 ---ROM HACKS / LOGIC---
 basic logic for getting encounters from rom hack documentation
-Opencv to overlay on game
+
 
 
 ---EXTRAS---
 read encountertable data from rom
 add window to make adding games easier
 add iconbitmap to encounterWindow depending on areaName
+Opencv to overlay on game
 
     ---SHOWDOWN---
     export Trainer to showdown format
@@ -60,6 +61,11 @@ subclasses AddDeleteWindow -> AddDeletetrainerWindow, AddDeleteItemWindow
 popup message, x removed
 
 edit button- pop up, saying edit trainer to add pokemon -> call edit trainer immediatly
+
+
+create separate list in encounter logic for selectedPOkemon, failed pokemon, caught pokmemon and dead pokemon
+generate catchable pokemon by reading old savestates
+add non-canon pokemon with name and use own sprite or ?.png
 
 sort route list option, own choice
 

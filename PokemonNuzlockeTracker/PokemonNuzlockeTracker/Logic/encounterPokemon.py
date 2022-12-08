@@ -1,4 +1,5 @@
 class EncounterPokemon():
+    
     def __init__(self, name, level, percentage):
         self.name= name
         self.levels = level

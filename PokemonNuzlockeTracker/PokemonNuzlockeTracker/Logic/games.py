@@ -57,7 +57,7 @@ class MainGame():
         #TODO correct path
         #only needed to create the json dumps and backup if file cannot be read
         self.areaList = readFormattedData(f"{self.dataFolder}\{self.gameName}CorrectData.txt").returnAreaList()
-        print(self.areaList)
+        # print(self.areaList)
                 
     def convertDataToObjects(self):  
         #get all the data from the json dump
@@ -88,8 +88,9 @@ class MainGame():
                 pokemonList = terrain[1]
                 for pokemon in pokemonList:
                     encounterName = pokemon["name"]
-                    encounterLevels = pokemon["levels"]
-                    encounterPercentage = pokemon["percentage"]
+                    encounterLevels = self.checkVarExistsJsonDump("levels", pokemon)
+                    encounterPercentage = self.checkVarExistsJsonDump("percentage", pokemon)
+
                     encounterPokemon = EncounterPokemon(encounterName, encounterLevels, encounterPercentage)
                     encounterList.append(encounterPokemon)
                 wildArea._encounters.append([terrainName, encounterList])
@@ -102,35 +103,51 @@ class MainGame():
             for item in items:
                 itemName = item["_name"]
                 areaItem = Item(itemName)
-                areaItem.description = item["_description"]
-                areaItem.location = item["_location"]
-                wildArea.item = areaItem
+                areaItem.description = self.checkVarExistsJsonDump("_description", item)
+                areaItem.location = self.checkVarExistsJsonDump("_location", item)
+                wildArea.appendItem(areaItem)
             
             """retrieve all trainer attributes"""
             trainers = area["_trainers"]
             for trainer in trainers:
                 trainerName = trainer["_name"]
                 pokemonTrainer = Trainer(trainerName)
-                pokemonTrainer.trainerType = trainer["_trainerType"]
-                pokemonTrainer.gender = trainer["_gender"]
+                pokemonTrainer.trainerType = self.checkVarExistsJsonDump("_trainerType", trainer)
+                pokemonTrainer.gender = self.checkVarExistsJsonDump("_gender", trainer)
                 
                 """retrieve pokemon attributes"""
                 for pokemon in trainer["_pokemon"]:
                     pokemonName = pokemon["_name"]
                     pokemonLevel = pokemon["_level"]
                     trainerPokemon = TrainerPokemon(pokemonName, pokemonLevel)
-                    trainerPokemon._gender = pokemon["_gender"]
-                    trainerPokemon._ability = pokemon["_ability"]
-                    trainerPokemon._heldItem = pokemon["_heldItem"]
-                    trainerPokemon._dexNo = pokemon["_dexNo"]
+                    trainerPokemon._gender = self.checkVarExistsJsonDump("_gender", pokemon)
+                    trainerPokemon._ability = self.checkVarExistsJsonDump("_ability", pokemon)
+                    trainerPokemon._heldItem = self.checkVarExistsJsonDump("_heldItem", pokemon)
+                    trainerPokemon._dexNo = self.checkVarExistsJsonDump("_dexNo", pokemon)
                     #give the moves to the pokemon
-                    moves = pokemon["_moves"]
-                    for move in range(len(moves)):
-                        trainerPokemon.moves = moves[move]
+                    
+                    try: 
+                        moves = pokemon["_moves"]
+                    except KeyError as e:
+                        pass
+                    else:
+                        for move in range(len(moves)):
+                            trainerPokemon.moves = moves[move]
                     pokemonTrainer.pokemon = trainerPokemon
+
                 wildArea.trainers = pokemonTrainer
             if not alreadyexists:
                 self.areaList.append(wildArea)
+
+    def checkVarExistsJsonDump(self, attribute, dict):
+        """checks whether a variable exists in a dict else returns n/a"""
+        try:
+            x = dict[attribute]
+        except KeyError as e:
+            print(f"adding n/a as default, {e}")
+            x = "n/a"
+        return x
+
 
     def checkForSaveFileDirectory(self):
         """checks if the directory existst otherwise creates it"""

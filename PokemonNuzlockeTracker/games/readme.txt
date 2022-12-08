@@ -1,1 +1,1 @@
-directory to store savefiles and gamedata under the name of the game, please don't create your own savefiles, the program could crash
+directory to store savefiles and gamedata under the name of the game, please don't create your own savefiles, the program creates them automatically

@@ -9,7 +9,7 @@ class EncounterWindow():
     _spriteFolder = os.path.join(os.path.dirname(os.getcwd()), f"images/sprites")
     _pokemonSpritesFolder = os.path.join(_spriteFolder, f"pokemon")
 
-    def __init__(self, parent, area):
+    def __init__(self, parent, area, save):
         self.area = area
         self._encounterList = area.encounters
         self._areaName = area.name
@@ -63,12 +63,11 @@ class EncounterWindow():
             #draw everything inside areaTypeFrame
             for index, encounter in enumerate(areaType[1]): 
                 if encounter.name  not in self._intvarList:
-                    self._intvarList[encounter.name] = BooleanVar() 
+                    self._intvarList[encounter.name] = IntVar() 
 
                 #checkbutton          
                 checkButton = Checkbutton(areaTypeFrame, variable = self._intvarList[encounter.name])
                 checkButton.grid(row = index + 1, column = 0)
-
 
                 #get correct pokemon picture
                 image = os.path.join(self._pokemonSpritesFolder, (encounter.name + ".png"))
@@ -94,6 +93,7 @@ class EncounterWindow():
         print("updating")
         newList = []
         for key, value in self._intvarList.items():
+            print(value.get())
             if value.get():
                 newList.append(key)
         for pokemon in newList:
@@ -101,6 +101,7 @@ class EncounterWindow():
             if pokemon not in self._caughtPokemon:
                 print("adding pokemon to caughtList")
                 self._caughtPokemon[pokemon] = self._areaName
+                self.area.caughtPokemon = pokemon
             else:
                 print("already caught")
                 
@@ -108,8 +109,7 @@ class EncounterWindow():
     
         print(self._caughtPokemon)
 
-    def yes(self):
-        print("yes")
+
             
 
     

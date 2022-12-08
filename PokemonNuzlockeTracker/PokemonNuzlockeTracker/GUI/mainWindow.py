@@ -2,20 +2,17 @@ from tkinter import *
 import os
 from tkinter import ttk
 
-#from addDeleteAttributeWindows import AddDeleteTrainerWindow, AddItemWindow
-
 from templateWindow import TemplateWindow
 from encounterWindow import EncounterWindow
-#from ..Logic.trainer import Trainer
-#from attributeWindow import TrainerWindow, ItemWindow
-#from ..Logic.item import Item
 
 class MainWindow(TemplateWindow):
+    _spriteFolder = os.path.join(os.path.dirname(os.getcwd()), f"images/sprites")
+    _pokemonSpritesFolder = os.path.join(_spriteFolder, f"pokemon")
     def __init__(self, x, y, game, save):
         super().__init__(x, y) 
         #self._game is a gameObject  
         self._game = game
-        #path to saveFile
+        #attempt x :str
         self._save = save
         self._master.title(f"{self._game.gameName} {self._save}")
         self._listOfAreas = self._game.retrieveGameData()
@@ -116,6 +113,7 @@ class MainWindow(TemplateWindow):
         #closing window saves the changes made
         self._master.protocol("WM_DELETE_WINDOW")#, self.saveAndExit
         
+
         self.update()
         self.run()
 
@@ -123,7 +121,7 @@ class MainWindow(TemplateWindow):
         currentArea = self._areaMenu.get()
         for area in self._listOfAreas:
             if area.name == currentArea:
-                EncounterWindow(self._master, area)
+                EncounterWindow(self._master, area, self._save)
 
     def getAreas(self):
         """retrieve area list from game object"""
@@ -175,18 +173,25 @@ class MainWindow(TemplateWindow):
             for trainer in self._listOfTrainers:
                 if trainerName in trainer.name:
                     self.deletePokemonDisplay()
+                    print(f"pokemon: {trainer.pokemon}")
                     for index, pokemon in enumerate(trainer.pokemon):
                         self.displayPokemon(pokemon, index)
     
     def getItems(self, event):
-        pass
         areaName = event.widget.get()
         self._listOfItems = []
         for area in self._listOfAreas:
             if areaName == area.name:
+                #self._itemFrame.grid()
                 self.deleteItemDisplay()
                 self._listOfItems = area._items
-                self.displayItems()
+                #remove
+                if not len(self._listOfItems):
+                    self._indivItemFrame.grid_remove()
+                else:
+                    self._indivItemFrame.grid()
+                    self.displayItems()
+                break 
 
     def deletePokemonDisplay(self):
         """delete all listboxs etc in indivtrainerframe"""
@@ -195,13 +200,13 @@ class MainWindow(TemplateWindow):
         
     def displayPokemon(self, pokemon, index):
         """look for photo of the pokemon and add the pokemon to the gui"""
-        folderPath = os.path.join(os.getcwd(), 'sprites/pokemon')
-        photo = os.path.join(folderPath, pokemon.name + '.png')
+        
+        photo = os.path.join(self._pokemonSpritesFolder, pokemon.name + '.png')
         #check if pokemon name is correct else display '?' png
         try:
             pokemonImg = PhotoImage(file = photo)
         except TclError:
-            photo = os.path.join(folderPath, '0.png')
+            photo = os.path.join(self._pokemonSpritesFolder, '0.png')
             pokemonImg = PhotoImage(file = photo)
         
         #pokemonImg = ImageTk.PhotoImage(PIL.Image.open(photo))
@@ -231,7 +236,9 @@ class MainWindow(TemplateWindow):
         itemScrollbar.grid(row = 0, column = 1, sticky = NS)
         itemBox = Listbox(self._indivItemFrame, yscrollcommand = itemScrollbar.set)
         itemBox.grid(row = 0, column = 0)
-        for item in self._listOfItems:
+        print(self._listOfItems)
+        for index, item in enumerate(self._listOfItems):
+            #print(index, item)
             itemBox.insert(END, item.name)
         itemScrollbar.configure(command = itemBox.yview)
     
