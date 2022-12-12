@@ -10,7 +10,7 @@ class Area():
         self._trainers = [] #list of trainer objects
         self._items = [] # list of item objects
         self._accessible = 0
-        self._caughtPokemon = [] #list with pokemon objects
+        self._encounteredPokemon = [] #list with pokemon objects
     
     @property
     def name(self):
@@ -83,13 +83,13 @@ class Area():
             self._accessible = accessible
     
     @property
-    def caughtPokemon(self):
+    def encounteredPokemon(self):
         return self._caughtPokemon
 
-    @caughtPokemon.setter
-    def caughtPokemon(self, pokemon): #pokemon object
+    @encounteredPokemon.setter
+    def encounteredPokemon(self, pokemon): #pokemon object
         #create caughtPokemon object
-        self._caughtPokemon.append(pokemon)
+        self._encounteredPokemon.append(pokemon)
         print(f"added {pokemon}")
         return
 

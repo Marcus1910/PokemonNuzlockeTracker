@@ -4,6 +4,8 @@ class EncounterPokemon():
         self.name= name
         self.levels = level
         self.percentage = percentage
+        self._state = 0
+
     
     def __str__(self):
         return f"I am {self.name}, spawn at levels {self.levels} and have a percentage of: {self.percentage}"

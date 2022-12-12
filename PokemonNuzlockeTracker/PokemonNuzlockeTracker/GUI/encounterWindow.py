@@ -5,7 +5,9 @@ import os
 
 class EncounterWindow():
     _caughtPokemon = {}
-    _intvarList = {}
+    _labelTextDict = {}
+    _labelObjDict = {}
+    _buttonDict = {}
     _spriteFolder = os.path.join(os.path.dirname(os.getcwd()), f"images/sprites")
     _pokemonSpritesFolder = os.path.join(_spriteFolder, f"pokemon")
 
@@ -13,6 +15,9 @@ class EncounterWindow():
         self.area = area
         self._encounterList = area.encounters
         self._areaName = area.name
+        self._localLabelObjDict = {}
+        self._localButtonDict = {}
+
         self._master = Toplevel(parent)
         #self._master.resizable(False, False)
         self._master.attributes("-topmost", True)
@@ -36,7 +41,23 @@ class EncounterWindow():
         self._canvasFrame = Frame(self._masterCanvas)
         self._masterCanvas.create_window((0,0), window = self._canvasFrame, anchor = NW)
 
+        self._master.protocol("WM_DELETE_WINDOW", lambda : [self.updateLists(), self._master.destroy()])
+
         self.makeAreas()
+
+    def updateLists(self):
+        """removesButtons / labels from class variable lists so you can open the same window without error"""
+        for name, labelList in self._localLabelObjDict.items():
+            if name in self._labelObjDict:
+                list = self._labelObjDict[name]
+                for label in labelList:
+                    list.remove(label)
+        for name, buttonList in self._localButtonDict.items():
+            if name in self._buttonDict:
+                list = self._buttonDict[name]
+                for button in buttonList:
+                    list.remove(button)
+        # self._master.destroy()
 
     def makeAreas(self):
         row = 0
@@ -58,38 +79,61 @@ class EncounterWindow():
             typeLabel = Label(areaTypeFrame, text = areaType[0], borderwidth = 1, relief = "raised", fg = "blue")
             typeLabel.grid(row = 0, column=1, columnspan = 5, sticky = NSEW)
 
-            
-
             #draw everything inside areaTypeFrame
             for index, encounter in enumerate(areaType[1]): 
-                if encounter.name  not in self._intvarList:
-                    self._intvarList[encounter.name] = IntVar() 
+                if encounter.name  not in self._labelTextDict:
+                    self._labelTextDict[encounter.name] = StringVar()
+                    self._labelTextDict[encounter.name].set("catch")
+                    self._buttonDict[encounter.name] = []
+                    self._labelObjDict[encounter.name] = []
+                if encounter.name not in self._localButtonDict:
+                    self._localButtonDict[encounter.name] = []
+                    self._localLabelObjDict[encounter.name] = []# create empty list to store all labels for pokemon
 
-                #checkbutton          
-                checkButton = Checkbutton(areaTypeFrame, variable = self._intvarList[encounter.name])
-                checkButton.grid(row = index + 1, column = 0)
+                #checkbutton    
+                catchButton = Button(areaTypeFrame, textvariable = self._labelTextDict[encounter.name], command = lambda name = encounter.name : [self.changeColour(name)])
+                catchButton.grid(row = index + 1, column = 0)
 
                 #get correct pokemon picture
                 image = os.path.join(self._pokemonSpritesFolder, (encounter.name + ".png"))
                 try:
-                    pokemonImage = PhotoImage(file = image)
+                    pokemonImage = ImageTk.PhotoImage(Image.open(image).resize([90, 90]).convert("RGBA"))
                 except TclError:
                     image = os.path.join(self._spriteFolder, '0.png')
-                    pokemonImage = PhotoImage(file = image)
+                    pokemonImage = ImageTk.PhotoImage(Image.open(image).resize([90, 90]).convert("RGBA"))
 
-                imageLabel = Label(areaTypeFrame, image = pokemonImage, borderwidth = 1, relief = "solid")
+
+                imageLabel = Label(areaTypeFrame, image = pokemonImage, textvariable = self._labelTextDict[encounter.name], borderwidth = 1, relief = "solid", compound = "top")
                 imageLabel.grid(row = index + 1, column = 1)
 
                 self.encounterLabel(areaTypeFrame, encounter.name, index + 1, 2)
                 self.encounterLabel(areaTypeFrame, encounter.levels, index + 1, 3)
                 self.encounterLabel(areaTypeFrame, encounter.percentage, index + 1, 4)
+                
+                #all the same pokemon labels will change at the same time
+                self._labelObjDict[encounter.name].append(imageLabel)
+                self._buttonDict[encounter.name].append(catchButton)
+                self._localLabelObjDict[encounter.name].append(imageLabel)
+                self._localButtonDict[encounter.name].append(catchButton)
+
                 imageLabel.image = pokemonImage
+    
+    def changeColour(self, name):
+        print(name)
+        x = self._labelObjDict[name]
+        for i in x:
+            i.configure(bg = "green")
+        buttons = self._buttonDict[name]
+        for button in buttons:
+            button.configure(bg = "red")
+            print(button)
 
     def encounterLabel(self, frame, text, row, column):
         encounterNameLabel = Label(frame, text = text, borderwidth = 2, relief = "flat")
         encounterNameLabel.grid(row = row, column = column, sticky = NSEW)
     
     def updateCapturedPokemon(self):
+        pass
         print("updating")
         newList = []
         for key, value in self._intvarList.items():

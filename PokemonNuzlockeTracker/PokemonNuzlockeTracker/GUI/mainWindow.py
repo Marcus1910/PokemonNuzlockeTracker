@@ -234,7 +234,7 @@ class MainWindow(TemplateWindow):
     def displayItems(self):
         itemScrollbar = Scrollbar(self._indivItemFrame)
         itemScrollbar.grid(row = 0, column = 1, sticky = NS)
-        itemBox = Listbox(self._indivItemFrame, yscrollcommand = itemScrollbar.set)
+        itemBox = Listbox(self._indivItemFrame, yscrollcommand = itemScrollbar.set, height = len(self._listOfItems) if len(self._listOfItems) < 10 else 10)#causes listbox to shrink / expand to fit all items
         itemBox.grid(row = 0, column = 0)
         print(self._listOfItems)
         for index, item in enumerate(self._listOfItems):
