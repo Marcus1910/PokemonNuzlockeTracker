@@ -24,13 +24,13 @@ class SelectGameWindow(TemplateWindow):
         
         self._chosenGame = StringVar()
         self._chosenGame.set("which game?")
-        self._chosenGame.trace_add("write", self.validateGame)
+        self._chosenGame.trace_add("write", self.getGameSaveFiles)
         self._gameMenu = OptionMenu(self._setupFrame, self._chosenGame , *self._listOfGames)
         self._gameMenu.grid(row = 0, column = 0, sticky = N)
         
         self._chosenSaveFile = StringVar()
         self._chosenSaveFile.set("which saveFile?")
-        self._chosenSaveFile.trace_add("write", self.validateSaveFile)
+        self._chosenSaveFile.trace_add("write", self.showSaveFileData)
         self._saveFile = OptionMenu(self._setupFrame, self._chosenSaveFile, *self._saveFiles)
         self._saveFile.grid(row = 1, column = 0, sticky = EW)
         self._saveFile.configure(state = DISABLED)
@@ -38,7 +38,6 @@ class SelectGameWindow(TemplateWindow):
         """forward creation"""
         self._saveFileDataFrame = Frame(self._setupFrame)
         self._saveFileDataFrame.grid(row = 3, column = 0, sticky = NSEW)
-
 
         self._continueButton = Button(self._master, text = "continue", command = self.nextWindow)
         self._continueButton.grid(row = 5, column = 5, sticky = SE)
@@ -55,30 +54,14 @@ class SelectGameWindow(TemplateWindow):
         self._saveFileDataFrame.grid_remove()
         self._chosenSaveFile.set("which saveFile?")
 
-    #TODO replace to logic folder relook code
-    def validateGame(self, *args):
-        """validates the game chosen"""
-        #checks if self._game already exists
-        try:
-            #checks if the chosengame has changed and resets chosengame to default if it has
-            if self._game != self._chosenGame.get():
-                self.resetSaveFileOption()
-        except AttributeError:
-            #first time changing games from default position
-            pass
-            
 
-        self._game = self._chosenGame.get()
-        self._gameObject = gm.MainGame(self._game)
-        
-        if self._game in self._listOfGames:
-            
-            #get all the savefiles from that game
-            self._saveFile.configure(state = NORMAL)
-            self.updateSaveFiles()
-        else:
-            self._gameMenu.config(bg = 'Red')
-            self._saveFile.configure(state = DISABLED)
+    def getGameSaveFiles(self, *args):
+        """create game object and retrieve the save files which are available"""
+        #*args is needed because of tkinter, contains 'PY_VARX', '' and 'write'
+        print("getting save files")
+        self._gameObject = gm.MainGame(self._chosenGame.get())
+        self._saveFile.configure(state = NORMAL)
+        self.updateSaveFiles()
     
     def updateSaveFiles(self):
         """clear the menu, than update it"""
@@ -87,18 +70,9 @@ class SelectGameWindow(TemplateWindow):
         menu.delete(0, "end")
         for save in self._saveFiles:
             menu.add_command(label = save, command = lambda value = save: self._chosenSaveFile.set(value))
-    
-    #TODO replace to logic folder
-    def validateSaveFile(self, *args):
-        self._save = self._chosenSaveFile.get()
-        print(self._save)
-        if self._save in self._saveFiles:
-            self._continueButton.configure(state = NORMAL)
-            self.showSaveFileData()
-        else:
-            self._continueButton.configure(state = DISABLED)
 
-    def showSaveFileData(self):
+    def showSaveFileData(self, *args):
+        self._save = self._chosenSaveFile.get()
         for label in self._saveFileDataFrame.winfo_children():
             label.destroy()
         if self._save != "new":
@@ -114,6 +88,7 @@ class SelectGameWindow(TemplateWindow):
             self.createDisplayLabel(f"remaining encounters: {remainingEncounters}", 3)
         else:
             self._saveFileDataFrame.grid_remove()
+        self._continueButton.configure(state = NORMAL)
 
 
     def createDisplayLabel(self, text, row, column = 0):
@@ -126,6 +101,7 @@ class SelectGameWindow(TemplateWindow):
         self.exit()
         #call to next window
 
+        #should not give gameObject or Savefile as parameter in GUI code
         MainWindow(self._masterX, self._masterY, self._gameObject, self._save)
 
 if __name__ == "__main__":

@@ -1,13 +1,17 @@
 ---MAIN---
-show all available pokemon per route vanilla games, new window
+show all available pokemon per route vanilla games
 show all available trainer data vanilla games
-show all available items per route
+show all available items per route vanilla games
 
 add button that edits a trainer from route X
+
 correct states for buttons
+    when adding or deleting, disable everything except route and select trainer
+
 
 ---ENCOUNTERPOKEMON---
-    sort frames on %
+    sort frames on preference, counter, type etc
+    resize window based on how long the frames are
 
 
 ---SETTINGS---
@@ -33,24 +37,26 @@ read encountertable data from rom
 add window to make adding games easier
 add iconbitmap to encounterWindow depending on areaName
 Opencv to overlay on game
+import pkhex file to display caught pokemon and update caught pokemon in areas
 
     ---SHOWDOWN---
     export Trainer to showdown format
     export route to showdown format
     export all trainers to showdown format
-    figure out how to change typings/ base stats in showdown
+        optionmenu for single trainer, route, all
+    figure out how to change typings/ base stats in showdown, probably create own showdown from base showdown
 
     ---INTERACTABLE MAP---
     add map to display encounters, in correlation with number of badges, colour coding
     add nickname, shiny, level etc from caught pokemon
 
-add list of moves
-check if moves are valid, option in settings
+    add list of moves
+    check if moves are valid, option in settings
 
 new run option, clears all data and starts with clean slate
 
 
-when adding or deleting, disable everything except route and select trainer
+
 
 clear trainer data when switching routes
 add / delete routes
@@ -62,9 +68,7 @@ popup message, x removed
 
 edit button- pop up, saying edit trainer to add pokemon -> call edit trainer immediatly
 
-
-create separate list in encounter logic for selectedPOkemon, failed pokemon, caught pokmemon and dead pokemon
-generate catchable pokemon by reading old savestates
+generate catchable pokemon by reading old savestates, only for blind nuzlockes. settings option
 add non-canon pokemon with name and use own sprite or ?.png
 
 sort route list option, own choice

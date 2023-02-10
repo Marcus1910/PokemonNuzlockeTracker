@@ -4,7 +4,9 @@ import os
 
 
 class EncounterWindow():
+    #for GUI purposes only
     _caughtPokemon = {}
+    
     _labelTextDict = {}
     _labelObjDict = {}
     _buttonDict = {}
@@ -41,6 +43,7 @@ class EncounterWindow():
         self._canvasFrame = Frame(self._masterCanvas)
         self._masterCanvas.create_window((0,0), window = self._canvasFrame, anchor = NW)
 
+        #on window deletion
         self._master.protocol("WM_DELETE_WINDOW", lambda : [self.updateLists(), self._master.destroy()])
 
         self.makeAreas()
@@ -57,7 +60,6 @@ class EncounterWindow():
                 list = self._buttonDict[name]
                 for button in buttonList:
                     list.remove(button)
-        # self._master.destroy()
 
     def makeAreas(self):
         row = 0

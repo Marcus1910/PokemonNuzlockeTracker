@@ -8,6 +8,7 @@ from encounterWindow import EncounterWindow
 class MainWindow(TemplateWindow):
     _spriteFolder = os.path.join(os.path.dirname(os.getcwd()), f"images/sprites")
     _pokemonSpritesFolder = os.path.join(_spriteFolder, f"pokemon")
+    
     def __init__(self, x, y, game, save):
         super().__init__(x, y) 
         #self._game is a gameObject  
