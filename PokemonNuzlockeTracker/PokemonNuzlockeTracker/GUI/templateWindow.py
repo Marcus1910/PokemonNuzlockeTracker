@@ -11,7 +11,6 @@ class TemplateWindow():
             self._master = Toplevel(parent)
             self.parentXOffset = parent.winfo_x()
             self.parentYOffset = parent.winfo_y()
-            print(f"HIER KIJKEN y: {self.parentYOffset} x: {self.parentXOffset}")
         self._debugMode = 0
         self._numberOfBadges = 0
         self._game = None
@@ -28,7 +27,11 @@ class TemplateWindow():
         self._icon = os.path.join(self.imagePath, "sprites/icons/nuzlocke.ico")
 
         self._master.geometry(f"{self._masterX}x{self._masterY}")
-        #self._master.geometry(str(self._masterX) + 'x' + str(self._masterY))
+        if parent != None:
+            #create window at lefthgand corner of parent window instead of a random location
+            self._master.geometry(f"+{self.parentXOffset}+{self.parentYOffset}")
+
+        self._master.attributes("-topmost", True)
         self._master.iconbitmap(self._icon)
         self._master.resizable(1,1)
 
@@ -74,4 +77,5 @@ class TemplateWindow():
         self._master.mainloop()
     
     def exit(self):
+        """destroys window"""
         self._master.destroy()

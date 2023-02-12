@@ -9,8 +9,8 @@ class MainWindow(TemplateWindow):
     _spriteFolder = os.path.join(os.path.dirname(os.getcwd()), f"images/sprites")
     _pokemonSpritesFolder = os.path.join(_spriteFolder, f"pokemon")
     
-    def __init__(self, x, y, game, save):
-        super().__init__(x, y) 
+    def __init__(self, x, y, game, save, parent = None):
+        super().__init__(x, y, parent) 
         #self._game is a gameObject  
         self._game = game
         #attempt x :str

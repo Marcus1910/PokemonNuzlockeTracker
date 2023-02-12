@@ -10,13 +10,13 @@ def changePath():
     GUIPath = mainPath + "\GUI"
     LogicPath = mainPath + "\Logic"
 
-    if currentpath[-16:] != "PokemonNuzlockes":
+    if currentpath[-22:] != "PokemonNuzlockeTracker":
         print(f"not in the correct folder, please go to the PokemonNuzlockes folder and start the program from there, you are currently in {os.getcwd()}")
         time.sleep(1)
         exit()
 
     if not os.path.isdir(mainPath):
-        print("please go to the correct PokemonNuzlockes directory which has 'PokemonNuzlockeTracker as sub directory'")
+        print("please go to the correct PokemonNuzlockeTracker directory which has 'PokemonNuzlockeTracker as sub directory'")
 
     #set the path and working directory to the folder where all the GUI files are so importing goes 'smoothly'
     sys.path.append(GUIPath)

@@ -1,10 +1,11 @@
 class EncounterPokemon():
     
     def __init__(self, name, level, percentage):
-        self.name= name
+        self.name = name
         self.levels = level
         self.percentage = percentage
         self._state = 0
+        self._states = ["Catchable", "Caught", "Failed"]
 
     
     def __str__(self):

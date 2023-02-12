@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import Image, ImageTk
+from trainerPokemon import TrainerPokemon
 import os
 
 
@@ -19,11 +20,12 @@ class EncounterWindow():
         self._areaName = area.name
         self._localLabelObjDict = {}
         self._localButtonDict = {}
+        self._temporaryCaptures = {}
 
         self._master = Toplevel(parent)
         #self._master.resizable(False, False)
         self._master.attributes("-topmost", True)
-        self._master.geometry("450x600")
+        self._master.geometry(f"450x600+{parent.winfo_x()}+{parent.winfo_y()}")
         self._master.title(self._areaName)
         self._master.columnconfigure(0, weight = 1)
         self._master.rowconfigure(0, weight = 1)
@@ -32,7 +34,7 @@ class EncounterWindow():
 
         #captureButtonFrame = Frame(self._master, bg = "red")
         #captureButtonFrame.grid(row = 1, column = 0)
-        captureButton = Button(self._master, text = "capture selected pokemon", command = self.updateCapturedPokemon)
+        captureButton = Button(self._master, text = "Capture selected pokemon", command = self.updateCapturedPokemon)
         captureButton.grid(row = 1, column = 0, sticky = EW)
         
         scrollbar = Scrollbar(self._master, orient = VERTICAL, command = self._masterCanvas.yview)
@@ -93,7 +95,7 @@ class EncounterWindow():
                     self._localLabelObjDict[encounter.name] = []# create empty list to store all labels for pokemon
 
                 #checkbutton    
-                catchButton = Button(areaTypeFrame, textvariable = self._labelTextDict[encounter.name], command = lambda name = encounter.name : [self.changeColour(name)])
+                catchButton = Button(areaTypeFrame, textvariable = self._labelTextDict[encounter.name], command = lambda name = encounter.name : [self.catchPokemon(name)])
                 catchButton.grid(row = index + 1, column = 0)
 
                 #get correct pokemon picture
@@ -120,8 +122,16 @@ class EncounterWindow():
 
                 imageLabel.image = pokemonImage
     
+    def catchPokemon(self, name, state = 0, level = 1):
+        """'catches' the selected pokemon, puts the pokemonTrainer object into a temporary list which get submitted to the area object
+         as soon as the capture button at the bottom is selected."""
+        #this piece of code is included here because it is primarily for the GUI and not needed at the logic side
+        self.changeColour(name)
+        newPokemon = TrainerPokemon(name, level)
+        self._temporaryCaptures[name] = [newPokemon, state]
+
+        
     def changeColour(self, name):
-        print(name)
         x = self._labelObjDict[name]
         for i in x:
             i.configure(bg = "green")
@@ -135,7 +145,11 @@ class EncounterWindow():
         encounterNameLabel.grid(row = row, column = column, sticky = NSEW)
     
     def updateCapturedPokemon(self):
-        pass
+        #self.area.encounteredPokemon = name
+        print(self._temporaryCaptures)
+        self.area.encounteredPokemon = self._temporaryCaptures
+        return
+        
         print("updating")
         newList = []
         for key, value in self._intvarList.items():

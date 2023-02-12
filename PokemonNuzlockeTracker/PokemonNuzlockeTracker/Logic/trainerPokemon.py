@@ -1,7 +1,7 @@
 import json
-class TrainerPokemon():
+class Pokemon():
     def __init__(self, name, level):
-        self._name = name
+        self._name = name.title()
         self._level = level
         self._dexNo = None
         self._gender = None
@@ -18,7 +18,7 @@ class TrainerPokemon():
         
     @name.setter
     def name(self, name):
-        self._name = name
+        self._name = name.title()
     
     @property
     def level(self):
@@ -84,3 +84,16 @@ class TrainerPokemon():
     def __str__(self):
         returnString = f"name: {self._name}, gender: {self._gender}, level: {self._level}, moves: {self._moves}, ability: {self._ability}, held item: {self._heldItem}"
         return returnString
+
+class TrainerPokemon(Pokemon):
+    def __init__(self, name, level):
+        super().__init__(name, level)
+
+class EncounteredPokemon(Pokemon):
+    def __init__(self, name, level, state = 1):
+        super().__init__(name, level)
+        self._captureStatus = state
+    
+    @property
+    def captureStatus(self):
+        return self._captureStatus

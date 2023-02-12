@@ -10,7 +10,10 @@ class Area():
         self._trainers = [] #list of trainer objects
         self._items = [] # list of item objects
         self._accessible = 0
-        self._encounteredPokemon = [] #list with pokemon objects
+        self._encounteredPokemon = {} #dict with pokemon objects, state: Catched or failed
+        pokemonCatchLimit = 1
+        self.canCathPokemon = False if len(self._encounteredPokemon) >= pokemonCatchLimit else True
+        print(self.canCathPokemon)
     
     @property
     def name(self):
@@ -84,16 +87,17 @@ class Area():
     
     @property
     def encounteredPokemon(self):
-        return self._caughtPokemon
+        return self._encounteredPokemon
 
     @encounteredPokemon.setter
-    def encounteredPokemon(self, pokemon): #pokemon object
-        #create caughtPokemon object
-        self._encounteredPokemon.append(pokemon)
-        print(f"added {pokemon}")
-        return
+    def encounteredPokemon(self, encounteredPokemon :dict): #pokemon object
+        """expects a dictionary of name : [TrainerPokemon objects , state] and updates the first with the new pokemon"""
+        self._encounteredPokemon.update(encounteredPokemon)
+        #scaffolding
+        for key in self._encounteredPokemon.keys():
+            print(key)
 
-    
+
     def __str__(self):
         returnString = f"{self._name} has {len(self._trainers)} trainers\n"
         for trainer in self._trainers:
