@@ -9,11 +9,10 @@ class Area():
         self._encounters = [] #list with encounterpokemon objects
         self._trainers = [] #list of trainer objects
         self._items = [] # list of item objects
-        self._accessible = 0
-        self._encounteredPokemon = {} #dict with pokemon objects, state: Catched or failed
+        self._accessible = 0 #how many badges are needed to access this area, default 0
+        self._encounteredPokemon = {} #dict with pokemon objects name: object
         pokemonCatchLimit = 1
-        self.canCathPokemon = False if len(self._encounteredPokemon) >= pokemonCatchLimit else True
-        print(self.canCathPokemon)
+        self.canCatchPokemon = True #replace code to somewhere it isnt immediatly called : False if len(self._encounteredPokemon) >= pokemonCatchLimit else True
     
     @property
     def name(self):
@@ -91,9 +90,21 @@ class Area():
 
     @encounteredPokemon.setter
     def encounteredPokemon(self, encounteredPokemon :dict): #pokemon object
-        """expects a dictionary of name : [TrainerPokemon objects , state] and updates the first with the new pokemon"""
+        """expects a dictionary of name : pokemonObject and updates the first with the new pokemon"""
+        #remove encounters with a '0' as status
+        removelist = []
+        for pokemon in encounteredPokemon.values():
+            if pokemon.captureStatus == 0:
+                removelist.append(pokemon.name)
+
+        for pokemonName in removelist:
+            #remove it from previous list as wel as the to be added list
+            encounteredPokemon.pop(pokemonName)
+            self._encounteredPokemon.pop(pokemonName)
+
         self._encounteredPokemon.update(encounteredPokemon)
         #scaffolding
+        print("list of pokemon caught here")
         for key in self._encounteredPokemon.keys():
             print(key)
 

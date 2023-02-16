@@ -86,14 +86,38 @@ class Pokemon():
         return returnString
 
 class TrainerPokemon(Pokemon):
+    #different class for future additions like health, pp, ai% of move chosen etc
     def __init__(self, name, level):
         super().__init__(name, level)
 
+
 class EncounteredPokemon(Pokemon):
-    def __init__(self, name, level, state = 1):
+    def __init__(self, name, level = 1, state = 0, percentage = "n/a", levels = "n/a"):
         super().__init__(name, level)
         self._captureStatus = state
+        self._percentage = percentage
+        self._levels = levels
     
     @property
     def captureStatus(self):
         return self._captureStatus
+
+    @captureStatus.setter
+    def captureStatus(self, state):
+        self._captureStatus = state
+    
+    @property
+    def percentage(self):
+        return self._percentage
+
+    @percentage.setter
+    def percentage(self, percentage):
+        self._percentage = percentage
+
+    @property
+    def levels(self):
+        return self._levels
+
+    @levels.setter
+    def levels(self, levels):
+        self._levels = levels

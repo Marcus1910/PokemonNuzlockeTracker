@@ -1,19 +1,25 @@
 from tkinter import *
 from PIL import Image, ImageTk
-from trainerPokemon import TrainerPokemon
+from trainerPokemon import EncounteredPokemon
 import os
 
 
 class EncounterWindow():
     #for GUI purposes only
     _caughtPokemon = {}
-    
+
+    #used to update buttons and labels across multiple encounterwindow instances
     _labelTextDict = {}
     _labelObjDict = {}
     _buttonDict = {}
+
     _spriteFolder = os.path.join(os.path.dirname(os.getcwd()), f"images/sprites")
     _pokemonSpritesFolder = os.path.join(_spriteFolder, f"pokemon")
 
+    #other position for declaration?
+    states = ["Catchable", "Caught", "Failed"]
+    colours = ["white", "green", "red"]
+    
     def __init__(self, parent, area, save):
         self.area = area
         self._encounterList = area.encounters
@@ -21,6 +27,10 @@ class EncounterWindow():
         self._localLabelObjDict = {}
         self._localButtonDict = {}
         self._temporaryCaptures = {}
+        #add the pokemon already caught in this area to global caughtlist
+        #update should also remove duplicates 
+        self._caughtPokemon.update(self.area.encounteredPokemon)
+        print(self._caughtPokemon)
 
         self._master = Toplevel(parent)
         #self._master.resizable(False, False)
@@ -46,12 +56,28 @@ class EncounterWindow():
         self._masterCanvas.create_window((0,0), window = self._canvasFrame, anchor = NW)
 
         #on window deletion
-        self._master.protocol("WM_DELETE_WINDOW", lambda : [self.updateLists(), self._master.destroy()])
+        self._master.protocol("WM_DELETE_WINDOW", self.destroy)#, self.checkLeftoverChanges)
 
         self.makeAreas()
 
+    # def checkLeftoverChanges(self):
+    #     #TODO relook code, does not work properly
+    #     print(self._temporaryCaptures)
+    #     if len(self._temporaryCaptures) > 0:
+    #         popup = Toplevel(self._master)
+    #         popup.title("confirmation")
+    #         popup.attributes("-topmost", True)
+    #         popup.configure(bg = "red")
+    #         Label(popup, text = "There are unsaved changes, are you sure you want to close this window?\n All changes will be deleted", bg = "red").grid(row = 0, column = 0)
+    #         Button(popup, text = "yes", command = lambda: [self.updateLists(), self._master.destroy()]).grid(row = 1, column = 0)
+    #         Button(popup, text = "No", command = popup.destroy).grid(row = 1, column = 1)
+    #     else:
+    #         self.updateLists()
+    #         self._master.destroy()
+
     def updateLists(self):
-        """removesButtons / labels from class variable lists so you can open the same window without error"""
+        """removes Buttons / labels from class variable lists so you can open the same window without error. Also clears temporaryCaptures"""
+        self._temporaryCaptures.clear()
         for name, labelList in self._localLabelObjDict.items():
             if name in self._labelObjDict:
                 list = self._labelObjDict[name]
@@ -62,11 +88,12 @@ class EncounterWindow():
                 list = self._buttonDict[name]
                 for button in buttonList:
                     list.remove(button)
-
+        
     def makeAreas(self):
         row = 0
         column = 0
         placement = 0
+        alreadyCaught = []
         for index, areaType in enumerate(self._encounterList):
             #determine position for the next label, next to it and/or below it
             if (index % 2) == 0:
@@ -84,7 +111,11 @@ class EncounterWindow():
             typeLabel.grid(row = 0, column=1, columnspan = 5, sticky = NSEW)
 
             #draw everything inside areaTypeFrame
-            for index, encounter in enumerate(areaType[1]): 
+            for index, encounter in enumerate(areaType[1]):
+                if encounter.name not in self._caughtPokemon and encounter.captureStatus > 0:
+                    self._caughtPokemon[encounter.name] = encounter
+                    print(f"adding {encounter.name} to caught list")
+                    
                 if encounter.name  not in self._labelTextDict:
                     self._labelTextDict[encounter.name] = StringVar()
                     self._labelTextDict[encounter.name].set("catch")
@@ -95,7 +126,7 @@ class EncounterWindow():
                     self._localLabelObjDict[encounter.name] = []# create empty list to store all labels for pokemon
 
                 #checkbutton    
-                catchButton = Button(areaTypeFrame, textvariable = self._labelTextDict[encounter.name], command = lambda name = encounter.name : [self.catchPokemon(name)])
+                catchButton = Button(areaTypeFrame, textvariable = self._labelTextDict[encounter.name], command = lambda pokemon = encounter: [self.catchPokemon(pokemon)])
                 catchButton.grid(row = index + 1, column = 0)
 
                 #get correct pokemon picture
@@ -120,25 +151,49 @@ class EncounterWindow():
                 self._localLabelObjDict[encounter.name].append(imageLabel)
                 self._localButtonDict[encounter.name].append(catchButton)
 
+                #checks whether or not the pokemon already has been caught, shows correct graphics on startup
+                if encounter.name in self._caughtPokemon:
+                    #append the encounter object to a list to update them all at once instead of updating 1 button 5 times if the pokemon is 5 times in that area
+                    alreadyCaught.append(self._caughtPokemon[encounter.name])
+
                 imageLabel.image = pokemonImage
+        #remove duplicate names from the list, can keep it as a set as we no longer are using it
+        alreadyCaught = set(alreadyCaught)
+        for pokemon in alreadyCaught:
+            self.changeButtonImage(pokemon)
     
-    def catchPokemon(self, name, state = 0, level = 1):
+    def catchPokemon(self, pokemon):
         """'catches' the selected pokemon, puts the pokemonTrainer object into a temporary list which get submitted to the area object
          as soon as the capture button at the bottom is selected."""
         #this piece of code is included here because it is primarily for the GUI and not needed at the logic side
-        self.changeColour(name)
-        newPokemon = TrainerPokemon(name, level)
-        self._temporaryCaptures[name] = [newPokemon, state]
 
+        level = 1 #TODO get correct value from widget get method
+
+        #most accurate and higher possibility it was changed last and needs to be checked first
+        if pokemon.name in self._temporaryCaptures.keys():
+            pokemon = self._temporaryCaptures[pokemon.name]
+
+        elif pokemon.name in self._caughtPokemon.keys():
+            pokemon = self._caughtPokemon[pokemon.name]
+
+        else:
+            #doesn't exist yet, so create it
+            pokemon = EncounteredPokemon(pokemon.name, level, state = 0)
+            self._temporaryCaptures[pokemon.name] = pokemon
+            print(f"added {pokemon} to temporarycapture list")
+
+        #make sure the value rolls over instead of overshooting
+        pokemon.captureStatus = (pokemon.captureStatus + 1) % len(self.states)
+
+        #update GUI button pictures
+        self.changeButtonImage(pokemon)
         
-    def changeColour(self, name):
-        x = self._labelObjDict[name]
-        for i in x:
-            i.configure(bg = "green")
-        buttons = self._buttonDict[name]
+        
+    def changeButtonImage(self, pokemon):
+        buttons = self._buttonDict[pokemon.name]
         for button in buttons:
-            button.configure(bg = "red")
-            print(button)
+            button.configure(background = self.colours[pokemon.captureStatus])
+            print(f"changed {pokemon.name} to {self.colours[pokemon.captureStatus]}")
 
     def encounterLabel(self, frame, text, row, column):
         encounterNameLabel = Label(frame, text = text, borderwidth = 2, relief = "flat")
@@ -148,6 +203,8 @@ class EncounterWindow():
         #self.area.encounteredPokemon = name
         print(self._temporaryCaptures)
         self.area.encounteredPokemon = self._temporaryCaptures
+        #remove all temporary captures, these are not submitted
+        self._temporaryCaptures.clear()
         return
         
         print("updating")
@@ -168,6 +225,11 @@ class EncounterWindow():
         newList = []
     
         print(self._caughtPokemon)
+    
+    def destroy(self):
+        """destroys the window and removes local tkinter references from the global list"""
+        self.updateLists()
+        self._master.destroy()
 
 
             

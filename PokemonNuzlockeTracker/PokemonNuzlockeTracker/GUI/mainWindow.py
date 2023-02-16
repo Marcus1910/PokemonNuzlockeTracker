@@ -97,7 +97,7 @@ class MainWindow(TemplateWindow):
         self._areaMenu = ttk.Combobox(self._areaFrame, textvariable = self._selectedArea, values = self._areaNames)#, command = lambda area: [self.getTrainers(area), self.getItems(area)])
         self._areaMenu.grid(row=0, column=5, sticky=NSEW)
         self._areaMenu['state'] = 'readonly'
-        self._areaMenu.bind("<<ComboboxSelected>>", lambda area = self._areaMenu.get(): [self.getTrainers(area), self.getItems(area)])
+        self._areaMenu.bind("<<ComboboxSelected>>", lambda area = self._areaMenu.get(): [self.getTrainers(area), self.getItems(area), self.changeCbbColor(area)])#call 1 functions that calls other 3
 
         self._showWildEncounterButton = Button(self._areaFrame, text = "Encounters", command = self.showEncounters)
         self._showWildEncounterButton.grid(row = 1, column = 5, sticky = NSEW)
@@ -112,7 +112,7 @@ class MainWindow(TemplateWindow):
         self._exportToShowdownButton.configure(state = DISABLED)
         #self.changeTrainerButtonState(DISABLED)
         #closing window saves the changes made
-        self._master.protocol("WM_DELETE_WINDOW")#, self.saveAndExit
+        self._master.protocol("WM_DELETE_WINDOW", self.saveAndExit)
         
 
         self.update()
@@ -129,7 +129,7 @@ class MainWindow(TemplateWindow):
         self._listOfAreas = self._game.areaList
         for area in self._listOfAreas:
             self._areaNames.append(area.name)
-    
+
     def changeAreaList(self, *args):
         badges = self._numberOfBadges.get()
         #TODO sort list on number of badges
@@ -161,7 +161,6 @@ class MainWindow(TemplateWindow):
         
     
     def getPokemon(self, *args):
-        pass
         """get the pokemon from a selected trainer"""
         trainerName = self._selectedTrainer.get()
         self._exportToShowdownButton.configure(state = NORMAL)
@@ -177,7 +176,17 @@ class MainWindow(TemplateWindow):
                     print(f"pokemon: {trainer.pokemon}")
                     for index, pokemon in enumerate(trainer.pokemon):
                         self.displayPokemon(pokemon, index)
-    
+
+    def changeCbbColor(self, event):
+        areaName = event.widget.get()
+        for area in self._listOfAreas:
+            if areaName == area.name:
+                if area.canCatchPokemon:
+                    self._showWildEncounterButton.config(background = "green")
+                else:
+                    self._showWildEncounterButton.config(background = "red")
+                break
+
     def getItems(self, event):
         areaName = event.widget.get()
         self._listOfItems = []

@@ -31,7 +31,6 @@ settings button front page
 basic logic for getting encounters from rom hack documentation
 
 
-
 ---EXTRAS---
 read encountertable data from rom
 add window to make adding games easier

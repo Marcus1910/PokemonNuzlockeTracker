@@ -1,7 +1,6 @@
 from area import Area
 from trainer import Trainer
-from trainerPokemon import TrainerPokemon
-from encounterPokemon import EncounterPokemon
+from trainerPokemon import TrainerPokemon, EncounteredPokemon
 from item import Item
 from readFormattedData import readFormattedData
 
@@ -59,10 +58,8 @@ class MainGame():
         self.areaList = readFormattedData(f"{self.dataFolder}\{self.gameName}CorrectData.txt").returnAreaList()
         # print(self.areaList)
                 
-    def convertDataToObjects(self):  
-        #get all the data from the json dump
-        #TODO different file for cleaner code?
-        #add logic to add encounterpokemon, encounterpokemon window are only available when running from empty 'SacredGoildGameData.txt' file
+    def convertDataToObjects(self):
+        """converts all data read from the json file and converts it into objects"""  
         for area in self.readData:
             alreadyexists = False
             areaName = area["_name"]
@@ -87,17 +84,16 @@ class MainGame():
                 terrainName = terrain[0]
                 pokemonList = terrain[1]
                 for pokemon in pokemonList:
-                    encounterName = pokemon["name"]
-                    encounterLevels = self.checkVarExistsJsonDump("levels", pokemon)
-                    encounterPercentage = self.checkVarExistsJsonDump("percentage", pokemon)
+                    encounterName = pokemon["_name"]
+                    encounterLevels = self.checkVarExistsJsonDump("_levels", pokemon)
+                    encounterPercentage = self.checkVarExistsJsonDump("_percentage", pokemon)
 
-                    encounterPokemon = EncounterPokemon(encounterName, encounterLevels, encounterPercentage)
+                    encounterPokemon = EncounteredPokemon(encounterName, levels = encounterLevels, percentage = encounterPercentage)
                     encounterList.append(encounterPokemon)
                 wildArea._encounters.append([terrainName, encounterList])
                 #print(wildArea.encounters)
                 encounterList = [terrainName, pokemonList]
             
-
             """retrieve all area attributes"""
             items = area["_items"]
             for item in items:
@@ -133,9 +129,23 @@ class MainGame():
                     else:
                         for move in range(len(moves)):
                             trainerPokemon.moves = moves[move]
+                    #append to trainer objects
                     pokemonTrainer.pokemon = trainerPokemon
-
+                #append to area object
                 wildArea.trainers = pokemonTrainer
+            
+            encounteredPokemon = area["_encounteredPokemon"]
+            for pokemon in encounteredPokemon:
+                pokemonData = encounteredPokemon[pokemon]
+                pokemonName = pokemonData["_name"]
+                pokemonLevel = pokemonData["_level"]
+                pokemonState = pokemonData["_captureStatus"]
+                newPokemon = EncounteredPokemon(pokemonName, level = pokemonLevel, state = pokemonState)
+                
+                #append it to area object
+                wildArea.encounteredPokemon[pokemonName] = newPokemon
+
+
             if not alreadyexists:
                 self.areaList.append(wildArea)
 
