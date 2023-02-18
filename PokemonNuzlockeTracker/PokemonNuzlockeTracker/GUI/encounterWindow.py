@@ -41,6 +41,7 @@ class EncounterWindow():
 
         self._masterCanvas.configure(yscrollcommand = scrollbar.set)
         self._masterCanvas.bind('<Configure>', lambda e: self._masterCanvas.configure(scrollregion = self._masterCanvas.bbox("all")))
+        self._masterCanvas.bind_all("<MouseWheel>", self.scroll)
         self._canvasFrame = Frame(self._masterCanvas)
         self._masterCanvas.create_window((0,0), window = self._canvasFrame, anchor = NW)
 
@@ -189,8 +190,17 @@ class EncounterWindow():
         #remove all temporary captures
         self._temporaryCaptures.clear()
     
+    def scroll(self, event):
+        """allows the user to use the mouse wheel as scrolling option"""
+        if event.delta < 0:
+            self._masterCanvas.yview_scroll(1, 'units')
+        else:
+            self._masterCanvas.yview_scroll(-1, 'units')
+
+    
     def destroy(self):
-        """destroys the window and removes local tkinter references from the global list"""
+        """destroys the window and removes local tkinter references from the global list, also unbinds the mousewheel binding from the window"""
+        self._masterCanvas.unbind_all("<MouseWheel>")
         self.updateLists()
         self._master.destroy()
 

@@ -8,7 +8,7 @@ class PokemonFrame(tk.Frame):
     _pokemonSpritesFolder = os.path.join(_spriteFolder, f"pokemon")
 
     states = ["Catchable", "Caught", "Failed"]
-    colours = ["white", "green", "red"]
+    buttonImages = ["white", "green", "red"]
     
     def __init__(self, master, pokemon, areaTypeName):
         """this frame always contains a button, imagelabel, namelabel, levelslabel, percentagelabel which are stored as variables for easy access"""
@@ -91,6 +91,7 @@ class PokemonFrame(tk.Frame):
         return list(range(int(separatedLevels[0]), int(separatedLevels[-1]) + 1))
 
     def updateCatchButton(self, pokemonStatus):
+
         self.catchButton.configure(background = self.colours[pokemonStatus])
     
     def updateState(self, pokemonStatus):
