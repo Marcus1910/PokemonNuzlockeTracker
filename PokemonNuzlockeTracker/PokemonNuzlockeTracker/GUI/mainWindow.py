@@ -97,7 +97,7 @@ class MainWindow(TemplateWindow):
         self._areaMenu = ttk.Combobox(self._areaFrame, textvariable = self._selectedArea, values = self._areaNames)#, command = lambda area: [self.getTrainers(area), self.getItems(area)])
         self._areaMenu.grid(row=0, column=5, sticky=NSEW)
         self._areaMenu['state'] = 'readonly'
-        self._areaMenu.bind("<<ComboboxSelected>>", lambda area = self._areaMenu.get(): [self.getTrainers(area), self.getItems(area), self.changeCbbColor(area)])#call 1 functions that calls other 3
+        self._areaMenu.bind("<<ComboboxSelected>>", lambda area = self._areaMenu.get(): [self.getTrainers(area), self.getItems(area), self.changeCbbColor(area)])
 
         self._showWildEncounterButton = Button(self._areaFrame, text = "Encounters", command = self.showEncounters)
         self._showWildEncounterButton.grid(row = 1, column = 5, sticky = NSEW)
@@ -302,5 +302,5 @@ class MainWindow(TemplateWindow):
         SelectGameWindow()
 
     def saveAndExit(self):
-        self._game.writeToFile()
+        #self._game.writeToFile()
         self.exit()

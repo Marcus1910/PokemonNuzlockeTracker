@@ -1,7 +1,7 @@
 from tkinter import *
-from PIL import Image, ImageTk
+from pokemonFrame import PokemonFrame
 from trainerPokemon import EncounteredPokemon
-import os
+
 
 
 class EncounterWindow():
@@ -9,41 +9,30 @@ class EncounterWindow():
     _caughtPokemon = {}
 
     #used to update buttons and labels across multiple encounterwindow instances
-    _labelTextDict = {}
-    _labelObjDict = {}
-    _buttonDict = {}
+    _pokemonFrames = {}
 
-    _spriteFolder = os.path.join(os.path.dirname(os.getcwd()), f"images/sprites")
-    _pokemonSpritesFolder = os.path.join(_spriteFolder, f"pokemon")
-
-    #other position for declaration?
-    states = ["Catchable", "Caught", "Failed"]
-    colours = ["white", "green", "red"]
-    
     def __init__(self, parent, area, save):
         self.area = area
         self._encounterList = area.encounters
         self._areaName = area.name
-        self._localLabelObjDict = {}
-        self._localButtonDict = {}
+        self._localPokemonFrames = {} #contains all frames madew in this window
+        self._areaFrames = {} #contains all the frames from every area
+
         self._temporaryCaptures = {}
         #add the pokemon already caught in this area to global caughtlist
-        #update should also remove duplicates 
+        #update should also overwrite duplicates 
         self._caughtPokemon.update(self.area.encounteredPokemon)
-        print(self._caughtPokemon)
 
         self._master = Toplevel(parent)
-        #self._master.resizable(False, False)
         self._master.attributes("-topmost", True)
         self._master.geometry(f"450x600+{parent.winfo_x()}+{parent.winfo_y()}")
         self._master.title(self._areaName)
         self._master.columnconfigure(0, weight = 1)
         self._master.rowconfigure(0, weight = 1)
+        #self._master.resizable(False, True) #only strecth in the y direction
         self._masterCanvas = Canvas(self._master)
         self._masterCanvas.grid(row = 0, column = 0, sticky = NSEW)
 
-        #captureButtonFrame = Frame(self._master, bg = "red")
-        #captureButtonFrame.grid(row = 1, column = 0)
         captureButton = Button(self._master, text = "Capture selected pokemon", command = self.updateCapturedPokemon)
         captureButton.grid(row = 1, column = 0, sticky = EW)
         
@@ -76,18 +65,13 @@ class EncounterWindow():
     #         self._master.destroy()
 
     def updateLists(self):
-        """removes Buttons / labels from class variable lists so you can open the same window without error. Also clears temporaryCaptures"""
+        """removes Frames from class variable lists so you can open the same window without error. Also clears temporaryCaptures"""
         self._temporaryCaptures.clear()
-        for name, labelList in self._localLabelObjDict.items():
-            if name in self._labelObjDict:
-                list = self._labelObjDict[name]
-                for label in labelList:
-                    list.remove(label)
-        for name, buttonList in self._localButtonDict.items():
-            if name in self._buttonDict:
-                list = self._buttonDict[name]
-                for button in buttonList:
-                    list.remove(button)
+        for name, localframeList in self._localPokemonFrames.items():
+            if name in self._pokemonFrames:
+                list = self._pokemonFrames[name]
+                for frame in localframeList:
+                    list.remove(frame)
         
     def makeAreas(self):
         row = 0
@@ -95,6 +79,7 @@ class EncounterWindow():
         placement = 0
         alreadyCaught = []
         for index, areaType in enumerate(self._encounterList):
+            areaTypeName = areaType[0]
             #determine position for the next label, next to it and/or below it
             if (index % 2) == 0:
                 placement = 0
@@ -103,71 +88,63 @@ class EncounterWindow():
                     row += max(len(areaType[1]), len(self._encounterList[index-1]))
             else:
                 placement = 2
+
+            
             
             areaTypeFrame = Frame(self._canvasFrame, borderwidth = 1, relief = "solid")
-            areaTypeFrame.grid(row = row, column = column + placement, columnspan = 2, sticky = NSEW)
+            areaTypeFrame.grid(row = row, column = column + placement, columnspan = 2, sticky = NSEW, pady = 1, padx = 1)
 
-            typeLabel = Label(areaTypeFrame, text = areaType[0], borderwidth = 1, relief = "raised", fg = "blue")
-            typeLabel.grid(row = 0, column=1, columnspan = 5, sticky = NSEW)
+            typeLabel = Label(areaTypeFrame, text = areaTypeName, borderwidth = 1, relief = "raised", fg = "blue")
+            typeLabel.grid(row = 0, column = 0, columnspan = 5, sticky = NSEW)
+
+            """"
+            # indexFrame = Frame(areaTypeFrame)
+            # indexFrame.grid(row = 1, column = 0, columnspan = 4, sticky = NSEW)
+
+            # self.textLabel(indexFrame, "catchButton", 0, 0)
+            # self.textLabel(indexFrame, "pokemon", 0, 1)
+            # self.textLabel(indexFrame, "levels", 0, 2)
+            # self.textLabel(indexFrame, "percentage", 0, 3)
+            """
 
             #draw everything inside areaTypeFrame
             for index, encounter in enumerate(areaType[1]):
-                if encounter.name not in self._caughtPokemon and encounter.captureStatus > 0:
-                    self._caughtPokemon[encounter.name] = encounter
-                    print(f"adding {encounter.name} to caught list")
-                    
-                if encounter.name  not in self._labelTextDict:
-                    self._labelTextDict[encounter.name] = StringVar()
-                    self._labelTextDict[encounter.name].set("catch")
-                    self._buttonDict[encounter.name] = []
-                    self._labelObjDict[encounter.name] = []
-                if encounter.name not in self._localButtonDict:
-                    self._localButtonDict[encounter.name] = []
-                    self._localLabelObjDict[encounter.name] = []# create empty list to store all labels for pokemon
+                #create individual Frames for the pokemon
+                indivFrame = PokemonFrame(areaTypeFrame, encounter, areaTypeName)
+                indivFrame.grid(row = index + 1, column = 0, columnspan = 4, sticky = NSEW)
 
-                #checkbutton    
-                catchButton = Button(areaTypeFrame, textvariable = self._labelTextDict[encounter.name], command = lambda pokemon = encounter: [self.catchPokemon(pokemon)])
-                catchButton.grid(row = index + 1, column = 0)
+                if encounter.name not in self._pokemonFrames:
+                    #create an entry with the encounter.name as key
+                    self._pokemonFrames[encounter.name] = []
+                if encounter.name not in self._localPokemonFrames: #check whether or not it has been created already
+                    self._localPokemonFrames[encounter.name] = []
+                if areaTypeName not in self._areaFrames:
+                    self._areaFrames[areaTypeName] = {}
 
-                #get correct pokemon picture
-                image = os.path.join(self._pokemonSpritesFolder, (encounter.name + ".png"))
-                try:
-                    pokemonImage = ImageTk.PhotoImage(Image.open(image).resize([90, 90]).convert("RGBA"))
-                except TclError:
-                    image = os.path.join(self._spriteFolder, '0.png')
-                    pokemonImage = ImageTk.PhotoImage(Image.open(image).resize([90, 90]).convert("RGBA"))
+                #give the pokemonFrame object catchButton a command   
+                indivFrame.catchButton.configure(command = lambda pokemon = encounter, name = areaTypeName: [self.catchPokemon(pokemon, name)])
 
-
-                imageLabel = Label(areaTypeFrame, image = pokemonImage, textvariable = self._labelTextDict[encounter.name], borderwidth = 1, relief = "solid", compound = "top")
-                imageLabel.grid(row = index + 1, column = 1)
-
-                self.encounterLabel(areaTypeFrame, encounter.name, index + 1, 2)
-                self.encounterLabel(areaTypeFrame, encounter.levels, index + 1, 3)
-                self.encounterLabel(areaTypeFrame, encounter.percentage, index + 1, 4)
-                
-                #all the same pokemon labels will change at the same time
-                self._labelObjDict[encounter.name].append(imageLabel)
-                self._buttonDict[encounter.name].append(catchButton)
-                self._localLabelObjDict[encounter.name].append(imageLabel)
-                self._localButtonDict[encounter.name].append(catchButton)
+                self._pokemonFrames[encounter.name].append(indivFrame)
+                self._localPokemonFrames[encounter.name].append(indivFrame)
+                #each pokemon only appears once in the separated area
+                self._areaFrames[areaTypeName][encounter.name] = indivFrame
 
                 #checks whether or not the pokemon already has been caught, shows correct graphics on startup
                 if encounter.name in self._caughtPokemon:
                     #append the encounter object to a list to update them all at once instead of updating 1 button 5 times if the pokemon is 5 times in that area
                     alreadyCaught.append(self._caughtPokemon[encounter.name])
 
-                imageLabel.image = pokemonImage
         #remove duplicate names from the list, can keep it as a set as we no longer are using it
         alreadyCaught = set(alreadyCaught)
         for pokemon in alreadyCaught:
             self.changeButtonImage(pokemon)
     
-    def catchPokemon(self, pokemon):
+    def catchPokemon(self, pokemon, areaTypeName):
         """'catches' the selected pokemon, puts the pokemonTrainer object into a temporary list which get submitted to the area object
          as soon as the capture button at the bottom is selected."""
-        #this piece of code is included here because it is primarily for the GUI and not needed at the logic side
-
-        level = 1 #TODO get correct value from widget get method
+        frame = self._areaFrames[areaTypeName][pokemon.name]
+        
+        level = frame.level.get()
 
         #most accurate and higher possibility it was changed last and needs to be checked first
         if pokemon.name in self._temporaryCaptures.keys():
@@ -180,51 +157,37 @@ class EncounterWindow():
             #doesn't exist yet, so create it
             pokemon = EncounteredPokemon(pokemon.name, level, state = 0)
             self._temporaryCaptures[pokemon.name] = pokemon
-            print(f"added {pokemon} to temporarycapture list")
 
-        #make sure the value rolls over instead of overshooting
-        pokemon.captureStatus = (pokemon.captureStatus + 1) % len(self.states)
+        #synch the capturestatus
+        pokemon.captureStatus = frame.updateState(pokemon.captureStatus)
+        print("pokemon status: ", pokemon.captureStatus)
 
         #update GUI button pictures
         self.changeButtonImage(pokemon)
         
         
     def changeButtonImage(self, pokemon):
-        buttons = self._buttonDict[pokemon.name]
-        for button in buttons:
-            button.configure(background = self.colours[pokemon.captureStatus])
-            print(f"changed {pokemon.name} to {self.colours[pokemon.captureStatus]}")
-
-    def encounterLabel(self, frame, text, row, column):
-        encounterNameLabel = Label(frame, text = text, borderwidth = 2, relief = "flat")
-        encounterNameLabel.grid(row = row, column = column, sticky = NSEW)
+        frames = self._pokemonFrames[pokemon.name]
+        print(len(frames))
+        for frame in frames:
+            print(frame)
+            frame.updateCatchButton(pokemon.captureStatus) 
     
     def updateCapturedPokemon(self):
+        """update the area.encounteredPokemon attribute with all the temporaryCaptures that are caught"""
         #self.area.encounteredPokemon = name
-        print(self._temporaryCaptures)
-        self.area.encounteredPokemon = self._temporaryCaptures
-        #remove all temporary captures, these are not submitted
+        for pokemon in self._temporaryCaptures.values():
+            #not actually captured, or misclick
+            if pokemon.captureStatus == 0:
+                #try except in case it doesn't exist
+                try:
+                    del self.area.encounteredPokemon[pokemon.name]
+                except KeyError:
+                    pass
+            else:    
+                self.area.encounteredPokemon[pokemon.name] = pokemon
+        #remove all temporary captures
         self._temporaryCaptures.clear()
-        return
-        
-        print("updating")
-        newList = []
-        for key, value in self._intvarList.items():
-            print(value.get())
-            if value.get():
-                newList.append(key)
-        for pokemon in newList:
-            print(pokemon)
-            if pokemon not in self._caughtPokemon:
-                print("adding pokemon to caughtList")
-                self._caughtPokemon[pokemon] = self._areaName
-                self.area.caughtPokemon = pokemon
-            else:
-                print("already caught")
-                
-        newList = []
-    
-        print(self._caughtPokemon)
     
     def destroy(self):
         """destroys the window and removes local tkinter references from the global list"""

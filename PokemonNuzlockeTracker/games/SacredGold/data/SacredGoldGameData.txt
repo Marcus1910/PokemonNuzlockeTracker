@@ -171,56 +171,20 @@
   ],
   "_accessible": 0,
   "_encounteredPokemon": {
-   "Shellder": {
-    "_name": "Shellder",
+   "Magikarp": {
+    "_name": "Magikarp",
     "_level": 1,
     "_dexNo": null,
     "_gender": null,
     "_moves": [],
     "_ability": null,
     "_heldItem": null,
-    "_captureStatus": 2,
+    "_captureStatus": 1,
     "_percentage": "n/a",
     "_levels": "n/a"
    },
    "Chinchou": {
     "_name": "Chinchou",
-    "_level": 1,
-    "_dexNo": null,
-    "_gender": null,
-    "_moves": [],
-    "_ability": null,
-    "_heldItem": null,
-    "_captureStatus": 1,
-    "_percentage": "n/a",
-    "_levels": "n/a"
-   },
-   "Tentacool": {
-    "_name": "Tentacool",
-    "_level": 1,
-    "_dexNo": null,
-    "_gender": null,
-    "_moves": [],
-    "_ability": null,
-    "_heldItem": null,
-    "_captureStatus": 1,
-    "_percentage": "n/a",
-    "_levels": "n/a"
-   },
-   "Tentacruel": {
-    "_name": "Tentacruel",
-    "_level": 1,
-    "_dexNo": null,
-    "_gender": null,
-    "_moves": [],
-    "_ability": null,
-    "_heldItem": null,
-    "_captureStatus": 1,
-    "_percentage": "n/a",
-    "_levels": "n/a"
-   },
-   "Magikarp": {
-    "_name": "Magikarp",
     "_level": 1,
     "_dexNo": null,
     "_gender": null,
@@ -478,32 +442,7 @@
   "_trainers": [],
   "_items": [],
   "_accessible": 0,
-  "_encounteredPokemon": {
-   "Hoothoot": {
-    "_name": "Hoothoot",
-    "_level": 1,
-    "_dexNo": null,
-    "_gender": null,
-    "_moves": [],
-    "_ability": null,
-    "_heldItem": null,
-    "_captureStatus": 0,
-    "_percentage": "n/a",
-    "_levels": "n/a"
-   },
-   "Rattata": {
-    "_name": "Rattata",
-    "_level": 1,
-    "_dexNo": null,
-    "_gender": null,
-    "_moves": [],
-    "_ability": null,
-    "_heldItem": null,
-    "_captureStatus": 0,
-    "_percentage": "n/a",
-    "_levels": "n/a"
-   }
-  },
+  "_encounteredPokemon": {},
   "canCatchPokemon": true
  },
  {

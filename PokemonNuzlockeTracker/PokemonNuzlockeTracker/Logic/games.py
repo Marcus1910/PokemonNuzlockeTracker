@@ -137,14 +137,17 @@ class MainGame():
             encounteredPokemon = area["_encounteredPokemon"]
             for pokemon in encounteredPokemon:
                 pokemonData = encounteredPokemon[pokemon]
+                pokemonState = pokemonData["_captureStatus"]
+                #if the pokemon is not actually captured, do not add it to the wildArea
+                if pokemonState == 0:
+                    break
+
                 pokemonName = pokemonData["_name"]
                 pokemonLevel = pokemonData["_level"]
-                pokemonState = pokemonData["_captureStatus"]
                 newPokemon = EncounteredPokemon(pokemonName, level = pokemonLevel, state = pokemonState)
                 
                 #append it to area object
                 wildArea.encounteredPokemon[pokemonName] = newPokemon
-
 
             if not alreadyexists:
                 self.areaList.append(wildArea)

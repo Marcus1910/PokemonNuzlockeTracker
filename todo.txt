@@ -75,4 +75,4 @@ sort route list option, own choice
 .bat file or .exe
 
 BUGS
-    when selecting the same game in the selectgamewindow, the selected savefile is also reset
+    temporarycapture is not synched between windows
