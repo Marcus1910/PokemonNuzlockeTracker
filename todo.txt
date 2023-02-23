@@ -1,3 +1,15 @@
+---STEPS TO TAKE FOR BETA---
+encounterwindow buttons changed to images
+able to create new games
+read trainerlist and can defeat trainers
+read itemlist and can pickup items
+create settingswindow and use it to update settings.py, also use settings.py for certain variables
+save encountered pokemon, defeated trainers and grabbed items to savefiles and read them correctly
+correct widget states for GUI
+remove all non-GUI logic from Mainwindow
+create Frame objects for the trainers and for the items
+
+
 ---MAIN---
 show all available pokemon per route vanilla games
 show all available trainer data vanilla games
@@ -33,10 +45,11 @@ basic logic for getting encounters from rom hack documentation
 
 ---EXTRAS---
 read encountertable data from rom
+    import pkhex file to display caught pokemon and update caught pokemon in areas
 add window to make adding games easier
 add iconbitmap to encounterWindow depending on areaName
 Opencv to overlay on game
-import pkhex file to display caught pokemon and update caught pokemon in areas
+
 
     ---SHOWDOWN---
     export Trainer to showdown format

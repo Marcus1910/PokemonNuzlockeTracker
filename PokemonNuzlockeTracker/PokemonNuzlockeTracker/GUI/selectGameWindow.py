@@ -3,7 +3,7 @@ from tkinter import *
 from templateWindow import TemplateWindow
 from mainWindow import MainWindow
 from programSettingsWindow import ProgramSettingsWindow
-#imports every game and checkGames + getGameObject
+#imports gameObject, checkGames + getGameObject
 import games as gm
 
 class SelectGameWindow(TemplateWindow):

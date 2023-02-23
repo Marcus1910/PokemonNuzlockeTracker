@@ -11,7 +11,7 @@ class EncounterWindow():
     #used to update buttons and labels across multiple encounterwindow instances
     _pokemonFrames = {}
 
-    def __init__(self, parent, area, save):
+    def __init__(self, parent, area):
         self.area = area
         self._encounterList = area.encounters
         self._areaName = area.name
@@ -161,7 +161,6 @@ class EncounterWindow():
 
         #synch the capturestatus
         pokemon.captureStatus = frame.updateState(pokemon.captureStatus)
-        print("pokemon status: ", pokemon.captureStatus)
 
         #update GUI button pictures
         self.changeButtonImage(pokemon)
@@ -169,9 +168,7 @@ class EncounterWindow():
         
     def changeButtonImage(self, pokemon):
         frames = self._pokemonFrames[pokemon.name]
-        print(len(frames))
         for frame in frames:
-            print(frame)
             frame.updateCatchButton(pokemon.captureStatus) 
     
     def updateCapturedPokemon(self):

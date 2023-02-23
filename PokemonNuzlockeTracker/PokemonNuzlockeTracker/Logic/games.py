@@ -11,34 +11,24 @@ txtfile = "trainerData.txt"
 
 class MainGame():
     def __init__(self, gameName):
-        self.areaList = []
         self.readData = None
+        #not a dictionary, because we want it to be in documentation order and in a stable order, dict items can change position
         self.areaList = []
-        self.areaNamesList = []
-        self.trainerList = []
-        self.itemList = []
 
         self.gameName = gameName
         self.gamePath = os.path.join(os.path.dirname(os.getcwd()), f"games/{self.gameName}")
         self.dataFolder = os.path.join(self.gamePath, "data")
         self.saveFileFolder = os.path.join(self.gamePath, "saveFiles")
+        self.saveFile = None
         self.dataFile = os.path.join(self.dataFolder, f"{self.gameName}GameData.txt")
-
-    def getAreaNamesList(self):
-        if len(self.areaNamesList) <= 0:
-            for area in self.areaList:
-                self.areaNamesList.append(area.name)
-                print(area.name)
-        else:
-            print("no area Names")
-        return self.areaNamesList
 
     def writeToFile(self):
         with open(self.dataFile, "w") as file:
             file.truncate()
-            file.write(json.dumps(self.areaList, default = vars, indent = 1))
+            file.write(json.dumps(self.areaList, default = vars, indent = 1))  
 
     def retrieveGameData(self):
+        """returns a list of area objects, read from the datafile and (TODO)-savefile"""
         try:
             with open(self.dataFile, "r") as file:
                 try:
@@ -50,13 +40,12 @@ class MainGame():
         except FileNotFoundError:
             print(f"there is no GameData for {self.gameName}, collecting it from {self.gameName}CorrectData.txt")
             self.retrieveEncounterData()
+        return self.areaList
 
     
     def retrieveEncounterData(self):
-        #TODO correct path
         #only needed to create the json dumps and backup if file cannot be read
         self.areaList = readFormattedData(f"{self.dataFolder}\{self.gameName}CorrectData.txt").returnAreaList()
-        # print(self.areaList)
                 
     def convertDataToObjects(self):
         """converts all data read from the json file and converts it into objects"""  
@@ -101,7 +90,7 @@ class MainGame():
                 areaItem = Item(itemName)
                 areaItem.description = self.checkVarExistsJsonDump("_description", item)
                 areaItem.location = self.checkVarExistsJsonDump("_location", item)
-                wildArea.appendItem(areaItem)
+                wildArea.items[itemName] = areaItem
             
             """retrieve all trainer attributes"""
             trainers = area["_trainers"]
@@ -132,7 +121,7 @@ class MainGame():
                     #append to trainer objects
                     pokemonTrainer.pokemon = trainerPokemon
                 #append to area object
-                wildArea.trainers = pokemonTrainer
+                wildArea.trainers[trainerName] = pokemonTrainer
             
             encounteredPokemon = area["_encounteredPokemon"]
             for pokemon in encounteredPokemon:
@@ -164,7 +153,6 @@ class MainGame():
 
     def checkForSaveFileDirectory(self):
         """checks if the directory existst otherwise creates it"""
-
         #if savefile directory doesn't exists
         if not os.path.isdir(self.saveFileFolder):
             print(f"creating new directory {self.saveFileFolder}")
@@ -192,10 +180,11 @@ class MainGame():
 
 def checkGames():
     gameFolder = os.path.join(os.path.dirname(os.getcwd()), "games")
-    #walks down the directory for other directories, retrieves the names an puts them in a list
+    #walks down the directory for other directories, retrieves the names and puts them in a list
     games = [x[1] for x in os.walk(gameFolder)][0]
-    #no games
+    #no games found
     if not games:
+        #TODO return error code instead of "new", GUI should open the window to create own pokemon game
         return ["new"]
     return games
 

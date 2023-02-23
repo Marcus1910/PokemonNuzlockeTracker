@@ -1,18 +1,17 @@
-from trainer import Trainer
-from trainerPokemon import TrainerPokemon
 import json
 
 class Area():
+
+    pokemonCatchLimit = 1 #TODO get from settings.py
     def __init__(self, name):
         self._name = name
         self._startLine = None
         self._encounters = [] #list with encounterpokemon objects
-        self._trainers = [] #list of trainer objects
-        self._items = [] # list of item objects
+        self._trainers = {} #dict of trainer name - object
+        self._items = {} # dict of item name - object
         self._accessible = 0 #how many badges are needed to access this area, default 0
         self._encounteredPokemon = {} #dict with pokemon objects name: object
-        pokemonCatchLimit = 1
-        self.canCatchPokemon = True #replace code to somewhere it isnt immediatly called : False if len(self._encounteredPokemon) >= pokemonCatchLimit else True
+        self._canCatchPokemon = True #replace code to somewhere it isnt immediatly called : False if len(self._encounteredPokemon) >= pokemonCatchLimit else True
     
     @property
     def name(self):
@@ -48,21 +47,17 @@ class Area():
     
     @trainers.setter
     def trainers(self, trainer):
-        #TODO append correct trainer and no duplicates
-        self._trainers.append(trainer)
+        """setter expects an item object as parameter"""
+        self._trainers[trainer.name] = trainer
 
     @property
-    def item(self):
+    def items(self):
         return self._items
 
-    def appendItem(self, item):
-        for items in self._items:
-            if item.name == items.name:
-                print("item already exists")
-                break
-        #not found, also works if no items in list
-        else: 
-            self._items.append(item)
+    @items.setter
+    def items(self, item):
+        """setter expects an item object as parameter"""
+        self._items[item.name] = item
     
     def removeItem(self, item):
         for items in self._items:
@@ -107,6 +102,14 @@ class Area():
         print("list of pokemon caught here")
         for key in self._encounteredPokemon.keys():
             print(key)
+    
+    @property
+    def canCatchPokemon(self):
+        return self._canCatchPokemon
+    
+    def storeToJson(self):
+        """TODO function that will return a dictionary which stores all the variables meant to be stored"""
+        pass
 
 
     def __str__(self):

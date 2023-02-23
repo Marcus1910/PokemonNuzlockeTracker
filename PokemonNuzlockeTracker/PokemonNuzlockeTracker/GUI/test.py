@@ -26,16 +26,17 @@
 
 # root.mainloop()
 
-import tkinter as tk
+# import tkinter as tk
 
-def button_command(index, number):
-    print(f"Button {index} pressed with parameters {index} and {number}")
+# def button_command(index, number):
+#     print(f"Button {index} pressed with parameters {index} and {number}")
 
-root = tk.Tk()
+# root = tk.Tk()
 
-for i, num in enumerate(range(9, 0, -1), start=1):
-    # create a button with a command that calls the button_command function with the index and number as parameters
-    button = tk.Button(root, text=f"Button {i}", command=lambda idx=i, n=num: button_command(idx, n))
-    button.pack()
+# for i, num in enumerate(range(9, 0, -1), start=1):
+#     # create a button with a command that calls the button_command function with the index and number as parameters
+#     button = tk.Button(root, text=f"Button {i}", command=lambda idx=i, n=num: button_command(idx, n))
+#     button.pack()
 
-root.mainloop()
+# root.mainloop()
+
