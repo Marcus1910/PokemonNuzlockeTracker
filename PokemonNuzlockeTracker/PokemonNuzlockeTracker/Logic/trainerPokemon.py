@@ -8,9 +8,7 @@ class Pokemon():
         self._moves = []
         self._ability = None
         self._heldItem = None
-    #TODO title() names before putting in variable
     
-
     ##getters and setters
     @property
     def name(self):
@@ -42,7 +40,6 @@ class Pokemon():
                 self._gender = gender
             else:
                 print("enter valid gender, options are M or F")
-
 
     @property
     def moves(self):
@@ -87,11 +84,15 @@ class Pokemon():
 
 class TrainerPokemon(Pokemon):
     #different class for future additions like health, pp, ai% of move chosen etc
-    def __init__(self, name, level):
+    defaultDefeated = False
+    def __init__(self, name, level, defeated = False):
+        self._defeated = defeated
         super().__init__(name, level)
 
 
 class EncounteredPokemon(Pokemon):
+    defaultCaptureStatus = 0
+    
     def __init__(self, name, level = 1, state = 0, percentage = "n/a", levels = "n/a"):
         super().__init__(name, level)
         self._captureStatus = state
@@ -121,3 +122,4 @@ class EncounteredPokemon(Pokemon):
     @levels.setter
     def levels(self, levels):
         self._levels = levels
+

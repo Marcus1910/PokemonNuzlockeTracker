@@ -1,10 +1,12 @@
 
 class Trainer():
-    def __init__(self, name):
+    defaultDefeated = False
+    def __init__(self, name, defeated = False):
         self._name = name
         self._trainerType = None
         self._gender = None
-        self._pokemon = {}#name- object
+        self._pokemon = []#List of pokemon otherwise trainers can't have the same pokemon twice
+        self._defeated = defeated
     
     @property
     def name(self):
@@ -46,7 +48,7 @@ class Trainer():
     def pokemon(self, pokemon):
         """expects a pokemon object"""
         if len(self._pokemon) < 6:
-            self._pokemon[pokemon.name] = pokemon
+            self._pokemon.append(pokemon)
         else:
             print(f"{self._name} already has 6 pokemon")
     

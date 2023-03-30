@@ -1,4 +1,6 @@
 ---STEPS TO TAKE FOR BETA---
+1st priority is the Logic, 2nd GUi
+Check capability of using it with retropie
 encounterwindow buttons changed to images
 able to create new games
 read trainerlist and can defeat trainers

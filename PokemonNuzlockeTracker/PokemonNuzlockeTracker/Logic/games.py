@@ -10,6 +10,7 @@ import os
 txtfile = "trainerData.txt"
 
 class MainGame():
+    errorName = "error something went wrong reading from the json file" # TODO settings.py
     def __init__(self, gameName):
         self.readData = None
         #not a dictionary, because we want it to be in documentation order and in a stable order, dict items can change position
@@ -72,12 +73,9 @@ class MainGame():
                 encounterList = []
                 terrainName = terrain[0]
                 pokemonList = terrain[1]
-                for pokemon in pokemonList:
-                    encounterName = pokemon["_name"]
-                    encounterLevels = self.checkVarExistsJsonDump("_levels", pokemon)
-                    encounterPercentage = self.checkVarExistsJsonDump("_percentage", pokemon)
-
-                    encounterPokemon = EncounteredPokemon(encounterName, levels = encounterLevels, percentage = encounterPercentage)
+                for pokemonJson in pokemonList:
+                    encounterPokemon = EncounteredPokemon(self.errorName)
+                    encounterPokemon = self.getFromJSON(encounterPokemon, pokemonJson)
                     encounterList.append(encounterPokemon)
                 wildArea._encounters.append([terrainName, encounterList])
                 #print(wildArea.encounters)
@@ -85,43 +83,28 @@ class MainGame():
             
             """retrieve all area attributes"""
             items = area["_items"]
-            for item in items:
-                itemName = item["_name"]
-                areaItem = Item(itemName)
-                areaItem.description = self.checkVarExistsJsonDump("_description", item)
-                areaItem.location = self.checkVarExistsJsonDump("_location", item)
-                wildArea.items[itemName] = areaItem
+            for itemJson in items:
+                areaItem = Item(self.errorName)
+                areaItem = self.getFromJSON(areaItem, itemJson)
+                wildArea.items[areaItem.name] = areaItem
             
             """retrieve all trainer attributes"""
             trainers = area["_trainers"]
-            for trainer in trainers:
-                trainerName = trainer["_name"]
-                pokemonTrainer = Trainer(trainerName)
-                pokemonTrainer.trainerType = self.checkVarExistsJsonDump("_trainerType", trainer)
-                pokemonTrainer.gender = self.checkVarExistsJsonDump("_gender", trainer)
+            for trainerJson in trainers:
+                #trainerName = trainer["_name"]
+                pokemonTrainer = Trainer(self.errorName)
+                pokemonTrainer = self.getFromJSON(pokemonTrainer, trainerJson, ["_pokemon"]) #puts json as pokemon
                 
                 """retrieve pokemon attributes"""
-                for pokemon in trainer["_pokemon"]:
-                    pokemonName = pokemon["_name"]
-                    pokemonLevel = pokemon["_level"]
-                    trainerPokemon = TrainerPokemon(pokemonName, pokemonLevel)
-                    trainerPokemon._gender = self.checkVarExistsJsonDump("_gender", pokemon)
-                    trainerPokemon._ability = self.checkVarExistsJsonDump("_ability", pokemon)
-                    trainerPokemon._heldItem = self.checkVarExistsJsonDump("_heldItem", pokemon)
-                    trainerPokemon._dexNo = self.checkVarExistsJsonDump("_dexNo", pokemon)
-                    #give the moves to the pokemon
-                    
-                    try: 
-                        moves = pokemon["_moves"]
-                    except KeyError as e:
-                        pass
-                    else:
-                        for move in range(len(moves)):
-                            trainerPokemon.moves = moves[move]
-                    #append to trainer objects
-                    pokemonTrainer.pokemon[pokemonName] = trainerPokemon
+                
+                pokemonJson = trainerJson["_pokemon"]
+                pokemonAmount = len(trainerJson["_pokemon"])
+                for number in range(pokemonAmount):
+                    trainerPokemon = TrainerPokemon(self.errorName, 0)
+                    trainerPokemon = self.getFromJSON(trainerPokemon, pokemonJson[number])
+                    pokemonTrainer.pokemon = trainerPokemon
                 #append to area object
-                wildArea.trainers[trainerName] = pokemonTrainer
+                wildArea.trainers[pokemonTrainer.name] = pokemonTrainer
             
             encounteredPokemon = area["_encounteredPokemon"]
             for pokemon in encounteredPokemon:
@@ -141,14 +124,51 @@ class MainGame():
             if not alreadyexists:
                 self.areaList.append(wildArea)
 
-    def checkVarExistsJsonDump(self, attribute, dict):
-        """checks whether a variable exists in a dict else returns n/a"""
+    def checkVarExistsJsonDump(self, attribute, json, value = "n/a"):
+        """checks whether a variable exists in a json else returns value or defaults to n/a"""
         try:
-            x = dict[attribute]
+            x = json[attribute]
         except KeyError as e:
-            print(f"adding n/a as default, {e}")
-            x = "n/a"
+            #print(f"adding n/a as default, {e}")
+            x = value
         return x
+
+    def getFromJSON(self, object, json, notWanted = []):
+        """function that reads the attributes of an object and completes them given the correct json"""
+        defaultValues = {}
+        notWanted = [*notWanted]
+        #removes all the __variables and methods (including setters and getters from property methods) from the attributes list
+        attributes = [attribute for attribute in dir(object) if not attribute.startswith('__') \
+                      and not callable(getattr(object, attribute)) and not isinstance(getattr(type(object), attribute, None), property)]
+        #remove all the class variables from the attributes list, [:] makes a copy of the list instead of making a secondary list
+        for attribute in attributes[:]:
+            if hasattr(type(object), attribute): #need the type of object else all variables will be removed
+                attributes.remove(attribute)
+                if "default" in attribute:
+                    print(attribute)
+                    #remove default from attribute
+                    keyName = attribute.replace("default", "")
+                    #decapitalize the actual variable
+                    keyName = keyName[0].lower() + keyName[1:]
+                    #the attribute 100% exists, so no default for the getattr
+                    defaultValues[keyName] = getattr(object, attribute)
+                #print(f"removed: {attribute}")
+        #remove not wanted variables
+        for variable in notWanted[:]:
+            print(notWanted)
+            if variable in attributes:
+                attributes.remove(variable)
+            
+        
+        #add correct values to the variables of the object
+        for attribute in attributes:
+            default = "n/a"
+            if attribute in defaultValues.keys():
+                default = defaultValues[attribute]
+            #get the default value for an attribute if it is given as class variable
+            attributeValue = self.checkVarExistsJsonDump(attribute, json, getattr(object, attribute, default))
+            setattr(object, attribute, attributeValue)
+        return object
 
 
     def checkForSaveFileDirectory(self):
@@ -177,6 +197,8 @@ class MainGame():
         number = len(saveFiles)
         #create the file then close it
         open(f"{self.saveFileFolder}/attempt {number}.txt", "x").close()
+    
+
 
 def checkGames():
     gameFolder = os.path.join(os.path.dirname(os.getcwd()), "games")
@@ -188,4 +210,3 @@ def checkGames():
         return ["new"]
     return games
 
-    

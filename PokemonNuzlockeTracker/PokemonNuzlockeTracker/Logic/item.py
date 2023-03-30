@@ -1,8 +1,10 @@
 class Item():
-    def __init__(self, name):
+    defaultGrabbed = False
+    def __init__(self, name, grabbed = False):
         self._name = name
         self._description = None
         self._location = None
+        self._grabbed = grabbed
     
 
     @property
@@ -28,5 +30,13 @@ class Item():
     @location.setter
     def location(self, location):
         self._location = location
+    
+    @property
+    def grabbed(self):
+        return self._grabbed
+    
+    @grabbed.setter
+    def grabbed(self, bool):
+        self._grabbed = bool
 
     

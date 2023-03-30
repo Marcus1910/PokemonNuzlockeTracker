@@ -155,8 +155,8 @@
       "_level": "58",
       "_dexNo": "n/a",
       "_gender": "n/a",
-      "_moves": [],
-      "_ability": "n/a",
+      "_moves": ["Flamethrower", "quick attack"],
+      "_ability": "drought",
       "_heldItem": "n/a"
      }
     ]
