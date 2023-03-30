@@ -6,8 +6,10 @@ read itemlist and can pickup items
 create settingswindow and use it to update settings.py, also use settings.py for certain variables
 save encountered pokemon, defeated trainers and grabbed items to savefiles and read them correctly
 correct widget states for GUI
-remove all non-GUI logic from Mainwindow
-create Frame objects for the trainers and for the items
+create Frame objects for the trainers pokemon and for the items
+edit trainers using a button, keeps config so changing trainers is enabled until turned off
+How double battles?
+LEFT OF MAKING NEW FRAMES FOR TRAINERS, ITEMS AND POKEMON
 
 
 ---MAIN---

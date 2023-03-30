@@ -119,7 +119,7 @@ class MainGame():
                         for move in range(len(moves)):
                             trainerPokemon.moves = moves[move]
                     #append to trainer objects
-                    pokemonTrainer.pokemon = trainerPokemon
+                    pokemonTrainer.pokemon[pokemonName] = trainerPokemon
                 #append to area object
                 wildArea.trainers[trainerName] = pokemonTrainer
             

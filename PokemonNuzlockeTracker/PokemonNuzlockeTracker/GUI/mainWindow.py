@@ -40,19 +40,20 @@ class MainWindow(TemplateWindow):
         self._itemFrame.rowconfigure(0, weight = 2)
         self._itemFrame.columnconfigure(0, weight = 2)
 
-        self._indivItemFrame = Frame(self._itemFrame)
+        self._indivItemFrame = Frame(self._itemFrame, relief = SUNKEN)
         self._indivItemFrame.grid(row = 1, column = 0, columnspan = 4, sticky = N)
         self._indivItemFrame.rowconfigure(0, weight = 2)
         self._indivItemFrame.columnconfigure(0, weight = 2)
+        #self.createItemScrollbar()
 
-        self._itemLabel = Label(self._itemFrame, text="Available Items")
+        self._itemLabel = Label(self._itemFrame, text="Available Items", anchor = CENTER)
         self._itemLabel.grid(row=0,column=0,sticky=N)
 
         """item buttons"""
-        self._addItemButton = Button(self._itemFrame, text = "add an item", bd = 3, font = self._font, command = self.addItem)
+        self._addItemButton = Button(self._itemFrame, text = "add an item", bd = 3, font = self._font)#, command = self.addItem)
         self._addItemButton.grid(row = 25, column = 0, sticky = NSEW)
         
-        self._deleteItemButton = Button(self._itemFrame, text = "delete an item", bd = 3, font = self._font, command = self.deleteItem)
+        self._deleteItemButton = Button(self._itemFrame, text = "delete an item", bd = 3, font = self._font)#, command = self.deleteItem)
         self._deleteItemButton.grid(row = 25, column = 1, sticky = NSEW)
         #self._addTrainerButton = Button(self._trainerFrame, text = "add a trainer", bd = 3, font = self._font, command = self.addTrainer)
         #self._addTrainerButton.grid(row = 8, column = 0, sticky = NSEW)
@@ -65,9 +66,10 @@ class MainWindow(TemplateWindow):
 
         self._selectedTrainer = StringVar()
         self._selectedTrainer.set("which trainer do you want to see")
-        #self._selectedTrainer.trace_add("write", self.getPokemon)
-        self._trainerMenu = OptionMenu(self._trainerFrame, self._selectedTrainer, StringVar())#, command = self.getPokemon)
-        self._trainerMenu.grid(row=0, column = 0, columnspan = 3, sticky = N)
+        #self._selectedTrainer.trace_add("write", self.getTrainerPokemon)
+        self._trainerMenu = OptionMenu(self._trainerFrame, self._selectedTrainer, ())
+        self._trainerMenu.grid(row=0, column = 0, columnspan = 3, sticky = "nwe")
+        #self._trainerMenu.configure(postcommand = self.centerDropDownMenu(self._trainerMenu))
 
         self._indivTrainerFrame = Frame(self._trainerFrame)
         self._indivTrainerFrame.grid(row = 1, column = 0, columnspan = 3, sticky = N)
@@ -101,7 +103,7 @@ class MainWindow(TemplateWindow):
         self._areaMenu = ttk.Combobox(self._areaFrame, textvariable = self._selectedArea, values = self._areaNames)#, command = lambda area: [self.getTrainers(area), self.getItems(area)])
         self._areaMenu.grid(row=0, column=5, sticky=NSEW)
         self._areaMenu['state'] = 'readonly'
-        self._areaMenu.bind("<<ComboboxSelected>>", lambda area = self._areaMenu.get(): [self.updateCurrentArea(area), self.updateTrainerMenu(), self.updateItemDisplay(), self.changeCbbColor()])
+        self._areaMenu.bind("<<ComboboxSelected>>", lambda area = self._areaMenu.get(): self.updateCurrentArea(area))
 
         self._showWildEncounterButton = Button(self._areaFrame, text = "Encounters", command = self.showEncounters)
         self._showWildEncounterButton.grid(row = 1, column = 5, sticky = NSEW)
@@ -118,6 +120,8 @@ class MainWindow(TemplateWindow):
         #closing window saves the changes made
         self._master.protocol("WM_DELETE_WINDOW", self.saveAndExit)
 
+        #disable all the widgest in trainerframe and in the itemdisplay
+        self.disableWidgetsStartup()
         self.update()
         self.run()
     
@@ -134,7 +138,8 @@ class MainWindow(TemplateWindow):
                 EncounterWindow(self._master, area)
     
     def updateCurrentArea(self, event):
-        """updates the current area based on the name of the area passed as the parameter, also updates the GUI lists connected to the area"""
+        """updates the current area based on the name of the area passed as the parameter, also updates the GUI lists connected to the area
+        , updates all the widgets on screen aswell (trainermenu, itemdisplay, button colour)"""
         areaName = event.widget.get()
         for area in self._listOfAreas:
             if area.name == areaName:
@@ -143,36 +148,49 @@ class MainWindow(TemplateWindow):
         #update the lists to match the area object
         self._trainerDict = self.currentArea.trainers
         self._itemDict = self.currentArea.items
+
+        self.updateTrainerMenu()
+        self.updateItemDisplay()
+        self.changeCbbColor()
+        self.enableWidgetsStartup()
     
     def updateTrainerMenu(self):
         """update the trainermenu with currentarea.trainers"""
-        if len(self._trainerDict) == 0:
-            #TODO create a label instead of an optionmenu otherwise create the optionmenu
-            self._selectedTrainer.set("this route has no trainers, please add one with the add trainer button")
+        #TODO create the trainerframes 
+        pass
+        #remove the previous pokemon and hide the display
+        # self.deletePokemonDisplay()
+        # self._indivTrainerFrame.grid_remove()
+        # #remove all previous trainers from the optionmenu
+        # self._trainerMenu['menu'].delete(0, 'end')
 
-        menu = self._trainerMenu["menu"]
-        #empty the optionmenu
-        menu.delete(0, "end")
-        for trainerName in self._trainerDict.keys():
-            menu.add_command(label = trainerName, command = lambda value = trainerName: self._selectedTrainer.set(value))
+        # if len(self._trainerDict) == 0:
+        #     #TODO create a label instead of an optionmenu otherwise create the optionmenu
+        #     #self._selectedTrainer.set("this route has no trainers, please add one with the add trainer button")
+        #     pass
+        # else:
+        #     menu = self._trainerMenu["menu"]
+        #     #empty the optionmenu
+        #     menu.delete(0, "end")
+        #     for trainerName in self._trainerDict.keys():
+        #         print(f"added {trainerName}")
+        #         #set the label to the corect name and display the correct pokemon
+        #         menu.add_command(label = trainerName, command = lambda trainerName = trainerName: [self._selectedTrainer.set(trainerName), self.getTrainerPokemon(trainerName)])
 
-    def getTrainerPokemon(self, *args):
+    def getTrainerPokemon(self, trainerName):
         """get the pokemon from a selected trainer"""
-        #TODO review code
-        trainerName = self._selectedTrainer.get()
+        #TODO use trainerpokemon frames
+        #this trainer has pokemon, show the frame again
+        self._indivTrainerFrame.grid()
         self._exportToShowdownButton.configure(state = NORMAL)
         #print(self._listOfTrainers)
-        if len(self._listOfTrainers) == 0:
+        if len(self._trainerDict) == 0:
             print("This trainer has no pokemon")
         else:
-            if trainerName is None:
-                return
-            for trainer in self._listOfTrainers:
-                if trainerName in trainer.name:
-                    self.deletePokemonDisplay()
-                    print(f"pokemon: {trainer.pokemon}")
-                    for index, pokemon in enumerate(trainer.pokemon):
-                        self.displayPokemon(pokemon, index)
+            trainer = self._trainerDict[trainerName] 
+            self.deletePokemonDisplay()
+            for index, pokemon in enumerate(trainer.pokemon.values()):
+                self.displayPokemon(pokemon, index)
 
     def deletePokemonDisplay(self):
         """delete all listboxs etc in indivtrainerframe"""
@@ -223,17 +241,23 @@ class MainWindow(TemplateWindow):
 
     def itemBoxHeight(self):
         """returns the length the itembox should have"""
-        return len(self._itemDict) if len(self._itemDict) < 10 else 10
+        itemDictLength = len(self._itemDict)
+        return itemDictLength if itemDictLength < 10 else 10
 
-    def displayItems(self):
+    def createItemScrollbar(self):
         itemScrollbar = Scrollbar(self._indivItemFrame)
         itemScrollbar.grid(row = 0, column = 1, sticky = NS)
-        itemBox = Listbox(self._indivItemFrame, yscrollcommand = itemScrollbar.set, height = self.itemBoxHeight())
-        itemBox.grid(row = 0, column = 0)
+        self._itemBox = Listbox(self._indivItemFrame, yscrollcommand = itemScrollbar.set, height = self.itemBoxHeight())
+        self._itemBox.grid(row = 0, column = 0)
+        itemScrollbar.configure(command = self._itemBox.yview)
+
+
+    def displayItems(self):
+        """Displays the current items available in this area"""
         for itemName in self._itemDict.keys():
             #TODO use frames like in ecnounterwindow?
-            itemBox.insert(END, itemName)
-        itemScrollbar.configure(command = itemBox.yview)
+            self._itemBox.insert(END, itemName)
+        
 
     def changeAreaList(self, *args):
         badges = self._numberOfBadges.get()
@@ -245,40 +269,29 @@ class MainWindow(TemplateWindow):
         if self.currentArea.canCatchPokemon:
             self._showWildEncounterButton.config(background = "green")
         else:
-            self._showWildEncounterButton.config(background = "red") 
+            self._showWildEncounterButton.config(background = "red")
 
-    def addTrainer(self):
-        pass
-        """add a trainer to trainer list"""
-        #disable add/ edit and delete button
-        #open new window which containes current trainers
-        #back button which closes window
-        #send name to main program
-        newWindow = AddDeleteTrainerWindow(self._master, self._listOfTrainers, self._selectedArea.get(), False, "trainer")
-        print(f"adding Trainer to {self._selectedArea.get()}")
-        pass
+    def enableWidgetsStartup(self):
+        frames = [self._trainerFrame, self._itemFrame]
+        self.changeFrameWidgets(frames, 'normal') 
     
-
-    def editTrainer(self):
-        #self._newWindow = TrainerWindow(self._master, self._listOfTrainers)
-        pass
-
-    def deleteTrainer(self):
-        pass
-        """delete a trainer from trainer list"""
-        newWindow = AddDeleteTrainerWindow(self._master, self._listOfTrainers, self._selectedArea.get(), True, "trainer")
-        print(f"deleting trainer")
+    def disableWidgetsStartup(self):
+        """sets all the widgets inside of trainerframe and the itemdisplay to disabled until an area is selected"""
+        frames = [self._trainerFrame, self._itemFrame]
+        self.changeFrameWidgets(frames, "disabled")  
     
-    def addItem(self):
-        pass
-        newWindow = AddItemWindow(self._master, self._listOfItems, self._selectedArea.get(), True, "Item")
-        print(f"adding item to {self._selectedArea.get()}")
-    
-    def deleteItem(self):
-        pass
-        newWindow = AddItemWindow(self._master, self._listOfItems, self._selectedArea.get(), True, "Item")
-        print(f"deleting item")
+    def changeFrameWidgets(self, frames :list, state :str):
+        """change the widgets of the given frames, list, to the state"""
+        widgetList = []
+        for frame in frames:
+            #comprehension to weed out all the frame and Listbox objects
+            widgetList.extend(widget for widget in frame.winfo_children() if not isinstance(widget, (Frame, Listbox)))
+        self.updateWidgetState(widgetList, state)
 
+    def updateWidgetState(self, widgets :list, state: str):
+        """accepts a list of widgets which will be given the state"""
+        for widget in widgets:
+            widget.configure(state = state)
 
     def showdownExport(self):
         """grabs current trainer selected and converts its data to showdown format"""

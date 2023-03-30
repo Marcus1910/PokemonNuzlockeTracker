@@ -4,7 +4,7 @@ class Trainer():
         self._name = name
         self._trainerType = None
         self._gender = None
-        self._pokemon = []
+        self._pokemon = {}#name- object
     
     @property
     def name(self):
@@ -44,8 +44,9 @@ class Trainer():
     
     @pokemon.setter
     def pokemon(self, pokemon):
+        """expects a pokemon object"""
         if len(self._pokemon) < 6:
-            self._pokemon.append(pokemon)
+            self._pokemon[pokemon.name] = pokemon
         else:
             print(f"{self._name} already has 6 pokemon")
     

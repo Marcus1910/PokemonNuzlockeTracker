@@ -1,5 +1,5 @@
 from tkinter import *
-from pokemonFrame import PokemonFrame
+from ownFrames import EncounterPokemonFrame
 from trainerPokemon import EncounteredPokemon
 
 
@@ -111,7 +111,7 @@ class EncounterWindow():
             #draw everything inside areaTypeFrame
             for index, encounter in enumerate(areaType[1]):
                 #create individual Frames for the pokemon
-                indivFrame = PokemonFrame(areaTypeFrame, encounter, areaTypeName)
+                indivFrame = EncounterPokemonFrame(areaTypeFrame, encounter, areaTypeName)
                 indivFrame.grid(row = index + 1, column = 0, columnspan = 4, sticky = NSEW)
 
                 if encounter.name not in self._pokemonFrames:
@@ -123,7 +123,7 @@ class EncounterWindow():
                     self._areaFrames[areaTypeName] = {}
 
                 #give the pokemonFrame object catchButton a command   
-                indivFrame.catchButton.configure(command = lambda pokemon = encounter, name = areaTypeName: [self.catchPokemon(pokemon, name)])
+                indivFrame.obtainButton.configure(command = lambda pokemon = encounter, name = areaTypeName: [self.catchPokemon(pokemon, name)])
 
                 self._pokemonFrames[encounter.name].append(indivFrame)
                 self._localPokemonFrames[encounter.name].append(indivFrame)
@@ -142,7 +142,7 @@ class EncounterWindow():
     
     def catchPokemon(self, pokemon, areaTypeName):
         """'catches' the selected pokemon, puts the pokemonTrainer object into a temporary list which get submitted to the area object
-         as soon as the capture button at the bottom is selected."""
+        as soon as the capture button at the bottom is selected."""
         frame = self._areaFrames[areaTypeName][pokemon.name]
         
         level = frame.level.get()
@@ -169,7 +169,7 @@ class EncounterWindow():
     def changeButtonImage(self, pokemon):
         frames = self._pokemonFrames[pokemon.name]
         for frame in frames:
-            frame.updateCatchButton(pokemon.captureStatus) 
+            frame.updateObtainButton(pokemon.captureStatus) 
     
     def updateCapturedPokemon(self):
         """update the area.encounteredPokemon attribute with all the temporaryCaptures that are caught"""
