@@ -27,6 +27,14 @@ class Pokemon():
         self._level = level
 
     @property
+    def dexNo(self):
+        return self._dexNo
+    
+    @dexNo.setter
+    def dexNo(self, dexNo):
+        self._dexNo = dexNo
+
+    @property
     def gender(self):
         return self._gender
     
@@ -75,8 +83,9 @@ class Pokemon():
     def heldItem(self, heldItem):
         self._heldItem = heldItem
     
-    def toJson(self):
-        return json.dumps(self, default = vars)
+    def storeToDataFile(self):
+        variableDict = {"_name": self.name, "_level": self.level, "_dexno": self.dexNo, "_gender": self.gender, "_moves": self.moves, "_ability": self.ability, "_heldItem": self.heldItem}
+        return variableDict
     
     def __str__(self):
         returnString = f"name: {self._name}, gender: {self._gender}, level: {self._level}, moves: {self._moves}, ability: {self._ability}, held item: {self._heldItem}"
@@ -88,7 +97,20 @@ class TrainerPokemon(Pokemon):
     def __init__(self, name, level, defeated = False):
         self._defeated = defeated
         super().__init__(name, level)
-
+    
+    @property
+    def defeated(self):
+        return self._defeated
+    
+    @defeated.setter
+    def defeated(self, bool):
+        self._defeated = bool
+    
+    def __str__(self):
+        parentStr = super().__str__()
+        childStr = f", defeated: {self._defeated}"
+        return parentStr + childStr
+    
 
 class EncounteredPokemon(Pokemon):
     defaultCaptureStatus = 0

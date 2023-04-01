@@ -83,7 +83,7 @@ class readFormattedData():
                         percentage = pokemon[1].split(')')[0]
                     except IndexError:
                         percentage = "N\A"
-                    encounter = EncounterPokemon(species, level, percentage)
+                    encounter = EncounteredPokemon(species, level = level, percentage = percentage)
                     encounterList.append(encounter)
                 formattedList.append([terrainType, encounterList])
             self._areaList[areaNumber]._encounters = copy.deepcopy(formattedList) 

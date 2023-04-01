@@ -3,9 +3,11 @@ import json
 class Area():
 
     pokemonCatchLimit = 1 #TODO get from settings.py
+    defaultCanCatchPokemon = False
+    defaultStartLine = 0
     def __init__(self, name):
         self._name = name
-        self._startLine = None
+        self._startLine = None #needed for initial reading, also useful for debugging
         self._encounters = [] #list with encounterpokemon objects
         self._trainers = {} #dict of trainer name - object
         self._items = {} # dict of item name - object
@@ -107,10 +109,16 @@ class Area():
     def canCatchPokemon(self):
         return self._canCatchPokemon
     
-    def storeToJson(self):
-        """TODO function that will return a dictionary which stores all the variables meant to be stored"""
-        pass
+    def storeToSaveFile(self):
+        """function that will return a dictionary which stores all the variables meant to be stored into the savefile"""
 
+        # for trainer in self.trainers:
+        #     if trainer.defeated:
+
+        return {"_name": self.name, "_trainers": self.trainers, "_items": self.items, "_encounteredPokemon": self.encounteredPokemon}
+
+    def storeToDataFile(self):
+        return {"_name": self.name, "_trainers": {trainerName: trainerObject.storeToDataFile() for trainerName, trainerObject in self.trainers.items()}, "_items": self.items, "_encounters": self.encounters, "_accessible": self.accessible}
 
     def __str__(self):
         returnString = f"{self._name} has {len(self._trainers)} trainers\n"

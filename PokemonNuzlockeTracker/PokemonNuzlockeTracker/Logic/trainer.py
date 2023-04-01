@@ -53,8 +53,12 @@ class Trainer():
             print(f"{self._name} already has 6 pokemon")
     
     def removePokemon(self, pokemon):
-        #TODO figure out how to remove specifik pokemon
+        #TODO figure out how to remove specific pokemon
         self._pokemon.remove(pokemon)
+
+    def storeToDataFile(self):
+        variableDict = {"_name": self.name, "_trainerType": self.trainerType, "_gender": self.gender, "_pokemon": [pokemon.storeToDataFile() for pokemon in self.pokemon]}
+        return variableDict
 
     def __str__(self):
         returnString = f"name : {self._name}. trainerType: {self._trainerType}. gender: {self._gender}.\n"

@@ -1,13 +1,22 @@
 ---STEPS TO TAKE FOR BETA---
 1st priority is the Logic, 2nd GUi
+
+Read from savefiles
+save to savefiles
+Create new games
+save encountered pokemon, defeated trainers and grabbed items to savefiles and read them correctly
+create settingswindow and use it to update settings.py, also use settings.py for certain variables
+
 Check capability of using it with retropie
+
 encounterwindow buttons changed to images
 able to create new games
 read trainerlist and can defeat trainers
 read itemlist and can pickup items
-create settingswindow and use it to update settings.py, also use settings.py for certain variables
-save encountered pokemon, defeated trainers and grabbed items to savefiles and read them correctly
+
+
 correct widget states for GUI
+
 create Frame objects for the trainers pokemon and for the items
 edit trainers using a button, keeps config so changing trainers is enabled until turned off
 How double battles?

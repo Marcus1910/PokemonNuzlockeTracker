@@ -1,7 +1,47 @@
 [
  {
   "_name": "New Bark Town",
-  "_startLine": 0,
+  "_trainers": {
+   "Larry": {
+    "_name": "Larry",
+    "_trainerType": "Youngster",
+    "_gender": "M",
+    "_pokemon": [
+     {
+      "_name": "Charizard",
+      "_level": "58",
+      "_dexno": "n/a",
+      "_gender": "n/a",
+      "_moves": [
+       "Flamethrower",
+       "quick attack"
+      ],
+      "_ability": "drought",
+      "_heldItem": "n/a"
+     },
+     {
+      "_name": "Magikarp",
+      "_level": "58",
+      "_dexno": "n/a",
+      "_gender": "n/a",
+      "_moves": [
+       "Splash",
+       "quick attack"
+      ],
+      "_ability": "drizzle",
+      "_heldItem": "heat rock"
+     }
+    ]
+   }
+  },
+  "_items": {
+   "Oran Berry": {
+    "_name": "Oran Berry",
+    "_description": "n/a",
+    "_location": "n/a",
+    "_grabbed": false
+   }
+  },
   "_encounters": [
    [
     "Surf",
@@ -144,63 +184,12 @@
     ]
    ]
   ],
-  "_trainers": [
-   {
-    "_name": "Larry",
-    "_trainerType": "Youngster",
-    "_gender": "M",
-    "_pokemon": [
-     {
-      "_name": "Charizard",
-      "_level": "58",
-      "_dexNo": "n/a",
-      "_gender": "n/a",
-      "_moves": ["Flamethrower", "quick attack"],
-      "_ability": "drought",
-      "_heldItem": "n/a"
-     }
-    ]
-   }
-  ],
-  "_items": [
-   {
-    "_name": "Oran Berry",
-    "_description": "n/a",
-    "_location": "n/a"
-   }
-  ],
-  "_accessible": 0,
-  "_encounteredPokemon": {
-   "Magikarp": {
-    "_name": "Magikarp",
-    "_level": 1,
-    "_dexNo": null,
-    "_gender": null,
-    "_moves": [],
-    "_ability": null,
-    "_heldItem": null,
-    "_captureStatus": 1,
-    "_percentage": "n/a",
-    "_levels": "n/a"
-   },
-   "Chinchou": {
-    "_name": "Chinchou",
-    "_level": 1,
-    "_dexNo": null,
-    "_gender": null,
-    "_moves": [],
-    "_ability": null,
-    "_heldItem": null,
-    "_captureStatus": 2,
-    "_percentage": "n/a",
-    "_levels": "n/a"
-   }
-  },
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 29",
-  "_startLine": 6,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -439,15 +428,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 46",
-  "_startLine": 12,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -698,15 +684,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Cherrygrove City",
-  "_startLine": 18,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -861,15 +844,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 30",
-  "_startLine": 24,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning",
@@ -1433,15 +1413,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 31",
-  "_startLine": 35,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning",
@@ -2089,15 +2066,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Dark Cave {Violet Side}",
-  "_startLine": 46,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, Morning / Day",
@@ -2594,15 +2568,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Violet City",
-  "_startLine": 58,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -2757,15 +2728,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 32",
-  "_startLine": 64,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -3180,15 +3148,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Ruins of Alph",
-  "_startLine": 74,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, All Times",
@@ -3471,15 +3436,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Sprout Tower [ 2F ]",
-  "_startLine": 84,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Building, Morning / Day",
@@ -3730,15 +3692,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Sprout Tower [ 3F ]",
-  "_startLine": 90,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Building, Morning / Day",
@@ -3989,15 +3948,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Union Cave [ 1F ]",
-  "_startLine": 96,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -4323,15 +4279,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Union Cave [ B1F ]",
-  "_startLine": 105,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -4657,15 +4610,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Union Cave [ B2F ]",
-  "_startLine": 114,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -5003,15 +4953,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 33",
-  "_startLine": 123,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -5262,15 +5209,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Slowpoke Well [ 1F ]",
-  "_startLine": 129,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -5560,15 +5504,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Slowpoke Well [ B1F ]",
-  "_startLine": 138,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -5870,15 +5811,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Ilex Forest",
-  "_startLine": 147,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning",
@@ -6442,15 +6380,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 34",
-  "_startLine": 158,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, All Times",
@@ -6805,15 +6740,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 35",
-  "_startLine": 168,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -7269,15 +7201,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "National Park",
-  "_startLine": 179,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning",
@@ -7725,15 +7654,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 36",
-  "_startLine": 186,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -8008,15 +7934,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 37",
-  "_startLine": 192,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -8303,15 +8226,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Ecruteak City",
-  "_startLine": 198,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -8418,15 +8338,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Burned Tower [ 1F ]",
-  "_startLine": 204,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -8576,15 +8493,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Burned Tower [ B1F ]",
-  "_startLine": 209,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -8734,15 +8648,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Dark Cave {Blackthorn Side}",
-  "_startLine": 214,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -9032,15 +8943,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 38",
-  "_startLine": 223,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -9368,15 +9276,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 39",
-  "_startLine": 230,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -9687,15 +9592,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Olivine City",
-  "_startLine": 236,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -9862,15 +9764,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 40",
-  "_startLine": 242,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -10049,15 +9948,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 41",
-  "_startLine": 248,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -10272,15 +10168,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Cianwood City",
-  "_startLine": 254,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Rock Smash",
@@ -10464,15 +10357,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 47",
-  "_startLine": 261,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day*",
@@ -10904,15 +10794,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Cliff Cave",
-  "_startLine": 272,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -11115,15 +11002,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 48",
-  "_startLine": 278,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -11422,15 +11306,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 42",
-  "_startLine": 284,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -11809,15 +11690,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Mt. Mortar [ 1F ]",
-  "_startLine": 294,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -12088,15 +11966,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Mt. Mortar [ 1F-2 ]",
-  "_startLine": 304,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -12282,15 +12157,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Mt. Mortar [ 1F-3 ]",
-  "_startLine": 309,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -12604,15 +12476,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Mt. Mortar [ B1F ]",
-  "_startLine": 318,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -12914,15 +12783,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 43",
-  "_startLine": 327,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -13241,15 +13107,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Lake of Rage",
-  "_startLine": 337,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -13392,15 +13255,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Whirl Islands [ 1F ]",
-  "_startLine": 343,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -13618,15 +13478,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Whirl Islands [ B1F ]",
-  "_startLine": 352,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -13752,15 +13609,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Whirl Islands [ B2F ]",
-  "_startLine": 357,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -13990,15 +13844,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Whirl Islands [ B3F ]",
-  "_startLine": 366,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -14136,15 +13987,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 44",
-  "_startLine": 372,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -14636,15 +14484,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Ice Path [ 1F ]",
-  "_startLine": 383,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -14758,15 +14603,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Ice Path [ B1F ]",
-  "_startLine": 388,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -14904,15 +14746,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Ice Path [ B2F ]",
-  "_startLine": 393,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -15062,15 +14901,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Ice Path [ B3F ]",
-  "_startLine": 398,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -15220,15 +15056,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Blackthorn City",
-  "_startLine": 403,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -15335,15 +15168,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 45",
-  "_startLine": 409,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, All Times",
@@ -15626,15 +15456,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Dragon\u00ef\u00bf\u00bds Den",
-  "_startLine": 419,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -15801,15 +15628,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Tohjo Falls",
-  "_startLine": 425,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -16087,15 +15911,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 27",
-  "_startLine": 434,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -16407,15 +16228,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 26",
-  "_startLine": 445,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -16734,15 +16552,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Victory Road [ 1F ]",
-  "_startLine": 455,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -16904,15 +16719,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Victory Road [ 2F ]",
-  "_startLine": 460,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -17098,15 +16910,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Victory Road [ 3F ]",
-  "_startLine": 465,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -17321,15 +17130,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Vermilion City",
-  "_startLine": 471,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -17506,15 +17312,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Diglett\u00ef\u00bf\u00bds Cave",
-  "_startLine": 479,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -17592,15 +17395,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 6",
-  "_startLine": 484,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -17895,15 +17695,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 2 - North",
-  "_startLine": 494,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -18106,15 +17903,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 3",
-  "_startLine": 500,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -18346,15 +18140,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 4",
-  "_startLine": 507,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, All Times",
@@ -18632,15 +18423,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Mt. Moon [ 1F ]",
-  "_startLine": 516,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -18754,15 +18542,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Mt. Moon [ 2F ]",
-  "_startLine": 521,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -18912,15 +18697,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Mt. Moon [ Outside ]",
-  "_startLine": 526,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -19027,15 +18809,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Cerulean City",
-  "_startLine": 532,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -19214,15 +18993,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 5",
-  "_startLine": 538,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -19473,15 +19249,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 24",
-  "_startLine": 544,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -19872,15 +19645,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 25",
-  "_startLine": 554,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -20288,15 +20058,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 9",
-  "_startLine": 565,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, All",
@@ -20567,15 +20334,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 10",
-  "_startLine": 575,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, All",
@@ -20829,15 +20593,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Rock Tunnel [ 1F ]",
-  "_startLine": 584,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -20999,15 +20760,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Rock Tunnel [ B1F ]",
-  "_startLine": 589,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave",
@@ -21198,15 +20956,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 8",
-  "_startLine": 595,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -21421,15 +21176,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 12",
-  "_startLine": 601,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -21577,15 +21329,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 13",
-  "_startLine": 608,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -21909,15 +21658,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 14",
-  "_startLine": 619,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -22096,15 +21842,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 15",
-  "_startLine": 625,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -22271,15 +22014,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 11",
-  "_startLine": 631,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, All",
@@ -22405,15 +22145,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Fuchsia City",
-  "_startLine": 636,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -22508,15 +22245,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 18",
-  "_startLine": 642,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -22719,15 +22453,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 17",
-  "_startLine": 648,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -22942,15 +22673,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 16",
-  "_startLine": 654,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, All",
@@ -23076,15 +22804,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 7",
-  "_startLine": 659,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -23335,15 +23060,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Celadon City",
-  "_startLine": 665,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -23375,15 +23097,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Viridian City",
-  "_startLine": 668,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -23454,15 +23173,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 2 - South",
-  "_startLine": 674,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -23665,15 +23381,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 1",
-  "_startLine": 680,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -24001,15 +23714,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Pallet Town",
-  "_startLine": 687,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -24080,15 +23790,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 21",
-  "_startLine": 693,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, All",
@@ -24342,15 +24049,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 22",
-  "_startLine": 702,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, All",
@@ -24556,15 +24260,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Cinnabar Island",
-  "_startLine": 711,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -24707,15 +24408,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 20",
-  "_startLine": 717,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -24906,15 +24604,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 19",
-  "_startLine": 723,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Surf",
@@ -25139,15 +24834,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Seafoam Islands [ 1F ]",
-  "_startLine": 731,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -25249,15 +24941,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Seafoam Islands [ B1F ]",
-  "_startLine": 736,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -25383,15 +25072,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Seafoam Islands [ B2F ]",
-  "_startLine": 741,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -25541,15 +25227,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Seafoam Islands [ B3F ]",
-  "_startLine": 746,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -25723,15 +25406,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Seafoam Islands [ B4F ]",
-  "_startLine": 751,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, All Times",
@@ -26093,15 +25773,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Viridian Forest",
-  "_startLine": 760,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning",
@@ -26482,15 +26159,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Bell Tower / Tin Tower [ 2F. 3F ]",
-  "_startLine": 768,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Building",
@@ -26628,15 +26302,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Bell Tower / Tin Tower [ 4F. 5F. 6F ]",
-  "_startLine": 774,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Building",
@@ -26774,15 +26445,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Bell Tower / Tin Tower [ 7F. 8F. 9F ]",
-  "_startLine": 780,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Building",
@@ -26956,15 +26624,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Bell Tower / Tin Tower [ 10F ]",
-  "_startLine": 786,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Building",
@@ -27138,15 +26803,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Cerulean Cave [ 1F ]",
-  "_startLine": 792,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, Morning",
@@ -27691,15 +27353,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Cerulean Cave [ 2F ]",
-  "_startLine": 804,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, Morning",
@@ -28099,15 +27758,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Cerulean Cave [ B2F ]",
-  "_startLine": 811,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, Morning",
@@ -28700,15 +28356,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Route 28",
-  "_startLine": 823,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -29075,15 +28728,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Mt. Silver {Outside}",
-  "_startLine": 833,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -29438,15 +29088,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Mt. Silver [ 1F \u00ef\u00bf\u00bd Entrance Room ]",
-  "_startLine": 843,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, Morning / Day",
@@ -29849,15 +29496,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Mt. Silver [ 1F \u00ef\u00bf\u00bd Side Room ]",
-  "_startLine": 853,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, Morning / Day",
@@ -30048,15 +29692,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Mt. Silver [ 1F \u00ef\u00bf\u00bd Back Room ]",
-  "_startLine": 859,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, Morning / Day",
@@ -30271,15 +29912,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Mt. Silver [ 2F \u00ef\u00bf\u00bd Spiral Cave ]",
-  "_startLine": 865,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, Morning / Day",
@@ -30506,15 +30144,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Mt. Silver [ Outside \u00ef\u00bf\u00bd Snowy Area ]",
-  "_startLine": 871,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -30765,15 +30400,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Mt. Silver [ Outside \u00ef\u00bf\u00bd Mountainous Area ]",
-  "_startLine": 877,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -31000,15 +30632,12 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  },
  {
   "_name": "Mt. Silver [ 3F \u00ef\u00bf\u00bd Final Cave ]",
-  "_startLine": 883,
+  "_trainers": {},
+  "_items": {},
   "_encounters": [
    [
     "Cave, Morning / Day",
@@ -31247,10 +30876,6 @@
     ]
    ]
   ],
-  "_trainers": [],
-  "_items": [],
-  "_accessible": 0,
-  "_encounteredPokemon": {},
-  "canCatchPokemon": true
+  "_accessible": 0
  }
 ]

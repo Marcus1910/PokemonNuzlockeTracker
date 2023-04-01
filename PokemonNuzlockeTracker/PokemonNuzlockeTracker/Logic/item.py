@@ -6,7 +6,6 @@ class Item():
         self._location = None
         self._grabbed = grabbed
     
-
     @property
     def name(self):
         return self._name
@@ -38,5 +37,10 @@ class Item():
     @grabbed.setter
     def grabbed(self, bool):
         self._grabbed = bool
+    
+    def storeToDataFile(self):
+        variableDict = {"_name": self.name, "_description": self.description, "_location": self.location}
+        return variableDict
+
 
     

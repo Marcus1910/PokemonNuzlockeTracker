@@ -20,13 +20,23 @@ class MainGame():
         self.gamePath = os.path.join(os.path.dirname(os.getcwd()), f"games/{self.gameName}")
         self.dataFolder = os.path.join(self.gamePath, "data")
         self.saveFileFolder = os.path.join(self.gamePath, "saveFiles")
-        self.saveFile = None
+        self.saveFile = os.path.join(self.saveFileFolder, "attempt 1.txt")
         self.dataFile = os.path.join(self.dataFolder, f"{self.gameName}GameData.txt")
 
     def writeToFile(self):
+        dataAreaList = []
+        saveFileList = []
+        for area in self.areaList:
+            saveFileList.append(area.storeToSaveFile())
+            dataAreaList.append(area.storeToDataFile())
+        
+        with open(self.saveFile, "w") as file:
+            file.truncate()
+            file.write(json.dumps(saveFileList, default = vars, indent = 1))
+
         with open(self.dataFile, "w") as file:
             file.truncate()
-            file.write(json.dumps(self.areaList, default = vars, indent = 1))  
+            file.write(json.dumps(dataAreaList, default = vars, indent = 1))  
 
     def retrieveGameData(self):
         """returns a list of area objects, read from the datafile and (TODO)-savefile"""
@@ -43,7 +53,6 @@ class MainGame():
             self.retrieveEncounterData()
         return self.areaList
 
-    
     def retrieveEncounterData(self):
         #only needed to create the json dumps and backup if file cannot be read
         self.areaList = readFormattedData(f"{self.dataFolder}\{self.gameName}CorrectData.txt").returnAreaList()
@@ -53,7 +62,6 @@ class MainGame():
         for area in self.readData:
             alreadyexists = False
             areaName = area["_name"]
-            startLine = area["_startLine"]
             
             #check if route exists by looping through entire list
             for route in self.areaList:
@@ -64,8 +72,9 @@ class MainGame():
             #if not found in areaList
             else:
                 wildArea = Area(areaName)
-                
-            wildArea.startLine = startLine
+                wildArea = self.getFromJSON(wildArea, area, ["_encounters", "_items", "_trainers", "_encounteredPokemon"])#exclude items, trainers, encounters and encounteredpokemon
+            
+
             
             '''retrieve encounters from json dump in sacredGoldGameData.txt'''
             terrainTypes = area["_encounters"]
@@ -76,6 +85,7 @@ class MainGame():
                 for pokemonJson in pokemonList:
                     encounterPokemon = EncounteredPokemon(self.errorName)
                     encounterPokemon = self.getFromJSON(encounterPokemon, pokemonJson)
+                    #print(f"FINISHED POKEMON: {encounterPokemon.name}")
                     encounterList.append(encounterPokemon)
                 wildArea._encounters.append([terrainName, encounterList])
                 #print(wildArea.encounters)
@@ -83,20 +93,26 @@ class MainGame():
             
             """retrieve all area attributes"""
             items = area["_items"]
-            for itemJson in items:
-                areaItem = Item(self.errorName)
+            #print("STARTING ITEMS")
+            for itemName, itemJson in items.items():
+                areaItem = Item(itemName)
                 areaItem = self.getFromJSON(areaItem, itemJson)
+                #print(f"FINISHED ITEM: {itemName}")
                 wildArea.items[areaItem.name] = areaItem
+            #print("FINISHED ITEMS")
             
             """retrieve all trainer attributes"""
+            #print("STARTING TRAINERS")
             trainers = area["_trainers"]
-            for trainerJson in trainers:
+            for trainerName, trainerJson in trainers.items():
                 #trainerName = trainer["_name"]
-                pokemonTrainer = Trainer(self.errorName)
-                pokemonTrainer = self.getFromJSON(pokemonTrainer, trainerJson, ["_pokemon"]) #puts json as pokemon
+                pokemonTrainer = Trainer(trainerName)
+                
+                pokemonTrainer = self.getFromJSON(pokemonTrainer, trainerJson, ["_pokemon"]) #puts json as a pokemon
+                #print(f"FINISHED TRAINER WITHOUT POKEMON ATTRIBUTES: {pokemonTrainer.name}")
+
                 
                 """retrieve pokemon attributes"""
-                
                 pokemonJson = trainerJson["_pokemon"]
                 pokemonAmount = len(trainerJson["_pokemon"])
                 for number in range(pokemonAmount):
@@ -105,28 +121,33 @@ class MainGame():
                     pokemonTrainer.pokemon = trainerPokemon
                 #append to area object
                 wildArea.trainers[pokemonTrainer.name] = pokemonTrainer
+            #print("FINISHED TRAINERS")
             
-            encounteredPokemon = area["_encounteredPokemon"]
-            for pokemon in encounteredPokemon:
-                pokemonData = encounteredPokemon[pokemon]
-                pokemonState = pokemonData["_captureStatus"]
-                #if the pokemon is not actually captured, do not add it to the wildArea
-                if pokemonState == 0:
-                    break
+            #read from savefile instead
+            # print("STARTING ENCOUNTEREDPOKEMON")
+            # encounteredPokemon = area["_encounteredPokemon"]
+            # for pokemon in encounteredPokemon:
+            #     pokemonData = encounteredPokemon[pokemon]
+            #     pokemonState = pokemonData["_captureStatus"]
+            #     #if the pokemon is not actually captured, do not add it to the wildArea
+            #     if pokemonState == 0:
+            #         break
 
-                pokemonName = pokemonData["_name"]
-                pokemonLevel = pokemonData["_level"]
-                newPokemon = EncounteredPokemon(pokemonName, level = pokemonLevel, state = pokemonState)
+            #     pokemonName = pokemonData["_name"]
+            #     pokemonLevel = pokemonData["_level"]
+            #     newPokemon = EncounteredPokemon(pokemonName, level = pokemonLevel, state = pokemonState)
+            #     newPokemon = self.getFromJSON(newPokemon, pokemonData)
                 
-                #append it to area object
-                wildArea.encounteredPokemon[pokemonName] = newPokemon
-
+            #     #append it to area object
+            #     wildArea.encounteredPokemon[pokemonName] = newPokemon
+            # print("FINISHED ENCOUNTEREDPOKEMON")
             if not alreadyexists:
                 self.areaList.append(wildArea)
 
     def checkVarExistsJsonDump(self, attribute, json, value = "n/a"):
         """checks whether a variable exists in a json else returns value or defaults to n/a"""
         try:
+            #print(attribute)#, json[attribute])
             x = json[attribute]
         except KeyError as e:
             #print(f"adding n/a as default, {e}")
@@ -145,7 +166,6 @@ class MainGame():
             if hasattr(type(object), attribute): #need the type of object else all variables will be removed
                 attributes.remove(attribute)
                 if "default" in attribute:
-                    print(attribute)
                     #remove default from attribute
                     keyName = attribute.replace("default", "")
                     #decapitalize the actual variable
@@ -155,10 +175,8 @@ class MainGame():
                 #print(f"removed: {attribute}")
         #remove not wanted variables
         for variable in notWanted[:]:
-            print(notWanted)
             if variable in attributes:
                 attributes.remove(variable)
-            
         
         #add correct values to the variables of the object
         for attribute in attributes:
@@ -168,6 +186,7 @@ class MainGame():
             #get the default value for an attribute if it is given as class variable
             attributeValue = self.checkVarExistsJsonDump(attribute, json, getattr(object, attribute, default))
             setattr(object, attribute, attributeValue)
+        #print(object.name)
         return object
 
 
@@ -209,4 +228,5 @@ def checkGames():
         #TODO return error code instead of "new", GUI should open the window to create own pokemon game
         return ["new"]
     return games
+
 

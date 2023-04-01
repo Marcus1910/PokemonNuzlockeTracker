@@ -44,7 +44,7 @@ class MainWindow(TemplateWindow):
         self._indivItemFrame.grid(row = 1, column = 0, columnspan = 4, sticky = N)
         self._indivItemFrame.rowconfigure(0, weight = 2)
         self._indivItemFrame.columnconfigure(0, weight = 2)
-        #self.createItemScrollbar()
+        self.createItemScrollbar()
 
         self._itemLabel = Label(self._itemFrame, text="Available Items", anchor = CENTER)
         self._itemLabel.grid(row=0,column=0,sticky=N)
@@ -157,25 +157,25 @@ class MainWindow(TemplateWindow):
     def updateTrainerMenu(self):
         """update the trainermenu with currentarea.trainers"""
         #TODO create the trainerframes 
-        pass
-        #remove the previous pokemon and hide the display
-        # self.deletePokemonDisplay()
-        # self._indivTrainerFrame.grid_remove()
-        # #remove all previous trainers from the optionmenu
-        # self._trainerMenu['menu'].delete(0, 'end')
+        # pass
+        # #remove the previous pokemon and hide the display
+        self.deletePokemonDisplay()
+        self._indivTrainerFrame.grid_remove()
+        #remove all previous trainers from the optionmenu
+        self._trainerMenu['menu'].delete(0, 'end')
 
-        # if len(self._trainerDict) == 0:
-        #     #TODO create a label instead of an optionmenu otherwise create the optionmenu
-        #     #self._selectedTrainer.set("this route has no trainers, please add one with the add trainer button")
-        #     pass
-        # else:
-        #     menu = self._trainerMenu["menu"]
-        #     #empty the optionmenu
-        #     menu.delete(0, "end")
-        #     for trainerName in self._trainerDict.keys():
-        #         print(f"added {trainerName}")
-        #         #set the label to the corect name and display the correct pokemon
-        #         menu.add_command(label = trainerName, command = lambda trainerName = trainerName: [self._selectedTrainer.set(trainerName), self.getTrainerPokemon(trainerName)])
+        if len(self._trainerDict) == 0:
+            #TODO create a label instead of an optionmenu otherwise create the optionmenu
+            #self._selectedTrainer.set("this route has no trainers, please add one with the add trainer button")
+            pass
+        else:
+            menu = self._trainerMenu["menu"]
+            #empty the optionmenu
+            menu.delete(0, "end")
+            for trainerName in self._trainerDict.keys():
+                print(f"added {trainerName}")
+                #set the label to the corect name and display the correct pokemon
+                menu.add_command(label = trainerName, command = lambda trainerName = trainerName: [self._selectedTrainer.set(trainerName), self.getTrainerPokemon(trainerName)])
 
     def getTrainerPokemon(self, trainerName):
         """get the pokemon from a selected trainer"""
@@ -255,7 +255,6 @@ class MainWindow(TemplateWindow):
     def displayItems(self):
         """Displays the current items available in this area"""
         for itemName in self._itemDict.keys():
-            #TODO use frames like in ecnounterwindow?
             self._itemBox.insert(END, itemName)
         
 

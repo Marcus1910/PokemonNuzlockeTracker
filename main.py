@@ -5,6 +5,7 @@ import os
 
 
 def changePath():
+
     currentpath = os.getcwd()
     mainPath = currentpath + "\PokemonNuzlockeTracker\PokemonNuzlockeTracker"
     GUIPath = mainPath + "\GUI"
@@ -25,6 +26,11 @@ def changePath():
 
 if __name__ == "__main__":
     changePath()
+    GUI = False
     #editor doesn't recognize it, but it is still a valid import because of the path.append(GUIPath)
-    from selectGameWindow import SelectGameWindow
-    SelectGameWindow()
+    if GUI:
+        from selectGameWindow import SelectGameWindow
+        SelectGameWindow()
+    else:
+        from CLI import CLI
+        CLI()
