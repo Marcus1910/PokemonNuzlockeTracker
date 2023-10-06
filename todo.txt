@@ -1,10 +1,10 @@
 ---STEPS TO TAKE FOR BETA---
 1st priority is the Logic, 2nd GUi
-
+**************************READ FROM SAVEFILES****************************
 Read from savefiles
 save to savefiles
 Create new games
-save encountered pokemon, defeated trainers and grabbed items to savefiles and read them correctly
+save encountered pokemon, defeated trainers and grabbed items to savefiles and read them correctly ONLY READING LEFT, TEST WRITING
 create settingswindow and use it to update settings.py, also use settings.py for certain variables
 
 Check capability of using it with retropie

@@ -88,14 +88,12 @@ class readFormattedData():
                 formattedList.append([terrainType, encounterList])
             self._areaList[areaNumber]._encounters = copy.deepcopy(formattedList) 
 
-
     def returnAreaList(self):
         """function that reads all encounterdata and returns a list of area objects"""
         self.readFile()
         self.indexAreas()
         self.removeDuplicateNames()
         self.createEncounterLists()
-        print(self._areaList)
         return self._areaList
 
 

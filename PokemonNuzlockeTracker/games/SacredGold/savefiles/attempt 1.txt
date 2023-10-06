@@ -4,14 +4,12 @@
   "_trainers": {
    "Larry": {
     "_name": "Larry",
-    "_trainerType": "Youngster",
-    "_gender": "M",
     "_pokemon": [
      {
-      "_defeated": false,
+      "_defeated": true,
       "_name": "Charizard",
       "_level": "58",
-      "_dexNo": "n/a",
+      "_dexNo": null,
       "_gender": "n/a",
       "_moves": [
        "Flamethrower",
@@ -24,7 +22,7 @@
       "_defeated": false,
       "_name": "Magikarp",
       "_level": "58",
-      "_dexNo": "n/a",
+      "_dexNo": null,
       "_gender": "n/a",
       "_moves": [
        "Splash",
@@ -38,11 +36,9 @@
    }
   },
   "_items": {
-   "Oran Berry": {
-    "_name": "Oran Berry",
-    "_description": "n/a",
-    "_location": "n/a",
-    "_grabbed": false
+   "Chesto Berry": {
+    "_name": "Chesto Berry",
+    "_grabbed": true
    }
   },
   "_encounteredPokemon": {}

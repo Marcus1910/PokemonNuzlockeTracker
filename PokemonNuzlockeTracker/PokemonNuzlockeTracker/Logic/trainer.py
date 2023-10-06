@@ -55,14 +55,67 @@ class Trainer():
     def removePokemon(self, pokemon):
         #TODO figure out how to remove specific pokemon
         self._pokemon.remove(pokemon)
+    
+    @property
+    def defeated(self):
+        return self._defeated
+    
+    @defeated.setter
+    def defeated(self, bool):
+        self._defeated = bool
 
     def storeToDataFile(self):
         variableDict = {"_name": self.name, "_trainerType": self.trainerType, "_gender": self.gender, "_pokemon": [pokemon.storeToDataFile() for pokemon in self.pokemon]}
         return variableDict
 
+    def storeToSaveFile(self):
+        """checks whether the trainer needs to be stored in the saveFile, if it is not defeated, or no pokemon are defeated It shouldn't"""
+        #get a list of None or json formats
+        NumberOfDefeatedPokemon = [pokemon.storeToSaveFile() for pokemon in self.pokemon]
+        variableDict = {"_name": self.name}
+        #want all the pokemon data if one pokemon
+        if self._defeated != self.defaultDefeated or not all(pokemon is None for pokemon in NumberOfDefeatedPokemon): 
+            variableDict["_pokemon"] = self.pokemon
+            variableDict["_defeated"] = self.defeated
+            return variableDict  
+        return None
+
     def __str__(self):
-        returnString = f"name : {self._name}. trainerType: {self._trainerType}. gender: {self._gender}.\n"
+        returnString = f"name : {self._name}. trainerType: {self._trainerType}. gender: {self._gender}. defeated: {self.defeated}\n"
         for pokemon in self._pokemon:
-            #x = str(print(pokemon))
             returnString += pokemon.__str__() + "\n"
         return returnString
+    
+"""example json trainer
+"Larry": {
+    "_name": "Larry",
+    "_trainerType": "Youngster",
+    "_gender": "M",
+    "_pokemon": [
+     {
+      "_name": "Charizard",
+      "_level": "58",
+      "_dexno": "n/a",
+      "_gender": "n/a",
+      "_moves": [
+       "Flamethrower",
+       "quick attack"
+      ],
+      "_ability": "drought",
+      "_heldItem": "n/a"
+     },
+     {
+      "_name": "Magikarp",
+      "_level": "58",
+      "_dexno": "n/a",
+      "_gender": "n/a",
+      "_moves": [
+       "Splash",
+       "quick attack"
+      ],
+      "_ability": "drizzle",
+      "_heldItem": "heat rock"
+     }
+    ]
+   }
+"""

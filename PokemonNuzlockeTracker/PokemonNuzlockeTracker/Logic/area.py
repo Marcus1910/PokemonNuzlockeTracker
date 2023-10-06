@@ -83,6 +83,9 @@ class Area():
     
     @property
     def encounteredPokemon(self):
+        #remove pokemon that are not actually captured and have captureStatus 0
+        self._encounteredPokemon = {pokemonName: pokemonObject for pokemonName, pokemonObject in self._encounteredPokemon.items()}# if pokemonObject.captureStatus != pokemonObject._defaultCaptureStatus}
+        #print(f"F{self._encounteredPokemon}")
         return self._encounteredPokemon
 
     @encounteredPokemon.setter
@@ -108,17 +111,24 @@ class Area():
     @property
     def canCatchPokemon(self):
         return self._canCatchPokemon
+
+    def createDictForSaving(self, dictionary, data = True):
+        """function meant for the storeToDataFile or StoreToSaveFile, default is DataFile"""
+        if data:
+            #check whether the itemObject is empty, if it is empty ity is not included
+            vars = {itemName: itemObject.storeToDataFile() for itemName, itemObject in dictionary.items()}
+        else:
+            vars = {itemName: itemObject.storeToSaveFile() for itemName, itemObject in dictionary.items() if itemObject.storeToSaveFile() is not None}
+        return vars
     
     def storeToSaveFile(self):
         """function that will return a dictionary which stores all the variables meant to be stored into the savefile"""
-
-        # for trainer in self.trainers:
-        #     if trainer.defeated:
-
-        return {"_name": self.name, "_trainers": self.trainers, "_items": self.items, "_encounteredPokemon": self.encounteredPokemon}
+        return {"_name": self.name, "_trainers": self.createDictForSaving(self.trainers, 0), \
+                "_items": self.createDictForSaving(self.items, 0), "_encounteredPokemon": self.createDictForSaving(self.encounteredPokemon, 0)}
 
     def storeToDataFile(self):
-        return {"_name": self.name, "_trainers": {trainerName: trainerObject.storeToDataFile() for trainerName, trainerObject in self.trainers.items()}, "_items": self.items, "_encounters": self.encounters, "_accessible": self.accessible}
+        return {"_name": self.name, "_trainers": self.createDictForSaving(self.trainers),\
+                 "_items": self.createDictForSaving(self.items), "_encounters": self.encounters, "_accessible": self.accessible}
 
     def __str__(self):
         returnString = f"{self._name} has {len(self._trainers)} trainers\n"

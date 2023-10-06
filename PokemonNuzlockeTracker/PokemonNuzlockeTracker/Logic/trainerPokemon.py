@@ -9,7 +9,7 @@ class Pokemon():
         self._ability = None
         self._heldItem = None
     
-    ##getters and setters
+    #getters and setters
     @property
     def name(self):
         return self._name
@@ -88,7 +88,7 @@ class Pokemon():
         return variableDict
     
     def __str__(self):
-        returnString = f"name: {self._name}, gender: {self._gender}, level: {self._level}, moves: {self._moves}, ability: {self._ability}, held item: {self._heldItem}"
+        returnString = f"name: {self._name}, dexNo: {self.dexNo}, gender: {self._gender}, level: {self._level}, moves: {self._moves}, ability: {self._ability}, held item: {self._heldItem}"
         return returnString
 
 class TrainerPokemon(Pokemon):
@@ -105,6 +105,12 @@ class TrainerPokemon(Pokemon):
     @defeated.setter
     def defeated(self, bool):
         self._defeated = bool
+    
+    def storeToSaveFile(self):
+        if self.defeated != self.defaultDefeated:
+            variableDict = {"_name": self.name, "_moves": self.moves, "_defeated": self.defeated}
+            return variableDict
+        return None
     
     def __str__(self):
         parentStr = super().__str__()
@@ -145,3 +151,38 @@ class EncounteredPokemon(Pokemon):
     def levels(self, levels):
         self._levels = levels
 
+    def storeToSaveFile(self):
+        if self.captureStatus != self.defaultCaptureStatus:
+            variableDict = {"_name": self.name, "_level": self.level, "_captureStatus": self.captureStatus, "_percentage": self.percentage}
+            return variableDict
+        return None
+    
+
+"""
+example json encountered pokemon
+"_encounteredPokemon": {
+   "Shellder": {
+    "_name": "Shellder",
+    "_level": 1,
+    "_dexNo": null,
+    "_gender": null,
+    "_moves": [],
+    "_ability": null,
+    "_heldItem": null,
+    "_captureStatus": 2,
+    "_percentage": "n/a",
+    "_levels": "n/a"
+   },
+   "Chinchou": {
+    "_name": "Chinchou",
+    "_level": 1,
+    "_dexNo": null,
+    "_gender": null,
+    "_moves": [],
+    "_ability": null,
+    "_heldItem": null,
+    "_captureStatus": 1,
+    "_percentage": "n/a",
+    "_levels": "n/a"
+   },
+"""

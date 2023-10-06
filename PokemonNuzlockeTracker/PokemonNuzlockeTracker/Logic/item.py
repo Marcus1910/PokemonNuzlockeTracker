@@ -41,6 +41,23 @@ class Item():
     def storeToDataFile(self):
         variableDict = {"_name": self.name, "_description": self.description, "_location": self.location}
         return variableDict
+    
+    def storeToSaveFile(self):
+        if self.grabbed != self.defaultGrabbed:
+            variableDict = {"_name": self.name, "_grabbed": self.grabbed}
+            return variableDict
+        return None
+    
+
+"""
+"Oran Berry": {
+  "_name": "Oran Berry",
+  "_description": "n/a",
+  "_location": "n/a",
+  "_grabbed": false
+}
+
+"""
 
 
     
