@@ -17,6 +17,7 @@ class MainGame():
 
         self.readData = None
         self.saveFileError = False
+        self._badge = 0 #default badge 0
         
         #not a dictionary, because we want it to be in documentation order and in a stable order, dict items can change position
         self.areaList = []
@@ -26,10 +27,18 @@ class MainGame():
 
         self.saveFile = os.path.join(self.saveFileFolder, self.saveFileName)
         self.dataFile = os.path.join(self.dataFolder, f"{self.gameName}GameData.txt")
+    
+    @property
+    def badge(self):
+        return self._badge
+    
+    @badge.setter
+    def badge(self, badge):
+        self._badge = badge
 
     def writeToFile(self):
         dataAreaList = []
-        saveFileList = []
+        saveFileList = [{"_badge": 6}]
         #fill lists with all the data to save
         for area in self.areaList:
             dataAreaList.append(area.storeToDataFile())
@@ -174,7 +183,12 @@ class MainGame():
 
     def addSaveFileData(self, saveFileJson):
         """updates the self.arealist with the savefile"""
-        #print(saveFileJson)
+        #remove dictionary from json
+        try:
+            self.badge = saveFileJson.pop(0)["_badge"]
+        except KeyError as e:
+            print("badges not found, defaulting to 0") 
+
         for index, area in enumerate(saveFileJson):
             areaName = area["_name"]
             #loop through each area

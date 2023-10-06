@@ -1,12 +1,15 @@
 [
  {
+  "_badge": 6
+ },
+ {
   "_name": "New Bark Town",
   "_trainers": {
    "Larry": {
     "_name": "Larry",
     "_pokemon": [
      {
-      "_defeated": true,
+      "_defeated": false,
       "_name": "Charizard",
       "_level": "58",
       "_dexNo": null,
@@ -19,7 +22,7 @@
       "_heldItem": "n/a"
      },
      {
-      "_defeated": false,
+      "_defeated": true,
       "_name": "Magikarp",
       "_level": "58",
       "_dexNo": null,
@@ -36,6 +39,10 @@
    }
   },
   "_items": {
+   "Oran Berry": {
+    "_name": "Oran Berry",
+    "_grabbed": true
+   },
    "Chesto Berry": {
     "_name": "Chesto Berry",
     "_grabbed": true
