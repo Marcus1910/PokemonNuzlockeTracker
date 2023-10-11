@@ -8,7 +8,7 @@ def changePath():
 
     currentpath = os.getcwd()
     mainPath = currentpath + "\PokemonNuzlockeTracker\PokemonNuzlockeTracker"
-    GUIPath = mainPath + "\GUI"
+    GUIPath = mainPath + "\GUI(Obsolete)"
     LogicPath = mainPath + "\Logic"
 
     if currentpath[-22:] != "PokemonNuzlockeTracker":
