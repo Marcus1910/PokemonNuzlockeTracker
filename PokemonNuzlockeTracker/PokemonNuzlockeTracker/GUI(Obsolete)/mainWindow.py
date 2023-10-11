@@ -4,6 +4,7 @@ from tkinter import ttk
 
 from templateWindow import TemplateWindow
 from encounterWindow import EncounterWindow
+from trainer import Trainer
 
 #TODO if there are no trainers, only display label
 
@@ -16,8 +17,10 @@ class MainWindow(TemplateWindow):
         #self._game is a gameObject  
         self._game = game
         #attempt x :str
+        #update location of the savefile
         self._game.saveFile = save
-        self._master.title(f"{self._game.gameName} {self._game.saveFile}")
+        self._master.title(f"{self._game.gameName} {save}")
+        #get all data from game and save file
         self._listOfAreas = self._game.retrieveGameData()
 
         self._trainerDict = {}
@@ -29,9 +32,8 @@ class MainWindow(TemplateWindow):
 
         """number of badges"""
         self._numberOfBadges = IntVar()
-        self._numberOfBadges.set(0)
+        self._numberOfBadges.set(self._game.badge)
         self._badgesMenu = OptionMenu(self._master, self._numberOfBadges, *list(range(0,9)), command = self.changeAreaList)
-        #TODO create variable in settings.py for the amount of badges, or give it to the game class
         self._badgesMenu.grid(row=0, column=0,rowspan=1, columnspan=1, sticky=NW) 
 
         """item frames"""
@@ -55,8 +57,6 @@ class MainWindow(TemplateWindow):
         
         self._deleteItemButton = Button(self._itemFrame, text = "delete an item", bd = 3, font = self._font)#, command = self.deleteItem)
         self._deleteItemButton.grid(row = 25, column = 1, sticky = NSEW)
-        #self._addTrainerButton = Button(self._trainerFrame, text = "add a trainer", bd = 3, font = self._font, command = self.addTrainer)
-        #self._addTrainerButton.grid(row = 8, column = 0, sticky = NSEW)
 
         """trainer frames"""
         self._trainerFrame = Frame(self._master)
@@ -77,7 +77,7 @@ class MainWindow(TemplateWindow):
         self._indivTrainerFrame.columnconfigure(0, weight = 2)
 
         """trainer buttons"""
-        self._addTrainerButton = Button(self._trainerFrame, text = "add a trainer", bd = 3, font = self._font)#, command = self.addTrainer)
+        self._addTrainerButton = Button(self._trainerFrame, text = "add a trainer", bd = 3, font = self._font, command = self.addTrainer)
         self._addTrainerButton.grid(row = 8, column = 0, sticky = NSEW)
 
         self._editTrainerButton = Button(self._trainerFrame, text = "edit a trainer", bd = 3, font = self._font)#, command =self.editTrainer)
@@ -87,11 +87,11 @@ class MainWindow(TemplateWindow):
         self._deleteTrainerButton.grid(row = 8, column = 2, sticky = NSEW)
 
         """showdown buttons"""
-        self._exportToShowdownButton = Button(self._trainerFrame, text = "export current trainer to showdown", bd = 5, font = self._font)#, command = self.showdownExport)
-        self._exportToShowdownButton.grid(row = 9, column =0, columnspan = 3, sticky = NSEW)
+        # self._exportToShowdownButton = Button(self._trainerFrame, text = "export current trainer to showdown", bd = 5, font = self._font)#, command = self.showdownExport)
+        # self._exportToShowdownButton.grid(row = 9, column =0, columnspan = 3, sticky = NSEW)
 
-        self._exportAllToShowdownButton = Button(self._trainerFrame, text = "export all available trainer data to showdown", bd = 5, font = self._font)
-        self._exportAllToShowdownButton.grid(row = 10, column =0, columnspan = 3, sticky = NSEW)
+        # self._exportAllToShowdownButton = Button(self._trainerFrame, text = "export all available trainer data to showdown", bd = 5, font = self._font)
+        # self._exportAllToShowdownButton.grid(row = 10, column =0, columnspan = 3, sticky = NSEW)
 
         """selected Area"""
         self._areaFrame = Frame(self._master)
@@ -105,8 +105,19 @@ class MainWindow(TemplateWindow):
         self._areaMenu['state'] = 'readonly'
         self._areaMenu.bind("<<ComboboxSelected>>", lambda area = self._areaMenu.get(): self.updateCurrentArea(area))
 
+        """Accessible updater"""
+        self._currentAccessible = IntVar()
+        self._accessibleFrame = Frame(self._areaFrame)
+        self._accessibleFrame.grid(row = 1, column = 5, columnspan = 3, sticky = NSEW)
+
+        self._currentAreaAccessibleLabel = Label(self._accessibleFrame, text = "badge needed:")
+        self._currentAreaAccessibleLabel.grid(row = 0, column = 1, columnspan = 2)
+
+        self._changeAccessibleMenu = OptionMenu(self._accessibleFrame, self._currentAccessible, *list(range(0,9)), command = self.updateCurrentAreaAccessible)
+        self._changeAccessibleMenu.grid(row = 0, column = 3, sticky = NSEW)
+
         self._showWildEncounterButton = Button(self._areaFrame, text = "Encounters", command = self.showEncounters)
-        self._showWildEncounterButton.grid(row = 1, column = 5, sticky = NSEW)
+        self._showWildEncounterButton.grid(row = 2, column = 5, sticky = NSEW)
 
         """exit buttons and main loop"""
         self._exitButton = Button(self._master, text = "save & exit", command = self.saveAndExit)
@@ -115,10 +126,12 @@ class MainWindow(TemplateWindow):
         self._backButton = Button(self._master, text = "back", command = self.createGameMenu)
         self._backButton.grid(row=4, column=5, sticky=SE)
 
-        self._exportToShowdownButton.configure(state = DISABLED)
+        # self._exportToShowdownButton.configure(state = DISABLED)
         #self.changeTrainerButtonState(DISABLED)
         #closing window saves the changes made
-        self._master.protocol("WM_DELETE_WINDOW", self.saveAndExit)
+        """"""
+        #self._master.protocol("WM_DELETE_WINDOW", self.saveAndExit)
+        """"""
 
         #disable all the widgest in trainerframe and in the itemdisplay
         self.disableWidgetsStartup()
@@ -145,12 +158,15 @@ class MainWindow(TemplateWindow):
             if area.name == areaName:
                 self.currentArea = area
                 break
+        else:
+            print(f"ERROR: {areaName} could not be found")
         #update the lists to match the area object
         self._trainerDict = self.currentArea.trainers
         self._itemDict = self.currentArea.items
 
         self.updateTrainerMenu()
         self.updateItemDisplay()
+        self.updateAccessibleMenu()
         self.changeCbbColor()
         self.enableWidgetsStartup()
     
@@ -166,9 +182,10 @@ class MainWindow(TemplateWindow):
 
         if len(self._trainerDict) == 0:
             #TODO create a label instead of an optionmenu otherwise create the optionmenu
-            #self._selectedTrainer.set("this route has no trainers, please add one with the add trainer button")
+            self._selectedTrainer.set("this route has no trainers, please add one with the add trainer button")
             pass
         else:
+            self._selectedTrainer.set("select a trainer")
             menu = self._trainerMenu["menu"]
             #empty the optionmenu
             menu.delete(0, "end")
@@ -182,14 +199,14 @@ class MainWindow(TemplateWindow):
         #TODO use trainerpokemon frames
         #this trainer has pokemon, show the frame again
         self._indivTrainerFrame.grid()
-        self._exportToShowdownButton.configure(state = NORMAL)
+        # self._exportToShowdownButton.configure(state = NORMAL)
         #print(self._listOfTrainers)
         if len(self._trainerDict) == 0:
             print("This trainer has no pokemon")
         else:
             trainer = self._trainerDict[trainerName] 
             self.deletePokemonDisplay()
-            for index, pokemon in enumerate(trainer.pokemon.values()):
+            for index, pokemon in enumerate(trainer.pokemon):
                 self.displayPokemon(pokemon, index)
 
     def deletePokemonDisplay(self):
@@ -224,6 +241,12 @@ class MainWindow(TemplateWindow):
             moveBox.insert(index, move)
         #prevent garbage collection
         pokemonPhoto.image = pokemonImg
+    
+    def addTrainer(self):
+        print("adding trainer")
+        trainer = Trainer("Morty")
+        self.currentArea.trainers[trainer.name] = trainer
+        
 
     def updateItemDisplay(self):
 
@@ -236,8 +259,7 @@ class MainWindow(TemplateWindow):
             self.displayItems()
 
     def deleteItemDisplay(self):
-        for label in self._indivItemFrame.winfo_children():
-            label.destroy()
+        self._itemBox.delete(0, "end")
 
     def itemBoxHeight(self):
         """returns the length the itembox should have"""
@@ -254,7 +276,7 @@ class MainWindow(TemplateWindow):
 
     def displayItems(self):
         """Displays the current items available in this area"""
-        for itemName in self._itemDict.keys():
+        for itemName, itemObject in self._itemDict.items():
             self._itemBox.insert(END, itemName)
         
 
@@ -262,6 +284,15 @@ class MainWindow(TemplateWindow):
         badges = self._numberOfBadges.get()
         #TODO sort list on number of badges
         pass
+
+    def updateAccessibleMenu(self):
+        """update the accessible value from the GUI to the one from the game object"""
+        self._currentAccessible = self.currentArea.accessible
+    
+    def updateCurrentAreaAccessible(self, *args):
+        """update accessible value belonging to the game object"""
+        newAccessible = args[0]
+        self.currentArea.accessible = newAccessible
 
     def changeCbbColor(self):
         """change the colour of the 'show encounters' button"""
@@ -271,12 +302,12 @@ class MainWindow(TemplateWindow):
             self._showWildEncounterButton.config(background = "red")
 
     def enableWidgetsStartup(self):
-        frames = [self._trainerFrame, self._itemFrame]
+        frames = [self._trainerFrame, self._itemFrame, self._accessibleFrame]
         self.changeFrameWidgets(frames, 'normal') 
     
     def disableWidgetsStartup(self):
         """sets all the widgets inside of trainerframe and the itemdisplay to disabled until an area is selected"""
-        frames = [self._trainerFrame, self._itemFrame]
+        frames = [self._trainerFrame, self._itemFrame, self._accessibleFrame]
         self.changeFrameWidgets(frames, "disabled")  
     
     def changeFrameWidgets(self, frames :list, state :str):
@@ -311,5 +342,5 @@ class MainWindow(TemplateWindow):
         SelectGameWindow()
 
     def saveAndExit(self):
-        #self._game.writeToFile()
+        self._game.writeToFile()
         self.exit()

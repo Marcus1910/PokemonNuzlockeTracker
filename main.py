@@ -26,7 +26,7 @@ def changePath():
 
 if __name__ == "__main__":
     changePath()
-    GUI = False
+    GUI = True
     #editor doesn't recognize it, but it is still a valid import because of the path.append(GUIPath)
     if GUI:
         from selectGameWindow import SelectGameWindow

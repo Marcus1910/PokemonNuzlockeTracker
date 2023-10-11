@@ -107,6 +107,7 @@ class SelectGameWindow(TemplateWindow):
         #make the update loop stop
         self.stop()
         self.exit()
+        print(self._save)
         MainWindow(self._masterX, self._masterY, self._gameObject, self._save)
         #call to next window
         

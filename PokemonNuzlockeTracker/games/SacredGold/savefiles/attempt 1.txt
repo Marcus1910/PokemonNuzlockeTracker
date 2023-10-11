@@ -9,7 +9,7 @@
     "_name": "Larry",
     "_pokemon": [
      {
-      "_defeated": false,
+      "_defeated": true,
       "_name": "Charizard",
       "_level": "58",
       "_dexNo": null,
@@ -35,7 +35,7 @@
       "_heldItem": "heat rock"
      }
     ],
-    "_defeated": false
+    "_defeated": true
    }
   },
   "_items": {

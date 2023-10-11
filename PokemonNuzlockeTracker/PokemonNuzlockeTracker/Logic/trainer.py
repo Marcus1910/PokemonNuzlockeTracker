@@ -73,7 +73,7 @@ class Trainer():
         #get a list of None or json formats
         NumberOfDefeatedPokemon = [pokemon.storeToSaveFile() for pokemon in self.pokemon]
         variableDict = {"_name": self.name}
-        #want all the pokemon data if one pokemon
+        #want all the pokemon data if one pokemon, checks if all the pokemon in numberofdefeated pokemon are defeated, true
         if self._defeated != self.defaultDefeated or not all(pokemon is None for pokemon in NumberOfDefeatedPokemon): 
             variableDict["_pokemon"] = self.pokemon
             variableDict["_defeated"] = self.defeated

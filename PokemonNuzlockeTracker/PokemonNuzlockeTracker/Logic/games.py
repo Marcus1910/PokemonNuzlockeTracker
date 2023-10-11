@@ -11,9 +11,9 @@ txtfile = "trainerData.txt"
 
 class MainGame():
     errorName = "error something went wrong reading from the json file" # TODO settings.py
-    def __init__(self, gameName, saveFileName = 'new.txt'): #TODO change new to actual new attempt name
+    def __init__(self, gameName, saveFileName = 'new'): #TODO change new to actual new attempt name
         self.gameName = gameName
-        self.saveFileName = saveFileName
+        self.saveFileName = f"{saveFileName}.txt"
 
         self.readData = None
         self.saveFileError = False
@@ -25,7 +25,7 @@ class MainGame():
         self.dataFolder = os.path.join(self.gamePath, "data")
         self.saveFileFolder = os.path.join(self.gamePath, "saveFiles")
 
-        self.saveFile = os.path.join(self.saveFileFolder, self.saveFileName)
+        self._saveFile = os.path.join(self.saveFileFolder, self.saveFileName)
         self.dataFile = os.path.join(self.dataFolder, f"{self.gameName}GameData.txt")
     
     @property
@@ -35,6 +35,14 @@ class MainGame():
     @badge.setter
     def badge(self, badge):
         self._badge = badge
+    
+    @property
+    def saveFile(self):
+        return self._saveFile
+    
+    @saveFile.setter
+    def saveFile(self, filename):
+        self._saveFile = os.path.join(self.saveFileFolder, f"{filename}.txt")
 
     def writeToFile(self):
         dataAreaList = []
@@ -189,7 +197,7 @@ class MainGame():
         except KeyError as e:
             print("badges not found, defaulting to 0") 
 
-        for index, area in enumerate(saveFileJson):
+        for area in saveFileJson:
             areaName = area["_name"]
             #loop through each area
             for areaObject in self.areaList:

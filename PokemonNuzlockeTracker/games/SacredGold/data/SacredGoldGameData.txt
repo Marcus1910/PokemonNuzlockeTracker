@@ -32,6 +32,12 @@
       "_heldItem": "heat rock"
      }
     ]
+   },
+   "Morty": {
+    "_name": "Morty",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": []
    }
   },
   "_items": {
@@ -192,8 +198,21 @@
  },
  {
   "_name": "Route 29",
-  "_trainers": {},
-  "_items": {},
+  "_trainers": {
+   "Morty": {
+    "_name": "Morty",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": []
+   }
+  },
+  "_items": {
+   "Morty": {
+    "_name": "Morty",
+    "_description": null,
+    "_location": null
+   }
+  },
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -436,8 +455,21 @@
  },
  {
   "_name": "Route 46",
-  "_trainers": {},
-  "_items": {},
+  "_trainers": {
+   "Morty": {
+    "_name": "Morty",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": []
+   }
+  },
+  "_items": {
+   "Morty": {
+    "_name": "Morty",
+    "_description": null,
+    "_location": null
+   }
+  },
   "_encounters": [
    [
     "Grass, Morning / Day",
@@ -692,7 +724,14 @@
  },
  {
   "_name": "Cherrygrove City",
-  "_trainers": {},
+  "_trainers": {
+   "Morty": {
+    "_name": "Morty",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": []
+   }
+  },
   "_items": {},
   "_encounters": [
    [
