@@ -7,10 +7,10 @@ import os
 def changePath():
 
     currentpath = os.getcwd()
-    mainPath = currentpath + "\PokemonNuzlockeTracker\PokemonNuzlockeTracker"
+    mainPath = os.path.join(currentpath + "\PokemonNuzlockeTracker\PokemonNuzlockeTracker")
     #GUIPath = mainPath + "\GUI(Obsolete)"
-    GUIPath = mainPath + "\GUI"
-    LogicPath = mainPath + "\Logic"
+    GUIPath = os.path.join(mainPath + "\GUI")
+    LogicPath = os.path.join(mainPath + "\Logic")
 
     if currentpath[-22:] != "PokemonNuzlockeTracker":
         print(f"not in the correct folder, please go to the PokemonNuzlockes folder and start the program from there, you are currently in {os.getcwd()}")
