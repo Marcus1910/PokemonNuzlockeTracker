@@ -8,7 +8,8 @@ def changePath():
 
     currentpath = os.getcwd()
     mainPath = currentpath + "\PokemonNuzlockeTracker\PokemonNuzlockeTracker"
-    GUIPath = mainPath + "\GUI(Obsolete)"
+    #GUIPath = mainPath + "\GUI(Obsolete)"
+    GUIPath = mainPath + "\GUI"
     LogicPath = mainPath + "\Logic"
 
     if currentpath[-22:] != "PokemonNuzlockeTracker":
@@ -29,8 +30,8 @@ if __name__ == "__main__":
     GUI = True
     #editor doesn't recognize it, but it is still a valid import because of the path.append(GUIPath)
     if GUI:
-        from selectGameWindow import SelectGameWindow
-        SelectGameWindow()
+        from kivyApp import KivyApp
+        KivyApp().run()
     else:
         from CLI import CLI
         CLI()
