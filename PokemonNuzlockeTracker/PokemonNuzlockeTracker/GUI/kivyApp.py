@@ -4,6 +4,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+import games as gm
 
 #define different screens
 class TrainerScreen(Screen):
@@ -23,7 +24,7 @@ class WindowManager(ScreenManager):
 class KivyApp(App):
     def build(self):
         layout = BoxLayout(orientation='vertical')
-        label = Label(text="Hello, Kivy!")
+        label = Label(text=f"{gm.checkGames()}")
         layout.add_widget(label)
 
         return layout
