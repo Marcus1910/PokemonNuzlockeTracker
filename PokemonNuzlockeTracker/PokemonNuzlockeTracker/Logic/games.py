@@ -317,6 +317,7 @@ class MainGame():
 
 def checkGames():
     gameFolder = os.path.join(os.path.dirname(os.getcwd()), "games")
+    print(f"current foolder = {os.getcwd()}, gamefolder: {gameFolder}")
     #walks down the directory for other directories, retrieves the names and puts them in a list
     games = [x[1] for x in os.walk(gameFolder)][0]
     #no games found
