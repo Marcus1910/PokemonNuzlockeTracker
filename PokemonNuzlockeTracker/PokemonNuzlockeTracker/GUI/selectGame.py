@@ -46,14 +46,14 @@ class SelectGame(App):
         layout.pos = root.pos
 
         #select the game
-        gameSelection = BoxLayout(orientation = "vertical", size_hint_y= 0.1)
+        gameSelection = BoxLayout(orientation = "vertical", size_hint_y= 0.05)
         self.gameDDM = Spinner(text = "Select the game", values = gm.checkGames())
         self.gameDDM.bind(text = self.gameChanged)
 
         gameSelection.add_widget(self.gameDDM)
         
         #select attempt, gets filled as soon as the gameselection is filled in
-        attemptSelection = BoxLayout(orientation= "vertical", size_hint_y= 0.1)
+        attemptSelection = BoxLayout(orientation= "vertical", size_hint_y= 0.05)
         self.attemptSpinner = Spinner(text = "Select Attempt")
         self.attemptSpinner.bind(text = self.attemptSelected)
         self.attemptSpinner.disabled = True
@@ -61,12 +61,12 @@ class SelectGame(App):
         attemptSelection.add_widget(self.attemptSpinner)
 
         #gather info on attempt and display it
-        attemptInfo = BoxLayout(orientation= "vertical", size_hint_y = 0.6)
+        attemptInfo = BoxLayout(orientation= "vertical", size_hint_y = 0.8)
         infoLabel = Label(text = "information about the attempt")
         attemptInfo.add_widget(infoLabel)
 
         #continue button
-        continueBox = BoxLayout(orientation= "vertical", size_hint_y = 0.2)
+        continueBox = BoxLayout(orientation= "vertical", size_hint_y = 0.1)
         self.continueButton = Button(text = "Continue with attempt")
         self.continueButton.disabled = True
         continueBox.add_widget(self.continueButton)
