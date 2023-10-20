@@ -29,7 +29,6 @@ class SelectGame(App):
         # pathToImage = os.path.join(os.path.dirname(os.getcwd()), "images", "bg.jpg")
         # print(pathToImage)
         bgImage = Image(source = os.path.join(os.path.dirname(os.getcwd()), "images", "background.jpg"))
-        bgImage.allow_stretch = True
         bgImage.keep_ratio = True
         root.add_widget(bgImage)
         # layout = BoxLayout(orientation='vertical')
