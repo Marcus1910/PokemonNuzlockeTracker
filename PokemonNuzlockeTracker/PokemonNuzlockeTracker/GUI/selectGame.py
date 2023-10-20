@@ -1,6 +1,6 @@
 from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager, Screen
-
+from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
+from kivy.uix.label import Label
 
 import games as gm
 from selectGameScreen import SelectGameScreen
@@ -18,23 +18,56 @@ class EncounterScreen(Screen):
     pass
 
 class WindowManager(ScreenManager):
-    pass
+    _gameObject = None
+    areaList = None
+
+
+    @property
+    def gameObject(self):
+        return self._gameObject
+    
+    @gameObject.setter
+    def gameObject(self, gameObject):
+        self._gameObject = gameObject
+        print("gathering data")
+        self.areaList = self._gameObject.retrieveGameData()
+
+class AttemptInfoScreen(Screen):
+    def __init__(self, **kwargs):
+        super(AttemptInfoScreen, self).__init__(**kwargs)
+
+    def on_enter(self):
+        #print(self.manager.gameObject.retrieveGameData())
+        AreaList = self.manager.gameObject.areaList
+        areaLabel = Label(text = AreaList[15].name)
+        self.add_widget(areaLabel)
+
+
 
 
 
 
 
 class SelectGame(App):
+
     def build(self):
-        self.game = None
-        self.attempt = None
-        sm = ScreenManager()
+        #given by selectgameWindow
+        
+
+        sm = WindowManager()
         selectGameScreen = SelectGameScreen(name = "selectGameScreen")
         trainerScreen = TrainerScreen(name = "trainerScreen")
+        attemptInfoScreen = AttemptInfoScreen(name = "attemptInfoScreen")
+
+
         sm.add_widget(selectGameScreen)
         sm.add_widget(trainerScreen)
+        sm.add_widget(attemptInfoScreen)
+
         sm.current = "selectGameScreen"
         return sm
+    
+
     
 
 

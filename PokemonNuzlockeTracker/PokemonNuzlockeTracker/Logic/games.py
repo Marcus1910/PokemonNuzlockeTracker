@@ -313,7 +313,6 @@ def checkForSaveFileDirectory(gameFolder):
 def getSaveFiles(gameName):
     """returns a list of the attempts made with a 'new' option"""
     gameFolder = os.path.join(os.path.dirname(os.getcwd()), "games", gameName, "saveFiles")
-    print(f"HIER: HIER:{gameFolder}")
     checkForSaveFileDirectory(gameFolder)
     #get every file, [0] because it returns a list inside of a list
     saveFiles = [x[2] for x in os.walk(gameFolder)][0]

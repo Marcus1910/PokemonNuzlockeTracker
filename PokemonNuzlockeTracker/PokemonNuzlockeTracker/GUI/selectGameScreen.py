@@ -1,6 +1,6 @@
 from kivy.uix.widget import Widget
 from kivy.uix.image import Image
-from kivy.uix.screenmanager import Screen
+from kivy.uix.screenmanager import Screen, SlideTransition
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.uix.label import Label
@@ -14,10 +14,10 @@ import os
 class SelectGameScreen(Screen):
     def __init__(self, **kwargs):
         super(SelectGameScreen, self).__init__(**kwargs)
-        self.game = None
-        self.attempt = None
         # pathToImage = os.path.join(os.path.dirname(os.getcwd()), "images", "bg.jpg")
         # print(pathToImage)
+        self.game = None
+        self.attempt = None
 
         bgImage = Image(source = os.path.join(os.path.dirname(os.getcwd()), "images", "background.jpg"))
         bgImage.size = Window.size
@@ -65,8 +65,7 @@ class SelectGameScreen(Screen):
     def gameChanged(self, instance, game:str):
         self.game = game
         self.continueButton.disabled = True
-        print(f"changed game to {self.game}")
-        if self.game == "new":
+        if game == "new":
             return
         self.retrieveSaveFile(game)
     
@@ -79,13 +78,16 @@ class SelectGameScreen(Screen):
 
     def attemptSelected(self, instance, attempt):
         if self.attemptSpinner.text == "select the attempt":
-            print("doe niks")
             return
         self.continueButton.disabled = False
         self.attempt = attempt
-        self.continueButton.text = f"game: {self.game}, attempt: {self.attempt}"
-        print(f"game: {self.game}, attempt: {self.attempt}")
-    
+        self.continueButton.text = f"{self.game}: {self.attempt}"
+
     def startAttempt(self, instance):
         #create Game Object, pass to new screen
-        gameObject = gm.MainGame(self.game, self.attempt)
+        self.manager.gameObject = gm.MainGame(self.game, self.attempt)
+        # print(self.manager.gameObject)
+        # GameObject = self.manager.gameObject.retrieveGameData()
+        # #list = GameObject.
+        # print(GameObject)
+        self.manager.current = "attemptInfoScreen"
