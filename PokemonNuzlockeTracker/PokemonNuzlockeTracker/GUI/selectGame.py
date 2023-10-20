@@ -21,7 +21,7 @@ class WindowManager(ScreenManager):
     pass
 
 
-class KivyApp(App):
+class SelectGame(App):
     def build(self):
         layout = BoxLayout(orientation='vertical')
         label = Label(text=f"{gm.checkGames()}")
@@ -37,8 +37,3 @@ class KivyApp(App):
         # self.sm.add_widget(screen3)
         # self.sm.current = "first"
         # return self.sm
-
-
-if __name__ == "__main__":
-    app = KivyApp()
-    app.run()

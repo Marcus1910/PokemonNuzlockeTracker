@@ -31,8 +31,8 @@ if __name__ == "__main__":
     GUI = True
     #editor doesn't recognize it, but it is still a valid import because of the path.append(GUIPath)
     if GUI:
-        from kivyApp import KivyApp
-        KivyApp().run()
+        from selectGame import SelectGame
+        SelectGame().run()
     else:
         from CLI import CLI
         CLI()
