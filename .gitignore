@@ -6,3 +6,4 @@ werk + pokemon.code-workspace
 
 #ignore testing folder
 PokemonNuzlockeTracker/localTesting/
+bin/*
