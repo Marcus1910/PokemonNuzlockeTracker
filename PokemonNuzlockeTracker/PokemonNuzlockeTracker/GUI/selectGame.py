@@ -96,6 +96,7 @@ class SelectGame(App):
             return
         self.continueButton.disabled = False
         self.attempt = attempt
+        self.continueButton.text = f"game: {self.game}, attempt: {self.attempt}"
         print(f"game: {self.game}, attempt: {self.attempt}")
 
 
