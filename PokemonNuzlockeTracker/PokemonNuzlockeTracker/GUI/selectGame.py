@@ -6,7 +6,9 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.spinner import Spinner
-
+from kivy.core.window import Window
+from kivy.uix.dropdown import DropDown
+from kivy.graphics import Color, Rectangle
 
 import games as gm
 import os
@@ -30,16 +32,18 @@ class SelectGame(App):
     def build(self):
         self.game = None
         self.attempt = None
-        #root = Widget()
+        root = Widget()
 
         # pathToImage = os.path.join(os.path.dirname(os.getcwd()), "images", "bg.jpg")
         # print(pathToImage)
 
-        # bgImage = Image(source = os.path.join(os.path.dirname(os.getcwd()), "images", "background.jpg"))
-        # bgImage.size = Window.size
-        # bgImage.pos = root.pos
+        bgImage = Image(source = os.path.join(os.path.dirname(os.getcwd()), "images", "background.jpg"))
+        bgImage.size = Window.size
+        bgImage.pos = root.pos
         
         layout = BoxLayout(orientation= "vertical", spacing = 10, padding = 10)
+        layout.size = Window.size
+        layout.pos = root.pos
 
         #select the game
         gameSelection = BoxLayout(orientation = "vertical", size_hint_y= 0.1)
@@ -72,8 +76,11 @@ class SelectGame(App):
         layout.add_widget(attemptInfo)
         layout.add_widget(continueBox)
 
+        root.add_widget(bgImage)
+        root.add_widget(layout)
 
-        return layout
+
+        return root
     
     def gameChanged(self, instance, game:str):
         self.game = game
