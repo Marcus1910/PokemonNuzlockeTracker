@@ -13,6 +13,8 @@ def changePath():
     GUIPath = os.path.join(mainPath, "GUI")
     LogicPath = os.path.join(mainPath, "Logic")
 
+    
+
     # if currentpath[-22:] != "PokemonNuzlockeTracker":
     #     print(f"not in the correct folder, please go to the PokemonNuzlockes folder and start the program from there, you are currently in {os.getcwd()}")
     #     time.sleep(1)
