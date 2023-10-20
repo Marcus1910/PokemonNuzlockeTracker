@@ -287,41 +287,49 @@ class MainGame():
         #print(object.name)
         return object
 
-    def checkForSaveFileDirectory(self):
-        """checks if the directory existst otherwise creates it"""
-        #if savefile directory doesn't exists
-        if not os.path.isdir(self.saveFileFolder):
-            print(f"creating new directory {self.saveFileFolder}")
-            os.mkdir(self.saveFileFolder)
+
 
     
-    def getSaveFiles(self):
-        """returns a list of the attempts made with a 'new' option"""
-        self.checkForSaveFileDirectory()
-        #get every file, [0] because it returns a list inside of a list
-        saveFiles = [x[2] for x in os.walk(self.saveFileFolder)][0]
-        #keep files with attempt in its name, and remove the '.txt'
-        saveFiles = [x[:-4] for x in saveFiles if("attempt" in x)] 
-        #give the option to make a new saveFile
-        saveFiles.append("new")
 
-        return saveFiles
-    
-    def addNewSaveFile(self):
-        #"new" has purposely not been removed, now len == attempt
-        saveFiles = self.getSaveFiles()
-        number = len(saveFiles)
-        #create the file then close it
-        open(f"{self.saveFileFolder}/attempt {number}.txt", "x").close()
     
 
 def checkGames():
     gameFolder = os.path.join(os.path.dirname(os.getcwd()), "games")
     #walks down the directory for other directories, retrieves the names and puts them in a list
-    games = [x[1] for x in os.walk(gameFolder)][0]
+    games = [gameName for gameName in next(os.walk(gameFolder))[1] if gameName != "Generic"]
     #no games found
     if not games:
         return ["new"]
+    games.append("new")
     return games
+
+def checkForSaveFileDirectory(gameFolder):
+    """checks if the directory existst otherwise creates it, returns 1 when succesful else 0"""
+    #if savefile directory doesn't exists
+    if not os.path.isdir(gameFolder):
+        print(f"creating new directory {gameFolder}")
+        #os.mkdir(gameFolder)
+
+def getSaveFiles(gameName):
+    """returns a list of the attempts made with a 'new' option"""
+    gameFolder = os.path.join(os.path.dirname(os.getcwd()), "games", gameName, "saveFiles")
+    print(gameFolder)
+    checkForSaveFileDirectory(gameFolder)
+    #get every file, [0] because it returns a list inside of a list
+    saveFiles = [x[2] for x in os.walk(gameFolder)][0]
+    #keep files with attempt in its name, and remove the '.txt'
+    saveFiles = [x[:-4] for x in saveFiles if("attempt" in x)] 
+    #give the option to make a new saveFile
+    saveFiles.append("new")
+
+    return saveFiles
+    
+# def addNewSaveFile():
+#     #"new" has purposely not been removed, now len == attempt
+#     saveFiles = self.getSaveFiles()
+#     number = len(saveFiles)
+#     #create the file then close it
+#     open(f"{self.saveFileFolder}/attempt {number}.txt", "x").close()
+
 
 
