@@ -85,6 +85,7 @@ class SelectGameScreen(Screen):
 
     def startAttempt(self, instance):
         #create Game Object, pass to new screen
+        self.manager.attempt = self.attempt
         self.manager.gameObject = gm.MainGame(self.game, self.attempt)
         # print(self.manager.gameObject)
         # GameObject = self.manager.gameObject.retrieveGameData()

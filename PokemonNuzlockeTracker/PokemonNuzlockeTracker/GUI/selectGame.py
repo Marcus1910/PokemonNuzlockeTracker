@@ -1,10 +1,14 @@
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 from kivy.uix.label import Label
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.image import Image
+from kivy.core.window import Window
 
 import games as gm
 from selectGameScreen import SelectGameScreen
 import os
+import time
 
 #define different screens
 class TrainerScreen(Screen):
@@ -18,6 +22,7 @@ class EncounterScreen(Screen):
     pass
 
 class WindowManager(ScreenManager):
+    attempt = None
     _gameObject = None
     areaList = None
 
@@ -32,15 +37,59 @@ class WindowManager(ScreenManager):
         print("gathering data")
         self.areaList = self._gameObject.retrieveGameData()
 
-class AttemptInfoScreen(Screen):
-    def __init__(self, **kwargs):
-        super(AttemptInfoScreen, self).__init__(**kwargs)
+class NuzlockeScreen(Screen):
+    """adds the name of the screen at the top, add self.layout which is a boxLayout. Can also add background for all screens except first screen"""
+    def __init__(self, screenName, **kwargs):
+        
+        super(NuzlockeScreen, self).__init__(**kwargs)
+
+        bgImage = Image(source = os.path.join(os.path.dirname(os.getcwd()), "images", "background.jpg"))
+        bgImage.size = Window.size
+        bgImage.pos = self.pos
+
+        self.layout = BoxLayout(orientation= "vertical")
+        self.screenBox = BoxLayout(orientation = "vertical", size_hint_y = 0.05)
+        screenLabel = Label(text = screenName, color = (0, 0, 0, 1))
+
+        self.screenBox.add_widget(screenLabel)
+        self.layout.add_widget(self.screenBox)
+
+        self.add_widget(bgImage)
+        self.add_widget(self.layout)
+
+
+class AttemptInfoScreen(NuzlockeScreen):
+    def __init__(self, screenName, **kwargs):
+        super(AttemptInfoScreen, self).__init__(screenName = screenName, **kwargs)
+
+
+
+        self.badgeLabel = Label(text = "gathering data", color = (0, 0, 0, 1), size_hint_y = 0.2)
+        self.areaLabel = Label(text = "gathering data", color = (0, 0, 0, 1), size_hint_y = 0.15)
+
+        self.pcBox = BoxLayout(orientation= "vertical", size_hint_y = 0.3)
+        pcLabel = Label(text = "Pokemon still available Placeholder", color = (0, 0, 0, 1))
+        self.pcBox.add_widget(pcLabel)
+
+        self.graveBox = BoxLayout(orientation = "vertical", size_hint_y = 0.3)
+        graveLabel = Label(text = "Fainted pokemon placeholder", color = (0, 0, 0, 1))
+        self.graveBox.add_widget(graveLabel)
+
+        
+        self.layout.add_widget(self.areaLabel)
+        self.layout.add_widget(self.badgeLabel)
+        self.layout.add_widget(self.pcBox)
+        self.layout.add_widget(self.graveBox)
 
     def on_enter(self):
         #print(self.manager.gameObject.retrieveGameData())
+        badge = self.manager.gameObject.badge
+        self.badgeLabel.text = f"amount of badges: {badge}"
+
         AreaList = self.manager.gameObject.areaList
-        areaLabel = Label(text = AreaList[15].name)
-        self.add_widget(areaLabel)
+        self.areaLabel.text = f"current area: {AreaList[6].name}"
+
+
 
 
 
@@ -57,8 +106,8 @@ class SelectGame(App):
         sm = WindowManager()
         selectGameScreen = SelectGameScreen(name = "selectGameScreen")
         trainerScreen = TrainerScreen(name = "trainerScreen")
-        attemptInfoScreen = AttemptInfoScreen(name = "attemptInfoScreen")
-
+        attemptInfoScreen = AttemptInfoScreen(name = "attemptInfoScreen", screenName = f"Info on current attempt")
+        #attemptInfoScreen = NuzlockeScreen(name = "attemptInfoScreen", )
 
         sm.add_widget(selectGameScreen)
         sm.add_widget(trainerScreen)
