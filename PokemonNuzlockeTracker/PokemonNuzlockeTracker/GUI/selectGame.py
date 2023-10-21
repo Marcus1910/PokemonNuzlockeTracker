@@ -7,6 +7,7 @@ from kivy.core.window import Window
 
 import games as gm
 from selectGameScreen import SelectGameScreen
+from attemptInfoScreen import AttemptInfoScreen
 import os
 import time
 
@@ -36,66 +37,6 @@ class WindowManager(ScreenManager):
         self._gameObject = gameObject
         print("gathering data")
         self.areaList = self._gameObject.retrieveGameData()
-
-class NuzlockeScreen(Screen):
-    """adds the name of the screen at the top, add self.layout which is a boxLayout. Can also add background for all screens except first screen"""
-    def __init__(self, screenName, **kwargs):
-        
-        super(NuzlockeScreen, self).__init__(**kwargs)
-
-        bgImage = Image(source = os.path.join(os.path.dirname(os.getcwd()), "images", "background.jpg"))
-        bgImage.size = Window.size
-        bgImage.pos = self.pos
-
-        self.layout = BoxLayout(orientation= "vertical")
-        self.screenBox = BoxLayout(orientation = "vertical", size_hint_y = 0.05)
-        screenLabel = Label(text = screenName, color = (0, 0, 0, 1))
-
-        self.screenBox.add_widget(screenLabel)
-        self.layout.add_widget(self.screenBox)
-
-        self.add_widget(bgImage)
-        self.add_widget(self.layout)
-
-
-class AttemptInfoScreen(NuzlockeScreen):
-    def __init__(self, screenName, **kwargs):
-        super(AttemptInfoScreen, self).__init__(screenName = screenName, **kwargs)
-
-
-
-        self.badgeLabel = Label(text = "gathering data", color = (0, 0, 0, 1), size_hint_y = 0.2)
-        self.areaLabel = Label(text = "gathering data", color = (0, 0, 0, 1), size_hint_y = 0.15)
-
-        self.pcBox = BoxLayout(orientation= "vertical", size_hint_y = 0.3)
-        pcLabel = Label(text = "Pokemon still available Placeholder", color = (0, 0, 0, 1))
-        self.pcBox.add_widget(pcLabel)
-
-        self.graveBox = BoxLayout(orientation = "vertical", size_hint_y = 0.3)
-        graveLabel = Label(text = "Fainted pokemon placeholder", color = (0, 0, 0, 1))
-        self.graveBox.add_widget(graveLabel)
-
-        
-        self.layout.add_widget(self.areaLabel)
-        self.layout.add_widget(self.badgeLabel)
-        self.layout.add_widget(self.pcBox)
-        self.layout.add_widget(self.graveBox)
-
-    def on_enter(self):
-        #print(self.manager.gameObject.retrieveGameData())
-        badge = self.manager.gameObject.badge
-        self.badgeLabel.text = f"amount of badges: {badge}"
-
-        AreaList = self.manager.gameObject.areaList
-        self.areaLabel.text = f"current area: {AreaList[6].name}"
-
-
-
-
-
-
-
-
 
 class SelectGame(App):
 
