@@ -59,10 +59,10 @@ class TrainerScreen(NuzlockeScreen):
         for index, pokemonObject in enumerate(trainerObject.pokemon):
             print(pokemonObject.name)
             #gather pokemon data and put it in textInputs
-            size = 1 / (len(trainerObject.pokemon) + 1)
-            pokemonBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.09)
+            
+            pokemonBox = BoxLayout(orientation = "horizontal", size_hint_y = 1 / (len(trainerObject.pokemon) + 1))
             #create Image with name underneath
-            imageBox = BoxLayout(orientation = "vertical", size_hint_x = 0.2)
+            imageBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
             imgButton = Button(text = "image", size_hint_y = 0.7, pos_hint = {"top" : 1})
             
             nameLevelBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.3, pos_hint = {"bottom" : 1})
@@ -76,7 +76,7 @@ class TrainerScreen(NuzlockeScreen):
             abilityInput = TextInput(text = f"{pokemonObject.ability}", background_normal="", background_color=(1, 1, 1, 0.5), size_hint_y = 0.5, pos_hint = {"top" : 1})
             heldItemInput = TextInput(text = f"{pokemonObject.heldItem}", background_normal="", background_color=(1, 1, 1, 0.5), size_hint_y = 0.5, pos_hint = {"bottom" : 1})
             
-            moveBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
+            moveBox = BoxLayout(orientation = "vertical", size_hint_x = 0.2)
 
             for moveIndex in range(4): 
                 moveSlot = TextInput(text = f"", background_normal="", background_color=(1, 1, 1, 0.5))
