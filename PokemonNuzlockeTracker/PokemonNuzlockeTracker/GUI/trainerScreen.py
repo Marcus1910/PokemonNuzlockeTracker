@@ -52,7 +52,7 @@ class TrainerScreen(NuzlockeScreen):
         #add pokemon
         for index, pokemonObject in enumerate(trainerObject.pokemon):
             #gather pokemon data and put it in textInputs
-            
+            print(pokemonObject.name)
             pokemonBox = BoxLayout(orientation = "horizontal", size_hint_y = 1 / (len(trainerObject.pokemon) + 1))
             #create Image with name underneath
             imageBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)

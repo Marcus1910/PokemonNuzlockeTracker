@@ -30,6 +30,42 @@
       ],
       "_ability": "drizzle",
       "_heldItem": "heat rock"
+     },
+     {
+      "_name": "Squirtle",
+      "_level": 25,
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_name": "Charmander",
+      "_level": 50,
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_name": "Squirtle",
+      "_level": 25,
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_name": "Charmander",
+      "_level": 50,
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
      }
     ]
    },

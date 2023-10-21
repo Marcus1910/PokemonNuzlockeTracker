@@ -5,27 +5,31 @@ from item import Item
 from trainerPokemon import Pokemon
 
 class CLI():
-    game = MainGame("SacredGold", 'attempt 1.txt')
-    print(game.badge)
-    listAreas = game.retrieveGameData()
-    newBark = listAreas[0]
-    trainers = newBark.trainers
-    items = newBark.items
-    encounters = newBark.encounters
+   game = MainGame("SacredGold", 'attempt 1')
+   print(game.badge)
+   listAreas = game.retrieveGameData()
+   newBark = listAreas[0]
+   trainers = newBark.trainers
+   items = newBark.items
+   encounters = newBark.encounters
+
+   print(trainers["Larry"])
     # geodude = Pokemon("Geodude", 15)
     # listAreas[0].encounteredPokemon["Geodude"] = geodude
 
-    larry = Trainer("Larry")
-    squirtle = TrainerPokemon("squirtle", 25)
-    charmander = TrainerPokemon("Charmander", 50)
-    listAreas[0].trainers["Larry"].pokemon[1].defeated = True
-    for trainer in trainers.values():
-       print(trainer)
-    berry = Item("Oran Berry", True)
-    chesto = Item("Chesto Berry", True)
+   #  larry = Trainer("Larry"
+   squirtle = TrainerPokemon("squirtle", 25)
+   charmander = TrainerPokemon("Charmander", 50)
+   # listAreas[0].trainers["Larry"].pokemon = squirtle
+   # listAreas[0].trainers["Larry"].pokemon = charmander
 
-    listAreas[0].items["Chesto Berry"] = chesto
-    listAreas[0].items["Oran Berry"] = berry
+   #  for trainer in trainers.values():
+   #     print(trainer)
+   #  berry = Item("Oran Berry", True)
+   #  chesto = Item("Chesto Berry", True)
+
+   #  listAreas[0].items["Chesto Berry"] = chesto
+   #  listAreas[0].items["Oran Berry"] = berry
     
     # print(listAreas[0].items)
 
@@ -36,5 +40,5 @@ class CLI():
 
 
 
-    game.writeToFile()
+   game.writeToFile()
     #print(items)

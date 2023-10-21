@@ -33,6 +33,46 @@
       ],
       "_ability": "drizzle",
       "_heldItem": "heat rock"
+     },
+     {
+      "_defeated": true,
+      "_name": "Squirtle",
+      "_level": 25,
+      "_dexNo": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_defeated": true,
+      "_name": "Charmander",
+      "_level": 50,
+      "_dexNo": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_defeated": false,
+      "_name": "Squirtle",
+      "_level": 25,
+      "_dexNo": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_defeated": false,
+      "_name": "Charmander",
+      "_level": 50,
+      "_dexNo": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
      }
     ],
     "_defeated": true
