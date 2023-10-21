@@ -22,11 +22,11 @@ class AttemptInfoScreen(NuzlockeScreen):
         self.layout.add_widget(self.pcBox)
         self.layout.add_widget(self.graveBox)
     
-    def on_enter(self):
+    def areaChanged(self, spinner, text):
+        super().areaChanged(spinner, text)
         #print(self.manager.gameObject.retrieveGameData())
         badge = self.manager.gameObject.badge
         self.badgeLabel.text = f"amount of badges: {badge}"
 
         AreaList = self.manager.gameObject.areaList
-        self.areaLabel.text = f"current area: {AreaList[6].name}"
-        super().on_enter()
+        self.areaLabel.text = f"current area: {self.manager.currentArea.name}"
