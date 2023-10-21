@@ -47,13 +47,15 @@ class TrainerScreen(NuzlockeScreen):
         else:
             print(f"trainer {trainerName} not found")
         #add trainer attributes
-        self.trainerLabel = Label(text = f"{trainerObject.name} {trainerObject.gender} {trainerObject.defeated}", size_hint_y = 0.1, pos_hint = {"top" : 1})
+        self.trainerLabel = Label(text = f"{trainerObject.name} {trainerObject.gender} {trainerObject.defeated}", size_hint_y = 0.05, pos_hint = {"top" : 1})
         self.trainerBox.add_widget(self.trainerLabel)
         #add pokemon
         for index, pokemonObject in enumerate(trainerObject.pokemon):
             #gather pokemon data and put it in textInputs
             print(pokemonObject.name)
-            pokemonBox = BoxLayout(orientation = "horizontal", size_hint_y = 1 / (len(trainerObject.pokemon) + 1))
+            size = (1 - 0.05)/ (len(trainerObject.pokemon))
+            print(f"size: {size}")
+            pokemonBox = BoxLayout(orientation = "horizontal", size_hint_y = (1 - 0.05)/ (len(trainerObject.pokemon)))
             #create Image with name underneath
             imageBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
             imgButton = Button(text = "image", size_hint_y = 0.7, pos_hint = {"top" : 1})
