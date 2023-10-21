@@ -29,3 +29,4 @@ class AttemptInfoScreen(NuzlockeScreen):
 
         AreaList = self.manager.gameObject.areaList
         self.areaLabel.text = f"current area: {AreaList[6].name}"
+        super().on_enter()

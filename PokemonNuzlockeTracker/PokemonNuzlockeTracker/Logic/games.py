@@ -8,6 +8,8 @@ import json
 import os
 
 txtfile = "trainerData.txt"
+#change to settings
+opaque = (1, 1, 1, 0.6)
 
 class MainGame():
     errorName = "error something went wrong reading from the json file" # TODO settings.py

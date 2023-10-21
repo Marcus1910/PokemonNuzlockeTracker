@@ -26,11 +26,11 @@ class SelectGameScreen(Screen):
         layout = BoxLayout(orientation= "vertical", spacing = 10, padding = 10)
         layout.size = Window.size
         layout.pos = self.pos
-
         #select the game
         gameSelection = BoxLayout(orientation = "vertical", size_hint_y= 0.05)
         self.gameDDM = Spinner(text = "Select the game", values = gm.checkGames())
         self.gameDDM.bind(text = self.gameChanged)
+        self.gameDDM.background_color = gm.opaque
 
         gameSelection.add_widget(self.gameDDM)
         
@@ -38,6 +38,7 @@ class SelectGameScreen(Screen):
         attemptSelection = BoxLayout(orientation= "vertical", size_hint_y= 0.05)
         self.attemptSpinner = Spinner(text = "Select Attempt")
         self.attemptSpinner.bind(text = self.attemptSelected)
+        self.attemptSpinner.background_color = gm.opaque
         self.attemptSpinner.disabled = True
 
         attemptSelection.add_widget(self.attemptSpinner)
@@ -51,7 +52,10 @@ class SelectGameScreen(Screen):
         continueBox = BoxLayout(orientation= "vertical", size_hint_y = 0.1)
         self.continueButton = Button(text = "Continue with attempt")
         self.continueButton.bind(on_press = self.startAttempt)
+        self.continueButton.background_color = gm.opaque
         self.continueButton.disabled = True
+
+
         continueBox.add_widget(self.continueButton)
         
         layout.add_widget(gameSelection)
