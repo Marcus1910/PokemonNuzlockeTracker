@@ -14,8 +14,6 @@ class TrainerScreen(NuzlockeScreen):
         self.trainerSpinner.bind(text = self.showTrainer)
         self.trainerSpinner.background_color = gm.opaque
         self.trainerBox = BoxLayout(size_hint_y = 0.65, orientation = "vertical")
-        
-        
         self.layout.add_widget(self.trainerSpinner)
         self.layout.add_widget(self.trainerBox)
 
@@ -36,28 +34,23 @@ class TrainerScreen(NuzlockeScreen):
         if len(self.trainers) > 0:
             spinnerList = [trainer for trainer in self.trainers.keys()]
         spinnerList.append("New Trainer")
-
         self.trainerSpinner.values = spinnerList
-
         self.clearTrainerBox()
     
     def showTrainer(self, spinner, text):
         self.clearTrainerBox()
         if text == "New Trainer":
-            print("add new Trainer")
             return
         for trainerName, trainerObject in self.trainers.items():
             if trainerName == text:
                 break
         else:
             print(f"trainer {trainerName} not found")
-        print(trainerName)
         #add trainer attributes
         self.trainerLabel = Label(text = f"{trainerObject.name} {trainerObject.gender} {trainerObject.defeated}", size_hint_y = 0.1, pos_hint = {"top" : 1})
         self.trainerBox.add_widget(self.trainerLabel)
         #add pokemon
         for index, pokemonObject in enumerate(trainerObject.pokemon):
-            print(pokemonObject.name)
             #gather pokemon data and put it in textInputs
             
             pokemonBox = BoxLayout(orientation = "horizontal", size_hint_y = 1 / (len(trainerObject.pokemon) + 1))
@@ -99,16 +92,10 @@ class TrainerScreen(NuzlockeScreen):
             pokemonBox.add_widget(moveBox)
         
             self.trainerBox.add_widget(pokemonBox)
-   
-
-
-
-        #add to layout
-        # self.layout.add_widget(self.trainerLabel)
     
     def clearTrainerBox(self):
-        print("todo clear trainer box")
-        pass
+        self.trainerBox.clear_widgets()
+
 
         
 
