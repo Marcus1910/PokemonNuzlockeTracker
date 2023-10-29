@@ -65,9 +65,7 @@ class TrainerScreen(NuzlockeScreen):
             imageBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
             #imgButton = Button(text = "image", size_hint_y = 0.7, pos_hint = {"top" : 1})
             pokemonImage = Image(source = os.path.join(self.spriteFolder, f"{pokemonObject.name.lower()}.png"))
-            pokemonImage.allow_stretch = True
-            pokemonImage.keep_ratio = True
-            
+            pokemonImage.fit_mode = "contain"
             nameLevelBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.3, pos_hint = {"bottom" : 1})
             nameInput = TextInput(text = f"{pokemonObject.name}", background_normal="", background_color=(1, 1, 1, 0.5), size_hint_x = 0.6)
             levelLabel = TextInput(text = f"lvl:", size_hint_x = 0.2, background_normal="", background_color=(1, 1, 1, 0.5))
@@ -92,7 +90,7 @@ class TrainerScreen(NuzlockeScreen):
             nameLevelBox.add_widget(levelInput)
 
             imageBox.add_widget(pokemonImage)
-            imageBox.add_widget(nameLevelBox)
+            #imageBox.add_widget(nameLevelBox)
             pokemonBox.add_widget(imageBox)
 
             itemAbilityBox.add_widget(abilityInput)
