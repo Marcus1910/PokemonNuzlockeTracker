@@ -5,6 +5,7 @@ from kivy.core.window import Window
 from kivy.uix.label import Label
 
 from kivy.uix.spinner import Spinner
+from kivy.uix.effectwidget import EffectWidget
 
 from transparentButton import TransparentButton
 import games as gm
@@ -26,7 +27,7 @@ class NuzlockeScreen(Screen):
         screenLabel = Label(text = screenName, color = (0, 0, 0, 1))
         self.screenBox.add_widget(screenLabel)
 
-        self.areaSpinner = Spinner(text = "choose an area", values = ["new Area"], size_hint_y = 0.08)
+        self.areaSpinner = Spinner(text = "choose an area", values = ["new Area"], size_hint_y = 0.04)
         self.areaSpinner.background_color = gm.opaque
         self.areaSpinner.bind(text = self.areaChanged)
 
@@ -54,7 +55,7 @@ class NuzlockeScreen(Screen):
         if self.entered:
             return
         #create buttons to naviagte through the screens and add to layout
-        self.buttons = BoxLayout(orientation = "horizontal", size_hint_y = 0.08)
+        self.buttons = BoxLayout(orientation = "horizontal", size_hint_y = 0.12)
         continueButton = TransparentButton(text = "next", size_hint_x = 0.2)
         continueButton.bind(on_press = self.nextScreen)
         fillerLabel = Label(text = "", size_hint_x = 0.6)
