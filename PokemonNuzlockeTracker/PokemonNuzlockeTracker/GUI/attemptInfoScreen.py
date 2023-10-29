@@ -6,14 +6,15 @@ class AttemptInfoScreen(NuzlockeScreen):
     def __init__(self, screenName, **kwargs):
         super(AttemptInfoScreen, self).__init__(screenName = screenName, **kwargs)
 
-        self.badgeLabel = Label(text = "gathering data", color = (0, 0, 0, 1), size_hint_y = 0.2)
-        self.areaLabel = Label(text = "gathering data", color = (0, 0, 0, 1), size_hint_y = 0.15)
+        
+        self.areaLabel = Label(text = "gathering data", color = (0, 0, 0, 1), size_hint_y = 0.125)
+        self.badgeLabel = Label(text = "gathering data", color = (0, 0, 0, 1), size_hint_y = 0.175)
 
-        self.pcBox = BoxLayout(orientation= "vertical", size_hint_y = 0.3)
+        self.pcBox = BoxLayout(orientation= "vertical", size_hint_y = 0.25)
         pcLabel = Label(text = "Pokemon still available Placeholder", color = (0, 0, 0, 1))
         self.pcBox.add_widget(pcLabel)
 
-        self.graveBox = BoxLayout(orientation = "vertical", size_hint_y = 0.3)
+        self.graveBox = BoxLayout(orientation = "vertical", size_hint_y = 0.25)
         graveLabel = Label(text = "Fainted pokemon placeholder", color = (0, 0, 0, 1))
         self.graveBox.add_widget(graveLabel)
 

@@ -4,16 +4,21 @@ from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
+from kivy.uix.image import Image
 
 import games as gm
+import os
 
 class TrainerScreen(NuzlockeScreen):
     def __init__(self, screenName, **kwargs):
         super(TrainerScreen, self).__init__(screenName = screenName, **kwargs)
-        self.trainerSpinner = Spinner(text = "select Trainer", values = "New Trainer", size_hint_y = 0.1)
+        #spinner to select trainer
+        self.trainerSpinner = Spinner(text = "select Trainer", values = "New Trainer", size_hint_y = 0.08)
         self.trainerSpinner.bind(text = self.showTrainer)
         self.trainerSpinner.background_color = gm.opaque
-        self.trainerBox = BoxLayout(size_hint_y = 0.65, orientation = "vertical")
+        #box that contains all pokemon from trainer
+        self.trainerBox = BoxLayout(size_hint_y = 0.67, orientation = "vertical")
+        self.spriteFolder = os.path.join(os.path.dirname(os.getcwd()), "images", "sprites", "pokemon")
         self.layout.add_widget(self.trainerSpinner)
         self.layout.add_widget(self.trainerBox)
 
@@ -58,7 +63,8 @@ class TrainerScreen(NuzlockeScreen):
             pokemonBox = BoxLayout(orientation = "horizontal", size_hint_y = (1 - 0.05)/ (len(trainerObject.pokemon)))
             #create Image with name underneath
             imageBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
-            imgButton = Button(text = "image", size_hint_y = 0.7, pos_hint = {"top" : 1})
+            #imgButton = Button(text = "image", size_hint_y = 0.7, pos_hint = {"top" : 1})
+            imgButton = Image(source = os.path.join(self.spriteFolder, f"{pokemonObject.name}.png"))
             
             nameLevelBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.3, pos_hint = {"bottom" : 1})
             nameInput = TextInput(text = f"{pokemonObject.name}", background_normal="", background_color=(1, 1, 1, 0.5), size_hint_x = 0.6)
