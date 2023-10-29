@@ -90,7 +90,7 @@ class TrainerScreen(NuzlockeScreen):
             nameLevelBox.add_widget(levelInput)
 
             imageBox.add_widget(pokemonImage)
-            #imageBox.add_widget(nameLevelBox)
+            imageBox.add_widget(nameLevelBox)
             pokemonBox.add_widget(imageBox)
 
             itemAbilityBox.add_widget(abilityInput)
