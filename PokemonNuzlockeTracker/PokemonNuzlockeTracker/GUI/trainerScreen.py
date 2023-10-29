@@ -13,11 +13,11 @@ class TrainerScreen(NuzlockeScreen):
     def __init__(self, screenName, **kwargs):
         super(TrainerScreen, self).__init__(screenName = screenName, **kwargs)
         #spinner to select trainer
-        self.trainerSpinner = Spinner(text = "select Trainer", values = "New Trainer", size_hint_y = 0.08)
+        self.trainerSpinner = Spinner(text = "select Trainer", values = "New Trainer", size_hint_y = 0.04)
         self.trainerSpinner.bind(text = self.showTrainer)
         self.trainerSpinner.background_color = gm.opaque
         #box that contains all pokemon from trainer
-        self.trainerBox = BoxLayout(size_hint_y = 0.67, orientation = "vertical")
+        self.trainerBox = BoxLayout(size_hint_y = 0.71, orientation = "vertical")
         self.spriteFolder = os.path.join(os.path.dirname(os.getcwd()), "images", "sprites", "pokemon")
         self.layout.add_widget(self.trainerSpinner)
         self.layout.add_widget(self.trainerBox)
