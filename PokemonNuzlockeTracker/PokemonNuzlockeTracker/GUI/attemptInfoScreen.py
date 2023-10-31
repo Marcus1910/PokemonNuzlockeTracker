@@ -4,18 +4,17 @@ from kivy.uix.label import Label
 
 class AttemptInfoScreen(NuzlockeScreen):
     def __init__(self, screenName, **kwargs):
-        super(AttemptInfoScreen, self).__init__(screenName = screenName, **kwargs)
+        super().__init__(screenName = screenName, **kwargs)
 
-        
-        self.areaLabel = Label(text = "gathering data", color = (0, 0, 0, 1), size_hint_y = 0.125)
-        self.badgeLabel = Label(text = "gathering data", color = (0, 0, 0, 1), size_hint_y = 0.175)
+        self.areaLabel = Label(text = "gathering data", color = self.standardColor, size_hint_y = 0.125)
+        self.badgeLabel = Label(text = "gathering data", color = self.standardColor, size_hint_y = 0.175)
 
         self.pcBox = BoxLayout(orientation= "vertical", size_hint_y = 0.25)
-        pcLabel = Label(text = "Pokemon still available Placeholder", color = (0, 0, 0, 1))
+        pcLabel = Label(text = "Pokemon still available Placeholder", color = self.standardColor)
         self.pcBox.add_widget(pcLabel)
 
         self.graveBox = BoxLayout(orientation = "vertical", size_hint_y = 0.25)
-        graveLabel = Label(text = "Fainted pokemon placeholder", color = (0, 0, 0, 1))
+        graveLabel = Label(text = "Fainted pokemon placeholder", color = self.standardColor)
         self.graveBox.add_widget(graveLabel)
 
         self.layout.add_widget(self.areaLabel)

@@ -8,20 +8,18 @@ from kivy.uix.button import Button
 from kivy.uix.spinner import Spinner
 
 import games as gm
+from backgroundScreen import BackgroundScreen
 import os
 
 
-class SelectGameScreen(Screen):
+
+class SelectGameScreen(BackgroundScreen):
     def __init__(self, **kwargs):
-        super(SelectGameScreen, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         # pathToImage = os.path.join(os.path.dirname(os.getcwd()), "images", "bg.jpg")
         # print(pathToImage)
         self.game = None
         self.attempt = None
-
-        bgImage = Image(source = os.path.join(os.path.dirname(os.getcwd()), "images", "background.jpg"))
-        bgImage.size = Window.size
-        bgImage.pos = self.pos
         
         layout = BoxLayout(orientation= "vertical", spacing = 10, padding = 10)
         layout.size = Window.size
@@ -63,7 +61,6 @@ class SelectGameScreen(Screen):
         layout.add_widget(attemptInfo)
         layout.add_widget(continueBox)
 
-        self.add_widget(bgImage)
         self.add_widget(layout)
 
     def gameChanged(self, instance, game:str):

@@ -3,28 +3,25 @@ from kivy.uix.screenmanager import Screen, SlideTransition
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.uix.label import Label
-
 from kivy.uix.spinner import Spinner
-from kivy.uix.effectwidget import EffectWidget
+
 
 from transparentButton import TransparentButton
+from backgroundScreen import BackgroundScreen
 import games as gm
 
 import os
 
-class NuzlockeScreen(Screen):
-    """adds the name of the screen at the top, add self.layout which is a boxLayout. Can also add background for all screens except first screen, total of 0.25 size_hint_y"""
+class NuzlockeScreen(BackgroundScreen):
+    """adds the name of the screen at the top, add self.layout which is a boxLayout. Can also add background for all screens except first screen, total of 0.2 size_hint_y"""
     def __init__(self, screenName, **kwargs):
-        super(NuzlockeScreen, self).__init__(**kwargs)
-
+        super().__init__(**kwargs)
+        self.standardColor = gm.standardColor
         self.entered = False
-        bgImage = Image(source = os.path.join(os.path.dirname(os.getcwd()), "images", "background.jpg"))
-        bgImage.size = Window.size
-        bgImage.pos = self.pos
 
         self.layout = BoxLayout(orientation= "vertical")
         self.screenBox = BoxLayout(orientation = "vertical", size_hint_y = 0.04)
-        screenLabel = Label(text = screenName, color = (0, 0, 0, 1))
+        screenLabel = Label(text = screenName, color = self.standardColor)
         self.screenBox.add_widget(screenLabel)
 
         self.areaSpinner = Spinner(text = "choose an area", values = ["new Area"], size_hint_y = 0.04)
@@ -34,10 +31,11 @@ class NuzlockeScreen(Screen):
         self.layout.add_widget(self.screenBox)
         self.layout.add_widget(self.areaSpinner)
 
-        self.add_widget(bgImage)
+
         self.add_widget(self.layout)
 
     def on_pre_enter(self):
+        """adjusts areaSpinner text to area currently selected"""
         self.areaSpinner.values = [area.name for area in self.manager.areaList]
         if self.manager.currentArea == None:
             return 0

@@ -4,6 +4,7 @@ from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import Image
 from kivy.core.window import Window
+from kivy.config import Config
 
 import games as gm
 from windowmanager import WindowManager
@@ -14,6 +15,7 @@ from nuzlockeScreen import NuzlockeScreen
 
 import os
 import time
+import sys
 
 #define different screens
 
@@ -22,11 +24,11 @@ import time
 
 class ItemScreen(NuzlockeScreen):
     def __init__(self, screenName, **kwargs):
-        super(ItemScreen, self).__init__(screenName = screenName, **kwargs)
+        super().__init__(screenName = screenName, **kwargs)
 
 class EncounterScreen(NuzlockeScreen):
     def __init__(self, screenName, **kwargs):
-        super(EncounterScreen, self).__init__(screenName = screenName, **kwargs)
+        super().__init__(screenName = screenName, **kwargs)
 
 
 
@@ -34,6 +36,9 @@ class EncounterScreen(NuzlockeScreen):
 class SelectGame(App):
 
     def build(self):
+        if sys.platform.startswith("win32"):
+            Window.size = (390, 780)
+
         sm = WindowManager()
         selectGameScreen = SelectGameScreen(name = "selectGameScreen")
         

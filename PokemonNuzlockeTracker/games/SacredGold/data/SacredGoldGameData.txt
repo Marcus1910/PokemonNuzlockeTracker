@@ -73,7 +73,26 @@
     "_name": "Morty",
     "_trainerType": null,
     "_gender": null,
-    "_pokemon": []
+    "_pokemon": [
+     {
+      "_name": "Alakazam",
+      "_level": 25,
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_name": "Machamp",
+      "_level": 50,
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     }
+    ]
    }
   },
   "_items": {

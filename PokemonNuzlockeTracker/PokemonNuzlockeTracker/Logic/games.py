@@ -10,6 +10,11 @@ import os
 txtfile = "trainerData.txt"
 #change to settings
 opaque = (1, 1, 1, 0.6)
+standardColor = (1, 1, 1, 1)
+red = (1, 0, 0, 1)
+blue = (0, 0, 1, 1) 
+green = (0, 1, 0, 1)
+
 
 class MainGame():
     errorName = "error something went wrong reading from the json file" # TODO settings.py

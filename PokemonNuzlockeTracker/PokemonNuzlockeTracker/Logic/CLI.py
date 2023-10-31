@@ -18,10 +18,10 @@ class CLI():
     # listAreas[0].encounteredPokemon["Geodude"] = geodude
 
    #  larry = Trainer("Larry"
-   squirtle = TrainerPokemon("squirtle", 25)
-   charmander = TrainerPokemon("Charmander", 50)
-   # listAreas[0].trainers["Larry"].pokemon = squirtle
-   # listAreas[0].trainers["Larry"].pokemon = charmander
+   squirtle = TrainerPokemon("alakazam", 25)
+   charmander = TrainerPokemon("machamp", 50)
+   # listAreas[0].trainers["Morty"].pokemon = squirtle
+   # listAreas[0].trainers["Morty"].pokemon = charmander
 
    #  for trainer in trainers.values():
    #     print(trainer)
