@@ -10,6 +10,7 @@ from kivy.uix.spinner import Spinner
 import games as gm
 from backgroundScreen import BackgroundScreen
 import os
+from loggerConfig import logger
 
 
 
@@ -53,7 +54,6 @@ class SelectGameScreen(BackgroundScreen):
         self.continueButton.background_color = gm.opaque
         self.continueButton.disabled = True
 
-
         continueBox.add_widget(self.continueButton)
         
         layout.add_widget(gameSelection)
@@ -71,13 +71,13 @@ class SelectGameScreen(BackgroundScreen):
         self.retrieveSaveFile(game)
     
     def retrieveSaveFile(self, game):
+        """updates save file spinner"""
         self.attemptSpinner.values = gm.getSaveFiles(game)
         self.attemptSpinner.text = "select the attempt"
-        
-
         self.attemptSpinner.disabled = False
 
     def attemptSelected(self, instance, attempt):
+        """verifies the attempt selected and disables continuebutton"""
         if self.attemptSpinner.text == "select the attempt":
             return
         self.continueButton.disabled = False
@@ -85,9 +85,11 @@ class SelectGameScreen(BackgroundScreen):
         self.continueButton.text = f"{self.game}: {self.attempt}"
 
     def startAttempt(self, instance):
+        """create Game object and give it to windowManager"""
         #create Game Object, pass to new screen
         self.manager.attempt = self.attempt
         self.manager.gameObject = gm.MainGame(self.game, self.attempt)
+        logger.info(f"loading {self.game} {self.attempt}")
         # print(self.manager.gameObject)
         # GameObject = self.manager.gameObject.retrieveGameData()
         # #list = GameObject.

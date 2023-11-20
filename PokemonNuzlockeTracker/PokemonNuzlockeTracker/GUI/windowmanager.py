@@ -1,4 +1,5 @@
 from kivy.uix.screenmanager import ScreenManager
+from loggerConfig import logger
 
 class WindowManager(ScreenManager):
     attempt = None
@@ -11,6 +12,8 @@ class WindowManager(ScreenManager):
     _screenNumber= 0
     screenList = []
 
+    
+
     @property
     def gameObject(self):
         return self._gameObject
@@ -18,7 +21,6 @@ class WindowManager(ScreenManager):
     @gameObject.setter
     def gameObject(self, gameObject):
         self._gameObject = gameObject
-        print("gathering data")
         self.areaList = self._gameObject.retrieveGameData()
     
     @property
@@ -36,11 +38,18 @@ class WindowManager(ScreenManager):
     
     @currentArea.setter
     def currentArea(self, areaName):
-        """function expects a name, creates an AreaObject from that name"""
+        """function expects a name, retrieves the AreaObject from the corresponding name"""
         for area in self.areaList:
             if area.name == areaName:
                 self._currentArea = area
                 break
         else:
-            print(f"Area {areaName} not found")
-        print(self._currentArea.name)
+            logger.error(f"{areaName} could not be loaded, not found in areaList")
+        logger.debug(f"{self._currentArea.name} Object loaded in manager")
+    
+    def saveCurrentArea(self):
+        """overwrite area object in areaList"""
+        pass
+
+    def updateCurrentArea(self):
+        logger.info(f"updating area")

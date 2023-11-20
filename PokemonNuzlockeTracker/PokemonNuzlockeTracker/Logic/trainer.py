@@ -1,3 +1,4 @@
+from loggerConfig import logicLogger as logger
 
 class Trainer():
     defaultDefeated = False
@@ -49,13 +50,74 @@ class Trainer():
         """expects a pokemon object"""
         if len(self._pokemon) < 6:
             self._pokemon.append(pokemon)
+            logger.debug(f"added {pokemon} to {self._name}")
         else:
-            print(f"{self._name} already has 6 pokemon")
+            logger.error(f"{self._name} already has 6 pokemon")
+        
+    def editPokemon(self, pokemonObject, index = None, newPokemonName = None):
+        """Edit pokemon Object and changes name if specified, returns 1 on success and 0 on failure"""
+        pokemonName = pokemonObject.name
+        pokemonAmount, pokemonIndexes = self.getPokemonIndex(pokemonName)
+        #pokemon exists, change pokemon Objects
+        if pokemonAmount == 0:
+            logger.error(f"{self._name} does not have a Pokemon named: {pokemonName}")
+            return 0
+        #exactly one
+        if pokemonAmount == 1:
+            if newPokemonName != None:
+                pokemonObject.name = newPokemonName
+            popIndex = pokemonIndexes[0]
+        #more than one pokemon
+        if pokemonAmount > 1:
+            if index == None:
+                logger.error(f"More than 1 pokemon and index not specified")
+                return 0
+            if index in pokemonIndexes:
+                popIndex = index
+            else:
+                logger.error(f"Index: {index} specified is not correct")
+
+        #pop object from list
+        self._pokemon.pop(popIndex)
+        #insert new Object
+        self._pokemon.insert(popIndex, pokemonObject)
+        infoString = f"succesfully changed {pokemonName}"
+        if index != None: infoString += f" to {newPokemonName}"
+        logger.info(infoString)
+        return 1
     
-    def removePokemon(self, pokemon):
-        #TODO figure out how to remove specific pokemon
-        self._pokemon.remove(pokemon)
+    def removePokemon(self, pokemonName, index=None):
+        """Removes Pokemon from trainer based on index or name. Returns 1 on success, 0 on failure"""
+        pokemonAmount, pokemonIndexes = self.getPokemonIndex(pokemonName)
     
+        if pokemonAmount == 0:
+            logger.error(f"{self._name} does not have a Pokemon named: {pokemonName}")
+            return 0
+        # Only one Pokemon with the given name
+        if pokemonAmount == 1:
+            pokemonIndex = pokemonIndexes[0]
+        # More than one Pokemon with the given name
+        elif pokemonAmount > 1:
+            if index is None:
+                logger.error(f"{self._name} has more than one Pokemon named {pokemonName}, please specify an index")
+                return 0
+    
+            if index in pokemonIndexes:
+                pokemonIndex = index
+            else:
+                logger.error(f"Specified index {index} does not match any Pokemon with name: {pokemonName}")
+                return 0
+
+        # Remove the Pokemon from the trainer
+        self._pokemon.pop(pokemonIndex)
+        return 1
+    
+    def getPokemonIndex(self, pokemonName):
+        """Checks if the Pokemon exists for the trainer and returns Pokemon amount and indexes"""
+        pokemonIndexes = [i for i, pokemon in enumerate(self._pokemon) if pokemon.name == pokemonName]
+        pokemonAmount = len(pokemonIndexes)
+        return pokemonAmount, pokemonIndexes
+
     @property
     def defeated(self):
         return self._defeated

@@ -5,8 +5,8 @@
  {
   "_name": "New Bark Town",
   "_trainers": {
-   "Larry": {
-    "_name": "Larry",
+   "JonkoMon": {
+    "_name": "JonkoMon",
     "_pokemon": [
      {
       "_defeated": true,
@@ -40,7 +40,12 @@
       "_level": 25,
       "_dexNo": null,
       "_gender": null,
-      "_moves": [],
+      "_moves": [
+       "Flamethrower",
+       "quick attack",
+       "Bubble",
+       "explosion"
+      ],
       "_ability": null,
       "_heldItem": null
      },

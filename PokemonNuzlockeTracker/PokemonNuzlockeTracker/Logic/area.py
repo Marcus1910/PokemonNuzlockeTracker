@@ -1,4 +1,5 @@
 import json
+from loggerConfig import logicLogger as logger
 
 class Area():
 
@@ -42,33 +43,69 @@ class Area():
     def removeEncounter(self, encounter):
         #TODO remove correct encounter
         self._encounters.remove(encounter)
-    
+
     @property
     def trainers(self):
         return self._trainers
+
+    def addTrainer(self, trainerObject):
+        """adds trainer to self._trainers dictionary, returns 1 if the trainer already exists and 0 if succesfull"""
+        if trainerObject.name in self._trainers.keys():
+            logger.error(f"{trainerObject.name} already exists")
+            return 0
+        self._trainers[trainerObject.name] = trainerObject
+        logger.debug(f"added {trainerObject.name} to trainer list of {self._name}")
+        return 1
+
+    def editTrainer(self, trainerObject, newTrainerName = None):
+        """edits the trainerObject and updates name if given, returns 1 on success and 0 on failure"""
+        #check if trainer exists before editing
+        if trainerObject.name not in self._trainers.keys():
+            logger.error(f"{trainerObject.name} is not on this area")
+            return 0
+        #trainer is in the list
+        #no new name needed so overwrite trainer object
+        if newTrainerName == None:
+            self._trainers[trainerObject.name] = trainerObject
+            logger.info(f"updated {trainerObject.name}")
+            return 1
+        #check if new name is not already used by other trainer
+        if newTrainerName in self._trainers.keys():
+            logger.error(f"this area already has a trainer named: {newTrainerName}")
+            return 0
+        
+        #remove old trainerObject to create new key value pair
+        oldTrainerObject = self._trainers.pop(trainerObject.name)
+        oldName = trainerObject.name
+        oldTrainerObject.name = newTrainerName
+        #add New trainerObject to trainers
+        self.addTrainer(oldTrainerObject)
+        logger.info(f"changed {oldName} to {newTrainerName} and updated its content")
+        return 1
+
+        
     
-    @trainers.setter
-    def trainers(self, trainer):
-        """setter expects an item object as parameter"""
-        self._trainers[trainer.name] = trainer
+    def removeTrainer(self, trainerName):
+        """removes trainerObject from trainer dict, return 1 on succes, 0 on failure"""
+        if trainerName in self._trainers.keys():
+            self._trainers.pop(trainerName)
+            logger.info(f"removed {trainerName} from {self._name}")
+            return 1
+        logger.error(f"{trainerName} does not exist and cannot be removed")
+        return 0
 
     @property
     def items(self):
         return self._items
-
-    @items.setter
-    def items(self, item):
-        """setter expects an item object as parameter"""
-        self._items[item.name] = item
     
     def removeItem(self, item):
         for items in self._items:
             if item.name == items.name:
-                print("needs to be deleted")
                 self._items.remove(item)
+                logger.debug(f"removed {item}")
                 break
         else:
-            print("item does not exist")
+            logger.error(f"{item} does not exist")
 
     @property
     def accessible(self):
@@ -77,7 +114,7 @@ class Area():
     @accessible.setter
     def accessible(self, accessible):
         if self._accessible < accessible:
-            print(f"current gym badges required are {self._accessible}, changed it to {accessible}")
+            logger.info(f"current gym badges required are {self._accessible}, changed it to {accessible}")
         else:
             self._accessible = accessible
     

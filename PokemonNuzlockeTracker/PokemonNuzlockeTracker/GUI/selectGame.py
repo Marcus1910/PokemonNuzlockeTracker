@@ -12,31 +12,18 @@ from selectGameScreen import SelectGameScreen
 from trainerScreen import TrainerScreen
 from attemptInfoScreen import AttemptInfoScreen
 from nuzlockeScreen import NuzlockeScreen
+from encounterScreen import EncounterScreen
+from itemScreen import ItemScreen
 
 import os
 import time
 import sys
-
-#define different screens
-
-
-
-
-class ItemScreen(NuzlockeScreen):
-    def __init__(self, screenName, **kwargs):
-        super().__init__(screenName = screenName, **kwargs)
-
-class EncounterScreen(NuzlockeScreen):
-    def __init__(self, screenName, **kwargs):
-        super().__init__(screenName = screenName, **kwargs)
-
-
-
+from loggerConfig import logger
 
 class SelectGame(App):
-
     def build(self):
         if sys.platform.startswith("win32"):
+            logger.info("detected windows")
             Window.size = (390, 780)
 
         sm = WindowManager()

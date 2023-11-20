@@ -3,6 +3,7 @@ from trainer import Trainer
 from trainerPokemon import TrainerPokemon, EncounteredPokemon
 from item import Item
 from readFormattedData import readFormattedData
+from loggerConfig import logicLogger as logger
 
 import json
 import os
@@ -83,13 +84,12 @@ class MainGame():
                     self.readData = json.load(file)
                     self.addGameData()
                 except json.JSONDecodeError as e:
-                    print(f"json failed to load so file is empty or invalid, reloading from correctdata, {e}")
+                    logger.error(f"json failed to load so file is empty or invalid, reloading from correctdata, {e}")
                     #change datafile name so no progress is lost
                     self.retrieveEncounterData()
         except FileNotFoundError:
-            print(f"there is no GameData for {self.gameName}, collecting it from {self.gameName}CorrectData.txt")
+            logger.error(f"there is no GameData for {self.gameName}, collecting it from {self.gameName}CorrectData.txt",exc_info = True)
             self.retrieveEncounterData()
-
 
     def retrieveSaveFile(self):
         try:
@@ -100,9 +100,9 @@ class MainGame():
                 except json.JSONDecodeError as e:
                     self.saveFileError = True
                     #TODO change self.saveFileError to a different file because the original cannot be read
-                    print(f"Something went wrong, could not load saveFile, {e}")
+                    logger.error(f"Something went wrong, could not load saveFile", exc_info = True)
         except FileNotFoundError:
-            print(f"Savefile, {self.saveFile} could not be found")
+            logger.error(f"Savefile, {self.saveFile} could not be found", exc_info = True)
             self.saveFileError = True
 
     def retrieveEncounterData(self):
@@ -135,31 +135,30 @@ class MainGame():
                 for pokemonJson in pokemonList:
                     encounterPokemon = EncounteredPokemon(self.errorName)
                     encounterPokemon = self.getFromJSON(encounterPokemon, pokemonJson)
-                    #print(f"FINISHED POKEMON: {encounterPokemon}")
+                    logger.debug(f"FINISHED POKEMON: {encounterPokemon}")
                     encounterList.append(encounterPokemon)
                 wildArea._encounters.append([terrainName, encounterList])
-                #print(wildArea.encounters)
                 encounterList = [terrainName, pokemonList]
             
             """retrieve all area attributes"""
             items = area["_items"]
-            #print("STARTING ITEMS")
+            logger.debug("STARTING ITEMS")
             for itemName, itemJson in items.items():
                 areaItem = Item(itemName)
                 areaItem = self.getFromJSON(areaItem, itemJson)
-                #print(f"FINISHED ITEM: {itemName}")
+                logger.debug(f"FINISHED ITEM: {itemName}")
                 wildArea.items[areaItem.name] = areaItem
-            #print("FINISHED ITEMS")
+            logger.debug("FINISHED ITEMS")
             
             """retrieve all trainer attributes"""
-            #print("STARTING TRAINERS")
+            logger.debug("STARTING TRAINERS")
             trainers = area["_trainers"]
             for trainerName, trainerJson in trainers.items():
                 #trainerName = trainer["_name"]
                 pokemonTrainer = Trainer(trainerName)
                 
                 pokemonTrainer = self.getFromJSON(pokemonTrainer, trainerJson, ["_pokemon"]) #puts json as a pokemon
-                #print(f"FINISHED TRAINER WITHOUT POKEMON ATTRIBUTES: {pokemonTrainer.name}")
+                logger.debug(f"FINISHED {pokemonTrainer.name} WITHOUT POKEMON ATTRIBUTES")
 
                 
                 """retrieve pokemon attributes"""
@@ -170,31 +169,13 @@ class MainGame():
                     trainerPokemon = self.getFromJSON(trainerPokemon, pokemonJson[number])
                     pokemonTrainer.pokemon = trainerPokemon
                 #append to area object
-                wildArea.trainers[pokemonTrainer.name] = pokemonTrainer
+                wildArea.addTrainer(pokemonTrainer)
 
             if not alreadyexists:
                 self.areaList.append(wildArea)
 
-            #print("FINISHED TRAINERS")
-            
-            #read from savefile instead
-            # print("STARTING ENCOUNTEREDPOKEMON")
-            # encounteredPokemon = area["_encounteredPokemon"]
-            # for pokemon in encounteredPokemon:
-            #     pokemonData = encounteredPokemon[pokemon]
-            #     pokemonState = pokemonData["_captureStatus"]
-            #     #if the pokemon is not actually captured, do not add it to the wildArea
-            #     if pokemonState == 0:
-            #         break
-
-            #     pokemonName = pokemonData["_name"]
-            #     pokemonLevel = pokemonData["_level"]
-            #     newPokemon = EncounteredPokemon(pokemonName, level = pokemonLevel, state = pokemonState)
-            #     newPokemon = self.getFromJSON(newPokemon, pokemonData)
-                
-            #     #append it to area object
-            #     wildArea.encounteredPokemon[pokemonName] = newPokemon
-            # print("FINISHED ENCOUNTEREDPOKEMON")
+            logger.debug("FINISHED TRAINERS")
+            logger.debug("FINISHED GAME DATA")
 
     def addSaveFileData(self, saveFileJson):
         """updates the self.arealist with the savefile"""
@@ -202,7 +183,7 @@ class MainGame():
         try:
             self.badge = saveFileJson.pop(0)["_badge"]
         except KeyError as e:
-            print("badges not found, defaulting to 0") 
+            logger.debug("badges not found, defaulting to 0")
 
         for area in saveFileJson:
             areaName = area["_name"]
@@ -244,18 +225,14 @@ class MainGame():
                             areaObject.items[item].grabbed = False
 
                     #add encounters caught on route
-
-
             break
 
 
     def checkVarExistsJsonDump(self, attribute, json, value = "n/a"):
         """checks whether a variable exists in a json else returns value or defaults to n/a"""
         try:
-            #print(attribute)#, json[attribute])
             x = json[attribute]
         except KeyError as e:
-            #print(f"adding n/a as default, {e}")
             x = value
         return x
 
@@ -314,7 +291,7 @@ def checkForSaveFileDirectory(gameFolder):
     """checks if the directory existst otherwise creates it, returns 1 when succesful else 0"""
     #if savefile directory doesn't exists
     if not os.path.isdir(gameFolder):
-        print(f"creating new directory {gameFolder}")
+        logger.info(f"creating new directory {gameFolder} - TODO")
         #os.mkdir(gameFolder)
 
 def getSaveFiles(gameName):

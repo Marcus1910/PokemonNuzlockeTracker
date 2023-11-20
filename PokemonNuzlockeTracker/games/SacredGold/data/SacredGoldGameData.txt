@@ -2,8 +2,33 @@
  {
   "_name": "New Bark Town",
   "_trainers": {
-   "Larry": {
-    "_name": "Larry",
+   "Morty": {
+    "_name": "Morty",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": [
+     {
+      "_name": "Alakazam",
+      "_level": 25,
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_name": "Machamp",
+      "_level": 50,
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     }
+    ]
+   },
+   "JonkoMon": {
+    "_name": "JonkoMon",
     "_trainerType": "Youngster",
     "_gender": "M",
     "_pokemon": [
@@ -36,7 +61,12 @@
       "_level": 25,
       "_dexno": null,
       "_gender": null,
-      "_moves": [],
+      "_moves": [
+       "Flamethrower",
+       "quick attack",
+       "Bubble",
+       "explosion"
+      ],
       "_ability": null,
       "_heldItem": null
      },
@@ -69,13 +99,13 @@
      }
     ]
    },
-   "Morty": {
-    "_name": "Morty",
+   "electro": {
+    "_name": "electro",
     "_trainerType": null,
     "_gender": null,
     "_pokemon": [
      {
-      "_name": "Alakazam",
+      "_name": "Electivire",
       "_level": 25,
       "_dexno": null,
       "_gender": null,
@@ -84,7 +114,7 @@
       "_heldItem": null
      },
      {
-      "_name": "Machamp",
+      "_name": "Rayquaza",
       "_level": 50,
       "_dexno": null,
       "_gender": null,
@@ -518,13 +548,7 @@
     "_pokemon": []
    }
   },
-  "_items": {
-   "Morty": {
-    "_name": "Morty",
-    "_description": null,
-    "_location": null
-   }
-  },
+  "_items": {},
   "_encounters": [
    [
     "Grass, Morning / Day",

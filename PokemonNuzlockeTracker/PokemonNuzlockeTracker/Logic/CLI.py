@@ -3,42 +3,39 @@ from trainer import Trainer
 from trainerPokemon import TrainerPokemon
 from item import Item
 from trainerPokemon import Pokemon
+from loggerConfig import logicLogger as logger
 
 class CLI():
    game = MainGame("SacredGold", 'attempt 1')
-   print(game.badge)
    listAreas = game.retrieveGameData()
    newBark = listAreas[0]
    trainers = newBark.trainers
    items = newBark.items
    encounters = newBark.encounters
+   trainer = trainers["JonkoMon"]
+   trainer.removePokemon("Air")
 
-   print(trainers["Larry"])
-    # geodude = Pokemon("Geodude", 15)
-    # listAreas[0].encounteredPokemon["Geodude"] = geodude
+   magikarp = TrainerPokemon("magikarp", 55)
 
-   #  larry = Trainer("Larry"
-   squirtle = TrainerPokemon("alakazam", 25)
-   charmander = TrainerPokemon("machamp", 50)
-   # listAreas[0].trainers["Morty"].pokemon = squirtle
-   # listAreas[0].trainers["Morty"].pokemon = charmander
+   trainer.editPokemon(magikarp, newPokemonName = "Electivire")
 
-   #  for trainer in trainers.values():
-   #     print(trainer)
-   #  berry = Item("Oran Berry", True)
-   #  chesto = Item("Chesto Berry", True)
+   # print(trainers)
+   # # newTrainer = Trainer("Gary")
+   # # squirtle = TrainerPokemon("Electivire", 25)
+   # Electro = newBark.trainers["electro"]
+   # charmander = TrainerPokemon("RayQuaza", 50)
+   # Electro.pokemon = charmander
 
-   #  listAreas[0].items["Chesto Berry"] = chesto
-   #  listAreas[0].items["Oran Berry"] = berry
-    
-    # print(listAreas[0].items)
+   # newBark.editTrainer(Electro)
+   # newTrainer.pokemon = squirtle
 
-    #     for pokemon in trainer.pokemon:
-    #         print(pokemon)
-    # for item in items.values():
-    #     print(item.name)
+   # newBark.addTrainer(newTrainer)
+   # print(trainers)
+   # newTrainer.pokemon = charmander 
+   # newBark.editTrainer(newTrainer)
+   # print(trainers)
+   # newBark.removeTrainer(newTrainer.name)
+   print(trainer)
 
-
-
-   game.writeToFile()
-    #print(items)
+   # game.writeToFile()
+   #print(items)

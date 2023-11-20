@@ -8,12 +8,14 @@ from kivy.uix.spinner import Spinner
 
 from transparentButton import TransparentButton
 from backgroundScreen import BackgroundScreen
+from loggerConfig import logger
 import games as gm
 
 import os
 
 class NuzlockeScreen(BackgroundScreen):
     """adds the name of the screen at the top, add self.layout which is a boxLayout. Can also add background for all screens except first screen, total of 0.2 size_hint_y"""
+    
     def __init__(self, screenName, **kwargs):
         super().__init__(**kwargs)
         self.standardColor = gm.standardColor
@@ -35,9 +37,10 @@ class NuzlockeScreen(BackgroundScreen):
         self.add_widget(self.layout)
 
     def on_pre_enter(self):
-        """adjusts areaSpinner text to area currently selected"""
+        """adjusts areaSpinner text to area currently selected, returns 0 if area == None"""
         self.areaSpinner.values = [area.name for area in self.manager.areaList]
         if self.manager.currentArea == None:
+            logger.debug("No area selected")
             return 0
         self.areaSpinner.text = self.manager.currentArea.name
         return 1
@@ -45,6 +48,7 @@ class NuzlockeScreen(BackgroundScreen):
     def areaChanged(self, spinner, text):
         """text is the areaName"""
         self.manager.currentArea = text
+        logger.info(f"currentArea changed to {text}")
         
 
     def on_enter(self):
@@ -52,7 +56,7 @@ class NuzlockeScreen(BackgroundScreen):
         #return if the function is already called, else create buttons. otherwise creates multiple buttons on each exit
         if self.entered:
             return
-        #create buttons to naviagte through the screens and add to layout
+        #create buttons to navigate through the screens and add to layout
         self.buttons = BoxLayout(orientation = "horizontal", size_hint_y = 0.12)
         continueButton = TransparentButton(text = "next", size_hint_x = 0.2)
         continueButton.bind(on_press = self.nextScreen)
