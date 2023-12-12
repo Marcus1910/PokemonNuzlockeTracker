@@ -99,8 +99,8 @@
      }
     ]
    },
-   "electro": {
-    "_name": "electro",
+   "Larry": {
+    "_name": "Larry",
     "_trainerType": null,
     "_gender": null,
     "_pokemon": [

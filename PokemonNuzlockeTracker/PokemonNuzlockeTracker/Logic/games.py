@@ -142,16 +142,16 @@ class MainGame():
             
             """retrieve all area attributes"""
             items = area["_items"]
-            logger.debug("STARTING ITEMS")
+            logger.debug(f"STARTING {areaName} ITEMS")
             for itemName, itemJson in items.items():
                 areaItem = Item(itemName)
                 areaItem = self.getFromJSON(areaItem, itemJson)
                 logger.debug(f"FINISHED ITEM: {itemName}")
                 wildArea.items[areaItem.name] = areaItem
-            logger.debug("FINISHED ITEMS")
+            logger.debug(f"FINISHED {areaName} ITEMS")
             
             """retrieve all trainer attributes"""
-            logger.debug("STARTING TRAINERS")
+            logger.debug(f"STARTING {areaName} TRAINERS")
             trainers = area["_trainers"]
             for trainerName, trainerJson in trainers.items():
                 #trainerName = trainer["_name"]
@@ -169,12 +169,13 @@ class MainGame():
                     trainerPokemon = self.getFromJSON(trainerPokemon, pokemonJson[number])
                     pokemonTrainer.pokemon = trainerPokemon
                 #append to area object
+                logger.debug(f"added {trainerName} to {wildArea.name}")
                 wildArea.addTrainer(pokemonTrainer)
 
             if not alreadyexists:
                 self.areaList.append(wildArea)
 
-            logger.debug("FINISHED TRAINERS")
+            logger.debug(f"FINISHED {areaName} TRAINERS")
             logger.debug("FINISHED GAME DATA")
 
     def addSaveFileData(self, saveFileJson):
