@@ -1,6 +1,7 @@
 from nuzlockeScreen import NuzlockeScreen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
+from loggerConfig import logger
 
 class EncounterScreen(NuzlockeScreen):
     def __init__(self, screenName, **kwargs):
@@ -30,10 +31,18 @@ class EncounterScreen(NuzlockeScreen):
             button = Button(text = encounterType[0], size_hint_x = 0.2)
             button.bind(on_press = lambda instance, encounterType = encounterType: self.showEncounterType(encounterType))
             self.areaSelectionBox.add_widget(button)
-    
+        #add new encountertype button
+        button = Button(text = "New encounterType", size_hint_x = 0.2)
+        button.bind(on_press = self.addNewEncounterType)
+        self.areaSelectionBox.add_widget(button)
+        
+    def addNewEncounterType(self, args):
+        logger.debug(f"adding new encounterType, TODO")
+
     def showEncounterType(self, encounterType):
         for encounter in encounterType[1]:
             print(encounter.name)
+        print()
         
     def clearLayout(self):
         self.areaSelectionBox.clear_widgets()

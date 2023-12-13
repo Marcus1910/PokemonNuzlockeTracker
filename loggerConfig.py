@@ -2,7 +2,7 @@ import logging
 
 # Get the logger for your application
 logger = logging.getLogger('PokemonNuzlockeTracker')
-logicLogger = logging.getLogger('PokemonNuzlockeTracker')
+logicLogger = logging.getLogger('PokemonNuzlockeTracker logic')
 
 logger.setLevel(logging.DEBUG)
 logicLogger.setLevel(logging.INFO)

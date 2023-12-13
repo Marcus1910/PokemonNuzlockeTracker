@@ -191,7 +191,7 @@ class TrainerScreen(NuzlockeScreen):
         self.trainerBox.add_widget(pokemonChoice)
         #simulate first button press for first pokemon
         try:
-            self.showDetailedPokemon(self.currentTrainerObject.pokemon[0])
+            self.showDetailedPokemon(0, self.currentTrainerObject.pokemon[0])
         except IndexError as e:
             logger.debug(f"{self.currentTrainerObject.name} has no pokemon, not showing first pokemon")
     

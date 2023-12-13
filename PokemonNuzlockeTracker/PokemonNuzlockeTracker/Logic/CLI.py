@@ -12,7 +12,7 @@ class CLI():
    trainers = newBark.trainers
    items = newBark.items
    encounters = newBark.encounters
-   trainer = trainers["JonkoMon"]
+   trainer = trainers["Larry"]
    trainer.removePokemon("Air")
 
    magikarp = TrainerPokemon("magikarp", 55)

@@ -27,8 +27,8 @@
      }
     ]
    },
-   "JonkoMon": {
-    "_name": "JonkoMon",
+   "Joey": {
+    "_name": "Joey",
     "_trainerType": "Youngster",
     "_gender": "M",
     "_pokemon": [

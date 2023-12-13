@@ -20,7 +20,7 @@ if __name__ == "__main__":
     changePath()
     parser = argparse.ArgumentParser(description = "Nuzlocke Tracker")
     parser.add_argument("--cli", action = "store_true", help = "Run in CLI mode", default = False)
-    args= parser.parse_args(sys.argv[2:])
+    args = parser.parse_args(sys.argv[2:])
 
     #editor doesn't recognize it, but it is still a valid import because of the path.append(GUIPath)
     if args.cli:

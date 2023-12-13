@@ -92,20 +92,22 @@ class DetailedPokemonBox(BoxLayout):
         if self.checkString(name):
             print("empty name")
             return
+        
+        #TODO rework saving
+        
+        # level = self.levelInput.text
+        # #create own pokemonObject
+        # if pokemonObject == None:
+        #     pokemonObject = TrainerPokemon(name, level)
+        # #decorate pokemonObject before saving it
+        # pokemonObject.ability = self.abilityInput.text if not self.checkString(self.abilityInput.text) else None
+        # print(f"bye bye: {pokemonObject}")
 
-        level = self.levelInput.text
-        #create own pokemonObject
-        if pokemonObject == None:
-            pokemonObject = TrainerPokemon(name, level)
-        #decorate pokemonObject before saving it
-        pokemonObject.ability = self.abilityInput.text if not self.checkString(self.abilityInput.text) else None
-        print(f"bye bye: {pokemonObject}")
-
-        if pokemonObject == None:
-            self.trainerObject.editPokemon(pokemonObject)
-        else:
-            self.trainerObject.pokemon = pokemonObject
-        self.trainerScreen.update()
+        # if pokemonObject == None:
+        #     self.trainerObject.editPokemon(pokemonObject)
+        # else:
+        #     self.trainerObject.pokemon = pokemonObject
+        # self.trainerScreen.update()
         
     def checkString(self, text):
         """function that checks whether the given text consists of only whitespace or is empty, 1 if True"""
