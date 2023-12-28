@@ -117,7 +117,6 @@ class TrainerPokemon(Pokemon):
         childStr = f", defeated: {self._defeated}"
         return parentStr + childStr
     
-
 class EncounteredPokemon(Pokemon):
     defaultCaptureStatus = 0
     

@@ -37,7 +37,7 @@ class TrainerScreen(NuzlockeScreen):
         self.trainerBox = BoxLayout(size_hint_y = 0.71, orientation = "vertical")
 
         #used for detailed view
-        self.detailedPokemonBox = DetailedPokemonBox(screen = self, orientation = "horizontal", size_hint_y = 0.51)
+        self.detailedPokemonBox = DetailedPokemonBox(screen = self, orientation = "vertical", size_hint_y = 0.51)
 
         self.viewBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.05, padding = (0, 0, 0, 10))
         self.viewLabel = Label(text = "view mode: ", size_hint_x = 0.15, padding = (0, 0, 50, 0))

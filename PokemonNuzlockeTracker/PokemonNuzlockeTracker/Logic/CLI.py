@@ -8,16 +8,23 @@ from loggerConfig import logicLogger as logger
 class CLI():
    game = MainGame("SacredGold", 'attempt 1')
    listAreas = game.retrieveGameData()
-   newBark = listAreas[0]
-   trainers = newBark.trainers
-   items = newBark.items
-   encounters = newBark.encounters
-   trainer = trainers["Larry"]
-   trainer.removePokemon("Air")
+   encounterAmount = 0
+   for area in listAreas:
+      for type in area.encounters:
+         for pokemon in type[1]:
+            print(pokemon)
+            pokemon.levels = pokemon.level
+   game.writeToFile()
+   # newBark = listAreas[0]
+   # trainers = newBark.trainers
+   # items = newBark.items
+   # encounters = newBark.encounters
+   # trainer = trainers["Larry"]
+   # trainer.removePokemon("Air")
 
-   magikarp = TrainerPokemon("magikarp", 55)
+   # magikarp = TrainerPokemon("magikarp", 55)
 
-   trainer.editPokemon(magikarp, newPokemonName = "Electivire")
+   # trainer.editPokemon(magikarp, newPokemonName = "Electivire")
 
    # print(trainers)
    # # newTrainer = Trainer("Gary")
@@ -35,7 +42,7 @@ class CLI():
    # newBark.editTrainer(newTrainer)
    # print(trainers)
    # newBark.removeTrainer(newTrainer.name)
-   print(trainer)
+   # print(trainer)
 
    # game.writeToFile()
    #print(items)

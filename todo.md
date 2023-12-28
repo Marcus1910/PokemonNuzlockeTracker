@@ -8,16 +8,22 @@ able to create new games
 ~~read itemlist and can pickup items~~
 How double battles?
 
+export/import save data
+add base stats, possible moves/abilities to base pokemon
 update settings.py, also use settings.py for certain variables
 export Trainer to showdown format
 export route trainers to showdown format
 export all trainers to showdown format
-optionmenu for single trainer, route, all
+    optionmenu for single trainer, route, all
 add / delete routes
 
 
 ********************************Kivy*************************
 implement logic
+implement swiping
+add Exit game button
+TrainerScreen global view, picture buttons -> defeat pokemon
+Trainerscreen add images to button to change detailed view
 
 
 
@@ -57,3 +63,5 @@ popup message, x removed
 generate catchable pokemon by reading old savestates, only for blind nuzlockes. settings option
 add non-canon pokemon with name and use own sprite or ?.png
 sort route list option, own choice
+When selecting route, automatically center route chosen when choosing other route
+When selecting areatype for encounters, use scrollview to telepoprt to correct position and have all pokmeon visible in a large layout
