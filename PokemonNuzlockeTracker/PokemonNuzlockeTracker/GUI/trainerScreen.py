@@ -33,11 +33,11 @@ class TrainerScreen(NuzlockeScreen):
         self.editTrainerButton.background_color = gm.opaque
         self.editTrainerButton.bind(on_press = self.editTrainer) 
 
-        #box that contains all pokemon from trainer
+        #box that contains global view, all pokemon from trainer
         self.trainerBox = BoxLayout(size_hint_y = 0.71, orientation = "vertical")
 
         #used for detailed view
-        self.detailedPokemonBox = DetailedPokemonBox(screen = self, orientation = "vertical", size_hint_y = 0.51)
+        self.detailedPokemonBox = DetailedPokemonBox(screen = self, orientation = "vertical", size_hint_y = 0.71)
 
         self.viewBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.05, padding = (0, 0, 0, 10))
         self.viewLabel = Label(text = "view mode: ", size_hint_x = 0.15, padding = (0, 0, 50, 0))
@@ -96,6 +96,7 @@ class TrainerScreen(NuzlockeScreen):
         if selectedTrainer == "New Trainer":
             #create new Trainer Object using the editTrainerPopup bound to the trainerBox
             logger.debug("Create new Trainer - TODO")
+            self.manager.saveTrainer()#testing if can save on apk
             return
         try:
             self.currentTrainerObject = self.trainers[selectedTrainer]
@@ -128,6 +129,7 @@ class TrainerScreen(NuzlockeScreen):
             logger.error(f"{view} is not a correct view")
   
     def clearTrainerBox(self):
+        """removes self.detailedPOkemonBox or pokemonBox from self.trainerBox"""
         self.trainerBox.clear_widgets()
         logger.debug(f"clearing trainerBox")
 
@@ -165,42 +167,10 @@ class TrainerScreen(NuzlockeScreen):
         
             self.trainerBox.add_widget(pokemonBox)
         logger.debug("created global view")
-        
-    def showDetailedView(self):
-        """creates buttons for detailed view"""
-        pokemonChoice = BoxLayout(orientation = "horizontal", size_hint_y = 0.2, pos_hint = {"bottom": 1})
-        pokemonAmount = len(self.currentTrainerObject.pokemon)
-
-        for number in range(6):
-            #default text settings
-            buttonText = "add new\nPokemon"
-            pokemonObject = None
-
-            if number < pokemonAmount:
-                #add pokemon details to buttons if there is a pokemon
-                pokemonObject = self.currentTrainerObject.pokemon[number]
-                buttonText = pokemonObject.name
-
-            pokemonButton = Button(text = buttonText)
-            #pokemonObject is None or a pokemon object and gets given to showDetailedPokemon
-            pokemonButton.bind(on_press = lambda instance, pokemonObject = pokemonObject: self.showDetailedPokemon(number, pokemonObject))
-
-            pokemonChoice.add_widget(pokemonButton)
-            
-        self.trainerBox.add_widget(self.detailedPokemonBox)
-        self.trainerBox.add_widget(pokemonChoice)
-        #simulate first button press for first pokemon
-        try:
-            self.showDetailedPokemon(0, self.currentTrainerObject.pokemon[0])
-        except IndexError as e:
-            logger.debug(f"{self.currentTrainerObject.name} has no pokemon, not showing first pokemon")
     
-    def showDetailedPokemon(self, listIndex, pokemonObject = None):
-        """creates detailedPokemonBox and fills it if the pokemonObject is not None"""
-        self.detailedPokemonBox.clearLayout()
+    def showDetailedView(self):
         self.detailedPokemonBox.buildLayout(self.currentTrainerObject)
-        if pokemonObject != None:
-            self.detailedPokemonBox.fillLayout(pokemonObject)
+        self.trainerBox.add_widget(self.detailedPokemonBox)
 
     def editTrainer(self, *args):
         """changes"""
@@ -210,8 +180,6 @@ class TrainerScreen(NuzlockeScreen):
         super().on_leave()
         logger.debug("saving pokemon")
         self.detailedPokemonBox.savePokemon()
-    
-    def update(self):
-        self.manager.updateCurrentArea()
+
 
 

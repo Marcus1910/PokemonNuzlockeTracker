@@ -81,7 +81,7 @@ class Trainer():
         self._pokemon.pop(popIndex)
         #insert new Object
         self._pokemon.insert(popIndex, pokemonObject)
-        infoString = f"succesfully changed {pokemonName}"
+        infoString = f"succesfully updated {pokemonName}"
         if index != None: infoString += f" to {newPokemonName}"
         logger.info(infoString)
         return 1

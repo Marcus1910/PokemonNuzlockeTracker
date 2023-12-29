@@ -106,7 +106,7 @@
     "_pokemon": [
      {
       "_name": "Electivire",
-      "_level": 25,
+      "_level": "25",
       "_dexno": null,
       "_gender": null,
       "_moves": [],
@@ -115,7 +115,34 @@
      },
      {
       "_name": "Rayquaza",
-      "_level": 50,
+      "_level": "50",
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_name": "Electivire",
+      "_level": "25",
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_name": "Charizard",
+      "_level": "88",
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": "Drought",
+      "_heldItem": null
+     },
+     {
+      "_name": "Magikarp",
+      "_level": "100",
       "_dexno": null,
       "_gender": null,
       "_moves": [],

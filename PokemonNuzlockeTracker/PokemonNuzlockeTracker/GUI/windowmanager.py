@@ -1,5 +1,7 @@
 from kivy.uix.screenmanager import ScreenManager
 from loggerConfig import logger
+from trainer import Trainer
+from trainerPokemon import TrainerPokemon
 
 class WindowManager(ScreenManager):
     attempt = None
@@ -53,3 +55,9 @@ class WindowManager(ScreenManager):
 
     def updateCurrentArea(self):
         logger.info(f"updating area")
+    
+    def saveTrainer(self):
+        trainer = Trainer("Maarten")
+        politoed = TrainerPokemon("Politoed", 57)
+        trainer.pokemon = politoed
+        self.gameObject.areaList[0].addTrainer(trainer)

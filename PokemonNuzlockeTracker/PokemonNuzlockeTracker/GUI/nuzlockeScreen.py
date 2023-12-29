@@ -4,6 +4,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.uix.label import Label
 from kivy.uix.spinner import Spinner
+from kivy.uix.button import Button
 
 
 from transparentButton import TransparentButton
@@ -60,13 +61,13 @@ class NuzlockeScreen(BackgroundScreen):
         self.buttons = BoxLayout(orientation = "horizontal", size_hint_y = 0.12)
         continueButton = TransparentButton(text = "next", size_hint_x = 0.2)
         continueButton.bind(on_press = self.nextScreen)
-        fillerLabel = Label(text = "", size_hint_x = 0.6)
+        exitGameButton = TransparentButton(text = "Exit and save Game", size_hint_x = 0.6, size_hint_y = 0.5, on_press = self.saveGame)
         previousButton = TransparentButton(text = "previous", size_hint_x = 0.2, pos_hint = {"x" : 0.8})
         previousButton.bind(on_press = self.previousScreen)
         self.buttons.pos_hint = {"y": 0, "x": 0}
 
         self.buttons.add_widget(previousButton)
-        self.buttons.add_widget(fillerLabel)
+        self.buttons.add_widget(exitGameButton)
         self.buttons.add_widget(continueButton)
 
         self.layout.add_widget(self.buttons)
@@ -79,4 +80,8 @@ class NuzlockeScreen(BackgroundScreen):
     def previousScreen(self, insatnce):
         """go to previous screen"""
         self.manager.screenNumber -= 1
+    
+    def saveGame(self, button):
+        self.manager.gameObject.writeToFile()
+        self.manager.current = "selectGameScreen"
 

@@ -5,6 +5,7 @@ from item import Item
 from readFormattedData import readFormattedData
 from loggerConfig import logicLogger as logger
 
+
 import json
 import os
 
@@ -53,6 +54,7 @@ class MainGame():
         self._saveFile = os.path.join(self.saveFileFolder, f"{filename}.txt")
 
     def writeToFile(self):
+        logger.info("saving game")
         dataAreaList = []
         saveFileList = [{"_badge": 6}]
         #fill lists with all the data to save

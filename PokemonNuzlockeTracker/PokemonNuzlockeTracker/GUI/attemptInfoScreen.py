@@ -2,6 +2,7 @@ from nuzlockeScreen import NuzlockeScreen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 
+
 class AttemptInfoScreen(NuzlockeScreen):
     def __init__(self, screenName, **kwargs):
         super().__init__(screenName = screenName, **kwargs)
