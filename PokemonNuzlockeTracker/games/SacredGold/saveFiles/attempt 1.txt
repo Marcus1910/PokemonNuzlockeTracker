@@ -5,8 +5,8 @@
  {
   "_name": "New Bark Town",
   "_trainers": {
-   "Joey": {
-    "_name": "Joey",
+   "Maarten": {
+    "_name": "Maarten",
     "_pokemon": [
      {
       "_defeated": true,

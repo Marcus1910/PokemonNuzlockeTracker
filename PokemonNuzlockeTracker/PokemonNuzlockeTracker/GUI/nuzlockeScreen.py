@@ -84,4 +84,7 @@ class NuzlockeScreen(BackgroundScreen):
     def saveGame(self, button):
         self.manager.gameObject.writeToFile()
         self.manager.current = "selectGameScreen"
+        #set the screennumber to 0 manually, setter instantly shows screen
+        self.manager._screenNumber = 0
+
 

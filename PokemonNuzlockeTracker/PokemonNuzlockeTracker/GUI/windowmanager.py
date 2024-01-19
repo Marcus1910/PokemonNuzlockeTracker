@@ -11,7 +11,7 @@ class WindowManager(ScreenManager):
     #gets replaced with the area object as soon as it is chosen
     _currentArea = None
 
-    _screenNumber= 0
+    _screenNumber = 0
     screenList = []
 
     

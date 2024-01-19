@@ -1,8 +1,7 @@
 #ignore all logfiles
 *.log
-*.code-workspace
 #ignore workspace file
-werk + pokemon.code-workspace
+*.code-workspace
 
 #ignore testing folder
 PokemonNuzlockeTracker/localTesting/*

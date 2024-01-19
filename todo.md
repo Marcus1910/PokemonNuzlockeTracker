@@ -1,3 +1,22 @@
+----------------**TestRun**-----------------------------------
+add new trainers
+edit trainers
+
+catch pokemon
+delete catched pokemon, seperate area called lost&found?
+save encountered pokemon to savefiles and read them
+add pokemon to area, add new encountertype to area
+
+treat multiple floors as the same encounter
+
+grab and save items
+show items
+add new items
+
+export import savefiles, entire directory
+
+
+
 ---STEPS TO TAKE FOR BETA---
 *******************************Logic*************************
 Create new games
@@ -16,6 +35,10 @@ export route trainers to showdown format
 export all trainers to showdown format
     optionmenu for single trainer, route, all
 add / delete routes
+rework saving
+add game object inheritance to also allow http, keep it locally as well for crashes
+
+removing pokemon automatically displays the first, update to show new position or 1 before??
 
 
 ********************************Kivy*************************

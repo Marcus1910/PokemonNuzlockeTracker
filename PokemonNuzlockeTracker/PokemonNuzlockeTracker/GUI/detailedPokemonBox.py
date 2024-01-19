@@ -4,15 +4,15 @@ from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.image import Image
 from loggerConfig import logger
-
+from popup import RemovePokemonPopup
 from trainerPokemon import TrainerPokemon
 import os
 
 class DetailedPokemonBox(BoxLayout):
     pokemonSpritesFolder = os.path.join(os.path.dirname(os.getcwd()), "images", "sprites", "pokemonMinimalWhitespace")
-    def __init__(self, screen, **kwargs):
+    def __init__(self, screen, *args, **kwargs):
         """DetailedPokemonBox used to give more info about a pokemon, buildlayout to build it, if given an pokemonObject it will fill it"""
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
         self.moveList = []
         self.pokemonObject = None
         self.pokemonIndex = None #used for saving purposes
@@ -41,7 +41,6 @@ class DetailedPokemonBox(BoxLayout):
         self.pokemonBox.clear_widgets()
         self.additionalInfoBox.clear_widgets()
 
-
     def buildLayout(self, trainerObject):
         """build standard layout with inputs so pokemon can be created"""
         self.trainerObject = trainerObject
@@ -53,7 +52,6 @@ class DetailedPokemonBox(BoxLayout):
         #TODO give regular pokemon object to function to give additional info
         self.buildAdditionalInfoLayout()
         self.updateButtons()
-        # self.buildAndFillButtonLayout()
 
         self.add_widget(self.pokemonBox)
         self.add_widget(self.additionalInfoBox)
@@ -85,6 +83,9 @@ class DetailedPokemonBox(BoxLayout):
             moveInput = TextInput(hint_text = f"move #{move + 1}", size_hint_y = 0.25, multiline = False)
             self.moveList.append(moveInput)
             self.moveBox.add_widget(moveInput)
+
+        #code for removeButton
+        self.removeButton = Button(text = "remove pokemon", on_press = self.removePokemon, size_hint_y = 0.2)
         
         #add everything to correct widgets
         self.nameLevelBox.add_widget(self.nameInput)
@@ -94,6 +95,7 @@ class DetailedPokemonBox(BoxLayout):
         
         self.nameImageBox.add_widget(self.nameLevelBox)
         self.nameImageBox.add_widget(self.imageBox)
+        self.nameImageBox.add_widget(self.removeButton)
 
         self.pokemonInfoBox.add_widget(self.abilityInput)
         self.pokemonInfoBox.add_widget(self.heldItemInput)
@@ -153,8 +155,8 @@ class DetailedPokemonBox(BoxLayout):
         self.baseStatBox.add_widget(self.changeStatsBox)
 
         #want to build everything so proportion stays the same, but doesn't need to be shown
-        if pokemonObject == None:
-            return
+        # if pokemonObject == None:
+        #     return
         
         self.additionalInfoBox.add_widget(self.baseStatBox)
         self.additionalInfoBox.add_widget(self.possibleAbilitiesBox)
@@ -190,7 +192,8 @@ class DetailedPokemonBox(BoxLayout):
         self.buildAndFillButtonLayout()
     
     def showPokemon(self, listIndex, pokemonObject = None):
-        """redraws detailedPokemonBox and fills it if the pokemonObject is not None"""
+        """redraws detailedPokemonBox and fills it if the pokemonObject is not None
+        Also sets self.pokemonIndex and self.pokemonObjet to the values given"""
         #first save pokemon, reset variables, update variables and redraw screen
         self.clearPokemonLayout()
         self.pokemonIndex = listIndex
@@ -216,8 +219,6 @@ class DetailedPokemonBox(BoxLayout):
             return
         
         logger.debug(f"saving {name}")
-        
-        #TODO rework saving
         
         level = self.levelInput.text
         #create own pokemonObject
@@ -245,6 +246,15 @@ class DetailedPokemonBox(BoxLayout):
         
         #edit the pokemon
         self.trainerObject.editPokemon(self.pokemonObject, self.pokemonIndex, newName)
+        self.updateButtons()
+    
+    def removePokemon(self, button):
+        self.savePokemon()
+        #remove pokemon from trainerObject
+        self.trainerObject.removePokemon(self.pokemonObject.name, self.pokemonIndex)
+        #show first pokemon again and update buttons
+        pokemon = self.trainerObject.pokemon[0] if len(self.trainerObject.pokemon) > 0 else None
+        self.showPokemon(0, pokemon)
         self.updateButtons()
 
     def checkString(self, text):

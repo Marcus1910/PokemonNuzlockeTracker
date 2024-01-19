@@ -1,6 +1,6 @@
 from nuzlockeScreen import NuzlockeScreen
 from detailedPokemonBox import DetailedPokemonBox
-from editTrainerPopup import EditTrainerPopup
+from editTrainerBox import EditTrainerBox
 from loggerConfig import logger
 
 from kivy.uix.spinner import Spinner
@@ -15,10 +15,11 @@ import os
 class TrainerScreen(NuzlockeScreen):
     def __init__(self, screenName, **kwargs):
         super().__init__(screenName = screenName, **kwargs)
+        #need areaObject to update trainers and add trainers
+        self.areaObject = None
         #trainer Object for current trainer
         self.currentTrainerObject = None
         self.trainers = None
-
         #spinner to select trainer with label to edit trainer
         self.trainerSpinnerBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.04)
         #create trainerspinner
@@ -26,7 +27,7 @@ class TrainerScreen(NuzlockeScreen):
         self.trainerSpinner = Spinner(text = self.defaultTrainerText, values = ["New Trainer"], size_hint_x = 0.75)
         self.trainerSpinner.bind(text = self.updateTrainerBox)
         self.trainerSpinner.background_color = gm.opaque
-        #create buttons that edits trainer
+        #create buttons that edits trainer, logic is inside of editTrainerBox
         self.editTrainerButton = Button(text = "edit", size_hint_x = 0.25)
         #disable button till a trainer is selected
         self.editTrainerButton.disabled = True
@@ -38,11 +39,16 @@ class TrainerScreen(NuzlockeScreen):
 
         #used for detailed view
         self.detailedPokemonBox = DetailedPokemonBox(screen = self, orientation = "vertical", size_hint_y = 0.71)
+    
+        #used to edit/add trainers from/to area
+        self.editTrainerBox = EditTrainerBox(trainerScreen = self, orientation = "horizontal", size_hint_y = 0.71)
 
         self.viewBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.05, padding = (0, 0, 0, 10))
         self.viewLabel = Label(text = "view mode: ", size_hint_x = 0.15, padding = (0, 0, 50, 0))
         self.viewSpinner = Spinner(values = ["global", "detailed"], size_hint_x = 0.15, pos_hint = {"right": 1}, padding = (10, 0, 0, 0), text_autoupdate = True)
         self.viewSpinner.bind(text = self.updateTrainerBox)
+
+
 
         self.spriteFolder = os.path.join(os.path.dirname(os.getcwd()), "images", "sprites", "pokemonMinimalWhitespace")
 
@@ -61,6 +67,7 @@ class TrainerScreen(NuzlockeScreen):
         self.updateTrainers()
         self.trainerSpinner.text = self.defaultTrainerText
         self.currentTrainerObject = None
+        self.areaObject = self.manager.currentArea
 
     def updateTrainers(self):
         #disable edit button for trainers till trainer has been found in showTrainers function
@@ -84,6 +91,7 @@ class TrainerScreen(NuzlockeScreen):
         self.changeTrainerSpinnerColor(gm.opaque)
         self.clearTrainerBox()
         self.detailedPokemonBox.clearLayout()
+        self.editTrainerBox.clearLayout()
         selectedTrainer = self.trainerSpinner.text
         viewMode = self.viewSpinner.text
         self.showTrainer(selectedTrainer, viewMode)
@@ -94,9 +102,8 @@ class TrainerScreen(NuzlockeScreen):
             #default value for trainerspinner so do nothing
             return
         if selectedTrainer == "New Trainer":
-            #create new Trainer Object using the editTrainerPopup bound to the trainerBox
-            logger.debug("Create new Trainer - TODO")
-            self.manager.saveTrainer()#testing if can save on apk
+            #fill trainerBox with new window to add new trainer
+            self.addNewTrainer()
             return
         try:
             self.currentTrainerObject = self.trainers[selectedTrainer]
@@ -121,6 +128,7 @@ class TrainerScreen(NuzlockeScreen):
         
     def changeView(self, view):
         """function that changes the view to detailed or global"""
+        self.editTrainerBox.clearLayout()
         if view == "global":
             self.showGlobalView()
         elif view == "detailed":
@@ -173,13 +181,50 @@ class TrainerScreen(NuzlockeScreen):
         self.trainerBox.add_widget(self.detailedPokemonBox)
 
     def editTrainer(self, *args):
-        """changes"""
-        pass
+        """gives trainerobject to self.editTrainerBox for editing"""
+        logger.debug(f"editing {self.currentTrainerObject.name}")
+        self.editTrainerBox.buildLayout(self.currentTrainerObject)
+        #clear the previous layout
+        self.clearTrainerBox()
+        #show new layout
+        self.trainerBox.add_widget(self.editTrainerBox)
 
     def on_leave(self):
         super().on_leave()
         logger.debug("saving pokemon")
         self.detailedPokemonBox.savePokemon()
+    
+    def addNewTrainer(self):
+        """displays the edittrainerBox for a new trainer to be added"""
+        logger.debug("create new Trainer screen")
+        #no object as we want to create a new object
+        self.editTrainerBox.buildLayout()
+        self.trainerBox.add_widget(self.editTrainerBox)
+
+    
+    def addTrainerToGame(self, trainerObject):
+        """Add trainerObject to the gameObject, function called in the editTrainer box"""
+        logger.debug(f"Adding {trainerObject.name} to {self.areaObject.name}")
+        self.areaObject.addTrainer(trainerObject)
+        #refresh listbox
+        self.updateTrainers()
+    
+    def editTrainerObject(self, trainerObject, newName):
+        """Edit the trainerObject from the game"""
+        #NewName is either the name or None, None is the default value in the called function
+        logger.debug(f"editing {trainerObject.name} in {self.areaObject.name}")
+        self.areaObject.editTrainer(trainerObject, newName)
+        self.updateTrainers()
+        #change text from the spinner then call the function which would be called with a normal interaction.
+        self.trainerSpinner.text = trainerObject.name if newName == None else newName
+        self.updateTrainerBox(self.trainerSpinner, self.trainerSpinner.text)
+        
+
+
+
+
+        
+
 
 
 

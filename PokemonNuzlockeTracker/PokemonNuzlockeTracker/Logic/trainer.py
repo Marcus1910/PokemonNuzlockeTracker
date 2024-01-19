@@ -31,7 +31,7 @@ class Trainer():
 
     @gender.setter
     def gender(self, gender):
-        if gender is None:
+        if gender == None:
             self._gender = None
         else:
             gender = str(gender).upper()

@@ -23,7 +23,7 @@ class SacredGoldWriter():
             file.truncate()
             for page in pdf.pages:
                 text = page.extract_text()
-                #pdf extract gives word as wwwwoooorrrrdddd so remove every character that repeats itself 4 times
+                #pdf extract gives word as wwwwoooorrrrdddd so reduce every character that repeats itself 4 times to 1 time
                 duplicateChars = re.findall(r"(.)\1{3}", text)
                 for char in duplicateChars:
                     if char * 4 in text:
