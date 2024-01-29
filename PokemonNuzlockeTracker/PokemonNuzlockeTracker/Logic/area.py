@@ -49,7 +49,7 @@ class Area():
         return self._trainers
 
     def addTrainer(self, trainerObject):
-        """adds trainer to self._trainers dictionary, returns 1 if the trainer already exists and 0 if succesfull"""
+        """adds trainer to self._trainers dictionary, returns 0 if the trainer already exists and 1 if succesfull"""
         if trainerObject.name in self._trainers.keys():
             logger.error(f"{trainerObject.name} already exists")
             return 0
@@ -82,8 +82,6 @@ class Area():
         self.addTrainer(oldTrainerObject)
         logger.info(f"changed {oldName} to {newTrainerName} and updated its content")
         return 1
-
-        
     
     def removeTrainer(self, trainerName):
         """removes trainerObject from trainer dict, return 1 on succes, 0 on failure"""

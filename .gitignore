@@ -5,5 +5,4 @@
 
 #ignore testing folder
 PokemonNuzlockeTracker/localTesting/*
-bin/*
 /.buildozer/*

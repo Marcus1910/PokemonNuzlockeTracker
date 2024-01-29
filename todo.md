@@ -1,6 +1,4 @@
 ----------------**TestRun**-----------------------------------
-add new trainers
-edit trainers
 
 catch pokemon
 delete catched pokemon, seperate area called lost&found?

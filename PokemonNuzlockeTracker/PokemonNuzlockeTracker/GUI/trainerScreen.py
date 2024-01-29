@@ -140,8 +140,23 @@ class TrainerScreen(NuzlockeScreen):
         """removes self.detailedPOkemonBox or pokemonBox from self.trainerBox"""
         self.trainerBox.clear_widgets()
         logger.debug(f"clearing trainerBox")
+    
+    # def addFirstPokemon(self, *args):
+    #     """function that gets called when the trainer has no pokemon in global view
+    #     switches view to detailed"""
+    #     self.clearTrainerBox()
+    #     self.viewSpinner.text = "detailed"
+    #     self.changeView("detailed")
 
     def showGlobalView(self):
+        if len(self.currentTrainerObject.pokemon) == 0:
+            #add new pokemon by showing empty detailedpokemonBox
+            # addPokemonLabel = Label(text = "No pokemon found", size_hint_y = 0.6)
+            # addPokemonButton = Button(text = "add pokemon", on_press = self.addFirstPokemon, size_hint_y = 0.4)
+            # self.trainerBox.add_widget(addPokemonLabel)
+            # self.trainerBox.add_widget(addPokemonButton)
+            return
+        
         for index, pokemonObject in enumerate(self.currentTrainerObject.pokemon):
             #gather pokemon data and put it in Labels
             pokemonBox = BoxLayout(orientation = "horizontal", size_hint_y = (1 - 0.05)/ (len(self.currentTrainerObject.pokemon)), padding = (0, 0, 0, 10))
@@ -201,23 +216,51 @@ class TrainerScreen(NuzlockeScreen):
         self.editTrainerBox.buildLayout()
         self.trainerBox.add_widget(self.editTrainerBox)
 
-    
     def addTrainerToGame(self, trainerObject):
         """Add trainerObject to the gameObject, function called in the editTrainer box"""
         logger.debug(f"Adding {trainerObject.name} to {self.areaObject.name}")
-        self.areaObject.addTrainer(trainerObject)
+        if self.areaObject.addTrainer(trainerObject):
+            logger.debug("added trainer")
+        else:
+            logger.debug("error ocured adding trainer")
+            #update self.trainerobject to None, otherwise next call will execute edittrainer
+            self.editTrainerBox.trainerObject = None
+            return
         #refresh listbox
         self.updateTrainers()
+        #change text from the spinner then call the function which would be called with a normal interaction
+        self.trainerSpinner.text = trainerObject.name
+        self.updateTrainerBox(self.trainerSpinner, self.trainerSpinner.text)
     
     def editTrainerObject(self, trainerObject, newName):
         """Edit the trainerObject from the game"""
         #NewName is either the name or None, None is the default value in the called function
         logger.debug(f"editing {trainerObject.name} in {self.areaObject.name}")
-        self.areaObject.editTrainer(trainerObject, newName)
+        if self.areaObject.editTrainer(trainerObject, newName):
+            logger.debug("edit done succesfully, redrawing screen")
+        else:
+            logger.debug("error occurred")
+            return
         self.updateTrainers()
         #change text from the spinner then call the function which would be called with a normal interaction.
         self.trainerSpinner.text = trainerObject.name if newName == None else newName
         self.updateTrainerBox(self.trainerSpinner, self.trainerSpinner.text)
+    
+    def removeTrainer(self, trainerName):
+        """remove trainer from game object using its name"""
+        if self.areaObject.removeTrainer(trainerName):
+            logger.debug("removed Trainer sucessfully")
+        else:
+            logger.debug("error ocurred during removal")
+            return
+
+        self.updateTrainers()
+        self.trainerSpinner.text = self.defaultTrainerText
+        
+    
+    def cancelEditTrainer(self):
+        """function called form edittrainerBox to cancel the editing"""
+        self.updateTrainerBox(self.trainerSpinner, self.defaultTrainerText)
         
 
 
