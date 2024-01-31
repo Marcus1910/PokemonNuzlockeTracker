@@ -5,13 +5,15 @@ delete catched pokemon, seperate area called lost&found?
 save encountered pokemon to savefiles and read them
 add pokemon to area, add new encountertype to area
 
-treat multiple floors as the same encounter
+treat multiple floors as the same encounter - logic
 
 grab and save items
 show items
 add new items
 
 export import savefiles, entire directory
+
+add pokemon when name is entered, update pokemon after that
 
 
 

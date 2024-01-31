@@ -37,7 +37,9 @@
       "_level": "25",
       "_dexno": null,
       "_gender": null,
-      "_moves": [],
+      "_moves": [
+       "Thunderbolt"
+      ],
       "_ability": null,
       "_heldItem": null
      },
@@ -46,7 +48,9 @@
       "_level": "50",
       "_dexno": null,
       "_gender": null,
-      "_moves": [],
+      "_moves": [
+       "Thunderbolt"
+      ],
       "_ability": null,
       "_heldItem": null
      },
@@ -94,7 +98,7 @@
        "quick attack"
       ],
       "_ability": "drought",
-      "_heldItem": "n/a"
+      "_heldItem": null
      },
      {
       "_name": "Magikarp",
@@ -110,7 +114,7 @@
      },
      {
       "_name": "Squirtle",
-      "_level": 25,
+      "_level": "25",
       "_dexno": null,
       "_gender": null,
       "_moves": [
@@ -142,11 +146,15 @@
      },
      {
       "_name": "Charmander",
-      "_level": 50,
+      "_level": "50",
       "_dexno": null,
       "_gender": null,
-      "_moves": [],
-      "_ability": null,
+      "_moves": [
+       "Flamethrower",
+       "quick attack",
+       "Crabhammer"
+      ],
+      "_ability": "Drizzle",
       "_heldItem": null
      }
     ]

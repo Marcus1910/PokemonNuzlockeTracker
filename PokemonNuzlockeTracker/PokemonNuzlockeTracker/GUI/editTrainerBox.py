@@ -57,8 +57,7 @@ class EditTrainerBox(BoxLayout):
 
         self.add_widget(self.layout)
 
-        if self.trainerObject != None:
-            self.fillLayout()
+        self.fillLayout()
     
     def fillLayout(self):
         """fills the layout build by buildlayout with information from the trainerobject"""
@@ -99,15 +98,9 @@ class EditTrainerBox(BoxLayout):
             return
         #used to store newName, default None for function area.editTrainer
         newName = None
-        addNewEntry = False
         if self.checkString(name):
             logger.error(f"No name has been supplied for the new trainer, please enter name")
             return
-        #check if there is a trainerobject that needs to be modified or if a new object must be created
-        if self.trainerObject == None:
-            #create new trainerObject from name
-            self.trainerObject = Trainer(name = name)
-            addNewEntry = True
             
         #check if name needs to be adjusted
         if self.trainerObject.name != self.trainerName.text:
@@ -119,11 +112,7 @@ class EditTrainerBox(BoxLayout):
         self.trainerObject.defeated = self.trainerDefeated
 
         #call correct functions
-        print("addNewEntry", addNewEntry)
-        if addNewEntry:
-            self.trainerScreen.addTrainerToGame(self.trainerObject)
-        else:
-            self.trainerScreen.editTrainerObject(self.trainerObject, newName)
+        self.trainerScreen.editTrainerObject(self.trainerObject, newName)
         
     def deleteTrainerFromGame(self, *args):
         logger.debug(f"removing {self.trainerObject.name}")
@@ -134,8 +123,8 @@ class EditTrainerBox(BoxLayout):
         return text.isspace() or text == ""
 
     def validateTextInput(self, textInput):
-        """function that returns None or the supplied TextInput si the input is not empty"""
-        return textInput.text if self.checkString(textInput.text) else None
+        """function that returns None or the supplied TextInput is the input is not empty"""
+        return textInput.text if not self.checkString(textInput.text) else None
         
 
 

@@ -62,6 +62,7 @@ class DetailedPokemonBox(BoxLayout):
         """builds the layout which shows everything from the pokemon; abilities, moves, etc. places everything inside of self.pokemonBox"""
         #create Name label and input
         self.nameInput = TextInput(hint_text = "Name", multiline = False, size_hint_x = 0.7)
+        self.nameInput.bind(focus = self.updatePokemonImage)
         self.levelInput = TextInput(hint_text = "Level", multiline = False, size_hint_x = 0.3)
         self.nameLevelBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.15)
         #add pokemon image
@@ -112,12 +113,34 @@ class DetailedPokemonBox(BoxLayout):
         
         self.fillPokemonLayout(self.pokemonObject)
         #call fill additional info here?
+    
+    def updatePokemonImage(self, label, focus):
+        if focus:
+            #entering text
+            return
+        image = self.retrievePokemonImage(label.text)
+        self.pokemonImage.source = image
+
+        
+    def retrievePokemonImage(self, name: str) -> str:
+        """returns location of the pokemon image or the 0.png"""
+        logger.debug(f"searching for image of {name}")
+        imagePath = os.path.join(self.pokemonSpritesFolder, f"{name.lower()}.png")
+        if os.path.exists(imagePath):
+            logger.debug(f"found image for {name}")
+            return imagePath
+        else:
+            logger.debug(f"could not find image for {name}")
+            return os.path.join(self.pokemonSpritesFolder, f"0.png")
+
+
+
 
     def fillPokemonLayout(self, pokemonObject):
         """fills in the layout made by buildPokemonLayout function, needs pokemon object to do so"""
         self.nameInput.text = pokemonObject.name
         self.levelInput.text = str(pokemonObject.level)
-        self.pokemonImage.source = os.path.join(self.pokemonSpritesFolder, f"{pokemonObject.name.lower()}.png")
+        self.pokemonImage.source = self.retrievePokemonImage(pokemonObject.name)
         
         if pokemonObject.ability is not None:
             self.abilityInput.text = pokemonObject.ability
@@ -129,8 +152,6 @@ class DetailedPokemonBox(BoxLayout):
     def buildAdditionalInfoLayout(self, pokemonObject = None):
         """builds layout in self.additionalInfoBox if pokemonObject is given, otherwise only takes up space to keep the ratio the same"""
         #create basestats + possible abilities / move box
-        
-
         self.baseStatBox = BoxLayout(orientation = "vertical", size_hint_x = 0.45)
         self.basestatGraph = BoxLayout(orientation = "vertical", size_hint_y = 0.9)
 
@@ -208,12 +229,14 @@ class DetailedPokemonBox(BoxLayout):
         createNewEntry = False
         if self.trainerObject == None:
             return
+        
         try:
             #check if the box already exists, otherwise crashes when switching from screens when area has changed
             name = self.nameInput.text
         except AttributeError:
             logger.debug("excepted AttributeError from nameInput because it has not yet been drawn and could cause a crash")
             return
+        
         if self.checkString(name):
             logger.debug("empty name")
             return
@@ -226,11 +249,17 @@ class DetailedPokemonBox(BoxLayout):
             logger.debug(f"creating new pokemon called {name}")
             self.pokemonObject = TrainerPokemon(name, level)
             createNewEntry = True
-        # #decorate pokemonObject before saving it
+        #decorate pokemonObject before saving it
         self.pokemonObject.level = level 
-        #create Function for this shit
-        self.pokemonObject.ability = self.abilityInput.text if not self.checkString(self.abilityInput.text) else None
-        self.pokemonObject.heldItem = self.heldItemInput.text if not self.checkString(self.heldItemInput.text) else None
+        self.pokemonObject.ability = self.validateTextInput(self.abilityInput)
+        print(self.pokemonObject.ability)
+        self.pokemonObject.heldItem = self.validateTextInput(self.heldItemInput)
+        for move in self.moveList:
+            print(f"move: {move.text}")
+            newMove = self.validateTextInput(move)
+            #None should not be added
+            if newMove != None:
+                self.pokemonObject.moves = newMove
 
         #check if a new pokemon needs to be added to the roster
         if createNewEntry:
@@ -251,7 +280,12 @@ class DetailedPokemonBox(BoxLayout):
     def removePokemon(self, button):
         self.savePokemon()
         #remove pokemon from trainerObject
+        #check if object actually exists before it can be removed
+        if self.pokemonObject == None:
+            logger.error("tried to remove a pokemon that doesn't exist")
+            return
         self.trainerObject.removePokemon(self.pokemonObject.name, self.pokemonIndex)
+        logger.info(f"removed {self.pokemonObject.name} from {self.trainerObject.name}")
         #show first pokemon again and update buttons
         pokemon = self.trainerObject.pokemon[0] if len(self.trainerObject.pokemon) > 0 else None
         self.showPokemon(0, pokemon)
@@ -260,6 +294,10 @@ class DetailedPokemonBox(BoxLayout):
     def checkString(self, text):
         """function that returns True when the given text consists of only whitespace or is empty"""
         return text.isspace() or text == ""
+    
+    def validateTextInput(self, textInput, defaultValue = None):
+        """function that returns None or the supplied TextInput is the input is not empty"""
+        return textInput.text if not self.checkString(textInput.text) else defaultValue
 
         
     

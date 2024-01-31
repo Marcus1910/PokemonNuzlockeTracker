@@ -1,6 +1,7 @@
 from nuzlockeScreen import NuzlockeScreen
 from detailedPokemonBox import DetailedPokemonBox
 from editTrainerBox import EditTrainerBox
+from addTrainerBox import AddTrainerBox
 from loggerConfig import logger
 
 from kivy.uix.spinner import Spinner
@@ -42,6 +43,9 @@ class TrainerScreen(NuzlockeScreen):
     
         #used to edit/add trainers from/to area
         self.editTrainerBox = EditTrainerBox(trainerScreen = self, orientation = "horizontal", size_hint_y = 0.71)
+
+        #screen used for adding trainers when "New Trainer" is selected
+        self.addTrainerBox = AddTrainerBox(trainerScreen = self, orientation = "horizontal", size_hint_y = 0.71)
 
         self.viewBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.05, padding = (0, 0, 0, 10))
         self.viewLabel = Label(text = "view mode: ", size_hint_x = 0.15, padding = (0, 0, 50, 0))
@@ -92,6 +96,7 @@ class TrainerScreen(NuzlockeScreen):
         self.clearTrainerBox()
         self.detailedPokemonBox.clearLayout()
         self.editTrainerBox.clearLayout()
+        self.addTrainerBox.clearLayout()
         selectedTrainer = self.trainerSpinner.text
         viewMode = self.viewSpinner.text
         self.showTrainer(selectedTrainer, viewMode)
@@ -129,6 +134,7 @@ class TrainerScreen(NuzlockeScreen):
     def changeView(self, view):
         """function that changes the view to detailed or global"""
         self.editTrainerBox.clearLayout()
+        self.addTrainerBox.clearLayout()
         if view == "global":
             self.showGlobalView()
         elif view == "detailed":
@@ -213,8 +219,8 @@ class TrainerScreen(NuzlockeScreen):
         """displays the edittrainerBox for a new trainer to be added"""
         logger.debug("create new Trainer screen")
         #no object as we want to create a new object
-        self.editTrainerBox.buildLayout()
-        self.trainerBox.add_widget(self.editTrainerBox)
+        self.addTrainerBox.buildLayout()
+        self.trainerBox.add_widget(self.addTrainerBox)
 
     def addTrainerToGame(self, trainerObject):
         """Add trainerObject to the gameObject, function called in the editTrainer box"""

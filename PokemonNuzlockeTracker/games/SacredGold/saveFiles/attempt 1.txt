@@ -19,7 +19,7 @@
        "quick attack"
       ],
       "_ability": "drought",
-      "_heldItem": "n/a"
+      "_heldItem": null
      },
      {
       "_defeated": true,
@@ -37,7 +37,7 @@
      {
       "_defeated": true,
       "_name": "Squirtle",
-      "_level": 25,
+      "_level": "25",
       "_dexNo": null,
       "_gender": null,
       "_moves": [
@@ -72,11 +72,15 @@
      {
       "_defeated": true,
       "_name": "Charmander",
-      "_level": 50,
+      "_level": "50",
       "_dexNo": null,
       "_gender": null,
-      "_moves": [],
-      "_ability": null,
+      "_moves": [
+       "Flamethrower",
+       "quick attack",
+       "Crabhammer"
+      ],
+      "_ability": "Drizzle",
       "_heldItem": null
      }
     ],
