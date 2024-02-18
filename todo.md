@@ -1,5 +1,10 @@
 ----------------**TestRun**-----------------------------------
 
+save files to internal storage android
+
+import saves from folder
+
+
 catch pokemon
 delete catched pokemon, seperate area called lost&found?
 save encountered pokemon to savefiles and read them
@@ -11,7 +16,7 @@ grab and save items
 show items
 add new items
 
-export import savefiles, entire directory
+
 
 add pokemon when name is entered, update pokemon after that
 
@@ -83,8 +88,8 @@ add list of moves
 check if moves are valid, option in settings
 new run option, clears all data and starts with clean slate
 popup message, x removed
-generate catchable pokemon by reading old savestates, only for blind nuzlockes. settings option
+generate catchable pokemon by reading old savestates, only for blind nuzlockes. settings option, add statistics which pokemon was caught at every route
 add non-canon pokemon with name and use own sprite or ?.png
 sort route list option, own choice
 When selecting route, automatically center route chosen when choosing other route
-When selecting areatype for encounters, use scrollview to telepoprt to correct position and have all pokmeon visible in a large layout
+When selecting areatype for encounters, use scrollview to teleport to correct position and have all pokemon visible in a large layout

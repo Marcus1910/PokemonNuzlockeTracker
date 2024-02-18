@@ -11,6 +11,8 @@ import games as gm
 from backgroundScreen import BackgroundScreen
 import os
 from loggerConfig import logger
+import platform as platform
+from android.storage import app_storage_path
 
 
 
@@ -47,6 +49,10 @@ class SelectGameScreen(BackgroundScreen):
         infoLabel = Label(text = "information about the attempt")
         attemptInfo.add_widget(infoLabel)
 
+        #export button to export
+        self.exportButton = Button(text = "Export saves", on_release = self.exportSaves)
+        self.importButton = Button(text = "Import saves", on_release = self.importSaves)
+
         #continue button
         continueBox = BoxLayout(orientation= "vertical", size_hint_y = 0.1)
         self.continueButton = Button(text = "Continue with attempt")
@@ -54,6 +60,8 @@ class SelectGameScreen(BackgroundScreen):
         self.continueButton.background_color = gm.opaque
         self.continueButton.disabled = True
 
+        continueBox.add_widget(self.exportButton)
+        continueBox.add_widget(self.importButton)
         continueBox.add_widget(self.continueButton)
         
         layout.add_widget(gameSelection)
@@ -83,6 +91,31 @@ class SelectGameScreen(BackgroundScreen):
         self.continueButton.disabled = False
         self.attempt = attempt
         self.continueButton.text = f"{self.game}: {self.attempt}"
+    
+    def exportSaves(self, *args):
+        """Determine on which platform it runs and change the way in which the saves are exported"""
+        #should be earlier in the code, so loading is also affected, perhaps the gameObject class
+        OS = platform.system()
+        # print(OS)
+        # if OS == "Linux":
+        #     storagePath = app_storage_path()
+        #     print(storagePath)
+        #     newFile = os.path.join(storagePath, "kankerget.txt")
+        #     with open(newFile, "w") as file:
+        #         file.write("kankerget")
+        #     print(f"created {newFile}")
+
+        print(os.getcwd())
+    
+    def importSaves(self, *args):
+        OS = platform.system()
+        if OS == "Linux":
+            storagePath = app_storage_path()
+            print(storagePath)
+            newFile = os.path.join(storagePath, "kankerget.txt")
+            print(f"reading {newFile}")
+            with open(newFile, "r") as file:
+                print(file.read())
 
     def startAttempt(self, instance):
         """create Game object and give it to windowManager"""

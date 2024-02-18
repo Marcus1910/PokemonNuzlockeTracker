@@ -1,6 +1,7 @@
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+from utilityFunctions import checkString, validateTextInput
 
 from loggerConfig import logger
 from trainer import Trainer
@@ -98,7 +99,7 @@ class EditTrainerBox(BoxLayout):
             return
         #used to store newName, default None for function area.editTrainer
         newName = None
-        if self.checkString(name):
+        if checkString(name):
             logger.error(f"No name has been supplied for the new trainer, please enter name")
             return
             
@@ -107,8 +108,8 @@ class EditTrainerBox(BoxLayout):
             newName = self.trainerName.text
 
         #decorate object
-        self.trainerObject.gender = self.validateTextInput(self.trainerGender)
-        self.trainerObject.trainerType = self.validateTextInput(self.trainerType)
+        self.trainerObject.gender = validateTextInput(self.trainerGender.text)
+        self.trainerObject.trainerType = validateTextInput(self.trainerType.text)
         self.trainerObject.defeated = self.trainerDefeated
 
         #call correct functions
@@ -117,14 +118,6 @@ class EditTrainerBox(BoxLayout):
     def deleteTrainerFromGame(self, *args):
         logger.debug(f"removing {self.trainerObject.name}")
         self.trainerScreen.removeTrainer(self.trainerObject.name)
-
-    def checkString(self, text):
-        """function that returns True when the given text consists of only whitespace or is empty"""
-        return text.isspace() or text == ""
-
-    def validateTextInput(self, textInput):
-        """function that returns None or the supplied TextInput is the input is not empty"""
-        return textInput.text if not self.checkString(textInput.text) else None
         
 
 
