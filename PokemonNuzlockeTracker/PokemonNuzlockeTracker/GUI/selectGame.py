@@ -1,33 +1,29 @@
 from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
-from kivy.uix.label import Label
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.image import Image
 from kivy.core.window import Window
-from kivy.config import Config
 
-import games as gm
 from windowmanager import WindowManager
 from selectGameScreen import SelectGameScreen
 from trainerScreen import TrainerScreen
 from attemptInfoScreen import AttemptInfoScreen
-from nuzlockeScreen import NuzlockeScreen
 from encounterScreen import EncounterScreen
 from itemScreen import ItemScreen
 
-import os
-import time
 import sys
 from loggerConfig import logger
 
 class SelectGame(App):
+    def __init__(self, operatingSystem, **kwargs):
+        super().__init__(**kwargs)
+        self.operatingSystem = operatingSystem
+
     def build(self):
-        if sys.platform.startswith("win32"):
+        #use OS to change view to that of android
+        if self.operatingSystem == "Windows":
             logger.info("detected windows")
             Window.size = (390, 780)
 
         sm = WindowManager()
-        selectGameScreen = SelectGameScreen(name = "selectGameScreen")
+        selectGameScreen = SelectGameScreen(operatingSystem = self.operatingSystem, name = "selectGameScreen")
         
         attemptInfoScreen = AttemptInfoScreen(name = "attemptInfoScreen", screenName = "Info on current attempt")
         trainerScreen = TrainerScreen(name = "trainerScreen", screenName = "Trainer Screen")

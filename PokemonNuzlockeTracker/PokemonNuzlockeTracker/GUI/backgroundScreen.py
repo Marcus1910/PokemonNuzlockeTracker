@@ -1,8 +1,6 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.image import Image
-
 import os
-
 
 class BackgroundScreen(Screen):
     def __init__(self, **kwargs):

@@ -1,10 +1,6 @@
-from kivy.uix.image import Image
-from kivy.uix.screenmanager import Screen, SlideTransition
 from kivy.uix.boxlayout import BoxLayout
-from kivy.core.window import Window
 from kivy.uix.label import Label
 from kivy.uix.spinner import Spinner
-from kivy.uix.button import Button
 
 
 from transparentButton import TransparentButton
@@ -12,10 +8,8 @@ from backgroundScreen import BackgroundScreen
 from loggerConfig import logger
 import games as gm
 
-import os
-
 class NuzlockeScreen(BackgroundScreen):
-    """adds the name of the screen at the top, add self.layout which is a boxLayout. Can also add background for all screens except first screen, total of 0.2 size_hint_y"""
+    """Parent screen, adds the name of the screen at the top, add self.layout which is a boxLayout. Can also add background for all screens except first screen, total of 0.2 size_hint_y"""
     
     def __init__(self, screenName, **kwargs):
         super().__init__(**kwargs)

@@ -9,27 +9,27 @@ from kivy.uix.spinner import Spinner
 
 import games as gm
 from backgroundScreen import BackgroundScreen
-import os
 from loggerConfig import logger
 import platform as platform
-from android.storage import app_storage_path
-
-
+from fileRetriever import FileRetriever
+from games import MainGame
 
 class SelectGameScreen(BackgroundScreen):
-    def __init__(self, **kwargs):
+    def __init__(self, operatingSystem, **kwargs):
         super().__init__(**kwargs)
         # pathToImage = os.path.join(os.path.dirname(os.getcwd()), "images", "bg.jpg")
         # print(pathToImage)
         self.game = None
         self.attempt = None
+        print(f"operatingSystem: {operatingSystem}")
+        self.fileRetriever = FileRetriever(operatingSystem)
         
         layout = BoxLayout(orientation= "vertical", spacing = 10, padding = 10)
         layout.size = Window.size
         layout.pos = self.pos
         #select the game
         gameSelection = BoxLayout(orientation = "vertical", size_hint_y= 0.05)
-        self.gameDDM = Spinner(text = "Select the game", values = gm.checkGames())
+        self.gameDDM = Spinner(text = "Select the game", values = self.fileRetriever.checkGames())
         self.gameDDM.bind(text = self.gameChanged)
         self.gameDDM.background_color = gm.opaque
 
@@ -49,10 +49,6 @@ class SelectGameScreen(BackgroundScreen):
         infoLabel = Label(text = "information about the attempt")
         attemptInfo.add_widget(infoLabel)
 
-        #export button to export
-        self.exportButton = Button(text = "Export saves", on_release = self.exportSaves)
-        self.importButton = Button(text = "Import saves", on_release = self.importSaves)
-
         #continue button
         continueBox = BoxLayout(orientation= "vertical", size_hint_y = 0.1)
         self.continueButton = Button(text = "Continue with attempt")
@@ -60,8 +56,6 @@ class SelectGameScreen(BackgroundScreen):
         self.continueButton.background_color = gm.opaque
         self.continueButton.disabled = True
 
-        continueBox.add_widget(self.exportButton)
-        continueBox.add_widget(self.importButton)
         continueBox.add_widget(self.continueButton)
         
         layout.add_widget(gameSelection)
@@ -71,16 +65,17 @@ class SelectGameScreen(BackgroundScreen):
 
         self.add_widget(layout)
 
-    def gameChanged(self, instance, game:str):
+    def gameChanged(self, instance, game : str):
         self.game = game
         self.continueButton.disabled = True
-        if game == "new":
+        if game == "New game":
+            logger.info("TODO, implement popup for a new game")
             return
         self.retrieveSaveFile(game)
     
-    def retrieveSaveFile(self, game):
+    def retrieveSaveFile(self, game : str):
         """updates save file spinner"""
-        self.attemptSpinner.values = gm.getSaveFiles(game)
+        self.attemptSpinner.values = self.fileRetriever.getSaveFiles(game)
         self.attemptSpinner.text = "select the attempt"
         self.attemptSpinner.disabled = False
 
@@ -91,40 +86,11 @@ class SelectGameScreen(BackgroundScreen):
         self.continueButton.disabled = False
         self.attempt = attempt
         self.continueButton.text = f"{self.game}: {self.attempt}"
-    
-    def exportSaves(self, *args):
-        """Determine on which platform it runs and change the way in which the saves are exported"""
-        #should be earlier in the code, so loading is also affected, perhaps the gameObject class
-        OS = platform.system()
-        # print(OS)
-        # if OS == "Linux":
-        #     storagePath = app_storage_path()
-        #     print(storagePath)
-        #     newFile = os.path.join(storagePath, "kankerget.txt")
-        #     with open(newFile, "w") as file:
-        #         file.write("kankerget")
-        #     print(f"created {newFile}")
-
-        print(os.getcwd())
-    
-    def importSaves(self, *args):
-        OS = platform.system()
-        if OS == "Linux":
-            storagePath = app_storage_path()
-            print(storagePath)
-            newFile = os.path.join(storagePath, "kankerget.txt")
-            print(f"reading {newFile}")
-            with open(newFile, "r") as file:
-                print(file.read())
 
     def startAttempt(self, instance):
         """create Game object and give it to windowManager"""
         #create Game Object, pass to new screen
         self.manager.attempt = self.attempt
-        self.manager.gameObject = gm.MainGame(self.game, self.attempt)
+        self.manager.gameObject = MainGame(self.fileRetriever, self.game, self.attempt)
         logger.info(f"loading {self.game} {self.attempt}")
-        # print(self.manager.gameObject)
-        # GameObject = self.manager.gameObject.retrieveGameData()
-        # #list = GameObject.
-        # print(GameObject)
         self.manager.current = "attemptInfoScreen"

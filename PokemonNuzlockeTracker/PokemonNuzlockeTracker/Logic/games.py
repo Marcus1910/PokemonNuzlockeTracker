@@ -4,6 +4,8 @@ from trainerPokemon import TrainerPokemon, EncounteredPokemon
 from item import Item
 from readFormattedData import readFormattedData
 from loggerConfig import logicLogger as logger
+from fileRetriever import FileRetriever
+import shutil
 
 
 import json
@@ -20,7 +22,8 @@ green = (0, 1, 0, 1)
 
 class MainGame():
     errorName = "error something went wrong reading from the json file" # TODO settings.py
-    def __init__(self, gameName, saveFileName = 'new'): #TODO change new to actual new attempt name
+    def __init__(self, fileRetriever: FileRetriever, gameName: str, saveFileName = 'new'):
+        self.fileRetriever = fileRetriever
         self.gameName = gameName
         self.saveFileName = f"{saveFileName}.txt"
 
@@ -36,6 +39,8 @@ class MainGame():
 
         self._saveFile = os.path.join(self.saveFileFolder, self.saveFileName)
         self.dataFile = os.path.join(self.dataFolder, f"{self.gameName}GameData.txt")
+
+        self.fileRetriever.retrieveGameFiles(gameName)
     
     @property
     def badge(self):
@@ -70,6 +75,9 @@ class MainGame():
         with open(self.dataFile, "w") as file:
             file.truncate()
             file.write(json.dumps(dataAreaList, default = vars, indent = 1))  
+        
+        self.fileRetriever.saveGameFiles(self.gameName)
+    
 
     def retrieveGameData(self):
         """retrieves all information that can be found about the current game, including selected savefile"""
@@ -275,47 +283,6 @@ class MainGame():
         return object
 
 
-
-    
-
-    
-
-def checkGames():
-    gameFolder = os.path.join(os.path.dirname(os.getcwd()), "games")
-    #walks down the directory for other directories, retrieves the names and puts them in a list
-    games = [gameName for gameName in next(os.walk(gameFolder))[1] if gameName != "Generic"]
-    #no games found
-    if not games:
-        return ["new"]
-    games.append("new")
-    return games
-
-def checkForSaveFileDirectory(gameFolder):
-    """checks if the directory existst otherwise creates it, returns 1 when succesful else 0"""
-    #if savefile directory doesn't exists
-    if not os.path.isdir(gameFolder):
-        logger.info(f"creating new directory {gameFolder} - TODO")
-        #os.mkdir(gameFolder)
-
-def getSaveFiles(gameName):
-    """returns a list of the attempts made with a 'new' option"""
-    gameFolder = os.path.join(os.path.dirname(os.getcwd()), "games", gameName, "saveFiles")
-    checkForSaveFileDirectory(gameFolder)
-    #get every file, [0] because it returns a list inside of a list
-    saveFiles = [x[2] for x in os.walk(gameFolder)][0]
-    #keep files with attempt in its name, and remove the '.txt'
-    saveFiles = [x[:-4] for x in saveFiles if("attempt" in x)] 
-    #give the option to make a new saveFile
-    saveFiles.append("new")
-
-    return saveFiles
-    
-# def addNewSaveFile():
-#     #"new" has purposely not been removed, now len == attempt
-#     saveFiles = self.getSaveFiles()
-#     number = len(saveFiles)
-#     #create the file then close it
-#     open(f"{self.saveFileFolder}/attempt {number}.txt", "x").close()
 
 
 

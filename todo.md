@@ -2,9 +2,6 @@
 
 save files to internal storage android
 
-import saves from folder
-
-
 catch pokemon
 delete catched pokemon, seperate area called lost&found?
 save encountered pokemon to savefiles and read them
@@ -44,14 +41,15 @@ rework saving
 add game object inheritance to also allow http, keep it locally as well for crashes
 
 removing pokemon automatically displays the first, update to show new position or 1 before??
+error? if 1 or more pokemon caught same route (default on) "you have already caught pokemon x on this route"
+
+ugly solution, change saves for different phone. export to folder/over wifi to other device?, import from folder
 
 
-********************************Kivy*************************
-implement logic
+********************************UI*************************
 implement swiping
-add Exit game button
-TrainerScreen global view, picture buttons -> defeat pokemon
-Trainerscreen add images to button to change detailed view
+TrainerScreen global view, picture buttons pressed -> defeat pokemon
+Trainerscreen add images to buttons to change detailed view
 
 
 
@@ -60,23 +58,22 @@ Opencv to overlay on game
 
 
 
+*************************Settings*******************************
+settings button front page
+    show available areas per badge - option on or off (default off)
+    
+    checkmark after route name if pokemon already caught that route (default on)
+    duplicate clause and evolutionary clause (default on)
+    shiny clause (on)
+    option to change wallpaper
+        check standard image(s) for copyright
+
 *****************************extras***************************
 show all available pokemon per route vanilla games
 show all available trainer data vanilla games
 show all available items per route vanilla games
 
-settings button front page
-    show available areas per badge - option on or off (default off)
-    message if 2 or more pokemon caught same route (default on) "you have already caught pokemon x on this route"
-    checkmark after route name if pokemon already caught that route (default on)
-    duplicate clause and evolutionary clause (default on)
-    remember all caught pokemon, collected items and defeated trainers (default on) each own setting
-    use a movelist to validate moves used
-    amount of saves kept.
-    option to change wallpaper
-        check image(s) for copyright
-        option to change updateTime for wallpaper
-
+use a movelist to validate moves used
 basic logic for getting encounters from rom hack documentation
 read encountertable data from rom
     import pkhex file to display caught pokemon and update caught pokemon in areas
@@ -93,3 +90,5 @@ add non-canon pokemon with name and use own sprite or ?.png
 sort route list option, own choice
 When selecting route, automatically center route chosen when choosing other route
 When selecting areatype for encounters, use scrollview to teleport to correct position and have all pokemon visible in a large layout
+export import saves, files on android will be saved to internals storag and windows will exclude /games/*
+settings button on front page, settings page two tabs, general and game specific based on game chosen

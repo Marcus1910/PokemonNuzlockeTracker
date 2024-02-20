@@ -14,8 +14,6 @@ class WindowManager(ScreenManager):
     _screenNumber = 0
     screenList = []
 
-    
-
     @property
     def gameObject(self):
         return self._gameObject
