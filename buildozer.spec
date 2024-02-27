@@ -7,7 +7,7 @@ title = NuzlockeTracker
 package.name = NuzlockeTracker
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.test
+package.domain = org.NuzlockeTracker
 
 # (str) Source code where the main.py live
 source.dir = .
@@ -23,7 +23,7 @@ source.include_patterns = assets/*,images/*.png
 #source.exclude_exts = spec, txt, md, code-workspace
 
 # (list) List of directory to exclude (let empty to not exclude anything)
-source.exclude_dirs = Documentation 
+source.exclude_dirs = documentation, bin, feedback, .buildozer
 
 # (list) List of exclusions using pattern matching
 # Do not prefix with './'

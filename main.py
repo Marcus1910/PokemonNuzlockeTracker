@@ -18,12 +18,6 @@ def changePath():
     os.chdir(mainPath)
 
 def getOS() -> str:
-    #don't know if this works for everything but works for me with pc and phone
-    print(platform.system())
-    print(os.environ)
-    print()
-    # platform.system() == 'Linux' and 'ANDROID_DATA' in os.environ
-
     if platform.system() == 'Windows':
         return 'Windows'
     elif platform.system() == 'Darwin':  # macOS

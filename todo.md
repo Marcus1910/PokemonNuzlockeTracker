@@ -16,6 +16,7 @@ add new items
 
 
 add pokemon when name is entered, update pokemon after that
+back button -> popup leave game, check if screen is a edit screen, message continue editing. else message save and exit or just exit
 
 
 

@@ -4,7 +4,7 @@ eigen pokemon calculator, showdown imports etc
 
 
 Android internal storage
--Org.test.PokemonNuzlockeTracker
+-org.NuzlockeTracker.PokemonNuzlockeTracker
     |
     |-games
     |   |-{GameName}
@@ -14,6 +14,9 @@ Android internal storage
     |-backgroundImages
     |
     |-settings
+    |
+    |-app
+    |   |-program
     |
     |
     

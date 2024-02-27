@@ -21,7 +21,6 @@ class SelectGameScreen(BackgroundScreen):
         # print(pathToImage)
         self.game = None
         self.attempt = None
-        print(f"operatingSystem: {operatingSystem}")
         self.fileRetriever = FileRetriever(operatingSystem)
         
         layout = BoxLayout(orientation= "vertical", spacing = 10, padding = 10)

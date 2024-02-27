@@ -15,14 +15,18 @@ class FileRetriever():
         self.internalGameStoragePath = None
         self.operatingSystem = operatingSystem
 
+        #call correct functions to setup filesystem inside program correctly or continue with leftover files
         if self.operatingSystem == "Android":
             self.internalStoragePath = self.getStoragePath()
             print(f"storage phone: {self.internalStoragePath}")
             if self.validateDirectory(self.internalStoragePath):
                 self.internalGameStoragePath = self.getInternalGameStoragePath()
+                print(self.internalStoragePath, self.internalGameStoragePath)
                 self.moveAllFiles()
             else:
-                logger.error(f"could not move all Files from internal storage to program storage")
+                logger.error(f"could not access internal storage, has it been removed?\ncontinuing with local files inside program")
+        else:
+            logger.info("did not detect Android, assuming Windows")
 
     def checkGames(self):
         #walks down the directory for other directories, retrieves the names and puts them in a list
@@ -35,7 +39,6 @@ class FileRetriever():
 
     def validateDirectory(self, folder : str) -> bool:
         """checks if the directory existst otherwise creates it, returns 1 when succesful else 0"""
-        #if savefile directory doesn't exists
         if not os.path.isdir(folder):
             logger.debug(f"could not find {folder}")
             return 0
@@ -58,14 +61,10 @@ class FileRetriever():
     def moveAllFiles(self):
         """moves all files from internal storage to program folder, depending on OS"""
         if self.operatingSystem == "Android":
-            self.printDirectory(self.internalGameStoragePath)
-            print("-------------------------------------")
-            self.printDirectory(self.gameFolder)
-            print("-------------------------------------")
-            # self.moveFiles(self.internalStoragePath, self.gameFolder)
+            self.moveFiles(self.internalStoragePath, self.gameFolder)
 
     def getStoragePath(self) -> str | None:
-        """get storagePath from android device, if failed returns None"""
+        """get storagePath from android device, if failed returns None. sets internalStporage to True or False"""
         try:
             from android.storage import app_storage_path
         except ImportError as e:
@@ -80,10 +79,13 @@ class FileRetriever():
         return None
 
     def getInternalGameStoragePath(self) -> str | None:
-        """get internalGamePath to store savefiles"""
+        """get internalGamePath to store savefiles, sets internalGameStorage to True or False"""
         gamePath = os.path.join(self.internalStoragePath, "games")
-        return gamePath if self.validateDirectory(gamePath) else None 
-
+        print(f"gamePath: {gamePath}")
+        if not self.validateDirectory(gamePath):
+            #directory does not exist but internal storage is accessible. create new folder
+            os.mkdir(gamePath)
+        return gamePath
     
     def retrieveGameFiles(self, gameName: str) -> bool:
         """places the correct gameFiles into the /games/gameName directory"""
@@ -172,10 +174,23 @@ class FileRetriever():
         return 1
 
     def printDirectory(self, path: str):
+        """prints all files and subdirectories from given path"""
+        print(f"path: {path}")
+        if not os.path.isdir(path) or path == None:
+            logger.error(f"could not read {path}, path is invalid")
+            return
+        totalSize = 0
         for root, dirs, files in os.walk(path):
+            rootSize = 0
             print(f"Directory: {root}")
             for file in files:
+                fp = os.path.join(root, file)
+                if not os.path.islink(fp):
+                    rootSize += os.path.getsize(fp)
                 print(f"  File: {file}")
+            totalSize += rootSize
+            print(f"{root}: {rootSize}")
+        print(f"total: {totalSize}")
 
 
 
