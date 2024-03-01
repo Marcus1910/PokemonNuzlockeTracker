@@ -23,6 +23,7 @@ class NuzlockeScreen(BackgroundScreen):
 
         self.areaSpinner = Spinner(text = "choose an area", values = ["new Area"], size_hint_y = 0.04)
         self.areaSpinner.background_color = gm.opaque
+        self.areaSpinner.scroll_timeout = 0.2
         self.areaSpinner.bind(text = self.areaChanged)
 
         self.layout.add_widget(self.screenBox)

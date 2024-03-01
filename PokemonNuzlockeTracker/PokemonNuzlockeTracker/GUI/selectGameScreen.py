@@ -1,6 +1,3 @@
-from kivy.uix.widget import Widget
-from kivy.uix.image import Image
-from kivy.uix.screenmanager import Screen, SlideTransition
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.uix.label import Label
@@ -17,8 +14,6 @@ from games import MainGame
 class SelectGameScreen(BackgroundScreen):
     def __init__(self, operatingSystem, **kwargs):
         super().__init__(**kwargs)
-        # pathToImage = os.path.join(os.path.dirname(os.getcwd()), "images", "bg.jpg")
-        # print(pathToImage)
         self.game = None
         self.attempt = None
         self.fileRetriever = FileRetriever(operatingSystem)
@@ -64,7 +59,7 @@ class SelectGameScreen(BackgroundScreen):
 
         self.add_widget(layout)
 
-    def gameChanged(self, instance, game : str):
+    def gameChanged(self, instance, game : str) -> None:
         self.game = game
         self.continueButton.disabled = True
         if game == "New game":
@@ -72,13 +67,13 @@ class SelectGameScreen(BackgroundScreen):
             return
         self.retrieveSaveFile(game)
     
-    def retrieveSaveFile(self, game : str):
+    def retrieveSaveFile(self, game : str) -> None:
         """updates save file spinner"""
-        self.attemptSpinner.values = self.fileRetriever.getSaveFiles(game)
+        self.attemptSpinner.values = self.fileRetriever.getSaveFilesList(game)
         self.attemptSpinner.text = "select the attempt"
         self.attemptSpinner.disabled = False
 
-    def attemptSelected(self, instance, attempt):
+    def attemptSelected(self, instance, attempt: str) -> None:
         """verifies the attempt selected and disables continuebutton"""
         if self.attemptSpinner.text == "select the attempt":
             return
@@ -86,7 +81,7 @@ class SelectGameScreen(BackgroundScreen):
         self.attempt = attempt
         self.continueButton.text = f"{self.game}: {self.attempt}"
 
-    def startAttempt(self, instance):
+    def startAttempt(self, instance) -> None:
         """create Game object and give it to windowManager"""
         #create Game Object, pass to new screen
         self.manager.attempt = self.attempt

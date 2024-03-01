@@ -1,6 +1,10 @@
 ----------------**TestRun**-----------------------------------
 
-save files to internal storage android
+Backend logic add new Game
+
+add new games from UI
+
+add new Area
 
 catch pokemon
 delete catched pokemon, seperate area called lost&found?
@@ -13,16 +17,14 @@ grab and save items
 show items
 add new items
 
-
-
 add pokemon when name is entered, update pokemon after that
 back button -> popup leave game, check if screen is a edit screen, message continue editing. else message save and exit or just exit
+exit without saving -> save temporary, next startup ask to save with list of adjustments
 
 
 
 ---STEPS TO TAKE FOR BETA---
 *******************************Logic*************************
-Create new games
 save encountered pokemon, ~~defeated trainers~~ and ~~grabbed items~~ to savefiles and read them correctly ONLY READING LEFT, TEST WRITING
 
 able to create new games
@@ -91,5 +93,7 @@ add non-canon pokemon with name and use own sprite or ?.png
 sort route list option, own choice
 When selecting route, automatically center route chosen when choosing other route
 When selecting areatype for encounters, use scrollview to teleport to correct position and have all pokemon visible in a large layout
-export import saves, files on android will be saved to internals storag and windows will exclude /games/*
+export import saves, files on android will be saved to internal storage and windows will exclude /games/*
 settings button on front page, settings page two tabs, general and game specific based on game chosen
+read from internal storage instead of copying everything to the program at startup
+Remove trainer from saveFile is trainer is defeated, saves space

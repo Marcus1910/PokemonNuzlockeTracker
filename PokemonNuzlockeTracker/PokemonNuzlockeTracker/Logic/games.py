@@ -3,11 +3,9 @@ from trainer import Trainer
 from trainerPokemon import TrainerPokemon, EncounteredPokemon
 from item import Item
 from readFormattedData import readFormattedData
-from loggerConfig import logicLogger as logger
 from fileRetriever import FileRetriever
-import shutil
 
-
+from loggerConfig import logicLogger as logger
 import json
 import os
 
@@ -25,22 +23,28 @@ class MainGame():
     def __init__(self, fileRetriever: FileRetriever, gameName: str, saveFileName = 'new'):
         self.fileRetriever = fileRetriever
         self.gameName = gameName
-        self.saveFileName = f"{saveFileName}.txt"
+
+        if saveFileName == "new":
+            self.saveFileName = f"attempt {len(self.fileRetriever.getSaveFilesList(self.gameName))}.txt"
+        else:
+            self.saveFileName = f"{saveFileName}.txt"
 
         self.readData = None
         self.saveFileError = False
         self._badge = 0 #default badge 0
         
-        #not a dictionary, because we want it to be in documentation order and in a stable order, dict items can change position
+        #TODO not a dictionary, because we want it to be in documentation order and in a stable order, dict items can change position, OrderedDict change
         self.areaList = []
-        self.gamePath = os.path.join(os.path.dirname(os.getcwd()), f"games/{self.gameName}")
-        self.dataFolder = os.path.join(self.gamePath, "data")
-        self.saveFileFolder = os.path.join(self.gamePath, "saveFiles")
+        self.gamePath = self.fileRetriever.gameFolder
+        self.dataFolder = self.fileRetriever.dataFolder
+        self.saveFileFolder = self.fileRetriever.saveFilesFolder
 
-        self._saveFile = os.path.join(self.saveFileFolder, self.saveFileName)
+        self._saveFile = fileRetriever.getSaveFile(self.saveFileName)
         self.dataFile = os.path.join(self.dataFolder, f"{self.gameName}GameData.txt")
+        logger.info(f"saveFile: {self._saveFile}, dataFile: {self.dataFile}")
 
-        self.fileRetriever.retrieveGameFiles(gameName)
+        self.fileRetriever.copyGameFilesToProgram(gameName)
+        self.retrieveGameData()
     
     @property
     def badge(self):
@@ -50,13 +54,10 @@ class MainGame():
     def badge(self, badge):
         self._badge = badge
     
-    @property
-    def saveFile(self):
-        return self._saveFile
-    
-    @saveFile.setter
-    def saveFile(self, filename):
-        self._saveFile = os.path.join(self.saveFileFolder, f"{filename}.txt")
+    def validateFile(self, file: str) -> bool:
+        if os.path.isfile(file):
+            return True
+        return False
 
     def writeToFile(self):
         logger.info("saving game")
@@ -68,7 +69,7 @@ class MainGame():
             saveFileList.append(area.storeToSaveFile())
 
         #savefile location has been edited if there was an error reading from it
-        with open(self.saveFile, "w") as file:
+        with open(self._saveFile, "w") as file:
             file.truncate()
             file.write(json.dumps(saveFileList, default = vars, indent = 1))
 
@@ -78,46 +79,55 @@ class MainGame():
         
         self.fileRetriever.saveGameFiles(self.gameName)
     
-
-    def retrieveGameData(self):
-        """retrieves all information that can be found about the current game, including selected savefile"""
+    def retrieveGameData(self) -> list | list[Area]:
+        """retrieves all information that can be found about the current game, including selected savefile, returns an empty list or a list with area objects"""
+        #read from data folder correctdata, if that is not available try to read from gamedata otherwise return an empty list
         self.retrieveGlobalGameData()
-        if not self.saveFileError:
-            self.retrieveSaveFile()
+        logger.info("collected regular data")
+
+        self.retrieveSaveFile()
         return self.areaList
 
     def retrieveGlobalGameData(self):
         """retrieves game data and saves it into readData"""
-        try:
-            with open(self.dataFile, "r") as file:
-                try:
-                    self.readData = json.load(file)
-                    self.addGameData()
-                except json.JSONDecodeError as e:
-                    logger.error(f"json failed to load so file is empty or invalid, reloading from correctdata, {e}")
-                    #change datafile name so no progress is lost
-                    self.retrieveEncounterData()
-        except FileNotFoundError:
-            logger.error(f"there is no GameData for {self.gameName}, collecting it from {self.gameName}CorrectData.txt",exc_info = True)
+        if not self.validateFile(self.dataFile):
+            #file does not exist
+            logger.error(f"there is no GameData for {self.gameName}, collecting it from {self.gameName}CorrectData.txt")
             self.retrieveEncounterData()
+            return
+        #file exists
+        with open(self.dataFile, "r") as file:
+            try:
+                self.readData = json.load(file)
+                self.addGameData()
+            except json.JSONDecodeError as e:
+                logger.error(f"json failed to load so file is empty or invalid, reloading from correctdata, {e}")
+                #change datafile name so no progress is lost
+                self.retrieveEncounterData()
 
-    def retrieveSaveFile(self):
-        try:
-            with open(self.saveFile, "r") as file:
-                try:
-                    saveFileJson = json.load(file)
-                    self.addSaveFileData(saveFileJson)
-                except json.JSONDecodeError as e:
-                    self.saveFileError = True
-                    #TODO change self.saveFileError to a different file because the original cannot be read
-                    logger.error(f"Something went wrong, could not load saveFile", exc_info = True)
-        except FileNotFoundError:
-            logger.error(f"Savefile, {self.saveFile} could not be found", exc_info = True)
+    def retrieveSaveFile(self) -> None:
+        #check whether the saveFile is a corect path
+        if self._saveFile == None or not self.validateFile(self._saveFile):
+            logger.error(f"Savefile, {self._saveFile} could not be found")
             self.saveFileError = True
+            return
+        
+        with open(self._saveFile, "r") as file:
+            try:
+                saveFileJson = json.load(file)
+                self.addSaveFileData(saveFileJson)
+            except json.JSONDecodeError as e:
+                self.saveFileError = True
+                #TODO change self.saveFileError to a different file because the original cannot be read
+                logger.error(f"Something went wrong, could not load saveFile")
 
     def retrieveEncounterData(self):
         #only needed to create the json dumps and backup if file cannot be read
-        self.areaList = readFormattedData(f"{self.dataFolder}\{self.gameName}CorrectData.txt").returnAreaList()
+        correctDataPath = os.path.join(self.dataFolder, f"{self.gameName}CorrectData.txt")
+        if not self.validateFile(correctDataPath):
+            self.areaList = []
+            return
+        self.areaList = readFormattedData(correctDataPath).returnAreaList()
 
     def addGameData(self):
         """converts all data read from the game data json file and converts it into objects"""  
@@ -128,11 +138,13 @@ class MainGame():
             #check if route exists by looping through entire list
             for route in self.areaList:
                 if areaName == route.name:
+                    logger.debug(f"found {areaName} in json")
                     wildArea = route
                     alreadyexists = True
                     break
             #if not found in areaList
             else:
+                logger.debug(f"creating new Area {areaName} from provided json")
                 wildArea = Area(areaName)
                 wildArea = self.getFromJSON(wildArea, area, ["_encounters", "_items", "_trainers", "_encounteredPokemon"])#exclude items, trainers, encounters and encounteredpokemon
             
@@ -142,33 +154,35 @@ class MainGame():
                 encounterList = []
                 terrainName = terrain[0]
                 pokemonList = terrain[1]
+                logger.debug(f"starting gathering pokemon from {areaName} : {terrainName}")
                 for pokemonJson in pokemonList:
                     encounterPokemon = EncounteredPokemon(self.errorName)
                     encounterPokemon = self.getFromJSON(encounterPokemon, pokemonJson)
-                    logger.debug(f"FINISHED POKEMON: {encounterPokemon}")
+                    logger.debug(f"finished pokemon: {encounterPokemon}")
                     encounterList.append(encounterPokemon)
                 wildArea._encounters.append([terrainName, encounterList])
                 encounterList = [terrainName, pokemonList]
+                logger.debug(f"Finished gathering from {terrainName}")
             
             """retrieve all area attributes"""
             items = area["_items"]
-            logger.debug(f"STARTING {areaName} ITEMS")
+            logger.debug(f"starting {areaName} items")
             for itemName, itemJson in items.items():
                 areaItem = Item(itemName)
                 areaItem = self.getFromJSON(areaItem, itemJson)
-                logger.debug(f"FINISHED ITEM: {itemName}")
+                logger.debug(f"Finished item: {itemName}")
                 wildArea.items[areaItem.name] = areaItem
-            logger.debug(f"FINISHED {areaName} ITEMS")
+            logger.debug(f"finished {areaName} items")
             
             """retrieve all trainer attributes"""
-            logger.debug(f"STARTING {areaName} TRAINERS")
+            logger.debug(f"starting {areaName} trainers")
             trainers = area["_trainers"]
             for trainerName, trainerJson in trainers.items():
                 #trainerName = trainer["_name"]
                 pokemonTrainer = Trainer(trainerName)
                 
                 pokemonTrainer = self.getFromJSON(pokemonTrainer, trainerJson, ["_pokemon"]) #puts json as a pokemon
-                logger.debug(f"FINISHED {pokemonTrainer.name} WITHOUT POKEMON ATTRIBUTES")
+                logger.debug(f"finished {pokemonTrainer.name} without pokemon attributes")
 
                 
                 """retrieve pokemon attributes"""
@@ -185,11 +199,12 @@ class MainGame():
             if not alreadyexists:
                 self.areaList.append(wildArea)
 
-            logger.debug(f"FINISHED {areaName} TRAINERS")
-            logger.debug("FINISHED GAME DATA")
+            logger.debug(f"Finished {areaName} trainers")
+        logger.debug("FINISHED GAME DATA")
 
     def addSaveFileData(self, saveFileJson):
         """updates the self.arealist with the savefile"""
+        logger.debug("GATHERING SAVEFILE DATA")
         #remove dictionary from json
         try:
             self.badge = saveFileJson.pop(0)["_badge"]
@@ -214,16 +229,19 @@ class MainGame():
                         else:
                             #trainer undefeated, look at pokemon
                             areaObject.trainers[trainer].defeated = False
-                            for pokemonAmount, pokemon in enumerate(area["_trainers"][trainer]["_pokemon"]):
-                                #keep track of defeated pokemon
-                                defeated = 0
-                                for pokemonObject in areaObject.trainers[trainer].pokemon:
-                                    if pokemonObject.name == pokemon["_name"]:
-                                        pokemonObject.defeated = pokemon["_defeated"]
-                                        if pokemonObject.defeated: defeated += 1
-                                if defeated == pokemonAmount:
-                                    #all pokemon are defeated, set trainer to defeated
-                                    areaObject.trainers[trainer].defeated = True
+                            try:
+                                for pokemonAmount, pokemon in enumerate(area["_trainers"][trainer]["_pokemon"]):
+                                    #keep track of defeated pokemon
+                                    defeated = 0
+                                    for pokemonObject in areaObject.trainers[trainer].pokemon:
+                                        if pokemonObject.name == pokemon["_name"]:
+                                            pokemonObject.defeated = pokemon["_defeated"]
+                                            if pokemonObject.defeated: defeated += 1
+                                    if defeated == pokemonAmount:
+                                        #all pokemon are defeated, set trainer to defeated
+                                        areaObject.trainers[trainer].defeated = True
+                            except KeyError as e:
+                                logger.debug(f"could not find the pokemon belonging to {trainer}")
 
                     #add items picked up
                     #items that are not picked up don't get saved by default, still check just in case
@@ -238,7 +256,6 @@ class MainGame():
                     #add encounters caught on route
             break
 
-
     def checkVarExistsJsonDump(self, attribute, json, value = "n/a"):
         """checks whether a variable exists in a json else returns value or defaults to n/a"""
         try:
@@ -247,8 +264,8 @@ class MainGame():
             x = value
         return x
 
-    def getFromJSON(self, object, json, notWanted = []):
-        """function that reads the attributes of an object and completes them given the correct json"""
+    def getFromJSON(self, object, json, notWanted = []) -> object:
+        """function that reads the attributes of an object and completes them given the correct json, returns object that was given"""
         defaultValues = {}
         notWanted = [*notWanted]
         #removes all the __variables and methods (including setters and getters from property methods) from the attributes list
@@ -265,7 +282,6 @@ class MainGame():
                     keyName = keyName[0].lower() + keyName[1:]
                     #the attribute 100% exists, so no default for the getattr
                     defaultValues[keyName] = getattr(object, attribute)
-                #print(f"removed: {attribute}")
         #remove not wanted variables
         for variable in notWanted[:]:
             if variable in attributes:
@@ -279,7 +295,6 @@ class MainGame():
             #get the default value for an attribute if it is given as class variable
             attributeValue = self.checkVarExistsJsonDump(attribute, json, getattr(object, attribute, default))
             setattr(object, attribute, attributeValue)
-        #print(object.name)
         return object
 
 

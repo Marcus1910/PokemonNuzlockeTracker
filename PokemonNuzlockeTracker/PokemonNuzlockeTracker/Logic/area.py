@@ -153,7 +153,8 @@ class Area():
             #check whether the itemObject is empty, if it is empty ity is not included
             vars = {itemName: itemObject.storeToDataFile() for itemName, itemObject in dictionary.items()}
         else:
-            vars = {itemName: itemObject.storeToSaveFile() for itemName, itemObject in dictionary.items() if itemObject.storeToSaveFile() is not None}
+            #savedObject so function is only called once
+            vars = {itemName: savedObject for itemName, itemObject in dictionary.items() if (savedObject := itemObject.storeToSaveFile()) is not None}
         return vars
     
     def storeToSaveFile(self):
@@ -162,8 +163,8 @@ class Area():
                 "_items": self.createDictForSaving(self.items, 0), "_encounteredPokemon": self.createDictForSaving(self.encounteredPokemon, 0)}
 
     def storeToDataFile(self):
-        return {"_name": self.name, "_trainers": self.createDictForSaving(self.trainers),\
-                 "_items": self.createDictForSaving(self.items), "_encounters": self.encounters, "_accessible": self.accessible}
+        return {"_name": self.name, "_accessible": self.accessible, "_trainers": self.createDictForSaving(self.trainers),\
+                 "_items": self.createDictForSaving(self.items), "_encounters": self.encounters}
 
     def __str__(self):
         returnString = f"{self._name} has {len(self._trainers)} trainers\n"

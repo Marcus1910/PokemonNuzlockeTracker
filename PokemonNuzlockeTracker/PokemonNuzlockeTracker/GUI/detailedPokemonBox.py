@@ -86,7 +86,8 @@ class DetailedPokemonBox(BoxLayout):
             self.moveBox.add_widget(moveInput)
 
         #code for removeButton
-        self.removeButton = Button(text = "remove pokemon", on_press = self.removePokemon, size_hint_y = 0.2)
+        self.defeatButton = Button(text = "Defeat Pokemon", on_press = self.defeatPokemon, size_hint_y = 0.1)
+        self.removeButton = Button(text = "Remove Pokemon", on_press = self.removePokemon, size_hint_y = 0.1)
         
         #add everything to correct widgets
         self.nameLevelBox.add_widget(self.nameInput)
@@ -96,6 +97,7 @@ class DetailedPokemonBox(BoxLayout):
         
         self.nameImageBox.add_widget(self.nameLevelBox)
         self.nameImageBox.add_widget(self.imageBox)
+        self.nameImageBox.add_widget(self.defeatButton)
         self.nameImageBox.add_widget(self.removeButton)
 
         self.pokemonInfoBox.add_widget(self.abilityInput)
@@ -121,7 +123,6 @@ class DetailedPokemonBox(BoxLayout):
         image = self.retrievePokemonImage(label.text)
         self.pokemonImage.source = image
 
-        
     def retrievePokemonImage(self, name: str) -> str:
         """returns location of the pokemon image or the 0.png"""
         logger.debug(f"searching for image of {name}")
@@ -132,9 +133,6 @@ class DetailedPokemonBox(BoxLayout):
         else:
             logger.debug(f"could not find image for {name}")
             return os.path.join(self.pokemonSpritesFolder, f"0.png")
-
-
-
 
     def fillPokemonLayout(self, pokemonObject):
         """fills in the layout made by buildPokemonLayout function, needs pokemon object to do so"""
@@ -290,6 +288,11 @@ class DetailedPokemonBox(BoxLayout):
         pokemon = self.trainerObject.pokemon[0] if len(self.trainerObject.pokemon) > 0 else None
         self.showPokemon(0, pokemon)
         self.updateButtons()
+    
+    def defeatPokemon(self, button):
+        newDefeated = not self.pokemonObject.defeated
+        logger.debug(f"changed {self.pokemonObject.name} to {newDefeated}")
+        self.pokemonObject.defeated = newDefeated
 
     def checkString(self, text):
         """function that returns True when the given text consists of only whitespace or is empty"""

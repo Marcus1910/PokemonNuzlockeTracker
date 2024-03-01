@@ -1,12 +1,22 @@
 import os
 import shutil
 from loggerConfig import logicLogger as logger
+import time
 
 
 class FileRetriever():
     def __init__(self, operatingSystem):
-        print("file retriever")
+        """Fileretriever takes the responsibility to move, copy, create and retrieve folders and correctly place them so the game object can adjust the files"""
         self.gameFolder = os.path.join(os.path.dirname(os.getcwd()), "games")
+        #forward declaration, TODO getters
+        self._gameNameFolder = None
+        self._dataFolder = None
+        self._saveFilesFolder = None
+        
+        if not self.validateDirectory(self.gameFolder):
+            logger.critical(f"Could not find own internal storage for games, exiting in 10 seconds")
+            time.sleep(10)
+
         #boolean if the internal storage is accessible, now used for Android
         self.internalStorage = False
         self.internalStoragePath = None
@@ -18,17 +28,30 @@ class FileRetriever():
         #call correct functions to setup filesystem inside program correctly or continue with leftover files
         if self.operatingSystem == "Android":
             self.internalStoragePath = self.getStoragePath()
-            print(f"storage phone: {self.internalStoragePath}")
+            logger.debug(f"storage phone: {self.internalStoragePath}")
             if self.validateDirectory(self.internalStoragePath):
                 self.internalGameStoragePath = self.getInternalGameStoragePath()
-                print(self.internalStoragePath, self.internalGameStoragePath)
                 self.moveAllFiles()
             else:
-                logger.error(f"could not access internal storage, has it been removed?\ncontinuing with local files inside program")
+                logger.warning(f"could not access internal storage, has it been removed?\ncontinuing with local files inside program")
         else:
-            logger.info("did not detect Android, assuming Windows")
+            logger.debug("did not detect Android, assuming Windows")
+
+    @property
+    def gameNameFolder(self):
+        return self._gameNameFolder
+    
+    @property
+    def dataFolder(self):
+        return self._dataFolder
+    
+    @property
+    def saveFilesFolder(self):
+        return self._saveFilesFolder
 
     def checkGames(self):
+        """returns a list of the games available with an option to create a new game"""
+        #TODO read from internal storage as well? no need to copy everything at startup
         #walks down the directory for other directories, retrieves the names and puts them in a list
         games = [gameName for gameName in next(os.walk(self.gameFolder))[1] if gameName != "Generic"]
         #no games found
@@ -38,22 +61,31 @@ class FileRetriever():
         return games
 
     def validateDirectory(self, folder : str) -> bool:
-        """checks if the directory existst otherwise creates it, returns 1 when succesful else 0"""
+        """checks if the directory exists returns 1 on success, 0 on failure"""
         if not os.path.isdir(folder):
             logger.debug(f"could not find {folder}")
             return 0
         return 1
+    
+    def getSaveFile(self, saveFileName: str) -> str | None:
+        saveFilePath = os.path.join(self._saveFilesFolder, saveFileName)
+        print(saveFilePath)
+        if not os.path.isfile(saveFilePath):
+            return None
+        return saveFilePath
 
-    def getSaveFiles(self, gameName : str) -> list[str]:
-        """returns a list of the attempts made with a 'New attempt' option"""
-        saveFileFolder = os.path.join(os.path.dirname(os.getcwd()), "games", gameName, "saveFiles")
-        if self.validateDirectory(saveFileFolder):
+    def getSaveFilesList(self, gameName : str) -> list[str]:
+        """returns a list of the attempts made with a 'New attempt' option. Should be called after the game is selected"""
+        #creates all folders if they don't already exist
+        self.createGameFolders(gameName)
+        saveFiles = []
+        if self.validateDirectory(self._saveFilesFolder):
             #get every file, [0] because it returns a list inside of a list
-            saveFiles = [x[2] for x in os.walk(saveFileFolder)][0]
+            saveFiles = [x[2] for x in os.walk(self._saveFilesFolder)][0]
             #keep files with attempt in its name, and remove the '.txt'
             saveFiles = [x[:-4] for x in saveFiles if("attempt" in x)]
         else:
-            logger.error(f"could not find savefilefolder: {saveFileFolder}") 
+            logger.error(f"could not find savefilefolder: {self._saveFilesFolder}") 
         #give the option to make a new saveFile
         saveFiles.append("New attempt")
         return saveFiles
@@ -81,14 +113,14 @@ class FileRetriever():
     def getInternalGameStoragePath(self) -> str | None:
         """get internalGamePath to store savefiles, sets internalGameStorage to True or False"""
         gamePath = os.path.join(self.internalStoragePath, "games")
-        print(f"gamePath: {gamePath}")
+        logger.info(f"found gamePath: {gamePath}")
         if not self.validateDirectory(gamePath):
             #directory does not exist but internal storage is accessible. create new folder
             os.mkdir(gamePath)
         return gamePath
     
-    def retrieveGameFiles(self, gameName: str) -> bool:
-        """places the correct gameFiles into the /games/gameName directory"""
+    def copyGameFilesToProgram(self, gameName: str) -> bool:
+        """places the correct gameFiles into the /games/gameName directory, gets called by game Object"""
         if self.operatingSystem == "Android":
             return self.copyGameFolderToProgramFolder(gameName)
         elif self.operatingSystem == "Windows":
@@ -113,12 +145,11 @@ class FileRetriever():
 
         logger.debug(f"fetching files from {savefileFolder}")
         self.internalGameStorage = True
-        
-        print("savefile directory")
-        self.printDirectory(savefileFolder)
+
+        # self.printDirectory(savefileFolder)
         gameNameFolder = os.path.join(self.gameFolder, gameName)
         self.moveFiles(savefileFolder, gameNameFolder)
-        print("program folder after copy")
+        logger.info("program folder after copy: ")
         self.printDirectory(gameNameFolder)
         return 1
 
@@ -170,27 +201,49 @@ class FileRetriever():
                         return 0
 
                 shutil.copy(sourceFile, destinationDirectory)
-                print(f"copied {sourceFile} to {destinationDirectory}")
+                logger.info(f"copied {sourceFile} to {destinationDirectory}")
         return 1
+
+    def createGameFolders(self, gameName: str):
+        """creates the neccessary folders GameName, datafolder, savefilesFolder if they don't already exist"""
+        if gameName == "Generic":
+            logger.error(f"cannot allow a game called 'Generic' as Generic is used for the default data for pokemon")
+
+        #create Game Folder
+        self._gameNameFolder = os.path.join(self.gameFolder, gameName)
+        self.createNewFolder(self._gameNameFolder)
+        #create Savefiles folder
+        self._saveFilesFolder = os.path.join(self._gameNameFolder, "saveFiles")
+        self.createNewFolder(self._saveFilesFolder)
+        #create Data folder
+        self._dataFolder = os.path.join(self._gameNameFolder, "data")
+        self.createNewFolder(self._dataFolder)
+    
+    def createNewFolder(self, path: str) -> None:
+        """creates a new folder if the folder does not already exist"""
+        if self.validateDirectory(path):
+            logger.debug(f"{path} already has a folder, not creating a new one")
+        else:
+            logger.debug(f"creating {path}")
+            os.mkdir(path)
 
     def printDirectory(self, path: str):
         """prints all files and subdirectories from given path"""
-        print(f"path: {path}")
         if not os.path.isdir(path) or path == None:
             logger.error(f"could not read {path}, path is invalid")
             return
         totalSize = 0
         for root, dirs, files in os.walk(path):
             rootSize = 0
-            print(f"Directory: {root}")
+            logger.debug(f"Directory: {root}")
             for file in files:
                 fp = os.path.join(root, file)
                 if not os.path.islink(fp):
                     rootSize += os.path.getsize(fp)
-                print(f"  File: {file}")
+                logger.debug(f"  File: {file}")
             totalSize += rootSize
-            print(f"{root}: {rootSize}")
-        print(f"total: {totalSize}")
+            logger.debug(f"{root} has a size of: {rootSize} bytes")
+        logger.debug(f"total bytes: {totalSize}")
 
 
 

@@ -132,14 +132,33 @@ class Trainer():
 
     def storeToSaveFile(self):
         """checks whether the trainer needs to be stored in the saveFile, if it is not defeated, or no pokemon are defeated It shouldn't"""
-        #get a list of None or json formats
-        NumberOfDefeatedPokemon = [pokemon.storeToSaveFile() for pokemon in self.pokemon]
+        #get a list of True or False
+        logger.debug(f"saving {self._name}")
+        numberOfDefeatedPokemon = [pokemon.defeated for pokemon in self.pokemon]
         variableDict = {"_name": self.name}
-        #want all the pokemon data if one pokemon, checks if all the pokemon in numberofdefeated pokemon are defeated, true
-        if self._defeated != self.defaultDefeated or not all(pokemon is None for pokemon in NumberOfDefeatedPokemon): 
-            variableDict["_pokemon"] = self.pokemon
-            variableDict["_defeated"] = self.defeated
-            return variableDict  
+        
+        #all checks for boolean values
+        if all(numberOfDefeatedPokemon):
+            #all pokemon have been defeated
+            logger.debug(f"all pokemon have been defeated, changing trainers defeated status to True")
+            self._defeated = True
+
+        #add defeated status to json
+        variableDict["_defeated"] = self.defeated
+
+        #trainer has been defeated
+        if self._defeated != self.defaultDefeated: 
+            logger.debug(f"trainer has been defeated, only saving name and defeatedStatus")
+            return variableDict
+        
+        if any(numberOfDefeatedPokemon):
+            #add pokemon to variable list as at least one pokemon has been defeated but the trainer hasn't
+            logger.debug("adding pokemon to saveFile")
+            variableDict["_pokemon"] = [pokemonJson for pokemon in self._pokemon if (pokemonJson := pokemon.storeToSaveFile()) is not None]
+            return variableDict
+        
+        #no pokemon have been defeated and the trainer hasn't been defeated
+        logger.debug("skipping trainer, has not been fought")
         return None
 
     def __str__(self):

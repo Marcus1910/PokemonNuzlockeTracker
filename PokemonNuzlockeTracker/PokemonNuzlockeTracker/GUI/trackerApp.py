@@ -11,7 +11,7 @@ from itemScreen import ItemScreen
 import sys
 from loggerConfig import logger
 
-class SelectGame(App):
+class TrackerApp(App):
     def __init__(self, operatingSystem, **kwargs):
         super().__init__(**kwargs)
         self.operatingSystem = operatingSystem

@@ -21,7 +21,7 @@ class WindowManager(ScreenManager):
     @gameObject.setter
     def gameObject(self, gameObject):
         self._gameObject = gameObject
-        self.areaList = self._gameObject.retrieveGameData()
+        self.areaList = self._gameObject.areaList
     
     @property
     def screenNumber(self):

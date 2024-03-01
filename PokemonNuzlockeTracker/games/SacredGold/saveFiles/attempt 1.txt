@@ -5,85 +5,16 @@
  {
   "_name": "New Bark Town",
   "_trainers": {
+   "Morty": {
+    "_name": "Morty",
+    "_defeated": true
+   },
+   "Larry": {
+    "_name": "Larry",
+    "_defeated": true
+   },
    "Maarten": {
     "_name": "Maarten",
-    "_pokemon": [
-     {
-      "_defeated": true,
-      "_name": "Charizard",
-      "_level": "58",
-      "_dexNo": null,
-      "_gender": "n/a",
-      "_moves": [
-       "Flamethrower",
-       "quick attack"
-      ],
-      "_ability": "drought",
-      "_heldItem": null
-     },
-     {
-      "_defeated": true,
-      "_name": "Magikarp",
-      "_level": "58",
-      "_dexNo": null,
-      "_gender": "n/a",
-      "_moves": [
-       "Splash",
-       "quick attack"
-      ],
-      "_ability": "drizzle",
-      "_heldItem": "heat rock"
-     },
-     {
-      "_defeated": true,
-      "_name": "Squirtle",
-      "_level": "25",
-      "_dexNo": null,
-      "_gender": null,
-      "_moves": [
-       "Flamethrower",
-       "quick attack",
-       "Bubble",
-       "explosion"
-      ],
-      "_ability": null,
-      "_heldItem": null
-     },
-     {
-      "_defeated": true,
-      "_name": "Charmander",
-      "_level": 50,
-      "_dexNo": null,
-      "_gender": null,
-      "_moves": [],
-      "_ability": null,
-      "_heldItem": null
-     },
-     {
-      "_defeated": true,
-      "_name": "Squirtle",
-      "_level": 25,
-      "_dexNo": null,
-      "_gender": null,
-      "_moves": [],
-      "_ability": null,
-      "_heldItem": null
-     },
-     {
-      "_defeated": true,
-      "_name": "Charmander",
-      "_level": "50",
-      "_dexNo": null,
-      "_gender": null,
-      "_moves": [
-       "Flamethrower",
-       "quick attack",
-       "Crabhammer"
-      ],
-      "_ability": "Drizzle",
-      "_heldItem": null
-     }
-    ],
     "_defeated": true
    }
   },

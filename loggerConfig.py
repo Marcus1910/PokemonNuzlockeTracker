@@ -5,7 +5,7 @@ logger = logging.getLogger('PokemonNuzlockeTracker')
 logicLogger = logging.getLogger('PokemonNuzlockeTracker logic')
 
 logger.setLevel(logging.DEBUG)
-logicLogger.setLevel(logging.INFO)
+logicLogger.setLevel(logging.DEBUG)
 
 logger.propagate = False
 logicLogger.propagate = False

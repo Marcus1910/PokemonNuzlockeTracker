@@ -43,6 +43,6 @@ if __name__ == "__main__":
         from CLI import CLI
         CLI(operatingSystem)
     else:
-        from selectGame import SelectGame
-        SelectGame(operatingSystem).run()
+        from trackerApp import TrackerApp
+        TrackerApp(operatingSystem).run()
 
