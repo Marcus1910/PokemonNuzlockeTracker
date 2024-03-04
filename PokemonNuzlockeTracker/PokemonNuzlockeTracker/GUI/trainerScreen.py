@@ -28,8 +28,9 @@ class TrainerScreen(NuzlockeScreen):
         self.trainerSpinner = Spinner(text = self.defaultTrainerText, values = ["New Trainer"], size_hint_x = 0.75)
         self.trainerSpinner.bind(text = self.updateTrainerBox)
         self.trainerSpinner.background_color = gm.opaque
+        self.trainerSpinner.disabled = True
         #create buttons that edits trainer, logic is inside of editTrainerBox
-        self.editTrainerButton = Button(text = "edit", size_hint_x = 0.25)
+        self.editTrainerButton = Button(text = "edit trainer", size_hint_x = 0.25)
         #disable button till a trainer is selected
         self.editTrainerButton.disabled = True
         self.editTrainerButton.background_color = gm.opaque
@@ -52,8 +53,6 @@ class TrainerScreen(NuzlockeScreen):
         self.viewSpinner = Spinner(values = ["global", "detailed"], size_hint_x = 0.15, pos_hint = {"right": 1}, padding = (10, 0, 0, 0), text_autoupdate = True)
         self.viewSpinner.bind(text = self.updateTrainerBox)
 
-
-
         self.spriteFolder = os.path.join(os.path.dirname(os.getcwd()), "images", "sprites", "pokemonMinimalWhitespace")
 
         self.trainerSpinnerBox.add_widget(self.trainerSpinner)
@@ -66,8 +65,12 @@ class TrainerScreen(NuzlockeScreen):
         self.layout.add_widget(self.viewBox)
         self.layout.add_widget(self.trainerBox)
     
-    def areaChanged(self, spinner, text):
-        super().areaChanged(spinner, text)
+    def areaChanged(self, spinner, text) -> None:
+        if not super().areaChanged(spinner, text):
+            #invalid area, should not be able to add new Trainer to it
+            self.trainerSpinner.disabled = True
+            return
+        self.trainerSpinner.disabled = False
         self.updateTrainers()
         self.trainerSpinner.text = self.defaultTrainerText
         self.currentTrainerObject = None

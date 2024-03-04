@@ -1,5 +1,6 @@
 from kivy.uix.screenmanager import ScreenManager
 from loggerConfig import logger
+import games as gm
 from trainer import Trainer
 from trainerPokemon import TrainerPokemon
 
@@ -7,7 +8,7 @@ class WindowManager(ScreenManager):
     attempt = None
     #global game object
     _gameObject = None
-    areaList = None
+    areaDict = None
     #gets replaced with the area object as soon as it is chosen
     _currentArea = None
 
@@ -21,7 +22,7 @@ class WindowManager(ScreenManager):
     @gameObject.setter
     def gameObject(self, gameObject):
         self._gameObject = gameObject
-        self.areaList = self._gameObject.areaList
+        self.areaDict = self._gameObject.areaDict
     
     @property
     def screenNumber(self):
@@ -37,18 +38,20 @@ class WindowManager(ScreenManager):
         return self._currentArea
     
     @currentArea.setter
-    def currentArea(self, areaName):
+    def currentArea(self, newAreaName):
         """function expects a name, retrieves the AreaObject from the corresponding name"""
-        for area in self.areaList:
-            if area.name == areaName:
-                self._currentArea = area
+        for areaObject in self.areaDict.values():
+            if areaObject.name == newAreaName:
+                self._currentArea = areaObject
+                logger.debug(f"found {newAreaName} in areaDict")
                 break
         else:
-            logger.error(f"{areaName} could not be loaded, not found in areaList")
+            logger.error(f"{newAreaName} could not be loaded, not found in areaDict")
+            return
         logger.debug(f"{self._currentArea.name} Object loaded in manager")
     
     def saveCurrentArea(self):
-        """overwrite area object in areaList"""
+        """overwrite area object in areaDict"""
         pass
 
     def updateCurrentArea(self):
@@ -58,4 +61,4 @@ class WindowManager(ScreenManager):
         trainer = Trainer("Maarten")
         politoed = TrainerPokemon("Politoed", 57)
         trainer.pokemon = politoed
-        self.gameObject.areaList[0].addTrainer(trainer)
+        self.gameObject.areaDict[0].addTrainer(trainer)

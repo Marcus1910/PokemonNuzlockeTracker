@@ -24,7 +24,8 @@ class ItemScreen(NuzlockeScreen):
     
     def areaChanged(self, spinner, text):
         """when the area changes update all items on screen"""
-        super().areaChanged(spinner, text)
+        if not super().areaChanged(spinner, text):
+            return
         self.items = self.manager.currentArea.items
         self.updateLayout()
     

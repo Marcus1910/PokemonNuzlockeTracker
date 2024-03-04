@@ -1,20 +1,11 @@
 import json
 from loggerConfig import logicLogger as logger
+from visibility import Visibility
 
 class Area():
-
-    pokemonCatchLimit = 1 #TODO get from settings.py
-    defaultCanCatchPokemon = False
-    defaultStartLine = 0
     def __init__(self, name):
-        self._name = name
-        self._startLine = None #needed for initial reading, also useful for debugging
-        self._encounters = [] #list with encounterpokemon objects
-        self._trainers = {} #dict of trainer name - object
-        self._items = {} # dict of item name - object
+        self.name = name
         self._accessible = 0 #how many badges are needed to access this area, default 0
-        self._encounteredPokemon = {} #dict with pokemon objects name: object
-        self._canCatchPokemon = True #replace code to somewhere it isnt immediatly called : False if len(self._encounteredPokemon) >= pokemonCatchLimit else True
     
     @property
     def name(self):
@@ -25,12 +16,44 @@ class Area():
         self._name = name
     
     @property
-    def startLine(self):
-        return self._startLine
+    def accessible(self):
+        return self._accessible
     
-    @startLine.setter
-    def startLine(self, line):
-        self._startLine = line
+    @accessible.setter
+    def accessible(self, accessible):
+        if self._accessible < accessible:
+            logger.info(f"current gym badges required are {self._accessible}, changed it to {accessible}")
+        else:
+            self._accessible = accessible
+
+    def createDictForSaving(self, dictionary, data = True):
+        """function meant for the storeToDataFile or StoreToSaveFile, default is DataFile"""
+        if data:
+            #check whether the itemObject is empty, if it is empty ity is not included
+            vars = {itemName: itemObject.storeToDataFile() for itemName, itemObject in dictionary.items()}
+        else:
+            #savedObject so function is only called once
+            vars = {itemName: savedObject for itemName, itemObject in dictionary.items() if (savedObject := itemObject.storeToSaveFile()) is not None}
+        return vars
+    
+    def storeToSaveFile(self):
+        """function that will return a dictionary which stores all the variables meant to be stored into the savefile"""
+        return {"_name": self.name}
+
+    def storeToDataFile(self):
+        return {"_name": self.name, "_accessible": self.accessible}
+
+class EncounterArea(Area):
+
+    pokemonCatchLimit = 1 #TODO get from settings.py
+    defaultCanCatchPokemon = False
+    def __init__(self, name):
+        super().__init__(name)
+        self._encounters = [] #list with encounterpokemon objects
+        self._trainers = {} #dict of trainer name - object
+        self._items = {} # dict of item name - object
+        self._encounteredPokemon = {} #dict with pokemon objects name: object
+        self._canCatchPokemon = True #replace code to somewhere it isnt immediatly called : False if len(self._encounteredPokemon) >= pokemonCatchLimit else True
     
     @property
     def encounters(self):
@@ -106,17 +129,6 @@ class Area():
             logger.error(f"{item} does not exist")
 
     @property
-    def accessible(self):
-        return self._accessible
-    
-    @accessible.setter
-    def accessible(self, accessible):
-        if self._accessible < accessible:
-            logger.info(f"current gym badges required are {self._accessible}, changed it to {accessible}")
-        else:
-            self._accessible = accessible
-    
-    @property
     def encounteredPokemon(self):
         #remove pokemon that are not actually captured and have captureStatus 0
         self._encounteredPokemon = {pokemonName: pokemonObject for pokemonName, pokemonObject in self._encounteredPokemon.items()}# if pokemonObject.captureStatus != pokemonObject._defaultCaptureStatus}
@@ -146,32 +158,42 @@ class Area():
     @property
     def canCatchPokemon(self):
         return self._canCatchPokemon
-
-    def createDictForSaving(self, dictionary, data = True):
-        """function meant for the storeToDataFile or StoreToSaveFile, default is DataFile"""
-        if data:
-            #check whether the itemObject is empty, if it is empty ity is not included
-            vars = {itemName: itemObject.storeToDataFile() for itemName, itemObject in dictionary.items()}
-        else:
-            #savedObject so function is only called once
-            vars = {itemName: savedObject for itemName, itemObject in dictionary.items() if (savedObject := itemObject.storeToSaveFile()) is not None}
-        return vars
     
     def storeToSaveFile(self):
         """function that will return a dictionary which stores all the variables meant to be stored into the savefile"""
-        return {"_name": self.name, "_trainers": self.createDictForSaving(self.trainers, 0), \
-                "_items": self.createDictForSaving(self.items, 0), "_encounteredPokemon": self.createDictForSaving(self.encounteredPokemon, 0)}
+        previousDict = super().storeToSaveFile()
+        previousDict["_trainers"] = self.createDictForSaving(self.trainers, 0)
+        previousDict["_items"] = self.createDictForSaving(self.items, 0)
+        previousDict["_encounteredPokemon"] = self.createDictForSaving(self.encounteredPokemon, 0)
+        return previousDict
 
     def storeToDataFile(self):
-        return {"_name": self.name, "_accessible": self.accessible, "_trainers": self.createDictForSaving(self.trainers),\
-                 "_items": self.createDictForSaving(self.items), "_encounters": self.encounters}
-
+        previousDict = super().storeToDataFile()
+        previousDict["_trainers"] = self.createDictForSaving(self.trainers, 1)
+        previousDict["_items"] = self.createDictForSaving(self.items, 1)
+        previousDict["_encounteredPokemon"] = self.createDictForSaving(self.encounteredPokemon, 1)
+        return previousDict
+    
     def __str__(self):
         returnString = f"{self._name} has {len(self._trainers)} trainers\n"
         for trainer in self._trainers:
             returnString += trainer.__str__()
         return returnString
 
+class ReadArea(EncounterArea):
+    defaultStartLine = 0
+    def __init__(self, name):
+        """class is used for the initial reading from the pdf or text file"""
+        super().__init___(name)
+        self._startLine = None #needed for initial reading, also useful for debugging
+    
+    @property
+    def startLine(self):
+        return self._startLine
+    
+    @startLine.setter
+    def startLine(self, line):
+        self._startLine = line
 
 
 

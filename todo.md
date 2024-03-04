@@ -1,10 +1,14 @@
 ----------------**TestRun**-----------------------------------
 
-Backend logic add new Game
+Backend logic add new Game, 
+UI changes AreaObject on spinner click, creating new Area first thing on app startup crashes app
+ENUMS FLAG, visibilty -> trainers, items, encounters
+Also use for reading
 
 add new games from UI
 
 add new Area
+    update nuzlockeScreen areaChanged to show a new screen
 
 catch pokemon
 delete catched pokemon, seperate area called lost&found?
@@ -12,6 +16,8 @@ save encountered pokemon to savefiles and read them
 add pokemon to area, add new encountertype to area
 
 treat multiple floors as the same encounter - logic
+
+fileretriever -> dictionary with settings
 
 grab and save items
 show items
@@ -97,3 +103,4 @@ export import saves, files on android will be saved to internal storage and wind
 settings button on front page, settings page two tabs, general and game specific based on game chosen
 read from internal storage instead of copying everything to the program at startup
 Remove trainer from saveFile is trainer is defeated, saves space
+1 function for searching for pokemon images

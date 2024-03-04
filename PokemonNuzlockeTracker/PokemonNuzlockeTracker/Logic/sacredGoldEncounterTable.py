@@ -1,4 +1,4 @@
-from area import Area
+from area import EncounterArea, ReadArea
 from trainerPokemon import EncounterPokemon
 import pdfplumber
 import re
@@ -84,7 +84,7 @@ class SacredGoldWriter():
                             line = line.replace("  ", " ")
                         if line[-1:] == " ":
                             line = line[:-1]
-                        newArea = Area(line)
+                        newArea = ReadArea(line)
                         newArea.startLine = index
                         self._areaList.append(newArea)
         

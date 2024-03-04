@@ -1,10 +1,12 @@
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.spinner import Spinner
+from kivy.uix.popup import Popup
 
 
 from transparentButton import TransparentButton
 from backgroundScreen import BackgroundScreen
+from newAreaBox import NewAreaBox
 from loggerConfig import logger
 import games as gm
 
@@ -13,6 +15,7 @@ class NuzlockeScreen(BackgroundScreen):
     
     def __init__(self, screenName, **kwargs):
         super().__init__(**kwargs)
+        self.areaSpinnerString = "choose an area"
         self.standardColor = gm.standardColor
         self.entered = False
 
@@ -21,32 +24,84 @@ class NuzlockeScreen(BackgroundScreen):
         screenLabel = Label(text = screenName, color = self.standardColor)
         self.screenBox.add_widget(screenLabel)
 
-        self.areaSpinner = Spinner(text = "choose an area", values = ["new Area"], size_hint_y = 0.04)
+        self.areaSpinnerBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.04)
+        self.areaSpinner = Spinner(text = self.areaSpinnerString, values = ["new Area"], size_hint_x = 0.85)
         self.areaSpinner.background_color = gm.opaque
-        self.areaSpinner.scroll_timeout = 0.2
         self.areaSpinner.bind(text = self.areaChanged)
 
+        self.editAreaButton = TransparentButton(text = "edit area", size_hint_x = 0.15, on_release = self.editArea)
+        self.editAreaButton.disabled = True
+
+        self.areaSpinnerBox.add_widget(self.areaSpinner)
+        self.areaSpinnerBox.add_widget(self.editAreaButton)
+
         self.layout.add_widget(self.screenBox)
-        self.layout.add_widget(self.areaSpinner)
+        self.layout.add_widget(self.areaSpinnerBox)
 
 
         self.add_widget(self.layout)
 
-    def on_pre_enter(self):
+    def editArea(self, button):
+        logger.debug("editing Area, TODO")
+    
+    def addArea(self, name, badge):
+        if self.manager.gameObject.addArea(name, badge):
+            #change spinner text to new Area, area object follows due to areaChanged
+            self.areaSpinner.text = name
+            #reload area spinner
+            self.updateAreaSpinner()
+            return 1
+        return 0
+    
+    def setDefaultArea(self):
+        """set area to default is current Area is None"""
+        if self.manager.currentArea == None:
+            logger.debug("setting area to default")
+            self.areaSpinner.text = self.areaSpinnerString
+            return
+        self.areaSpinner.text = self.manager.currentArea.name
+        logger.debug("popup skipped and area is valid, changing spinner text to correct text")
+    
+    def updateAreaSpinner(self):
+        """updates the values that the spinner uses"""
+        self.areaSpinner.values = [routeName for routeName in self.manager.areaDict.keys()]
+
+    
+    def on_pre_enter(self) -> bool:
         """adjusts areaSpinner text to area currently selected, returns 0 if area == None"""
-        self.areaSpinner.values = [area.name for area in self.manager.areaList]
+        self.updateAreaSpinner()
+        self.areaSpinner.values.insert(0, "New Area")
         if self.manager.currentArea == None:
             logger.debug("No area selected")
             return 0
         self.areaSpinner.text = self.manager.currentArea.name
         return 1
 
-    def areaChanged(self, spinner, text):
+    def areaChanged(self, spinner, text) -> bool:
         """text is the areaName"""
-        self.manager.currentArea = text
-        logger.info(f"currentArea changed to {text}")
+        #gets set to default when popup is canceled, otherwise crashes if the areaObject is None
+        if text == self.areaSpinnerString or self.manager.gameObject == None:
+            logger.debug("default string for Area, or area invalid not doing anything")
+            return 0
         
-
+        if text == gm.newAreaString:
+            logger.debug("creating popup to add new Area")
+            self.editAreaButton.disabled = True
+            newAreaBox = NewAreaBox(orientation = "vertical", confirmCallback = self.addArea)
+            areaPopup = Popup(title = "add Area", content = newAreaBox)
+            newAreaBox.dismiss = areaPopup.dismiss
+            
+            #newAreaBox.confirmButton.on_release(self.addArea)
+            newAreaBox.cancelButton.on_release = lambda : [areaPopup.dismiss(), self.setDefaultArea()]
+            
+            areaPopup.open()
+            return 0
+        
+        self.manager.currentArea = text
+        self.editAreaButton.disabled = False
+        logger.info(f"currentArea changed to {text}")
+        return 1
+        
     def on_enter(self):
         """call function to add next and previous buttons to the bottom of the screen"""
         #return if the function is already called, else create buttons. otherwise creates multiple buttons on each exit
@@ -72,7 +127,7 @@ class NuzlockeScreen(BackgroundScreen):
         """go to the next screen"""
         self.manager.screenNumber += 1
 
-    def previousScreen(self, insatnce):
+    def previousScreen(self, instance):
         """go to previous screen"""
         self.manager.screenNumber -= 1
     

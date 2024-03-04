@@ -23,12 +23,16 @@ class EncounterScreen(NuzlockeScreen):
         self.areaTypeSpinner = Spinner(text = self.areaTypeSpinnerString, values = [], size_hint_y = 0.04)
         self.areaTypeSpinner.background_color = gm.opaque
         self.areaTypeSpinner.bind(text = self.changeEncounters)
+        self.areaTypeSpinner.disabled = True
 
         self.layout.add_widget(self.areaTypeSpinner)
         self.layout.add_widget(self.encounterBox)
     
     def areaChanged(self, spinner, text):
-        super().areaChanged(spinner, text)
+        if not super().areaChanged(spinner, text):
+            self.areaTypeSpinner.disabled = True
+            return 0
+        self.areaTypeSpinner.disabled = False
         self.clearLayout()
         self.resetSpinner()
         self.encounterTypeList = []
