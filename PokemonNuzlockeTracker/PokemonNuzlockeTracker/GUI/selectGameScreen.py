@@ -1,8 +1,10 @@
-from kivy.uix.boxlayout import BoxLayout
+from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.core.window import Window
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.spinner import Spinner
+from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogContentContainer, MDDialogSupportingText
+from kivymd.uix.textfield import MDTextField, MDTextFieldHintText
 
 import games as gm
 from backgroundScreen import BackgroundScreen
@@ -18,11 +20,11 @@ class SelectGameScreen(BackgroundScreen):
         self.attempt = None
         self.fileRetriever = FileRetriever(operatingSystem)
         
-        layout = BoxLayout(orientation= "vertical", spacing = 10, padding = 10)
+        layout = MDBoxLayout(orientation= "vertical", spacing = 10, padding = 10)
         layout.size = Window.size
         layout.pos = self.pos
         #select the game
-        gameSelection = BoxLayout(orientation = "vertical", size_hint_y= 0.05)
+        gameSelection = MDBoxLayout(orientation = "vertical", size_hint_y= 0.05)
         self.gameDDM = Spinner(text = "Select the game", values = self.fileRetriever.checkGames())
         self.gameDDM.bind(text = self.gameChanged)
         self.gameDDM.background_color = gm.opaque
@@ -30,7 +32,7 @@ class SelectGameScreen(BackgroundScreen):
         gameSelection.add_widget(self.gameDDM)
         
         #select attempt, gets filled as soon as the gameselection is filled in
-        attemptSelection = BoxLayout(orientation= "vertical", size_hint_y= 0.05)
+        attemptSelection = MDBoxLayout(orientation= "vertical", size_hint_y= 0.05)
         self.attemptSpinner = Spinner(text = "Select Attempt")
         self.attemptSpinner.bind(text = self.attemptSelected)
         self.attemptSpinner.background_color = gm.opaque
@@ -39,12 +41,12 @@ class SelectGameScreen(BackgroundScreen):
         attemptSelection.add_widget(self.attemptSpinner)
 
         #gather info on attempt and display it
-        attemptInfo = BoxLayout(orientation= "vertical", size_hint_y = 0.8)
+        attemptInfo = MDBoxLayout(orientation= "vertical", size_hint_y = 0.8)
         infoLabel = Label(text = "information about the attempt")
         attemptInfo.add_widget(infoLabel)
 
         #continue button
-        continueBox = BoxLayout(orientation= "vertical", size_hint_y = 0.1)
+        continueBox = MDBoxLayout(orientation= "vertical", size_hint_y = 0.1)
         self.continueButton = Button(text = "Continue with attempt")
         self.continueButton.bind(on_press = self.startAttempt)
         self.continueButton.background_color = gm.opaque
@@ -64,6 +66,8 @@ class SelectGameScreen(BackgroundScreen):
         self.continueButton.disabled = True
         if game == "New game":
             logger.info("TODO, implement popup for a new game")
+            self.newGameNameInput = MDTextField(MDTextFieldHintText(text="game name"))
+            MDDialog(MDDialogHeadlineText(text= "create new Game"), MDDialogContentContainer(self.newGameNameInput)).open()
             return
         self.retrieveSaveFile(game)
     

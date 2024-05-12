@@ -11,7 +11,7 @@ from loggerConfig import logger
 import games as gm
 
 class NuzlockeScreen(BackgroundScreen):
-    """Parent screen, adds the name of the screen at the top, add self.layout which is a boxLayout. Can also add background for all screens except first screen, total of 0.2 size_hint_y"""
+    """Parent screen, adds the name of the screen at the top, add own widgets into screenBox which is a boxLayout."""
     
     def __init__(self, screenName, **kwargs):
         super().__init__(**kwargs)
@@ -20,9 +20,11 @@ class NuzlockeScreen(BackgroundScreen):
         self.entered = False
 
         self.layout = BoxLayout(orientation= "vertical")
-        self.screenBox = BoxLayout(orientation = "vertical", size_hint_y = 0.04)
+        self.screenInfoBox = BoxLayout(orientation = "vertical", size_hint_y = 0.04)
         screenLabel = Label(text = screenName, color = self.standardColor)
-        self.screenBox.add_widget(screenLabel)
+        self.screenInfoBox.add_widget(screenLabel)
+
+        self.screenBox = BoxLayout(orientation = "vertical", size_hint_y = 0.8)
 
         self.areaSpinnerBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.04)
         self.areaSpinner = Spinner(text = self.areaSpinnerString, values = ["new Area"], size_hint_x = 0.85)
@@ -35,9 +37,9 @@ class NuzlockeScreen(BackgroundScreen):
         self.areaSpinnerBox.add_widget(self.areaSpinner)
         self.areaSpinnerBox.add_widget(self.editAreaButton)
 
-        self.layout.add_widget(self.screenBox)
+        self.layout.add_widget(self.screenInfoBox)
         self.layout.add_widget(self.areaSpinnerBox)
-
+        self.layout.add_widget(self.screenBox)
 
         self.add_widget(self.layout)
 
@@ -64,13 +66,13 @@ class NuzlockeScreen(BackgroundScreen):
     
     def updateAreaSpinner(self):
         """updates the values that the spinner uses"""
-        self.areaSpinner.values = [routeName for routeName in self.manager.areaDict.keys()]
-
+        routeList = [route.name for route in self.manager.areaList]
+        routeList.insert(0, gm.newAreaString)
+        self.areaSpinner.values = routeList
     
     def on_pre_enter(self) -> bool:
         """adjusts areaSpinner text to area currently selected, returns 0 if area == None"""
         self.updateAreaSpinner()
-        self.areaSpinner.values.insert(0, "New Area")
         if self.manager.currentArea == None:
             logger.debug("No area selected")
             return 0
@@ -80,6 +82,7 @@ class NuzlockeScreen(BackgroundScreen):
     def areaChanged(self, spinner, text) -> bool:
         """text is the areaName"""
         #gets set to default when popup is canceled, otherwise crashes if the areaObject is None
+        print(self.screenBox.size)
         if text == self.areaSpinnerString or self.manager.gameObject == None:
             logger.debug("default string for Area, or area invalid not doing anything")
             return 0
@@ -122,6 +125,9 @@ class NuzlockeScreen(BackgroundScreen):
 
         self.layout.add_widget(self.buttons)
         self.entered = True
+
+    def cleanScreenBox(self):
+        self.screenBox.clear_widgets()
     
     def nextScreen(self, instance):
         """go to the next screen"""

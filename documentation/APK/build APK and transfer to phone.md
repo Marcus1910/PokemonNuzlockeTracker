@@ -1,7 +1,7 @@
 Notes
     You will need a Linux system to build an Android Package Kit (APK) or use the windows subsystem for linux.
     This only works for android phones, it should be possible for iphones as buildozer can also make files for IOS but that has not been tested
-    During installation errors can occurr, errors that occurred are stated below with the solution I used.
+    During installation errors can occur, errors that occurred are stated below with the solution I used.
 
 requirements
     python- sudo apt install python3.10
@@ -16,6 +16,9 @@ requirements
         *git clone https://github.com/kivy/buildozer.git* in the directory where PokemonNuzlockeTracker is located, it should be a sibling folder
         Use *cd buildozer* to go into the directory and run *sudo python3 setup.py install* to install buildozer
     android debrug bridge(adb), optional- sudo apt install adb for linux and download it here for windows https://dl.google.com/android/repository/platform-tools_r27.0.0-windows.zip
+
+Setup WSL2
+
 
 Build APK
     Buildozer needs a *buildozer.spec* which is provided in the root directory of the program. Depending on what you added it could need modification. With most modifications you won't need to modify the .spec file.

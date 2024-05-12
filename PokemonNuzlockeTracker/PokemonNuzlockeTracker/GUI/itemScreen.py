@@ -20,7 +20,7 @@ class ItemScreen(NuzlockeScreen):
         # self.itemBox.add_widget(self.scroll_view)
         # self.itemBox.add_widget(outerBox)
 
-        self.layout.add_widget(self.scroll_view)
+        self.screenBox.add_widget(self.scroll_view)
     
     def areaChanged(self, spinner, text):
         """when the area changes update all items on screen"""

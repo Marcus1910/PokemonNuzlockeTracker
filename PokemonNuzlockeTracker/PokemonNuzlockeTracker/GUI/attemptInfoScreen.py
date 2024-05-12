@@ -18,10 +18,10 @@ class AttemptInfoScreen(NuzlockeScreen):
         graveLabel = Label(text = "Fainted pokemon placeholder", color = self.standardColor)
         self.graveBox.add_widget(graveLabel)
 
-        self.layout.add_widget(self.areaLabel)
-        self.layout.add_widget(self.badgeLabel)
-        self.layout.add_widget(self.pcBox)
-        self.layout.add_widget(self.graveBox)
+        self.screenBox.add_widget(self.areaLabel)
+        self.screenBox.add_widget(self.badgeLabel)
+        self.screenBox.add_widget(self.pcBox)
+        self.screenBox.add_widget(self.graveBox)
     
     def areaChanged(self, spinner, text):
         if not super().areaChanged(spinner, text):

@@ -1,9 +1,6 @@
 ----------------**TestRun**-----------------------------------
 
-Backend logic add new Game, 
-UI changes AreaObject on spinner click, creating new Area first thing on app startup crashes app
-ENUMS FLAG, visibilty -> trainers, items, encounters
-Also use for reading
+Backend logic add new Game
 
 add new games from UI
 
@@ -26,12 +23,13 @@ add new items
 add pokemon when name is entered, update pokemon after that
 back button -> popup leave game, check if screen is a edit screen, message continue editing. else message save and exit or just exit
 exit without saving -> save temporary, next startup ask to save with list of adjustments
-
+update to kivyMD
 
 
 ---STEPS TO TAKE FOR BETA---
 *******************************Logic*************************
 save encountered pokemon, ~~defeated trainers~~ and ~~grabbed items~~ to savefiles and read them correctly ONLY READING LEFT, TEST WRITING
+What to save to data and savefile from encounters
 
 able to create new games
 ~~read trainerlist and can defeat trainers~~
@@ -104,3 +102,30 @@ settings button on front page, settings page two tabs, general and game specific
 read from internal storage instead of copying everything to the program at startup
 Remove trainer from saveFile is trainer is defeated, saves space
 1 function for searching for pokemon images
+
+*****************************************Overhaul to KIVYMD**********************************************
+start screen
+    
+
+info screen
+    add next boss
+
+trainerScreen
+    tabs for global/detailed
+    cogwheel for edit trainer?
+    Button overlap for edit area
+    MD divider between pokemon, global only
+
+encounterScreen
+    tabs for encounter types, grass, fish, surf
+    static size and scroll?
+    MDdivider between encounters
+
+ItemScreen
+
+
+General
+    kivy swiper and/or Navigation bar for screens
+    SnackBar for errors
+
+

@@ -8,7 +8,7 @@ class WindowManager(ScreenManager):
     attempt = None
     #global game object
     _gameObject = None
-    areaDict = None
+    areaList = None
     #gets replaced with the area object as soon as it is chosen
     _currentArea = None
 
@@ -22,7 +22,7 @@ class WindowManager(ScreenManager):
     @gameObject.setter
     def gameObject(self, gameObject):
         self._gameObject = gameObject
-        self.areaDict = self._gameObject.areaDict
+        self.areaList = self._gameObject.areaList
     
     @property
     def screenNumber(self):
@@ -40,18 +40,18 @@ class WindowManager(ScreenManager):
     @currentArea.setter
     def currentArea(self, newAreaName):
         """function expects a name, retrieves the AreaObject from the corresponding name"""
-        for areaObject in self.areaDict.values():
+        for areaObject in self.areaList:
             if areaObject.name == newAreaName:
                 self._currentArea = areaObject
-                logger.debug(f"found {newAreaName} in areaDict")
+                logger.debug(f"found {newAreaName} in areaList")
                 break
         else:
-            logger.error(f"{newAreaName} could not be loaded, not found in areaDict")
+            logger.error(f"{newAreaName} could not be loaded, not found in areaList")
             return
         logger.debug(f"{self._currentArea.name} Object loaded in manager")
     
     def saveCurrentArea(self):
-        """overwrite area object in areaDict"""
+        """overwrite area object in areaList"""
         pass
 
     def updateCurrentArea(self):
@@ -61,4 +61,4 @@ class WindowManager(ScreenManager):
         trainer = Trainer("Maarten")
         politoed = TrainerPokemon("Politoed", 57)
         trainer.pokemon = politoed
-        self.gameObject.areaDict[0].addTrainer(trainer)
+        self.gameObject.areaList[0].addTrainer(trainer)

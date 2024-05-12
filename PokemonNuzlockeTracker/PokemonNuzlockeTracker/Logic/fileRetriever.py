@@ -8,7 +8,7 @@ class FileRetriever():
     def __init__(self, operatingSystem):
         """Fileretriever takes the responsibility to move, copy, create and retrieve folders and correctly place them so the game object can adjust the files"""
         self.gameFolder = os.path.join(os.path.dirname(os.getcwd()), "games")
-        #forward declaration, TODO getters
+        #forward declaration
         self._gameNameFolder = None
         self._dataFolder = None
         self._saveFilesFolder = None
@@ -16,6 +16,7 @@ class FileRetriever():
         if not self.validateDirectory(self.gameFolder):
             logger.critical(f"Could not find own internal storage for games, exiting in 10 seconds")
             time.sleep(10)
+            exit()
 
         #boolean if the internal storage is accessible, now used for Android
         self.internalStorage = False
@@ -36,6 +37,9 @@ class FileRetriever():
                 logger.warning(f"could not access internal storage, has it been removed?\ncontinuing with local files inside program")
         else:
             logger.debug("did not detect Android, assuming Windows")
+        
+        #set folder variables correctly
+
 
     @property
     def gameNameFolder(self):
@@ -68,8 +72,9 @@ class FileRetriever():
         return 1
     
     def getSaveFile(self, saveFileName: str) -> str | None:
+        logger.debug(f"retrieving path to {saveFileName} from saveFilFolder: {self.saveFilesFolder}")
         saveFilePath = os.path.join(self._saveFilesFolder, saveFileName)
-        print(saveFilePath)
+        logger.debug(f"found path: {saveFilePath}")
         if not os.path.isfile(saveFilePath):
             return None
         return saveFilePath
@@ -93,7 +98,7 @@ class FileRetriever():
     def moveAllFiles(self):
         """moves all files from internal storage to program folder, depending on OS"""
         if self.operatingSystem == "Android":
-            self.moveFiles(self.internalStoragePath, self.gameFolder)
+            self.moveFiles(self.internalGameStoragePath, self.gameFolder)
 
     def getStoragePath(self) -> str | None:
         """get storagePath from android device, if failed returns None. sets internalStporage to True or False"""

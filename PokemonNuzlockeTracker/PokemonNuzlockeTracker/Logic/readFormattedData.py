@@ -1,5 +1,6 @@
-from area import Area
+from area import ReadArea, EncounterArea
 from trainerPokemon import EncounteredPokemon
+from loggerConfig import logicLogger as logger
 import copy
 
 
@@ -15,6 +16,8 @@ class readFormattedData():
             self._data = file.readlines()
 
     def indexAreas(self):
+        """create area objects with lines so know where to start reading the data file"""
+        logger.debug(f"indexing areas from {self._file}")
         for index, line in enumerate(self._data):
             for area in self._areaTypes:
                 if area in line:
@@ -23,9 +26,10 @@ class readFormattedData():
                             line = line.replace("  ", " ")
                         if line[-1:] == " ":
                             line = line[:-1]
-                        newArea = Area(line)
+                        newArea = ReadArea(line)
                         newArea.startLine = index
                         self._areaList.append(newArea)
+        logger.debug(f"done indexing")
     
     def areaList(self):
         returnString = ""
@@ -34,6 +38,7 @@ class readFormattedData():
         return returnString
     
     def removeDuplicateNames(self):
+        """removes empty dual spaces and removes duplicate areaNames"""
         alreadySeen = []
         newAreaList = []
         for area in self._areaList:
@@ -51,13 +56,14 @@ class readFormattedData():
         #area loop
         for areaNumber, area in enumerate(self._areaList):
             formattedList = []
-            #areaname is already known
             beginLine = area.startLine + 1
             #create boundaries for each area
             try:
                 nextLine = self._areaList[areaNumber + 1].startLine
             except IndexError:
+                #last area in the list
                 nextLine = len(self._data)
+
             #data loop
             for line in range(nextLine - beginLine):  
                 encounterList = []
@@ -73,17 +79,18 @@ class readFormattedData():
                         level = "N/A"
                     #continue otherwise wild levels will be seen as an encounter type
                     continue
+
                 pokemons = separatedLine[1].split(',')
                 #create pokemon object loop
                 for index, pokemon in enumerate(pokemons):
                     pokemon = pokemon.split("(", 1)
-                    #remove left-over spaces from pokemon species
-                    species = pokemon[0].strip()
+                    #remove spaces in front of and at the end of the pokemon name
+                    pokemonName = pokemon[0].strip()
                     try:
-                        percentage = pokemon[1].split(')')[0]
+                        percentage = pokemon[1].split(')')[0].strip()
                     except IndexError:
-                        percentage = "N\A"
-                    encounter = EncounteredPokemon(species, level = level, percentage = percentage)
+                        percentage = "n/a"
+                    encounter = EncounteredPokemon(pokemonName, level = level, percentage = percentage)
                     encounterList.append(encounter)
                 formattedList.append([terrainType, encounterList])
             self._areaList[areaNumber]._encounters = copy.deepcopy(formattedList) 

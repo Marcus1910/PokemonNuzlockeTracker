@@ -61,9 +61,9 @@ class TrainerScreen(NuzlockeScreen):
         self.viewBox.add_widget(self.viewLabel)
         self.viewBox.add_widget(self.viewSpinner)
 
-        self.layout.add_widget(self.trainerSpinnerBox)
-        self.layout.add_widget(self.viewBox)
-        self.layout.add_widget(self.trainerBox)
+        self.screenBox.add_widget(self.trainerSpinnerBox)
+        self.screenBox.add_widget(self.viewBox)
+        self.screenBox.add_widget(self.trainerBox)
     
     def areaChanged(self, spinner, text) -> None:
         if not super().areaChanged(spinner, text):

@@ -5,10 +5,12 @@ from item import Item
 from readFormattedData import readFormattedData
 from fileRetriever import FileRetriever
 from collections import OrderedDict
+from utilityFunctions import checkString
 
 from loggerConfig import logicLogger as logger
 import json
 import os
+from time import sleep
 
 txtfile = "trainerData.txt"
 #change to settings
@@ -30,13 +32,14 @@ class MainGame():
             self.saveFileName = f"attempt {len(self.fileRetriever.getSaveFilesList(self.gameName))}.txt"
         else:
             self.saveFileName = f"{saveFileName}.txt"
+        logger.debug(f"savefileName: {self.saveFileName}")
 
         self.readData = None
         self.saveFileError = False
         self._badge = 0 #default badge 0
         
         #TODO not a dictionary, because we want it to be in documentation order and in a stable order, dict items can change position, OrderedDict change
-        self.areaDict = OrderedDict() #name : areaObject
+        self.areaList = [] #name : areaObject
         self.gamePath = self.fileRetriever.gameFolder
         self.dataFolder = self.fileRetriever.dataFolder
         self.saveFileFolder = self.fileRetriever.saveFilesFolder
@@ -58,23 +61,43 @@ class MainGame():
 
     def addArea(self, name, badge = 0) -> bool:
         logger.debug(f"adding Area: {name}")
+        if checkString(name):
+            return 0
+        
         if self.checkAreaExists(name):
             return 0
+        
         newArea = EncounterArea(name)
         newArea.badge = badge
-        self.areaDict.append(newArea)
+        #replace with insert on index, also place based on badge -> new function
+        self.areaList.append(newArea)
         return 1
     
     def removeArea(self, name) -> bool:
         logger.debug(f"removing Area: {name}")
+        for area in self.areaList:
+            if area.name == name:
+                self.areaList.remove(area)
+                return 1
+        else: 
+            logger.debug(f"{area} not found in list")
+            return 0
     
     def editArea(self, name, newName = None) -> bool:
         logger.debug(f"editing Area: {name}")
     
     def checkAreaExists(self, name) -> bool:
         logger.debug(f"checking if Area: {name} exists")
-
-    
+        for areaName in self.areaList:
+            if areaName == name:
+                #area exists
+                logger.debug(f"area {name} already exists")
+                return 1
+        else:
+            #area does not exists
+            logger.debug(f"area {name} does not exists yet")
+            return 0
+        
     def validateFile(self, file: str) -> bool:
         if os.path.isfile(file):
             return True
@@ -82,11 +105,11 @@ class MainGame():
 
     def writeToFile(self):
         logger.info("saving game")
-        dataareaDict = []
+        dataareaList = []
         saveFileList = [{"_badge": 6}]
         #fill lists with all the data to save
-        for area in self.areaDict.values():
-            dataareaDict.append(area.storeToDataFile())
+        for area in self.areaList:
+            dataareaList.append(area.storeToDataFile())
             saveFileList.append(area.storeToSaveFile())
 
         #savefile location has been edited if there was an error reading from it
@@ -96,7 +119,7 @@ class MainGame():
 
         with open(self.dataFile, "w") as file:
             file.truncate()
-            file.write(json.dumps(dataareaDict, default = vars, indent = 1))  
+            file.write(json.dumps(dataareaList, default = vars, indent = 1))  
         
         self.fileRetriever.saveGameFiles(self.gameName)
     
@@ -108,10 +131,16 @@ class MainGame():
         logger.info("collected regular data")
 
         self.retrieveSaveFile()
-        return self.areaDict
+        return self.areaList
 
     def addMandatoryAreas(self):
         logger.debug("adding Arena, Retirement and lost and found")
+        arena = EncounterArea("Arena")
+        retirement = EncounterArea("Retirement")
+        lostAndFound = EncounterArea("lost&found")
+        self.areaList.append(arena)
+        self.areaList.append(retirement)
+        self.areaList.append(lostAndFound)
 
     def retrieveGlobalGameData(self):
         """retrieves game data and saves it into readData"""
@@ -150,8 +179,10 @@ class MainGame():
         #only needed to create the json dumps and backup if file cannot be read
         correctDataPath = os.path.join(self.dataFolder, f"{self.gameName}CorrectData.txt")
         if not self.validateFile(correctDataPath):
-            return
-        self.areaDict = readFormattedData(correctDataPath).returnareaDict()
+            logger.critical(f"there is no correctDataFile, please make sure it is in gamename/data/. Exiting in 10 seconds")
+            sleep(10)
+            exit()
+        self.areaList = readFormattedData(correctDataPath).returnAreaList()
     
     # def checkForNormalArea(self, name : str) -> bool:
     #     """checks if the provided name is a normal Area, retirement, arena, lost and found"""
@@ -167,20 +198,20 @@ class MainGame():
             areaName = area["_name"]
             
             #check if route exists by looping through entire list
-            for routeName, areaObject in enumerate(self.areaDict.items()):
-                if areaName == routeName:
+            for route in self.areaList:
+                if areaName == route.name:
                     logger.debug(f"found {areaName} in json")
-                    wildArea = areaObject
+                    wildArea = route
                     alreadyexists = True
                     break
-            #if not found in areaDict
+            #if not found in areaList
             else:
                 logger.debug(f"creating new Area {areaName} from provided json")
                 wildArea = EncounterArea(areaName)
                 wildArea = self.getFromJSON(wildArea, area, ["_encounters", "_items", "_trainers", "_encounteredPokemon"])#exclude items, trainers, encounters and encounteredpokemon
             
             '''retrieve encounters from json dump in sacredGoldGameData.txt'''
-            terrainTypes = area["_encounters"]
+            terrainTypes = area["_encounters"]  
             for terrain in terrainTypes:
                 encounterList = []
                 terrainName = terrain[0]
@@ -228,13 +259,13 @@ class MainGame():
                 wildArea.addTrainer(pokemonTrainer)
 
             if not alreadyexists:
-                self.areaDict[wildArea.name] = wildArea
+                self.areaList.append(wildArea)
 
             logger.debug(f"Finished {areaName} trainers")
         logger.debug("FINISHED GAME DATA")
 
     def addSaveFileData(self, saveFileJson):
-        """updates the self.areaDict with the savefile"""
+        """updates the self.areaList with the savefile"""
         logger.debug("GATHERING SAVEFILE DATA")
         #remove dictionary from json
         try:
@@ -246,14 +277,14 @@ class MainGame():
             areaName = area["_name"]
             logger.debug(f"gathering savefile data for {areaName}")
             #loop through each area
-            for areaObject in self.areaDict.values():
+            for areaObject in self.areaList:
                 if areaObject.name == areaName:
                     #add trainers defeated status
                     for trainer in area["_trainers"]:
                         logger.debug(f"looking for {trainer} data")
                         #check if trainer has been defeated
                         if area["_trainers"][trainer]["_defeated"]:
-                            #add defeated to the areaDict
+                            #add defeated to the areaList
                             areaObject.trainers[trainer].defeated = True
                             #set all trainer pokemon to defeated
                             for pokemonIndex, _ in enumerate(areaObject.trainers[trainer].pokemon): 

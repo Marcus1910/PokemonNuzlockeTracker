@@ -1,4 +1,4 @@
-from kivy.app import App
+from kivymd.app import MDApp
 from kivy.core.window import Window
 
 from windowmanager import WindowManager
@@ -11,7 +11,7 @@ from itemScreen import ItemScreen
 import sys
 from loggerConfig import logger
 
-class TrackerApp(App):
+class TrackerApp(MDApp):
     def __init__(self, operatingSystem, **kwargs):
         super().__init__(**kwargs)
         self.operatingSystem = operatingSystem

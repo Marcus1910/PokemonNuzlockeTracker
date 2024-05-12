@@ -171,7 +171,7 @@ class EncounterArea(Area):
         previousDict = super().storeToDataFile()
         previousDict["_trainers"] = self.createDictForSaving(self.trainers, 1)
         previousDict["_items"] = self.createDictForSaving(self.items, 1)
-        previousDict["_encounteredPokemon"] = self.createDictForSaving(self.encounteredPokemon, 1)
+        previousDict["_encounters"] = self.encounters
         return previousDict
     
     def __str__(self):
@@ -184,7 +184,7 @@ class ReadArea(EncounterArea):
     defaultStartLine = 0
     def __init__(self, name):
         """class is used for the initial reading from the pdf or text file"""
-        super().__init___(name)
+        super().__init__(name)
         self._startLine = None #needed for initial reading, also useful for debugging
     
     @property
