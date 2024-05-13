@@ -5,8 +5,8 @@ from addTrainerBox import AddTrainerBox
 from loggerConfig import logger
 
 from kivy.uix.spinner import Spinner
-from kivy.uix.label import Label
-from kivy.uix.boxlayout import BoxLayout
+from kivymd.uix.label import MDLabel
+from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.uix.button import Button
 from kivy.uix.image import Image
 
@@ -22,7 +22,7 @@ class TrainerScreen(NuzlockeScreen):
         self.currentTrainerObject = None
         self.trainers = None
         #spinner to select trainer with label to edit trainer
-        self.trainerSpinnerBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.04)
+        self.trainerSpinnerBox = MDBoxLayout(orientation = "horizontal", size_hint_y = 0.04)
         #create trainerspinner
         self.defaultTrainerText = "Select Trainer"
         self.trainerSpinner = Spinner(text = self.defaultTrainerText, values = ["New Trainer"], size_hint_x = 0.75)
@@ -37,7 +37,7 @@ class TrainerScreen(NuzlockeScreen):
         self.editTrainerButton.bind(on_press = self.editTrainer) 
 
         #box that contains global view, all pokemon from trainer
-        self.trainerBox = BoxLayout(size_hint_y = 0.71, orientation = "vertical")
+        self.trainerBox = MDBoxLayout(size_hint_y = 0.71, orientation = "vertical")
 
         #used for detailed view
         self.detailedPokemonBox = DetailedPokemonBox(screen = self, orientation = "vertical", size_hint_y = 0.71)
@@ -48,8 +48,8 @@ class TrainerScreen(NuzlockeScreen):
         #screen used for adding trainers when "New Trainer" is selected
         self.addTrainerBox = AddTrainerBox(trainerScreen = self, orientation = "horizontal", size_hint_y = 0.71)
 
-        self.viewBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.05, padding = (0, 0, 0, 10))
-        self.viewLabel = Label(text = "view mode: ", size_hint_x = 0.15, padding = (0, 0, 50, 0))
+        self.viewBox = MDBoxLayout(orientation = "horizontal", size_hint_y = 0.05, padding = (0, 0, 0, 10))
+        self.viewLabel = MDLabel(text = "view mode: ", size_hint_x = 0.15, halign = "right")
         self.viewSpinner = Spinner(values = ["global", "detailed"], size_hint_x = 0.15, pos_hint = {"right": 1}, padding = (10, 0, 0, 0), text_autoupdate = True)
         self.viewSpinner.bind(text = self.updateTrainerBox)
 
@@ -168,21 +168,21 @@ class TrainerScreen(NuzlockeScreen):
         
         for index, pokemonObject in enumerate(self.currentTrainerObject.pokemon):
             #gather pokemon data and put it in Labels
-            pokemonBox = BoxLayout(orientation = "horizontal", size_hint_y = (1 - 0.05)/ (len(self.currentTrainerObject.pokemon)), padding = (0, 0, 0, 10))
+            pokemonBox = MDBoxLayout(orientation = "horizontal", size_hint_y = (1 - 0.05)/ (len(self.currentTrainerObject.pokemon)), padding = (0, 0, 0, 10))
             #create Image with name underneath
-            imageBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
+            imageBox = MDBoxLayout(orientation = "vertical", size_hint_x = 0.3)
             pokemonImage = Image(source = os.path.join(self.spriteFolder, f"{pokemonObject.name.lower()}.png"))
             pokemonImage.fit_mode = "contain"
-            nameLevelLabel = Label(text = f"{pokemonObject.name} lvl {pokemonObject.level}", color = self.standardColor, pos_hint = {"right": 1})
+            nameLevelLabel = MDLabel(text = f"{pokemonObject.name} lvl {pokemonObject.level}", color = self.standardColor, pos_hint = {"right": 1})
             
-            itemAbilityBox = BoxLayout(orientation = "vertical", size_hint_x = 0.1)
-            abilityInput = Label(text = f"{pokemonObject.ability}", color = self.standardColor, size_hint_y = 0.5, pos_hint = {"top" : 1})
-            heldItemInput = Label(text = f"{pokemonObject.heldItem}", color = self.standardColor, size_hint_y = 0.5, pos_hint = {"bottom" : 1})
+            itemAbilityBox = MDBoxLayout(orientation = "vertical", size_hint_x = 0.1)
+            abilityInput = MDLabel(text = f"{pokemonObject.ability}", color = self.standardColor, size_hint_y = 0.5, pos_hint = {"top" : 1})
+            heldItemInput = MDLabel(text = f"{pokemonObject.heldItem}", color = self.standardColor, size_hint_y = 0.5, pos_hint = {"bottom" : 1})
             
-            moveBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
+            moveBox = MDBoxLayout(orientation = "vertical", size_hint_x = 0.3)
 
             for moveIndex in range(4): 
-                moveSlot = Label(text = f"Not revealed", color = self.standardColor)
+                moveSlot = MDLabel(text = f"Not revealed", color = self.standardColor)
                 if moveIndex < len(pokemonObject.moves):
                     moveSlot.text = f"{pokemonObject.moves[moveIndex]}"
                 moveBox.add_widget(moveSlot)

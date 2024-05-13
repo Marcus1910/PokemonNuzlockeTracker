@@ -36,6 +36,7 @@ transfer APK to phone
 
     On Linux run *adb connect PHONE_IP:5555* to connect to your phone, this should start a new service and also ask for permission on your phone. Allow the connection.
     Navigate to PokemonNuzlockeTracker/bin, the location where the APK is and run *adb -s PHONE_IP:5555 install APK_NAME*, both PHONE_IP and APK_NAME can be autocompleted using the TAB key. It should now install to your phone. When you want to deploy again you only have to use the linux commands to connect and to install.
+    use adb -s 192.168.178.227:5555 logcat *:S python:D if you want to see what the terminal displays
 
 
 

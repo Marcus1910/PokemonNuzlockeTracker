@@ -3,6 +3,9 @@ from kivy.core.window import Window
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.spinner import Spinner
+
+from kivymd.uix.button import MDButton, MDButtonText
+from kivymd.uix.label import MDLabel
 from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogContentContainer, MDDialogSupportingText
 from kivymd.uix.textfield import MDTextField, MDTextFieldHintText
 
@@ -25,7 +28,7 @@ class SelectGameScreen(BackgroundScreen):
         layout.pos = self.pos
         #select the game
         gameSelection = MDBoxLayout(orientation = "vertical", size_hint_y= 0.05)
-        self.gameDDM = Spinner(text = "Select the game", values = self.fileRetriever.checkGames())
+        self.gameDDM = Spinner(text = "Select the game", values = self.fileRetriever.retrieveGameList())
         self.gameDDM.bind(text = self.gameChanged)
         self.gameDDM.background_color = gm.opaque
 
@@ -42,14 +45,14 @@ class SelectGameScreen(BackgroundScreen):
 
         #gather info on attempt and display it
         attemptInfo = MDBoxLayout(orientation= "vertical", size_hint_y = 0.8)
-        infoLabel = Label(text = "information about the attempt")
+        infoLabel = MDLabel(text = "information about the attempt", halign = "center")
         attemptInfo.add_widget(infoLabel)
 
         #continue button
         continueBox = MDBoxLayout(orientation= "vertical", size_hint_y = 0.1)
-        self.continueButton = Button(text = "Continue with attempt")
+        self.continueButton = MDButton(MDButtonText(text = "Continue with attempt"), style = "elevated", pos_hint = {"center_x": .5, "center_y": 0.5})
         self.continueButton.bind(on_press = self.startAttempt)
-        self.continueButton.background_color = gm.opaque
+        self.continueButton.md_bg_color = (1, 0, 1, 1)
         self.continueButton.disabled = True
 
         continueBox.add_widget(self.continueButton)
@@ -66,8 +69,9 @@ class SelectGameScreen(BackgroundScreen):
         self.continueButton.disabled = True
         if game == "New game":
             logger.info("TODO, implement popup for a new game")
+            self.createNewGameBox = MDBoxLayout(orientation = "vertical")
             self.newGameNameInput = MDTextField(MDTextFieldHintText(text="game name"))
-            MDDialog(MDDialogHeadlineText(text= "create new Game"), MDDialogContentContainer(self.newGameNameInput)).open()
+            MDDialog(MDDialogHeadlineText(text= "create new Game"), MDDialogContentContainer(self.createNewGameBox)).open()
             return
         self.retrieveSaveFile(game)
     

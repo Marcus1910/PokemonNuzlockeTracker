@@ -12,7 +12,7 @@ import json
 import os
 from time import sleep
 
-txtfile = "trainerData.txt"
+txtfile = "trainerData"
 #change to settings
 opaque = (1, 1, 1, 0.6)
 standardColor = (1, 1, 1, 1)
@@ -25,13 +25,26 @@ newAreaString = "New Area"
 class MainGame():
     errorName = "error something went wrong reading from the json file" # TODO settings.py
     def __init__(self, fileRetriever: FileRetriever, gameName: str, saveFileName = 'new'):
+        #attempt must never be "new", fileretriever should give name
         self.fileRetriever = fileRetriever
         self.gameName = gameName
 
+        #check whether the game can be found
+        if not fileRetriever.checkGameExists(gameName):
+            logger.info(f"game does not exists, creating new game: {gameName}")
+            fileRetriever.addNewPokemonGame(gameName)
+
         if saveFileName == "new":
-            self.saveFileName = f"attempt {len(self.fileRetriever.getSaveFilesList(self.gameName))}.txt"
+            self.saveFileName = f"attempt {len(self.fileRetriever.getSaveFilesList(self.gameName))}"
+            self.fileRetriever.createNewSaveFile(gameName, self.saveFileName)
         else:
-            self.saveFileName = f"{saveFileName}.txt"
+            self.saveFileName = f"{saveFileName}"
+        
+        #check if savefile exists
+        if not self.fileRetriever.checkSaveFileExists(saveFileName):
+            #error given by checkSaveFileExists
+            pass
+
         logger.debug(f"savefileName: {self.saveFileName}")
 
         self.readData = None
@@ -179,7 +192,7 @@ class MainGame():
         #only needed to create the json dumps and backup if file cannot be read
         correctDataPath = os.path.join(self.dataFolder, f"{self.gameName}CorrectData.txt")
         if not self.validateFile(correctDataPath):
-            logger.critical(f"there is no correctDataFile, please make sure it is in gamename/data/. Exiting in 10 seconds")
+            logger.critical(f"there is no correctDataFile, please make sure it is in {self.gameName}/data/. Exiting in 10 seconds")
             sleep(10)
             exit()
         self.areaList = readFormattedData(correctDataPath).returnAreaList()

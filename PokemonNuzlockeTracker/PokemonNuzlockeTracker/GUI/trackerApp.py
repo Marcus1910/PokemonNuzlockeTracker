@@ -17,6 +17,10 @@ class TrackerApp(MDApp):
         self.operatingSystem = operatingSystem
 
     def build(self):
+        #set theme
+        # self.theme_cls.theme_style = "Dark"
+        # self.theme_cls.primary_palette = "Orange"
+
         #use OS to change view to that of android
         if self.operatingSystem == "Windows":
             logger.info("detected windows")

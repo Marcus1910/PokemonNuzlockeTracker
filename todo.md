@@ -127,5 +127,6 @@ ItemScreen
 General
     kivy swiper and/or Navigation bar for screens
     SnackBar for errors
-
+    tabs for areas multiple floors
+    kivymd badges->number for new areas
 

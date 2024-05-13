@@ -9,14 +9,11 @@ from fileRetriever import FileRetriever
 class CLI():
    def __init__(self, operatingSystem):
       fileRetriever = FileRetriever(operatingSystem)
-      fileRetriever.getSaveFilesList("SacredGold")
-      game = MainGame(fileRetriever, "SacredGold", 'attempt 1')
-      encounterAmount = 0
-      # for area in listAreas:
-      #    for type in area.encounters:
-      #       for pokemon in type[1]:
-      #          print(pokemon)
-      #          pokemon.levels = pokemon.level
+      #set fileretriever variables correctly, TODO update earlier
+      gameName = "HisuiRed"
+      fileRetriever.setFolderVariables(gameName)
+      fileRetriever.addNewPokemonGame(gameName)
+      game = MainGame(fileRetriever, gameName, 'new')
       game.writeToFile()
 
 
