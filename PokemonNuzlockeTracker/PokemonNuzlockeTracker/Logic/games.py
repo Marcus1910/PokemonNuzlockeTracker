@@ -192,9 +192,8 @@ class MainGame():
         #only needed to create the json dumps and backup if file cannot be read
         correctDataPath = os.path.join(self.dataFolder, f"{self.gameName}CorrectData.txt")
         if not self.validateFile(correctDataPath):
-            logger.critical(f"there is no correctDataFile, please make sure it is in {self.gameName}/data/. Exiting in 10 seconds")
-            sleep(10)
-            exit()
+            logger.error(f"there is no correctDataFile, please make sure it is in {self.gameName}/data/. If it is the first time starting the game nad no data has been provided, this can be ignored")
+            return []
         self.areaList = readFormattedData(correctDataPath).returnAreaList()
     
     # def checkForNormalArea(self, name : str) -> bool:

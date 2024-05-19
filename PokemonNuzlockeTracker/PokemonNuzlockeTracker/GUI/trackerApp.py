@@ -1,3 +1,4 @@
+import kivymd
 from kivymd.app import MDApp
 from kivy.core.window import Window
 
@@ -10,6 +11,7 @@ from itemScreen import ItemScreen
 
 import sys
 from loggerConfig import logger
+
 
 class TrackerApp(MDApp):
     def __init__(self, operatingSystem, **kwargs):

@@ -1,6 +1,10 @@
 ----------------**TestRun**-----------------------------------
 
-Backend logic add new Game
+Backend logic add new Game - fileretriever
+    -Game object
+    start game from no files
+    start game from correctdata
+    start game from gamedata
 
 add new games from UI
 

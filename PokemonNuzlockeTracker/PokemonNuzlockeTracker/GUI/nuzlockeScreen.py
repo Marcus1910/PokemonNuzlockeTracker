@@ -4,7 +4,7 @@ from kivy.uix.spinner import Spinner
 from kivy.uix.popup import Popup
 
 from kivymd.uix.swiper import MDSwiper
-from kivymd.uix.navigationbar import MDNavigationBar, MDNavigationItem, MDNavigationItemLabel
+# from kivymd.uix.navigationbar import MDNavigationBar, MDNavigationItem, MDNavigationItemLabel
 
 
 from transparentButton import TransparentButton
@@ -34,10 +34,10 @@ class NuzlockeScreen(BackgroundScreen):
         self.areaSpinner.background_color = gm.opaque
         self.areaSpinner.bind(text = self.areaChanged)
 
-        self.btnbox = MDNavigationBar(MDNavigationItem(MDNavigationItemLabel(text = "hallo")), size_hint_y=0.1)
-        self.btnbox.add_widget(MDNavigationItem(MDNavigationItemLabel(text = "trainers")))
-        self.btnbox.add_widget(MDNavigationItem(MDNavigationItemLabel(text = "encounters")))
-        self.btnbox.add_widget(MDNavigationItem(MDNavigationItemLabel(text = "items")))
+        # self.btnbox = MDNavigationBar(MDNavigationItem(MDNavigationItemLabel(text = "hallo")), size_hint_y=0.1)
+        # self.btnbox.add_widget(MDNavigationItem(MDNavigationItemLabel(text = "trainers")))
+        # self.btnbox.add_widget(MDNavigationItem(MDNavigationItemLabel(text = "encounters")))
+        # self.btnbox.add_widget(MDNavigationItem(MDNavigationItemLabel(text = "items")))
 
 
         self.editAreaButton = TransparentButton(text = "edit area", size_hint_x = 0.15, on_release = self.editArea)
@@ -46,7 +46,7 @@ class NuzlockeScreen(BackgroundScreen):
         self.areaSpinnerBox.add_widget(self.areaSpinner)
         self.areaSpinnerBox.add_widget(self.editAreaButton)
 
-        # self.layout.add_widget(self.screenInfoBox)
+        self.layout.add_widget(self.screenInfoBox)
         # self.layout.add_widget(self.btnbox)
         self.layout.add_widget(self.areaSpinnerBox)
         self.layout.add_widget(self.screenBox)
@@ -121,14 +121,9 @@ class NuzlockeScreen(BackgroundScreen):
         if self.entered:
             return
         #create buttons to navigate through the screens and add to layout
-        self.buttons = BoxLayout(orientation = "horizontal", size_hint_y = 0.12)
-        exitGameButton = TransparentButton(text = "Exit and save Game", size_hint_x = 0.6, size_hint_y = 0.5, on_press = self.saveGame)
-        self.buttons.pos_hint = {"y": 0, "x": 0}
+        exitGameButton = TransparentButton(text = "Exit and save Game", on_press = self.saveGame, size_hint_y = 0.08)
 
-        self.buttons.add_widget(exitGameButton)
-
-        self.layout.add_widget(self.buttons)
-        # self.layout.add_widget(self.btnbox)
+        self.layout.add_widget(exitGameButton)
         self.entered = True
 
     def cleanScreenBox(self):
@@ -154,7 +149,6 @@ class NuzlockeScreen(BackgroundScreen):
         if 0 < touch.ox - touch.x > 150:
             self.nextScreen()
             
-
         if 0 > touch.ox - touch.x < -150:
             self.previousScreen()
             

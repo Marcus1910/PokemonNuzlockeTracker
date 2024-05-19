@@ -1,52 +1,45 @@
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.label import MDLabel
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.textfield import MDTextField
 
 from utilityFunctions import checkString, validateTextInput
 from loggerConfig import logger
 from trainer import Trainer
 
-class AddTrainerBox(BoxLayout): 
-    def __init__(self, trainerScreen, *args, **kwargs):
+class AddTrainerBox(MDBoxLayout): 
+    def __init__(self, *args, **kwargs):
         """creates a boxlayout, use buildlayout fill in the layout"""
         super().__init__(*args, **kwargs)
-        self.trainerScreen = trainerScreen
+        self.height = "200dp"
+        self.buildLayout()
+
 
     def buildLayout(self):
         """if trainerObject is Not supplied displays empty box meant to add a trainer if trainerObject is supplied fills in details about the trainer so it can be edited""" 
-        self.trainerName = TextInput(hint_text = "Name", size_hint_y = 0.3)
-        self.trainerType = TextInput(hint_text = "Trainer Type", size_hint_y = 0.2)
-        self.trainerGender = TextInput(hint_text = "Gender: M/F", size_hint_y = 0.2)
+
+        self.trainerName = MDTextField(hint_text = "Name")
+        self.trainerType = MDTextField(hint_text = "Trainer Type")
+        self.trainerGender = MDTextField(hint_text = "Gender: M/F")
         #TODO
-        self.trainerImage = BoxLayout(size_hint_y = 0.8)
-        self.confirmButton = Button(text = "confirm", on_press = self.saveTrainerObject, background_color = (0, 1, 0, 0.5))
+        self.trainerImage = MDBoxLayout()
 
-        self.trainerNameImage = BoxLayout(orientation = "vertical")
-        self.trainerNameImage.add_widget(self.trainerName)
-        self.trainerNameImage.add_widget(self.trainerImage)
-
-        self.trainerInfoBox = BoxLayout(orientation = "vertical")
+        self.trainerInfoBox = MDBoxLayout(orientation = "vertical")
+        self.trainerInfoBox.add_widget(self.trainerName)
         self.trainerInfoBox.add_widget(self.trainerType)
         self.trainerInfoBox.add_widget(self.trainerGender)
-    
-        self.trainerInfo = BoxLayout(orientation = "horizontal", size_hint_y = 0.4)
-        self.trainerInfo.add_widget(self.trainerNameImage)
-        self.trainerInfo.add_widget(self.trainerInfoBox)
 
-        self.pokemonBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.4)
+        self.trainerBox = MDBoxLayout(orientation = "horizontal")
+        self.trainerBox.add_widget(self.trainerInfoBox)
+        self.trainerBox.add_widget(self.trainerImage)
 
-        self.confirmButtonBox = BoxLayout(orientation = "horizontal")
-        self.confirmButtonBox.add_widget(self.confirmButton)
-
-        self.buttonBox = BoxLayout(orientation = "vertical", size_hint_y = 0.2)
-        self.buttonBox.add_widget(self.confirmButtonBox)
-
-        self.layout = BoxLayout(orientation = "vertical")
-        self.layout.add_widget(self.trainerInfo)
-        self.layout.add_widget(self.pokemonBox)
-        self.layout.add_widget(self.buttonBox)
-
-        self.add_widget(self.layout)
+        self.orientation = "vertical"
+        self.add_widget(self.trainerBox)
 
     def clearLayout(self):
         self.clear_widgets()
@@ -70,8 +63,33 @@ class AddTrainerBox(BoxLayout):
         self.trainerObject.gender = validateTextInput(self.trainerGender.text)
         self.trainerObject.trainerType = validateTextInput(self.trainerType.text)
         #add trainer to the game
-        self.trainerScreen.addTrainerToGame(self.trainerObject)
+        # self.trainerScreen.addTrainerToGame(self.trainerObject)
+    
+class TrainerDialog(MDDialog):
+    def __init__(self, **kwargs):
+        """Dialog to add trainer. Only use kivymd widgets inside"""
+        self.title = "Add new Trainer"
+        self.type = "custom"
+        self.pos_hint = {"center_x": 0.5, "center_y": 0.65}
+        content = MDBoxLayout(orientation = "vertical", height = "120dp", size_hint_y = None)
+        self.trainerName = MDTextField(hint_text = "Trainer name *")
+        self.trainertype = MDTextField(hint_text = "Trainer type")
+        self.trainergender = MDTextField(hint_text = "Trainer gender (m/f)")
 
+        content.add_widget(self.trainerName)
+        typegender = MDBoxLayout(orientation = "horizontal")
+        typegender.add_widget(self.trainertype)
+        typegender.add_widget(self.trainergender)
+
+        content.add_widget(typegender)
+        self.content_cls = AddTrainerBox(size_hint_y = None)
+
+        self.buttons = [MDFlatButton(text = "apply", on_release = self.checkout), MDFlatButton(text = "discard")]
+
+        super().__init__(**kwargs)
+
+    def checkout(self, instance):
+        print("hihihih")
         
 
 
