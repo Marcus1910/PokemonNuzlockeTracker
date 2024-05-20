@@ -171,7 +171,93 @@
  {
   "_name": "Route 29",
   "_accessible": 0,
-  "_trainers": {},
+  "_trainers": {
+    "Larry": {
+    "_name": "Larry",
+    "_trainerType": "Youngster",
+    "_gender": "M",
+    "_pokemon": [
+     {
+      "_name": "Charizard",
+      "_level": "58",
+      "_dexno": "n/a",
+      "_gender": "n/a",
+      "_moves": [
+       "Flamethrower",
+       "quick attack"
+      ],
+      "_ability": "drought",
+      "_heldItem": "n/a"
+     },
+     {
+      "_name": "Magikarp",
+      "_level": "58",
+      "_dexno": "n/a",
+      "_gender": "n/a",
+      "_moves": [
+       "Splash",
+       "quick attack"
+      ],
+      "_ability": "drizzle",
+      "_heldItem": "heat rock"
+     },
+     {
+      "_name": "Charizard",
+      "_level": "58",
+      "_dexno": "n/a",
+      "_gender": "n/a",
+      "_moves": [
+       "Flamethrower",
+       "quick attack"
+      ],
+      "_ability": "drought",
+      "_heldItem": "n/a"
+     },
+     {
+      "_name": "Magikarp",
+      "_level": "58",
+      "_dexno": "n/a",
+      "_gender": "n/a",
+      "_moves": [
+       "Splash",
+       "quick attack"
+      ],
+      "_ability": "drizzle",
+      "_heldItem": "heat rock"
+     },
+     {
+      "_name": "Charizard",
+      "_level": "58",
+      "_dexno": "n/a",
+      "_gender": "n/a",
+      "_moves": [
+       "Flamethrower",
+       "quick attack"
+      ],
+      "_ability": "drought",
+      "_heldItem": "n/a"
+     },
+     {
+      "_name": "Magikarp",
+      "_level": "58",
+      "_dexno": "n/a",
+      "_gender": "n/a",
+      "_moves": [
+       "Splash",
+       "quick attack"
+      ],
+      "_ability": "drizzle",
+      "_heldItem": "heat rock"
+     }
+    ]
+   },
+   "Maarten": {
+    "_name": "Maarten",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": []
+   }
+  },
   "_items": {},
   "_encounters": [
    [
@@ -415,7 +501,14 @@
  {
   "_name": "Route 46",
   "_accessible": 0,
-  "_trainers": {},
+  "_trainers": {
+   "Maarten": {
+    "_name": "Maarten",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": []
+   }
+  },
   "_items": {},
   "_encounters": [
    [

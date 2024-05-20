@@ -68,9 +68,6 @@ class SelectGameScreen(BackgroundScreen):
         self.continueButton.disabled = True
         if game == "New game":
             logger.info("TODO, implement popup for a new game")
-            # self.createNewGameBox = MDBoxLayout(orientation = "vertical")
-            # self.newGameNameInput = MDTextField(MDTextFieldHintText(text="game name"))
-            # MDDialog(MDDialogHeadlineText(text= "create new Game"), MDDialogContentContainer(self.createNewGameBox)).open()
             return
         self.retrieveSaveFile(game)
     

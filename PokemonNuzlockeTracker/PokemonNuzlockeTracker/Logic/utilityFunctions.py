@@ -3,5 +3,5 @@ def checkString(text: str) -> bool:
     return text.isspace() or text == ""
 
 def validateTextInput(text: str) -> str | None:
-    """function that validates text, returns None or the supplied TextInput is the input is not empty"""
+    """function that validates text, returns None or the supplied Text"""
     return text if not checkString(text) else None
