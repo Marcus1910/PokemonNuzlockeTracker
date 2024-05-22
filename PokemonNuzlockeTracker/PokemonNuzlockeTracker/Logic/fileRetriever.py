@@ -221,16 +221,19 @@ class FileRetriever():
         self._dataFolder = os.path.join(self._gameNameFolder, "data")
 
 
-    def createGameFolders(self, gameName: str):
+    def createGameFolders(self, gameName: str) -> bool:
         """creates the neccessary folders GameName, datafolder, savefilesFolder if they don't already exist"""
-        if gameName == "Generic":
-            logger.error(f"cannot allow a game called 'Generic' as Generic is used for the default data for pokemon")
+        capGameName = gameName.capitalize()
+        if capGameName == "Generic" or capGameName == "New":
+            logger.error(f"cannot allow a game called 'Generic' or 'new'")
+            return 0
 
         self.setFolderVariables(gameName)
         #create Game, savefiles and data Folder
         self.createNewFolder(self._gameNameFolder)
         self.createNewFolder(self._saveFilesFolder)
         self.createNewFolder(self._dataFolder)
+        return 1
     
     def createNewFolder(self, path: str) -> None:
         """creates a new folder if the folder does not already exist"""
@@ -267,7 +270,8 @@ class FileRetriever():
         if self.checkGameExists(gameName):
             logger.error(f"{gameName} already exists")
             return 0
-        self.createGameFolders(gameName)
+        if not self.createGameFolders(gameName):
+            return 0
         return 1
     
     def createNewSaveFile(self, gameName: str, attempt: str) -> bool:
