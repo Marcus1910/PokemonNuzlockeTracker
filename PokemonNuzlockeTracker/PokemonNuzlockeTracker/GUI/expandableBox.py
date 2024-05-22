@@ -64,7 +64,7 @@ class ExpandableBox(BoxLayout):
             return
         logger.debug("opening")
         self.adjustSizes(0.2, 0.8, 5)
-        self.contentBox.add_widget(self.content)
+        self.updateContent()
 
     def close(self) -> None:
         """removes content from contentBox, then changes sizes to make contentBox disappear"""
@@ -73,6 +73,9 @@ class ExpandableBox(BoxLayout):
     
     def isOpened(self) -> bool:
         return self.opened
+
+    def updateContent(self) -> None:
+        logger.debug("updating content")
 
 class ExpandableTrainerBox(ExpandableBox):
     def __init__(self, trainerObject, **kwargs):
@@ -117,7 +120,7 @@ class ExpandableTrainerBox(ExpandableBox):
         return content
 
     def addPokemonPopup(self, instance):
-        dia = AddPokemonDialog(self.trainerObject)
+        dia = AddPokemonDialog(self.trainerObject, self)
         dia.open()
     
     def createPokemonBox(self, pokemonObject):
@@ -159,7 +162,10 @@ class ExpandableTrainerBox(ExpandableBox):
         pokemonBox.add_widget(pokemonInfoBox2)
         pokemonBox.add_widget(pokemonMoves)
         return pokemonBox
-    
+
+    def updateContent(self) -> None:
+        self.contentBox.clear_widgets()
+        self.contentBox.add_widget(self.createContent())
 
 
 

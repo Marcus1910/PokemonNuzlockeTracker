@@ -10,8 +10,9 @@ from loggerConfig import logger
 from trainerPokemon import TrainerPokemon
 
 class AddPokemonDialog(MDDialog):
-    def __init__(self, trainerObject, **kwargs):
+    def __init__(self, trainerObject, trainerBox, **kwargs):
         self.trainerObject = trainerObject
+        self.trainerBox = trainerBox
         self.auto_dismiss = False
         self.title = "add new Pokemon"
         self.type = "custom"
@@ -24,6 +25,7 @@ class AddPokemonDialog(MDDialog):
     def createPokemon(self, instance):
         object = self.content.getInput()
         self.trainerObject.pokemon = object
+        self.trainerBox.updateContent()
         self.dismiss()
 
 
