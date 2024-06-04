@@ -27,7 +27,7 @@ class NuzlockeScreen(BackgroundScreen):
         screenLabel = Label(text = screenName, color = self.standardColor)
         self.screenInfoBox.add_widget(screenLabel)
 
-        self.screenBox = BoxLayout(orientation = "vertical", size_hint_y = 0.8)
+        self.screenBox = BoxLayout(orientation = "vertical", size_hint_y = 0.92)
 
         self.areaSpinnerBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.04)
         self.areaSpinner = Spinner(text = self.areaSpinnerString, values = ["new Area"], size_hint_x = 0.85)

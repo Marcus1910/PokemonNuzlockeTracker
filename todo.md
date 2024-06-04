@@ -6,8 +6,6 @@ Backend logic add new Game - fileretriever
     start game from correctdata
     start game from gamedata
 
-add new games from UI
-
 add new Area
     update nuzlockeScreen areaChanged to show a new screen
 
@@ -27,7 +25,8 @@ add new items
 add pokemon when name is entered, update pokemon after that
 back button -> popup leave game, check if screen is a edit screen, message continue editing. else message save and exit or just exit
 exit without saving -> save temporary, next startup ask to save with list of adjustments
-update to kivyMD
+
+remove games
 
 
 ---STEPS TO TAKE FOR BETA---
@@ -134,3 +133,6 @@ General
     tabs for areas multiple floors
     kivymd badges->number for new areas
 
+
+
+add sdm for pi images

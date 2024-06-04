@@ -17,16 +17,25 @@ class ExpandableBox(BoxLayout):
         super().__init__(**kwargs)
         self.orientation = "vertical"
         self.opened = False
-        self.headerY = 0.999
-        self.contentY = 0.001
+        #set height to values when received
+        self.headerClosed = 150
+        self.contentClosed = 1
+        self.headerOpen = 100
+        self.contentOpen = 600
 
         self.header = header
-        self.content = content
-        self.button = button 
-        self.checkHeader()
+        self.header.size_hint_y = None
+        self.header.height = self.headerClosed
 
+        self.content = content
         #box that will contain the content
-        self.contentBox = BoxLayout(size_hint_y = self.contentY)
+        self.contentBox = BoxLayout()
+        self.contentBox.size_hint_y = None
+        self.contentBox.height = self.contentClosed
+
+        self.size_hint_y = None
+        self.height = self.headerClosed + self.contentClosed
+        self.checkHeader()
 
         self.add_widget(self.header)
         self.add_widget(self.contentBox)
@@ -45,14 +54,11 @@ class ExpandableBox(BoxLayout):
                 bttn = Button(text = "open", on_release = self.open, size_hint_y = self.headerY)
                 self.header.add_widget(bttn)
     
-    def adjustSizes(self, headerSize : float, contentSize: float, size_hint_y: float, increase: bool = True):
+    def adjustSizes(self, headerSize : float, contentSize: float):
         """adjust the sizes of contentBox and header to open or close the box"""
-        self.header.size_hint_y = headerSize
-        self.contentBox.size_hint_y = contentSize
-        if increase:
-            self.size_hint_y += size_hint_y
-            return
-        self.size_hint_y -= size_hint_y
+        self.header.height = headerSize
+        self.contentBox.height = contentSize
+        self.height = headerSize + contentSize
 
     def open(self, instance = None) -> None:
         """open the Box showing the content"""
@@ -63,22 +69,20 @@ class ExpandableBox(BoxLayout):
             self.close()
             return
         logger.debug("opening")
-        self.adjustSizes(0.2, 0.8, 5)
+        self.adjustSizes(self.headerOpen, self.contentOpen)
         self.updateContent()
 
     def close(self) -> None:
         """removes content from contentBox, then changes sizes to make contentBox disappear"""
         self.contentBox.clear_widgets()
-        self.adjustSizes(self.headerY, self.contentY, 5, False)
-    
-    def isOpened(self) -> bool:
-        return self.opened
+        self.adjustSizes(self.headerClosed, self.contentClosed)
 
     def updateContent(self) -> None:
         logger.debug("updating content")
 
 class ExpandableTrainerBox(ExpandableBox):
     def __init__(self, trainerObject, **kwargs):
+        """works with height and width rather than size_hint"""
         self.button = None
         self.trainerObject = trainerObject
         header = self.createHeader()
@@ -125,7 +129,6 @@ class ExpandableTrainerBox(ExpandableBox):
     
     def createPokemonBox(self, pokemonObject):
         #TODO class
-        
         defeatedButton = Button(background_color = "green" if pokemonObject.defeated else "red", size_hint_x = 0.1)
         pokemonImage = Image(source = os.path.join(os.getcwd(), "../", "images", "sprites", "pokemonMinimalWhitespace", f"{pokemonObject.name.lower()}.png"), fit_mode = "contain", size_hint_x = 0.2)
         pokemonName = Label(text = pokemonObject.name)
@@ -164,11 +167,9 @@ class ExpandableTrainerBox(ExpandableBox):
         return pokemonBox
 
     def updateContent(self) -> None:
+        super().updateContent()
         self.contentBox.clear_widgets()
         self.contentBox.add_widget(self.createContent())
-
-
-
 
 # def showGlobalView(self):
     #     if len(self.currentTrainerObject.pokemon) == 0:

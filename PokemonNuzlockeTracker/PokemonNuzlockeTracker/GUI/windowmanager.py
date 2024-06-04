@@ -1,4 +1,5 @@
 from kivy.uix.screenmanager import ScreenManager
+
 from loggerConfig import logger
 import games as gm
 from trainer import Trainer
@@ -62,3 +63,6 @@ class WindowManager(ScreenManager):
         politoed = TrainerPokemon("Politoed", 57)
         trainer.pokemon = politoed
         self.gameObject.areaList[0].addTrainer(trainer)
+    
+    def showError(self, text):
+        pass

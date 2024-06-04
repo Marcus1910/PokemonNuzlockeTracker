@@ -83,7 +83,7 @@ class SelectGameScreen(BackgroundScreen):
             return 0
         #create new game, folders and all
         if self.fileRetriever.addNewPokemonGame(gameName):
-            self.gameDDM.text = self.getGame(gameName)
+            self.gameDDM.text = self.getGameName(gameName)
             self.updateGameSpinnerValues()
             return 1
         return 0

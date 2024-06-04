@@ -34,7 +34,7 @@ class MainGame():
             logger.info(f"game does not exists, creating new game: {gameName}")
             fileRetriever.addNewPokemonGame(gameName)
 
-        if saveFileName == "new":
+        if saveFileName == "New attempt":
             self.saveFileName = f"attempt {len(self.fileRetriever.getSaveFilesList(self.gameName))}"
             self.fileRetriever.createNewSaveFile(gameName, self.saveFileName)
         else:
@@ -44,6 +44,8 @@ class MainGame():
         if not self.fileRetriever.checkSaveFileExists(saveFileName):
             #error given by checkSaveFileExists
             pass
+
+        logger.info(f"savefile name: {self.saveFileName}")
 
         logger.debug(f"savefileName: {self.saveFileName}")
 

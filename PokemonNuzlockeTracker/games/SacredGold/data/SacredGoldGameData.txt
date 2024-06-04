@@ -172,7 +172,7 @@
   "_name": "Route 29",
   "_accessible": 0,
   "_trainers": {
-    "Larry": {
+   "Larry": {
     "_name": "Larry",
     "_trainerType": "Youngster",
     "_gender": "M",
@@ -180,7 +180,7 @@
      {
       "_name": "Charizard",
       "_level": "58",
-      "_dexno": "n/a",
+      "_dexno": null,
       "_gender": "n/a",
       "_moves": [
        "Flamethrower",
@@ -192,7 +192,7 @@
      {
       "_name": "Magikarp",
       "_level": "58",
-      "_dexno": "n/a",
+      "_dexno": null,
       "_gender": "n/a",
       "_moves": [
        "Splash",
@@ -204,7 +204,7 @@
      {
       "_name": "Charizard",
       "_level": "58",
-      "_dexno": "n/a",
+      "_dexno": null,
       "_gender": "n/a",
       "_moves": [
        "Flamethrower",
@@ -216,7 +216,7 @@
      {
       "_name": "Magikarp",
       "_level": "58",
-      "_dexno": "n/a",
+      "_dexno": null,
       "_gender": "n/a",
       "_moves": [
        "Splash",
@@ -228,7 +228,7 @@
      {
       "_name": "Charizard",
       "_level": "58",
-      "_dexno": "n/a",
+      "_dexno": null,
       "_gender": "n/a",
       "_moves": [
        "Flamethrower",
@@ -240,7 +240,7 @@
      {
       "_name": "Magikarp",
       "_level": "58",
-      "_dexno": "n/a",
+      "_dexno": null,
       "_gender": "n/a",
       "_moves": [
        "Splash",
@@ -253,6 +253,42 @@
    },
    "Maarten": {
     "_name": "Maarten",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": []
+   },
+   "Gary": {
+    "_name": "Gary",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": []
+   },
+   "Morty": {
+    "_name": "Morty",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": []
+   },
+   "Guts": {
+    "_name": "Guts",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": []
+   },
+   "Joey": {
+    "_name": "Joey",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": []
+   },
+   "Umbreon": {
+    "_name": "Umbreon",
+    "_trainerType": null,
+    "_gender": null,
+    "_pokemon": []
+   },
+   "Anouska": {
+    "_name": "Anouska",
     "_trainerType": null,
     "_gender": null,
     "_pokemon": []

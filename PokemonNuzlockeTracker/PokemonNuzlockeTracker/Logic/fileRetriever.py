@@ -284,9 +284,10 @@ class FileRetriever():
             open(saveFilePath, "x").close()
         
     def checkSaveFileExists(self, fileName: str) -> bool:
-        """returns 1 when file if file already exists"""
+        """returns 1 when file already exists"""
         saveFilePath = os.path.join(self._saveFilesFolder, f"{fileName}.txt")
         return 1 if os.path.isfile(saveFilePath) else 0
+
 
 
 

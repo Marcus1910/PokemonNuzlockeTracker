@@ -3,8 +3,12 @@ from trainerDialog import AddTrainerDialog
 from loggerConfig import logger
 from expandableBox import ExpandableTrainerBox
 
+from kivy.core.window import Window
+
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
+from kivy.uix.scrollview import ScrollView
 
 import games as gm
 import os
@@ -21,7 +25,10 @@ class TrainerScreen(NuzlockeScreen):
         self.newTrainerDialog = AddTrainerDialog(self.addTrainerToGame)
 
         #box that contains all expandabletrainerboxes
-        self.trainerBox = BoxLayout(size_hint_y = 0.61, orientation = "vertical")
+        self.trainerBox = GridLayout(size_hint_y = None, cols = 1)
+        self.trainerBoxScroll = ScrollView(size = (self.trainerBox.width, self.trainerBox.height))
+        self.trainerBox.bind(minimum_height = self.trainerBox.setter("height"))
+        
 
         self.newTrainerButton = Button(text = "add new Trainer", on_release = self.addNewTrainer, size_hint_y = 0.1)
         #start disabled
@@ -31,7 +38,8 @@ class TrainerScreen(NuzlockeScreen):
         self.trainerSpriteFolder = os.path.join(self.spriteFolder, "trainerSprites")
         self.pokemonSpriteFolder = os.path.join(self.spriteFolder, "pokemonMinimalWhitespace")
 
-        self.screenBox.add_widget(self.trainerBox)
+        self.trainerBoxScroll.add_widget(self.trainerBox)
+        self.screenBox.add_widget(self.trainerBoxScroll)
         self.screenBox.add_widget(self.newTrainerButton)
     
     def areaChanged(self, spinner, text) -> None:
@@ -62,6 +70,9 @@ class TrainerScreen(NuzlockeScreen):
         for emptyBox in range(emptyBoxes):
             box = BoxLayout()
             self.trainerBox.add_widget(box)
+        
+        self.trainerBoxScroll.size = (self.trainerBox.width, self.trainerBox.height)
+        self.trainerBox.bind(minimum_height = self.trainerBox.setter("height"))
   
     def clearTrainerBox(self):
         """removes all widgets from trainerBox"""
