@@ -22,7 +22,6 @@ grab and save items
 show items
 add new items
 
-add pokemon when name is entered, update pokemon after that
 back button -> popup leave game, check if screen is a edit screen, message continue editing. else message save and exit or just exit
 exit without saving -> save temporary, next startup ask to save with list of adjustments
 
@@ -57,9 +56,7 @@ ugly solution, change saves for different phone. export to folder/over wifi to o
 
 
 ********************************UI*************************
-implement swiping
-TrainerScreen global view, picture buttons pressed -> defeat pokemon
-Trainerscreen add images to buttons to change detailed view
+TrainerScreen picture buttons pressed -> defeat pokemon
 
 
 

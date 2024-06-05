@@ -255,7 +255,62 @@
     "_name": "Maarten",
     "_trainerType": null,
     "_gender": null,
-    "_pokemon": []
+    "_pokemon": [
+     {
+      "_name": "Reshiram",
+      "_level": "77",
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_name": "Zekrom",
+      "_level": "9",
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_name": "Kyurem",
+      "_level": "70",
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_name": "Kyurem-White",
+      "_level": "77",
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_name": "Kyurem-Black",
+      "_level": "100",
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     },
+     {
+      "_name": "Hydreigon",
+      "_level": "77",
+      "_dexno": null,
+      "_gender": null,
+      "_moves": [],
+      "_ability": null,
+      "_heldItem": null
+     }
+    ]
    },
    "Gary": {
     "_name": "Gary",

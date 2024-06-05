@@ -55,7 +55,7 @@ class readFormattedData():
     def createEncounterLists(self):
         #area loop
         for areaNumber, area in enumerate(self._areaList):
-            formattedList = []
+            formattedDict = {}
             beginLine = area.startLine + 1
             #create boundaries for each area
             try:
@@ -92,8 +92,8 @@ class readFormattedData():
                         percentage = "n/a"
                     encounter = EncounteredPokemon(pokemonName, level = level, percentage = percentage)
                     encounterList.append(encounter)
-                formattedList.append([terrainType, encounterList])
-            self._areaList[areaNumber]._encounters = copy.deepcopy(formattedList) 
+                formattedDict[terrainType] = encounterList
+            self._areaList[areaNumber]._encounters = copy.deepcopy(formattedDict) 
 
     def returnAreaList(self):
         """function that reads all encounterdata and returns a list of area objects"""

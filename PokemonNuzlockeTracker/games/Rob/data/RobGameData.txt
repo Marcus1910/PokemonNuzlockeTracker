@@ -4,20 +4,20 @@
   "_accessible": 0,
   "_trainers": {},
   "_items": {},
-  "_encounters": []
+  "_encounters": {}
  },
  {
   "_name": "Retirement",
   "_accessible": 0,
   "_trainers": {},
   "_items": {},
-  "_encounters": []
+  "_encounters": {}
  },
  {
   "_name": "lost&found",
   "_accessible": 0,
   "_trainers": {},
   "_items": {},
-  "_encounters": []
+  "_encounters": {}
  }
 ]

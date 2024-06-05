@@ -195,7 +195,7 @@ class MainGame():
         correctDataPath = os.path.join(self.dataFolder, f"{self.gameName}CorrectData.txt")
         if not self.validateFile(correctDataPath):
             logger.error(f"there is no correctDataFile, please make sure it is in {self.gameName}/data/. If it is the first time starting the game nad no data has been provided, this can be ignored")
-            return []
+            return {}
         self.areaList = readFormattedData(correctDataPath).returnAreaList()
     
     # def checkForNormalArea(self, name : str) -> bool:
@@ -236,7 +236,7 @@ class MainGame():
                     encounterPokemon = self.getFromJSON(encounterPokemon, pokemonJson)
                     logger.debug(f"finished pokemon: {encounterPokemon}")
                     encounterList.append(encounterPokemon)
-                wildArea._encounters.append([terrainName, encounterList])
+                wildArea._encounters[terrainName] = encounterList
                 encounterList = [terrainName, pokemonList]
                 logger.debug(f"Finished gathering from {terrainName}")
             

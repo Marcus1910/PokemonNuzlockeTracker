@@ -2,12 +2,12 @@ from nuzlockeScreen import NuzlockeScreen
 from trainerDialog import AddTrainerDialog
 from loggerConfig import logger
 from expandableBox import ExpandableTrainerBox
+from transparentButton import TransparentButton
 
 from kivy.core.window import Window
 
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 
 import games as gm
@@ -30,7 +30,7 @@ class TrainerScreen(NuzlockeScreen):
         self.trainerBox.bind(minimum_height = self.trainerBox.setter("height"))
         
 
-        self.newTrainerButton = Button(text = "add new Trainer", on_release = self.addNewTrainer, size_hint_y = 0.1)
+        self.newTrainerButton = TransparentButton(text = "add new Trainer", on_release = self.addNewTrainer, size_hint_y = 0.1)
         #start disabled
         self.newTrainerButton.disabled = True
 
@@ -47,9 +47,9 @@ class TrainerScreen(NuzlockeScreen):
             #invalid area, should not be able to add new Trainer to it
             self.newTrainerButton.disabled = True
             return
-        self.updateTrainers()
         self.currentTrainerObject = None
         self.areaObject = self.manager.currentArea
+        self.updateTrainers()
         self.newTrainerButton.disabled = False
     
     def on_leave(self):
@@ -57,22 +57,18 @@ class TrainerScreen(NuzlockeScreen):
 
     def updateTrainers(self):
         """reloads the expandabletrainerboxes with updated trainer dict"""
-        areaObject = self.manager.currentArea
-        self.trainers = areaObject.trainers
-        logger.debug(f"loaded trainers: {self.trainers}")
+        print(f"object: {self.areaObject}")
+        self.trainers = self.areaObject.trainers
+        logger.debug(f"loaded trainers: {self.trainers.keys()}")
         self.clearTrainerBox()
-        emptyBoxes = 4 - len(self.trainers)
-        print(emptyBoxes)
+
         for trainer in self.trainers.values():
             box = ExpandableTrainerBox(trainer)
             self.trainerBox.add_widget(box)
         
-        for emptyBox in range(emptyBoxes):
-            box = BoxLayout()
-            self.trainerBox.add_widget(box)
-        
-        self.trainerBoxScroll.size = (self.trainerBox.width, self.trainerBox.height)
-        self.trainerBox.bind(minimum_height = self.trainerBox.setter("height"))
+        """code below should not have an effect, leftover if something where to happen to the scrollbar"""
+        # self.trainerBoxScroll.size = (self.trainerBox.width, self.trainerBox.height)
+        # self.trainerBox.bind(minimum_height = self.trainerBox.setter("height"))
   
     def clearTrainerBox(self):
         """removes all widgets from trainerBox"""

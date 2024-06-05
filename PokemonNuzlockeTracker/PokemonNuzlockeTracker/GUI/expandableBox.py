@@ -1,13 +1,14 @@
-from kivymd.app import MDApp
 from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.image import Image
+from kivy.uix.button import Button
+from transparentButton import TransparentButton
 
 import os
 from loggerConfig import logger
 from pokemonDialog import AddPokemonDialog
+import games as gm
 
 
 class ExpandableBox(BoxLayout):
@@ -79,6 +80,12 @@ class ExpandableBox(BoxLayout):
 
     def updateContent(self) -> None:
         logger.debug("updating content")
+        self.contentBox.clear_widgets()
+        self.contentBox.add_widget(self.createContent())
+    
+    def createContent(self) -> Widget:
+        """meant for override by child classes but used by updateContent"""
+        pass
 
 class ExpandableTrainerBox(ExpandableBox):
     def __init__(self, trainerObject, **kwargs):
@@ -89,6 +96,7 @@ class ExpandableTrainerBox(ExpandableBox):
         content = self.createContent()
 
         super().__init__(header = header, content = content, button = self.button, **kwargs)
+        
 
     def createHeader(self) -> Widget:
         """creates and returns header, also creates self.button"""
@@ -96,7 +104,7 @@ class ExpandableTrainerBox(ExpandableBox):
         nameLabel = Label(text = self.trainerObject.name, size_hint_y = 0.2)
         trainerPic = os.path.join(os.getcwd(), "../","localTesting", "swipeTest", "sprite.png")
         trainerImage = Image(source = trainerPic, fit_mode = "contain", pos_hint = {"left": 1})
-        self.button = Button(text = f"show {self.trainerObject.name}'s pokemon")
+        self.button = Button(text = f"show {self.trainerObject.name}'s pokemon", background_color = gm.opaque)
 
         nameImageBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
         nameImageBox.add_widget(trainerImage)
@@ -109,17 +117,20 @@ class ExpandableTrainerBox(ExpandableBox):
         return header
     
     def createContent(self) -> Widget:
+
         content = BoxLayout(orientation = "vertical")
         pokemonAmount = len(self.trainerObject.pokemon)
         for pokemon in self.trainerObject.pokemon:
             content.add_widget(self.createPokemonBox(pokemon))
+
+        #TODO change content size dynamically based on pokemon amount using self.openContent
+        for i in range(5 - pokemonAmount):
+            content.add_widget(Label())
+
         #add button beneath pokemon
         if pokemonAmount < 6:  
-            addPokemonButton = Button(text = f"Add pokemon to {self.trainerObject.name}", on_release = self.addPokemonPopup)  
+            addPokemonButton = Button(text = f"Add pokemon to {self.trainerObject.name}", on_release = self.addPokemonPopup, background_color = gm.opaque)  
             content.add_widget(addPokemonButton)
-        #check for 5 pokemon as the last slot will be used for the button
-        for emptySpace in range(5 - pokemonAmount):
-            content.add_widget(Label())
 
         return content
 
@@ -129,7 +140,7 @@ class ExpandableTrainerBox(ExpandableBox):
     
     def createPokemonBox(self, pokemonObject):
         #TODO class
-        defeatedButton = Button(background_color = "green" if pokemonObject.defeated else "red", size_hint_x = 0.1)
+        defeatedButton = Button(background_color = "green" if pokemonObject.defeated else "red", size_hint_x = 0.1, on_release = lambda btn: self.changeDefeated(pokemonObject, btn))
         pokemonImage = Image(source = os.path.join(os.getcwd(), "../", "images", "sprites", "pokemonMinimalWhitespace", f"{pokemonObject.name.lower()}.png"), fit_mode = "contain", size_hint_x = 0.2)
         pokemonName = Label(text = pokemonObject.name)
         pokemonLevel = Label(text = f"Lv. {pokemonObject.level}")
@@ -166,10 +177,64 @@ class ExpandableTrainerBox(ExpandableBox):
         pokemonBox.add_widget(pokemonMoves)
         return pokemonBox
 
-    def updateContent(self) -> None:
-        super().updateContent()
-        self.contentBox.clear_widgets()
-        self.contentBox.add_widget(self.createContent())
+    # def updateContent(self) -> None:
+    #     super().updateContent()
+    #     self.contentBox.add_widget(self.createContent())
+    
+    def changeDefeated(self, object, instance) -> None:
+        print(object, instance)
+        object.changeDefeated()
+    
+class EncounterTypeBox(ExpandableBox):
+    def __init__(self, encounterType, encounters, **kwargs):
+        """encounters is a dict of encounterType: encounters"""
+        self.encounterType = encounterType
+        self.encounters = encounters
+        header = self.createHeader()
+        content = self.createContent()
+        super().__init__(header, content, button = self.openButton, **kwargs)
+    
+    def createHeader(self) -> Widget:
+        self.openButton = TransparentButton(text = self.encounterType)
+        return self.openButton
+
+    def createContent(self) -> Widget:
+        content = BoxLayout(orientation = "vertical")
+        for encounter in self.encounters:
+            content.add_widget(EncounterBox(encounter))
+        return content
+    
+
+class EncounterBox(BoxLayout):
+    #TODO get from central point
+    pokemonSpritesFolder = os.path.join(os.path.dirname(os.getcwd()), "images", "sprites", "pokemonMinimalWhitespace")
+    def __init__(self, pokemonObject, *args, **kwargs):
+        """expects pokemonObject"""
+        super().__init__(*args, **kwargs)
+        self.pokemonObject = pokemonObject
+        self.orientation = "horizontal"
+        self.catchButton = Button(text = "catch", on_press = self.catch, size_hint_x = 0.1)
+        image = os.path.join(self.pokemonSpritesFolder, f"{pokemonObject.name.lower()}.png")
+        self.pokemonImage = Image(source = image, pos_hint = {"top": 1}, size_hint_x = 0.4)
+        self.pokemonImage.fit_mode = "contain"
+        self.infoBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
+        self.percentageLabel = Label(text = f"percentage: {pokemonObject.percentage}")
+        self.levelsLabel = Label(text = f"levels: {pokemonObject.levels}")
+        self.moreInfoButton = Button(text = "more info", on_press = self.showMoreInfo, size_hint_x = 0.2)
+        
+        self.infoBox.add_widget(self.percentageLabel)
+        self.infoBox.add_widget(self.levelsLabel)
+
+        self.add_widget(self.catchButton)
+        self.add_widget(self.pokemonImage)
+        self.add_widget(self.infoBox)
+        self.add_widget(self.moreInfoButton)
+
+    def catch(self, button):
+        logger.debug(f"catching {self.pokemonObject.name}, TODO")
+    
+    def showMoreInfo(self, button):
+        logger.debug(f"show more info, TODO")
 
 # def showGlobalView(self):
     #     if len(self.currentTrainerObject.pokemon) == 0:

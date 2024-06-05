@@ -30,7 +30,7 @@ class FileRetriever():
         if self.operatingSystem == "Android":
             self.internalStoragePath = self.getStoragePath()
             logger.info(f"storage phone: {self.internalStoragePath}")
-            self.printDirectory(self.internalStoragePath)
+            # self.printDirectory(self.internalStoragePath)
             if self.validateDirectory(self.internalStoragePath):
                 self.internalGameStoragePath = self.getInternalGameStoragePath()
                 self.moveAllFiles()

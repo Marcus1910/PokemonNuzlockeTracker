@@ -106,6 +106,10 @@ class TrainerPokemon(Pokemon):
     def defeated(self, bool):
         self._defeated = bool
     
+    def changeDefeated(self):
+        """change the defeated status of the pokemon, inverts it"""
+        self._defeated = not self._defeated
+    
     def storeToSaveFile(self):
         if self.defeated != self.defaultDefeated:
             variableDict = {"_name": self.name, "_moves": self.moves, "_defeated": self.defeated}

@@ -49,7 +49,7 @@ class EncounterArea(Area):
     defaultCanCatchPokemon = False
     def __init__(self, name):
         super().__init__(name)
-        self._encounters = [] #list with encounterpokemon objects
+        self._encounters = {} #dict with {encountertypes: [encounters]}
         self._trainers = {} #dict of trainer name - object
         self._items = {} # dict of item name - object
         self._encounteredPokemon = {} #dict with pokemon objects name: object
@@ -61,11 +61,13 @@ class EncounterArea(Area):
     
     @encounters.setter
     def encounters(self, encounter):
-        self.encounters.append(encounter)
+        logger.error("not yet implemented")
+        # self.encounters.append(encounter)
     
     def removeEncounter(self, encounter):
         #TODO remove correct encounter
-        self._encounters.remove(encounter)
+        logger.error("not yet implemented")
+        # self._encounters.remove(encounter)
 
     @property
     def trainers(self):
