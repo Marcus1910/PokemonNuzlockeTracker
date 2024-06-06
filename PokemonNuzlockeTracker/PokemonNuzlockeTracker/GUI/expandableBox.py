@@ -102,7 +102,7 @@ class ExpandableTrainerBox(ExpandableBox):
         """creates and returns header, also creates self.button"""
         #TODO add edit trainer button
         nameLabel = Label(text = self.trainerObject.name, size_hint_y = 0.2)
-        trainerPic = os.path.join(os.getcwd(), "../","localTesting", "swipeTest", "sprite.png")
+        trainerPic = os.path.join(os.getcwd(), "..","localTesting", "swipeTest", "sprite.png")
         trainerImage = Image(source = trainerPic, fit_mode = "contain", pos_hint = {"left": 1})
         self.button = Button(text = f"show {self.trainerObject.name}'s pokemon", background_color = gm.opaque)
 
