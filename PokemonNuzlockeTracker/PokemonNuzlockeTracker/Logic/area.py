@@ -1,6 +1,5 @@
 import json
 from loggerConfig import logicLogger as logger
-from visibility import Visibility
 
 class Area():
     def __init__(self, name):
@@ -49,7 +48,7 @@ class EncounterArea(Area):
     defaultCanCatchPokemon = False
     def __init__(self, name):
         super().__init__(name)
-        self._encounters = {} #dict with {encountertypes: [encounters]}
+        self._encounters = {} #dict with {encountertype: [encounters]}
         self._trainers = {} #dict of trainer name - object
         self._items = {} # dict of item name - object
         self._encounteredPokemon = {} #dict with pokemon objects name: object

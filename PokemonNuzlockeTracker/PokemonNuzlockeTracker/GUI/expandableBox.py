@@ -1,33 +1,44 @@
 from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.uix.button import Button
+from kivy.uix.scrollview import ScrollView
 from transparentButton import TransparentButton
 
 import os
 from loggerConfig import logger
 from pokemonDialog import AddPokemonDialog
+from detailedPokemonBox import DetailedPokemonBox
 import games as gm
 
 
+# class ExpandableBox(BoxLayout):
+#     pass
+
 class ExpandableBox(BoxLayout):
-    def __init__(self, header: Widget, content: Widget, button: None | Button = None, **kwargs):
-        """internal use only for trainer, item and encounter boxes, supply content and header. header must be a button or boxlayout. 
-        Use the button parameter to provide a reference to the button, open call will be binded to it automatically"""
+    def __init__(self, header: Button | BoxLayout, content: Widget, button: None | Button = None, **kwargs):
+        """supply content and header. header must be a button or boxlayout. 
+        Use the button parameter to provide a reference to the button, open call will be binded to it automatically
+        set headerClose, headerOpen and contentOpen in child class otherwise defaults to default heights"""
         super().__init__(**kwargs)
         self.orientation = "vertical"
         self.opened = False
-        #set height to values when received
-        self.headerClosed = 150
+
+        #set height to standard values or values already defined, TODO settings for standard
+        self.headerClosed = self.headerClosed if hasattr(self, 'headerClosed') else 150
         self.contentClosed = 1
-        self.headerOpen = 100
-        self.contentOpen = 600
+        self.headerOpen = self.headerOpen if hasattr(self, "headerOpen") else 100
+
+        #TODO dynamically calculate based on content height
+        self.contentOpen = self.contentOpen if hasattr(self, "contentOpen") else 600
 
         self.header = header
         self.header.size_hint_y = None
         self.header.height = self.headerClosed
 
+        self.button = button
         self.content = content
         #box that will contain the content
         self.contentBox = BoxLayout()
@@ -42,6 +53,8 @@ class ExpandableBox(BoxLayout):
         self.add_widget(self.contentBox)
     
     def checkHeader(self) -> None:
+        #TODO error handling, label
+        #or change header to boxlayout if not already boxlayout
         if isinstance(self.header, Button):
             logger.debug("header is button, appending function")
             self.header.on_release = self.open
@@ -52,8 +65,11 @@ class ExpandableBox(BoxLayout):
                 self.button.on_release = self.open
             else:
                 logger.debug("adding button")
-                bttn = Button(text = "open", on_release = self.open, size_hint_y = self.headerY)
+                bttn = Button(text = "open", on_release = self.open)
                 self.header.add_widget(bttn)
+        else:
+            logger.critical(f"header provided is not a button or boxlayout")
+            exit(2)
     
     def adjustSizes(self, headerSize : float, contentSize: float):
         """adjust the sizes of contentBox and header to open or close the box"""
@@ -82,33 +98,45 @@ class ExpandableBox(BoxLayout):
         logger.debug("updating content")
         self.contentBox.clear_widgets()
         self.contentBox.add_widget(self.createContent())
+        #resize widget as the add_widget does not update the size of the area given
+        self.adjustSizes(self.headerOpen, self.contentOpen)
+    
+    def updateHeader(self) -> None:
+        logger.debug("updating Header")
+        self.header.clear_widgets()
+        self.header.add_widget(self.createHeader())
     
     def createContent(self) -> Widget:
-        """meant for override by child classes but used by updateContent"""
-        pass
+        """meant for override by child classes but used by updateContent
+        Content height should be defined in this function,"""
+        return BoxLayout()
+
+    def createHeader(self) -> Widget:
+        """used in child classes"""
+        return BoxLayout()
 
 class ExpandableTrainerBox(ExpandableBox):
     def __init__(self, trainerObject, **kwargs):
         """works with height and width rather than size_hint"""
-        self.button = None
         self.trainerObject = trainerObject
+        self.headerClosed = 150
         header = self.createHeader()
         content = self.createContent()
 
+
         super().__init__(header = header, content = content, button = self.button, **kwargs)
-        
 
     def createHeader(self) -> Widget:
         """creates and returns header, also creates self.button"""
         #TODO add edit trainer button
-        nameLabel = Label(text = self.trainerObject.name, size_hint_y = 0.2)
+        nameButton = TransparentButton(text = self.trainerObject.name, size_hint_y = 0.2)
         trainerPic = os.path.join(os.getcwd(), "..","images", "sprite.png")
         trainerImage = Image(source = trainerPic, fit_mode = "contain", pos_hint = {"left": 1})
         self.button = Button(text = f"show {self.trainerObject.name}'s pokemon", background_color = gm.opaque)
 
         nameImageBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
         nameImageBox.add_widget(trainerImage)
-        nameImageBox.add_widget(nameLabel)
+        nameImageBox.add_widget(nameButton)
 
         header = BoxLayout(orientation = "horizontal")
         header.add_widget(nameImageBox)
@@ -117,41 +145,58 @@ class ExpandableTrainerBox(ExpandableBox):
         return header
     
     def createContent(self) -> Widget:
-
-        content = BoxLayout(orientation = "vertical")
+        content = GridLayout(cols = 1, size_hint_y = None)
+        contentScroller = ScrollView(size = (content.width, content.height))
+        content.bind(minimum_height = content.setter("height"))
         pokemonAmount = len(self.trainerObject.pokemon)
+        self.contentOpen = 0
         for pokemon in self.trainerObject.pokemon:
-            content.add_widget(self.createPokemonBox(pokemon))
-
-        #TODO change content size dynamically based on pokemon amount using self.openContent
-        for i in range(5 - pokemonAmount):
-            content.add_widget(Label())
+            pokemonBox = ExpandablePokemonBox(pokemon)
+            content.add_widget(pokemonBox)
+            self.contentOpen += pokemonBox.headerClosed + 1 #contentclosed is 1
 
         #add button beneath pokemon
         if pokemonAmount < 6:  
-            addPokemonButton = Button(text = f"Add pokemon to {self.trainerObject.name}", on_release = self.addPokemonPopup, background_color = gm.opaque)  
+            addPokemonButton = TransparentButton(text = f"Add pokemon to {self.trainerObject.name}", on_release = self.addPokemonPopup, size_hint_y = None) 
             content.add_widget(addPokemonButton)
+            self.contentOpen += 100
+        print(f"content open: {self.contentOpen}")
+        print(f"content height: {content.height}")
 
-        return content
+        contentScroller.add_widget(content)
+        return contentScroller
 
     def addPokemonPopup(self, instance):
         dia = AddPokemonDialog(self.trainerObject, self)
         dia.open()
+
+class ExpandablePokemonBox(ExpandableBox):
+    def __init__(self, pokemonObject, **kwargs):
+        self.pokemonObject = pokemonObject
+        self.headerClosed = 100
+        self.contentOpen = 400
+
+        header = self.createHeader()
+        content = self.createContent()
+        super().__init__(header = header, content = content, button = self.pokemonName, **kwargs)
     
-    def createPokemonBox(self, pokemonObject):
-        #TODO class
-        defeatedButton = Button(background_color = "green" if pokemonObject.defeated else "red", size_hint_x = 0.1, on_release = lambda btn: self.changeDefeated(pokemonObject, btn))
-        pokemonImage = Image(source = os.path.join(os.getcwd(), "../", "images", "sprites", "pokemonMinimalWhitespace", f"{pokemonObject.name.lower()}.png"), fit_mode = "contain", size_hint_x = 0.2)
-        pokemonName = Label(text = pokemonObject.name)
-        pokemonLevel = Label(text = f"Lv. {pokemonObject.level}")
-        pokemonAbility = Label(text = f"{pokemonObject.ability}")
-        pokemonHeldItem = Label(text = f"{pokemonObject.heldItem}")
+    def createHeader(self) -> Widget:
+        header = BoxLayout(orientation = "horizontal")
+        defeatedButton = Button(size_hint_x = 0.1, on_release = lambda btn: self.changeDefeated(btn), background_color = "white")
+        #change button color
+        self.changeWidgetColor(defeatedButton)
+        pokemonImage = Image(source = os.path.join(os.getcwd(), "..", "images", "sprites", "pokemonMinimalWhitespace", f"{self.pokemonObject.name.lower()}.png"), fit_mode = "contain", size_hint_x = 0.2)
+
+        self.pokemonName = Button(text = self.pokemonObject.name)
+        pokemonLevel = Label(text = f"Lv. {self.pokemonObject.level}")
+        pokemonAbility = Label(text = f"{self.pokemonObject.ability}")
+        pokemonHeldItem = Label(text = f"{self.pokemonObject.heldItem}")
 
         typingBox = BoxLayout(orientation = "horizontal")
         typingBox.add_widget(Label(text = "todo"))
 
         pokemonInfoBox = BoxLayout(orientation = "vertical", size_hint_x = 0.2)
-        pokemonInfoBox.add_widget(pokemonName)
+        pokemonInfoBox.add_widget(self.pokemonName)
         pokemonInfoBox.add_widget(pokemonLevel)
         pokemonInfoBox.add_widget(typingBox)
 
@@ -159,31 +204,40 @@ class ExpandableTrainerBox(ExpandableBox):
         pokemonInfoBox2.add_widget(pokemonAbility)
         pokemonInfoBox2.add_widget(pokemonHeldItem)
 
-
         pokemonMoves = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
         for index in range(4):
             try: 
-                move = pokemonObject.moves[index]
+                move = self.pokemonObject.moves[index]
             except IndexError as e:
                 move = ""
-
             pokemonMoves.add_widget(Label(text = move))
 
-        pokemonBox = BoxLayout(orientation = "horizontal")
-        pokemonBox.add_widget(defeatedButton)
-        pokemonBox.add_widget(pokemonImage)
-        pokemonBox.add_widget(pokemonInfoBox)
-        pokemonBox.add_widget(pokemonInfoBox2)
-        pokemonBox.add_widget(pokemonMoves)
-        return pokemonBox
+        header.add_widget(defeatedButton)
+        header.add_widget(pokemonImage)
+        header.add_widget(pokemonInfoBox)
+        header.add_widget(pokemonInfoBox2)
+        header.add_widget(pokemonMoves)
+        return header
 
-    # def updateContent(self) -> None:
-    #     super().updateContent()
-    #     self.contentBox.add_widget(self.createContent())
+    def createContent(self) -> Widget:
+        content = DetailedPokemonBox(self.pokemonObject, self.updateHeader)
+        return content
+
+    def changeDefeated(self, instance) -> None:
+        """changes pokemon defeated status"""
+        self.pokemonObject.changeDefeated()
+        #change button colour
+        self.changeWidgetColor(instance)
     
-    def changeDefeated(self, object, instance) -> None:
-        print(object, instance)
-        object.changeDefeated()
+    def changeWidgetColor(self, widget):
+        """changes button color to green or red based on pokemon defeated status"""
+        widget.background_color = "green" if self.pokemonObject.defeated else "red"
+
+    def updateHeader(self) -> None:
+        super().updateHeader()
+        self.button = self.pokemonName
+        self.checkHeader()
+
     
 class EncounterTypeBox(ExpandableBox):
     def __init__(self, encounterType, encounters, **kwargs):
@@ -213,11 +267,11 @@ class EncounterBox(BoxLayout):
         super().__init__(*args, **kwargs)
         self.pokemonObject = pokemonObject
         self.orientation = "horizontal"
-        self.catchButton = Button(text = "catch", on_press = self.catch, size_hint_x = 0.1)
+        self.catchButton = Button(text = "catch", on_press = self.catch, size_hint_x = 0.2)
         image = os.path.join(self.pokemonSpritesFolder, f"{pokemonObject.name.lower()}.png")
-        self.pokemonImage = Image(source = image, pos_hint = {"top": 1}, size_hint_x = 0.4)
+        self.pokemonImage = Image(source = image, pos_hint = {"top": 1}, size_hint_x = 0.2)
         self.pokemonImage.fit_mode = "contain"
-        self.infoBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
+        self.infoBox = BoxLayout(orientation = "vertical", size_hint_x = 0.4)
         self.percentageLabel = Label(text = f"percentage: {pokemonObject.percentage}")
         self.levelsLabel = Label(text = f"levels: {pokemonObject.levels}")
         self.moreInfoButton = Button(text = "more info", on_press = self.showMoreInfo, size_hint_x = 0.2)

@@ -225,11 +225,11 @@ class MainGame():
                 wildArea = self.getFromJSON(wildArea, area, ["_encounters", "_items", "_trainers", "_encounteredPokemon"])#exclude items, trainers, encounters and encounteredpokemon
             
             '''retrieve encounters from json dump in sacredGoldGameData.txt'''
-            terrainTypes = area["_encounters"]  
+            terrainTypes = area["_encounters"] 
             for terrain in terrainTypes:
                 encounterList = []
-                terrainName = terrain[0]
-                pokemonList = terrain[1]
+                terrainName = terrain
+                pokemonList = terrainTypes[terrainName]
                 logger.debug(f"starting gathering pokemon from {areaName} : {terrainName}")
                 for pokemonJson in pokemonList:
                     encounterPokemon = EncounteredPokemon(self.errorName)
@@ -348,7 +348,6 @@ class MainGame():
     def getFromJSON(self, object, json, notWanted = []) -> object:
         """function that reads the attributes of an object and completes them given the correct json, returns object that was given"""
         defaultValues = {}
-        notWanted = [*notWanted]
         #removes all the __variables and methods (including setters and getters from property methods) from the attributes list
         attributes = [attribute for attribute in dir(object) if not attribute.startswith('__') \
                       and not callable(getattr(object, attribute)) and not isinstance(getattr(type(object), attribute, None), property)]

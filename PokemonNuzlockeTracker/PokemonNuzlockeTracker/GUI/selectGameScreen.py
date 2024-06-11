@@ -9,6 +9,7 @@ import platform as platform
 import games as gm
 from backgroundScreen import BackgroundScreen
 from newGameDialog import NewGameDialog
+from transparentButton import TransparentButton
 from loggerConfig import logger
 from fileRetriever import FileRetriever
 from games import MainGame
@@ -49,11 +50,12 @@ class SelectGameScreen(BackgroundScreen):
 
         #continue button
         continueBox = BoxLayout(orientation= "vertical", size_hint_y = 0.1)
-        self.continueButton = Button(text = "Continue with attempt")
+        self.settingsButton = TransparentButton(text = "TODO settings", size_hint_y = 0.4)
+        self.continueButton = TransparentButton(text = "Continue with attempt", size_hint_y = 0.6)
         self.continueButton.bind(on_press = self.startAttempt)
-        self.continueButton.background_color = gm.opaque
         self.continueButton.disabled = True
 
+        continueBox.add_widget(self.settingsButton)
         continueBox.add_widget(self.continueButton)
         
         layout.add_widget(gameSelection)

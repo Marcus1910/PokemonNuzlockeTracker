@@ -59,7 +59,7 @@ class Pokemon():
             self._moves.append(move)
         else:
             print("This pokemon already has this move")
-    
+    #return something TODO
     def deleteMove(self, move):
         if move in self._moves:
             self._moves.remove(move)
