@@ -19,12 +19,15 @@ def resize_image(input_path, output_path, size=(64, 64)):
     #img_resized = img_cropped.resize(size, Image.Resampling.LANCZOS)
 
     # Save the resized image
+    if "i_3ds_" in output_path:
+        output_path = output_path.replace("i_3ds_", "")
     print(f"saving to: {output_path}")
     img_cropped.save(output_path)
+    time.sleep(0.1)
 
 # Example usage
-oldfilepath = os.path.join(os.getcwd(), "PokemonNuzlockeTracker", "images", "sprites", "pokemon")
-newFilePath = os.path.join(os.getcwd(), "PokemonNuzlockeTracker", "images", "sprites", "pokemonMinimalWhitespace")
+oldfilepath = os.path.join(os.getcwd(), "item_sprites")
+newFilePath = os.path.join(os.getcwd(), "items")
 oldfiles = [f for f in os.listdir(oldfilepath) if f.lower().endswith('.png')]
 for index, file in enumerate(oldfiles):
     try:

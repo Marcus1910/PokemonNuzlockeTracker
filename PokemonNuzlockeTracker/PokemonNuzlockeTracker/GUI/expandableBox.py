@@ -11,7 +11,7 @@ import os
 from loggerConfig import logger
 from pokemonDialog import AddPokemonDialog
 from detailedPokemonBox import DetailedPokemonBox
-import games as gm
+from games import pokemonSprites, trainerSprites, itemSprites
 
 
 # class ExpandableBox(BoxLayout):
@@ -131,9 +131,9 @@ class ExpandableTrainerBox(ExpandableBox):
         """creates and returns header, also creates self.button"""
         #TODO add edit trainer button
         nameButton = TransparentButton(text = self.trainerObject.name, size_hint_y = 0.3)
-        trainerPic = os.path.join(os.getcwd(), "..","images", "sprite.png")
+        trainerPic = os.path.join(trainerSprites, f"{self.trainerObject.trainerType}.png" if self.trainerObject.trainerType is not None else "hiker.png")
         trainerImage = Image(source = trainerPic, fit_mode = "contain", pos_hint = {"left": 1}, size_hint_y = 0.7)
-        self.button = Button(text = f"show {self.trainerObject.name}'s pokemon", background_color = gm.opaque)
+        self.button = TransparentButton(text = f"show {self.trainerObject.name}'s pokemon")
 
         nameImageBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
         nameImageBox.add_widget(trainerImage)
@@ -186,7 +186,7 @@ class ExpandablePokemonBox(ExpandableBox):
         defeatedButton = Button(size_hint_x = 0.1, on_release = lambda btn: self.changeDefeated(btn), background_color = "white")
         #change button color
         self.changeWidgetColor(defeatedButton)
-        pokemonImage = Image(source = os.path.join(os.getcwd(), "..", "images", "sprites", "pokemonMinimalWhitespace", f"{self.pokemonObject.name.lower()}.png"), fit_mode = "contain", size_hint_x = 0.2)
+        pokemonImage = Image(source = os.path.join(pokemonSprites, f"{self.pokemonObject.name.lower()}.png"), fit_mode = "contain", size_hint_x = 0.2)
 
         self.pokemonName = Button(text = self.pokemonObject.name)
         pokemonLevel = Label(text = f"Lv. {self.pokemonObject.level}")
@@ -262,20 +262,19 @@ class EncounterTypeBox(ExpandableBox):
 
 class EncounterBox(BoxLayout):
     #TODO get from central point
-    pokemonSpritesFolder = os.path.join(os.path.dirname(os.getcwd()), "images", "sprites", "pokemonMinimalWhitespace")
     def __init__(self, pokemonObject, *args, **kwargs):
         """expects pokemonObject"""
         super().__init__(*args, **kwargs)
         self.pokemonObject = pokemonObject
         self.orientation = "horizontal"
-        self.catchButton = Button(text = "catch", on_press = self.catch, size_hint_x = 0.2)
-        image = os.path.join(self.pokemonSpritesFolder, f"{pokemonObject.name.lower()}.png")
+        self.catchButton = TransparentButton(text = "catch", on_press = self.catch, size_hint_x = 0.2)
+        image = os.path.join(pokemonSprites, f"{pokemonObject.name.lower()}.png")
         self.pokemonImage = Image(source = image, pos_hint = {"top": 1}, size_hint_x = 0.2)
         self.pokemonImage.fit_mode = "contain"
         self.infoBox = BoxLayout(orientation = "vertical", size_hint_x = 0.4)
         self.percentageLabel = Label(text = f"percentage: {pokemonObject.percentage}")
         self.levelsLabel = Label(text = f"levels: {pokemonObject.levels}")
-        self.moreInfoButton = Button(text = "more info", on_press = self.showMoreInfo, size_hint_x = 0.2)
+        self.moreInfoButton = TransparentButton(text = "more info", on_press = self.showMoreInfo, size_hint_x = 0.2)
         
         self.infoBox.add_widget(self.percentageLabel)
         self.infoBox.add_widget(self.levelsLabel)

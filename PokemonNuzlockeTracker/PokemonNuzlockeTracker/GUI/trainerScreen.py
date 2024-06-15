@@ -11,6 +11,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scrollview import ScrollView
 
 import games as gm
+from games import pokemonSprites, trainerSprites, itemSprites
 import os
 
 class TrainerScreen(NuzlockeScreen):
@@ -34,9 +35,8 @@ class TrainerScreen(NuzlockeScreen):
         #start disabled
         self.newTrainerButton.disabled = True
 
-        self.spriteFolder = os.path.join(os.path.dirname(os.getcwd()), "images", "sprites")
-        self.trainerSpriteFolder = os.path.join(self.spriteFolder, "trainerSprites")
-        self.pokemonSpriteFolder = os.path.join(self.spriteFolder, "pokemonMinimalWhitespace")
+        self.trainerSpriteFolder = trainerSprites
+        self.pokemonSpriteFolder = pokemonSprites
 
         self.trainerBoxScroll.add_widget(self.trainerBox)
         self.screenBox.add_widget(self.trainerBoxScroll)

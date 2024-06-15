@@ -7,12 +7,13 @@ from loggerConfig import logger
 from transparentButton import TransparentButton
 from deleteDialog import DeleteTrainerPokemonPopup
 # from popup import RemovePokemonPopup
+from games import pokemonSprites, trainerSprites, itemSprites
 from utilityFunctions import validateTextInput
 from trainerPokemon import TrainerPokemon
 import os
 
 class DetailedPokemonBox(BoxLayout):
-    pokemonSpritesFolder = os.path.join(os.path.dirname(os.getcwd()), "images", "sprites", "pokemonMinimalWhitespace")
+    pokemonSpritesFolder = pokemonSprites
     def __init__(self, pokemonObject, updateHeader, updateTrainerContent, *args, **kwargs):
         """DetailedPokemonBox used to give more info about a pokemon, buildlayout to build it, if given an pokemonObject it will fill it"""
         super().__init__(*args, **kwargs)

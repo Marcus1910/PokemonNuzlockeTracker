@@ -20,6 +20,10 @@ red = (1, 0, 0, 1)
 blue = (0, 0, 1, 1) 
 green = (0, 1, 0, 1)
 newAreaString = "New Area"
+spriteFolder = os.path.join(os.path.dirname(os.getcwd()), "images", "sprites")
+pokemonSprites = os.path.join(spriteFolder, "pokemon")
+trainerSprites = os.path.join(spriteFolder, "trainers")
+itemSprites = os.path.join(spriteFolder, "items")
 
 
 class MainGame():
