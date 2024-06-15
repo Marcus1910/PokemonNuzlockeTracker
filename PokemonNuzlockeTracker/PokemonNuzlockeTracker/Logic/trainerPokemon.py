@@ -1,4 +1,5 @@
 import json
+from loggerConfig import logicLogger as logger
 class Pokemon():
     def __init__(self, name, level):
         self._name = name.title()
@@ -96,6 +97,7 @@ class TrainerPokemon(Pokemon):
     defaultDefeated = False
     def __init__(self, name, level, defeated = False):
         self._defeated = defeated
+        self._trainer = None
         super().__init__(name, level)
     
     @property
@@ -109,6 +111,18 @@ class TrainerPokemon(Pokemon):
     def changeDefeated(self):
         """change the defeated status of the pokemon, inverts it"""
         self._defeated = not self._defeated
+    
+    @property
+    def trainer(self):
+        return self._trainer
+
+    def trainer(self, trainerObject) -> bool:
+        if trainerObject == None:
+            logger.error(f"pokemon could not be added to trainer, trainer is not valid")
+            return 0
+        self._trainer = trainerObject
+        logger.info(f"{self.name} added to {trainerObject.name}")
+        return 1
     
     def storeToSaveFile(self):
         if self.defeated != self.defaultDefeated:

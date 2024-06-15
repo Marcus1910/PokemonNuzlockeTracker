@@ -12,11 +12,12 @@ import os
 
 class DetailedPokemonBox(BoxLayout):
     pokemonSpritesFolder = os.path.join(os.path.dirname(os.getcwd()), "images", "sprites", "pokemonMinimalWhitespace")
-    def __init__(self, pokemonObject, updateHeader, *args, **kwargs):
+    def __init__(self, pokemonObject, updateHeader, updateTrainerContent, *args, **kwargs):
         """DetailedPokemonBox used to give more info about a pokemon, buildlayout to build it, if given an pokemonObject it will fill it"""
         super().__init__(*args, **kwargs)
         self.pokemonObject = pokemonObject
         self.updateHeader = updateHeader
+        self.updateTrainerContent = updateTrainerContent
         self.moveList = [] #used for storing moves
 
         #forward declarations for clear_layout function
@@ -57,8 +58,7 @@ class DetailedPokemonBox(BoxLayout):
         self.moveBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3, pos_hint = {"top": 1})
 
         #code for removeButton
-        self.defeatButton = Button(text = "Defeat Pokemon", on_press = self.pokemonObject.changeDefeated, size_hint_y = 0.1)
-        self.removeButton = Button(text = "Remove Pokemon", size_hint_y = 0.1)
+        self.removeButton = Button(text = "Remove Pokemon", size_hint_y = 0.1, on_release = self.removePokemon)
         
         #add everything to correct widgets
         self.nameLevelBox.add_widget(self.nameInput)
@@ -68,7 +68,6 @@ class DetailedPokemonBox(BoxLayout):
         
         self.nameImageBox.add_widget(self.nameLevelBox)
         self.nameImageBox.add_widget(self.imageBox)
-        self.nameImageBox.add_widget(self.defeatButton)
         self.nameImageBox.add_widget(self.removeButton)
 
         self.pokemonInfoBox.add_widget(self.abilityInput)
@@ -93,37 +92,24 @@ class DetailedPokemonBox(BoxLayout):
         self.pokemonObject.name = pokemonName
         #update header so name and image are updated
         self.updateHeader()
-
-   #TODO Fix this shittiness 
-    def updateLevel(self, input, focus):
+ 
+    def updatePokemonAttribute(self, input, focus, attribute):
         if focus:
             return
-        pokemonLevel = validateTextInput(input.text)
-        if pokemonLevel == None:
-            return
-        level = int(input.text)
-        self.pokemonObject.level = level
+        attributeValue = validateTextInput(input.text)
+        if attributeValue == None:
+            return 
+        setattr(self.pokemonObject, attribute, attributeValue)
         self.updateHeader()
+
+    def updateLevel(self, input, focus):
+        self.updatePokemonAttribute(input, focus, "level")
     
     def updateAbility(self, input, focus):
-        if focus:
-            return
-        pokemonAbility = validateTextInput(input.text)
-        if pokemonAbility == None:
-            return
-        ability = input.text
-        self.pokemonObject.ability = ability
-        self.updateHeader()
+        self.updatePokemonAttribute(input, focus, "ability")
     
     def updateHeldItem(self, input, focus):
-        if focus:
-            return
-        pokemonHeldItem = validateTextInput(input.text)
-        if pokemonHeldItem == None:
-            return
-        hi = input.text
-        self.pokemonObject.heldItem = hi
-        self.updateHeader()
+        self.updatePokemonAttribute(input, focus, "heldItem")
     
     def updateMoves(self, input, focus):
         if focus:
@@ -142,6 +128,15 @@ class DetailedPokemonBox(BoxLayout):
         #remove button
         self.moveBox.remove_widget(instance)
         self.updateHeader()
+    
+    def removePokemon(self, instance):
+        """removes the pokemon from the trainer and puts it into the lost&found section"""
+        trainer = self.pokemonObject.trainer
+        if trainer.removePokemon(self.pokemonObject):
+            #add pokemon to lost and found area
+
+            #update Trainer box content
+            self.updateTrainerContent()
 
     def retrievePokemonImage(self, name: str) -> str:
         """returns location of the pokemon image or the 0.png, TODO centralized place"""

@@ -51,18 +51,5 @@ class WindowManager(ScreenManager):
             return
         logger.debug(f"{self._currentArea.name} Object loaded in manager")
     
-    def saveCurrentArea(self):
-        """overwrite area object in areaList"""
-        pass
-
-    def updateCurrentArea(self):
-        logger.info(f"updating area")
-    
-    def saveTrainer(self):
-        trainer = Trainer("Maarten")
-        politoed = TrainerPokemon("Politoed", 57)
-        trainer.pokemon = politoed
-        self.gameObject.areaList[0].addTrainer(trainer)
-    
     def showError(self, text):
         pass

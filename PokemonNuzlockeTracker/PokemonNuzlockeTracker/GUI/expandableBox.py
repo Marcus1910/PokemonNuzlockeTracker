@@ -119,7 +119,7 @@ class ExpandableTrainerBox(ExpandableBox):
     def __init__(self, trainerObject, **kwargs):
         """works with height and width rather than size_hint"""
         self.trainerObject = trainerObject
-        self.headerClosed = 150
+        self.headerClosed = 200
         header = self.createHeader()
         content = self.createContent()
 
@@ -151,7 +151,7 @@ class ExpandableTrainerBox(ExpandableBox):
         pokemonAmount = len(self.trainerObject.pokemon)
         self.contentOpen = 0
         for pokemon in self.trainerObject.pokemon:
-            pokemonBox = ExpandablePokemonBox(pokemon)
+            pokemonBox = ExpandablePokemonBox(pokemon, self.updateContent)
             content.add_widget(pokemonBox)
             self.contentOpen += pokemonBox.headerClosed + 1 #contentclosed is 1
 
@@ -159,7 +159,7 @@ class ExpandableTrainerBox(ExpandableBox):
         if pokemonAmount < 6:  
             addPokemonButton = TransparentButton(text = f"Add pokemon to {self.trainerObject.name}", on_release = self.addPokemonPopup, size_hint_y = None) 
             content.add_widget(addPokemonButton)
-            self.contentOpen += 100
+            self.contentOpen += 250
         print(f"content open: {self.contentOpen}")
         print(f"content height: {content.height}")
 
@@ -171,10 +171,11 @@ class ExpandableTrainerBox(ExpandableBox):
         dia.open()
 
 class ExpandablePokemonBox(ExpandableBox):
-    def __init__(self, pokemonObject, **kwargs):
+    def __init__(self, pokemonObject, updateTrainerContent, **kwargs):
         self.pokemonObject = pokemonObject
-        self.headerClosed = 100
-        self.contentOpen = 400
+        self.updateTrainerContent = updateTrainerContent
+        self.headerClosed = 250
+        self.contentOpen = 700
 
         header = self.createHeader()
         content = self.createContent()
@@ -220,7 +221,7 @@ class ExpandablePokemonBox(ExpandableBox):
         return header
 
     def createContent(self) -> Widget:
-        content = DetailedPokemonBox(self.pokemonObject, self.updateHeader)
+        content = DetailedPokemonBox(self.pokemonObject, self.updateHeader, self.updateTrainerContent)
         return content
 
     def changeDefeated(self, instance) -> None:
