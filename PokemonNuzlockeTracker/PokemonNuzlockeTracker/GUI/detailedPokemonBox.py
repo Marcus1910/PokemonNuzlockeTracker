@@ -5,6 +5,7 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.image import Image
 from loggerConfig import logger
 from transparentButton import TransparentButton
+from deleteDialog import DeleteTrainerPokemonPopup
 # from popup import RemovePokemonPopup
 from utilityFunctions import validateTextInput
 from trainerPokemon import TrainerPokemon
@@ -58,7 +59,7 @@ class DetailedPokemonBox(BoxLayout):
         self.moveBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3, pos_hint = {"top": 1})
 
         #code for removeButton
-        self.removeButton = Button(text = "Remove Pokemon", size_hint_y = 0.1, on_release = self.removePokemon)
+        self.removeButton = Button(text = "Remove Pokemon", size_hint_y = 0.1, on_release = self.deletePokemonPopup)
         
         #add everything to correct widgets
         self.nameLevelBox.add_widget(self.nameInput)
@@ -129,14 +130,29 @@ class DetailedPokemonBox(BoxLayout):
         self.moveBox.remove_widget(instance)
         self.updateHeader()
     
+    def deletePokemonPopup(self, instance):
+        """dialog that asks whether you want to delete the pokemon or cancel deletion"""
+        dialog = DeleteTrainerPokemonPopup()
+        dialog.open()
+        dialog.bind(on_dismiss = self.removePokemon)
+    
     def removePokemon(self, instance):
         """removes the pokemon from the trainer and puts it into the lost&found section"""
-        trainer = self.pokemonObject.trainer
-        if trainer.removePokemon(self.pokemonObject):
-            #add pokemon to lost and found area
+        if instance.result:
+            trainer = self.pokemonObject.trainer
+            logger.debug(f"removing {self.pokemonObject.name} from {trainer.name}")
+            if trainer.removePokemon(self.pokemonObject):
+                #move pokemon to lost and found area
+                #TODO
+                #update Trainer box content
+                self.updateTrainerContent()
+                return
+            
+            logger.error(f"{self.pokemonObject.name} could not be removed from {trainer.name}")
+            return
+        else:
+            logger.debug(f"not deleting pokemon")
 
-            #update Trainer box content
-            self.updateTrainerContent()
 
     def retrievePokemonImage(self, name: str) -> str:
         """returns location of the pokemon image or the 0.png, TODO centralized place"""

@@ -53,7 +53,7 @@ class MainGame():
         self.saveFileError = False
         self._badge = 0 #default badge 0
         
-        #TODO not a dictionary, because we want it to be in documentation order and in a stable order, dict items can change position, OrderedDict change
+        #TODO not a dictionary, because we want it to be in documentation order and in a stable order, dict items can change position
         self.areaList = [] #name : areaObject
         self.gamePath = self.fileRetriever.gameFolder
         self.dataFolder = self.fileRetriever.dataFolder
@@ -175,7 +175,7 @@ class MainGame():
                 self.retrieveEncounterData()
 
     def retrieveSaveFile(self) -> None:
-        #check whether the saveFile is a corect path
+        #check whether the saveFile is a correct path
         if self._saveFile == None or not self.validateFile(self._saveFile):
             logger.error(f"Savefile, {self._saveFile} could not be found")
             self.saveFileError = True

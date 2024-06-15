@@ -119,7 +119,8 @@ class ExpandableTrainerBox(ExpandableBox):
     def __init__(self, trainerObject, **kwargs):
         """works with height and width rather than size_hint"""
         self.trainerObject = trainerObject
-        self.headerClosed = 200
+        self.headerClosed = 300
+        self.headerOpen = 300
         header = self.createHeader()
         content = self.createContent()
 
@@ -129,9 +130,9 @@ class ExpandableTrainerBox(ExpandableBox):
     def createHeader(self) -> Widget:
         """creates and returns header, also creates self.button"""
         #TODO add edit trainer button
-        nameButton = TransparentButton(text = self.trainerObject.name, size_hint_y = 0.2)
+        nameButton = TransparentButton(text = self.trainerObject.name, size_hint_y = 0.3)
         trainerPic = os.path.join(os.getcwd(), "..","images", "sprite.png")
-        trainerImage = Image(source = trainerPic, fit_mode = "contain", pos_hint = {"left": 1})
+        trainerImage = Image(source = trainerPic, fit_mode = "contain", pos_hint = {"left": 1}, size_hint_y = 0.7)
         self.button = Button(text = f"show {self.trainerObject.name}'s pokemon", background_color = gm.opaque)
 
         nameImageBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
@@ -160,8 +161,6 @@ class ExpandableTrainerBox(ExpandableBox):
             addPokemonButton = TransparentButton(text = f"Add pokemon to {self.trainerObject.name}", on_release = self.addPokemonPopup, size_hint_y = None) 
             content.add_widget(addPokemonButton)
             self.contentOpen += 250
-        print(f"content open: {self.contentOpen}")
-        print(f"content height: {content.height}")
 
         contentScroller.add_widget(content)
         return contentScroller
@@ -175,6 +174,7 @@ class ExpandablePokemonBox(ExpandableBox):
         self.pokemonObject = pokemonObject
         self.updateTrainerContent = updateTrainerContent
         self.headerClosed = 250
+        self.headerOpen = 250
         self.contentOpen = 700
 
         header = self.createHeader()

@@ -51,5 +51,26 @@ class WindowManager(ScreenManager):
             return
         logger.debug(f"{self._currentArea.name} Object loaded in manager")
     
+    def addPokemonToArea(self, pokemonObject, areaName):
+        """add pokemon to encounters list of specified areaName"""
+        for area in self.areaList:
+            if area.name == areaName:
+                area.encounters = pokemonObject
+                logger.info(f"added {pokemonObject.name} to {areaName}")
+                return 1
+        else:
+            logger.error(f"{pokemonObject.name} could not be added to {areaName}")
+            return 0
+    
+    def addPokemonToArena(self, pokemonObject) -> None:
+        self.addPokemonToArea(pokemonObject, "Arena")
+
+    def addPokemonToRetirement(self, pokemonObject) -> None:
+        self.addPokemonToArea(pokemonObject, "Retirement")
+
+    def addPokemonToLostAndFound(self, pokemonObject) -> None:
+        self.addPokemonToArea(pokemonObject, "lost&found")
+
+    
     def showError(self, text):
         pass
