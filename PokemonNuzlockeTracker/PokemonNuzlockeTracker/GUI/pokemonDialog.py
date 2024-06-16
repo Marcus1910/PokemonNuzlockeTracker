@@ -25,6 +25,7 @@ class AddPokemonDialog(MDDialog):
     def createPokemon(self, instance):
         object = self.content.getInput()
         self.trainerObject.pokemon = object
+        self.trainerObject.checkDefeated()
         self.trainerBox.updateContent()
         self.dismiss()
 

@@ -127,6 +127,7 @@ class TrainerPokemon(Pokemon):
     def changeDefeated(self):
         """change the defeated status of the pokemon, inverts it"""
         self.defeated = not self.defeated
+        self.trainer.checkDefeated()
     
     @property
     def trainer(self):

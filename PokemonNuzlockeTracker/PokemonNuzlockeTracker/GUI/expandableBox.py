@@ -116,25 +116,27 @@ class ExpandableBox(BoxLayout):
         return BoxLayout()
 
 class ExpandableTrainerBox(ExpandableBox):
-    def __init__(self, trainerObject, removeTrainer, **kwargs):
+    def __init__(self, trainerObject, **kwargs):
         """works with height and width rather than size_hint"""
         self.trainerObject = trainerObject
-        self.removeTrainer = removeTrainer
+        #add updateHeader to the observer list so it gets called when defeated changes
+        self.trainerObject.addDefeatedObserver(self.updateHeader)
         self.headerClosed = 300
         self.headerOpen = 300
         header = self.createHeader()
         content = self.createContent()
-
 
         super().__init__(header = header, content = content, button = self.button, **kwargs)
 
     def createHeader(self) -> Widget:
         """creates and returns header, also creates self.button"""
         #TODO add edit trainer button
-        nameButton = TransparentButton(text = self.trainerObject.name, size_hint_y = 0.3, on_release = lambda btn: self.removeTrainer(self.trainerObject))
+        nameButton = TransparentButton(text = self.trainerObject.name, size_hint_y = 0.3, on_release = lambda btn: self.trainerObject.removeTrainer())
         trainerPic = os.path.join(trainerSprites, f"{self.trainerObject.trainerType}.png" if self.trainerObject.trainerType is not None else "hiker.png")
         trainerImage = Image(source = trainerPic, fit_mode = "contain", pos_hint = {"left": 1}, size_hint_y = 0.7)
         self.button = TransparentButton(text = f"show {self.trainerObject.name}'s pokemon")
+        #change button color based on defeated status of trainer
+        self.button.greenColor() if self.trainerObject.defeated else self.button.redColor()
 
         nameImageBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
         nameImageBox.add_widget(trainerImage)
@@ -153,7 +155,7 @@ class ExpandableTrainerBox(ExpandableBox):
         pokemonAmount = len(self.trainerObject.pokemon)
         self.contentOpen = 0
         for pokemon in self.trainerObject.pokemon:
-            pokemonBox = ExpandablePokemonBox(pokemon, self.updateContent)
+            pokemonBox = ExpandablePokemonBox(pokemon, self)
             content.add_widget(pokemonBox)
             self.contentOpen += pokemonBox.headerClosed + 1 #contentclosed is 1
 
@@ -171,9 +173,9 @@ class ExpandableTrainerBox(ExpandableBox):
         dia.open()
 
 class ExpandablePokemonBox(ExpandableBox):
-    def __init__(self, pokemonObject, updateTrainerContent, **kwargs):
+    def __init__(self, pokemonObject, trainerBox, **kwargs):
         self.pokemonObject = pokemonObject
-        self.updateTrainerContent = updateTrainerContent
+        self.trainerBox = trainerBox
         self.headerClosed = 250
         self.headerOpen = 250
         self.contentOpen = 700
@@ -184,12 +186,12 @@ class ExpandablePokemonBox(ExpandableBox):
     
     def createHeader(self) -> Widget:
         header = BoxLayout(orientation = "horizontal")
-        defeatedButton = Button(size_hint_x = 0.1, on_release = lambda btn: self.changeDefeated(btn), background_color = "white")
+        defeatedButton = TransparentButton(size_hint_x = 0.1, on_release = lambda btn: [self.changeDefeated(btn), self.trainerBox.updateHeader()], background_color = "white")
         #change button color
         self.changeWidgetColor(defeatedButton)
         pokemonImage = Image(source = os.path.join(pokemonSprites, f"{self.pokemonObject.name.lower()}.png"), fit_mode = "contain", size_hint_x = 0.2)
 
-        self.pokemonName = Button(text = self.pokemonObject.name)
+        self.pokemonName = TransparentButton(text = self.pokemonObject.name)
         pokemonLevel = Label(text = f"Lv. {self.pokemonObject.level}")
         pokemonAbility = Label(text = f"{self.pokemonObject.ability}")
         pokemonHeldItem = Label(text = f"{self.pokemonObject.heldItem}")
@@ -222,7 +224,7 @@ class ExpandablePokemonBox(ExpandableBox):
         return header
 
     def createContent(self) -> Widget:
-        content = DetailedPokemonBox(self.pokemonObject, self.updateHeader, self.updateTrainerContent)
+        content = DetailedPokemonBox(self.pokemonObject, self.updateHeader, self.trainerBox.updateContent)
         return content
 
     def changeDefeated(self, instance) -> None:
@@ -233,7 +235,7 @@ class ExpandablePokemonBox(ExpandableBox):
     
     def changeWidgetColor(self, widget):
         """changes button color to green or red based on pokemon defeated status"""
-        widget.background_color = "green" if self.pokemonObject.defeated else "red"
+        widget.greenColor() if self.pokemonObject.defeated else widget.redColor()
 
     def updateHeader(self) -> None:
         super().updateHeader()

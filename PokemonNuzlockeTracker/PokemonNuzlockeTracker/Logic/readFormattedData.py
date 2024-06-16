@@ -73,8 +73,12 @@ class readFormattedData():
                 terrainType = separatedLine[0]
                 if "Wild Level" in separatedLine[0]:
                     levels = separatedLine[1]
+                    while " " in levels:
+                        levels = levels.replace(" ", "")
+                    if "\n" in levels:
+                        levels = levels.replace("\n", "")
                     if "ï¿½" in levels:
-                        levels = levels.replace(" ï¿½ " , " - " )
+                        levels = levels.replace("ï¿½" , "-" )
                     else:
                         levels = "N/A"
                     #continue otherwise wild levels will be seen as an encounter type
@@ -86,6 +90,8 @@ class readFormattedData():
                     pokemon = pokemon.split("(", 1)
                     #remove spaces in front of and at the end of the pokemon name
                     pokemonName = pokemon[0].strip()
+                    if "ï¿½" in pokemonName:
+                        pokemonName = pokemonName.replace("ï¿½", "")
                     try:
                         percentage = pokemon[1].split(')')[0].strip()
                     except IndexError:

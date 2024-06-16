@@ -262,6 +262,7 @@ class MainGame():
                 pokemonTrainer = Trainer(trainerName)
                 
                 pokemonTrainer = self.getFromJSON(pokemonTrainer, trainerJson, ["_pokemon"]) #puts json as a pokemon
+                pokemonTrainer.area = wildArea
                 logger.debug(f"finished {pokemonTrainer.name} without pokemon attributes")
 
                 

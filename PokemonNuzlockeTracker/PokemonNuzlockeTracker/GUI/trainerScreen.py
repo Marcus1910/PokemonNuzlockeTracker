@@ -57,18 +57,20 @@ class TrainerScreen(NuzlockeScreen):
 
     def updateTrainers(self):
         """reloads the expandabletrainerboxes with updated trainer dict"""
-        print(f"object: {self.areaObject}")
+        noTrainers = True
+        self.newTrainerButton.resetColor()
         self.trainers = self.areaObject.trainers
-        logger.debug(f"loaded trainers: {self.trainers.keys()}")
         self.clearTrainerBox()
 
         for trainer in self.trainers.values():
-            box = ExpandableTrainerBox(trainer, self.removeTrainer)
+            noTrainers = False
+            box = ExpandableTrainerBox(trainer)
+            trainer.addRemoveObserver(self.updateTrainers)
             self.trainerBox.add_widget(box)
-        
-        """code below should not have an effect, leftover if something where to happen to the scrollbar"""
-        # self.trainerBoxScroll.size = (self.trainerBox.width, self.trainerBox.height)
-        # self.trainerBox.bind(minimum_height = self.trainerBox.setter("height"))
+
+        if noTrainers:
+            """make the new trainer button stand out more when there are no trainers"""
+            self.newTrainerButton.greenColor()
   
     def clearTrainerBox(self):
         """removes all widgets from trainerBox"""
@@ -93,24 +95,3 @@ class TrainerScreen(NuzlockeScreen):
             return 0
         self.updateTrainers()
         return 1
-
-    def editTrainerObject(self, trainerObject, newName):
-        """Edit the trainerObject from the game"""
-        #NewName is either the name or None, None is the default value in the called function
-        logger.debug(f"editing {trainerObject.name} in {self.areaObject.name}")
-        if self.areaObject.editTrainer(trainerObject, newName):
-            logger.debug("edit done succesfully, redrawing screen")
-        else:
-            logger.debug("error occurred")
-            return
-        self.updateTrainers()
-
-    def removeTrainer(self, trainerName):
-        """remove trainer from game object using its name"""
-        if self.areaObject.removeTrainer(trainerName):
-            logger.debug("removed Trainer sucessfully")
-        else:
-            logger.debug("error ocurred during removal")
-            return
-
-        self.updateTrainers()

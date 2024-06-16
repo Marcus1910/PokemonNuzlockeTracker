@@ -4,10 +4,15 @@ class Trainer():
     defaultDefeated = False
     def __init__(self, name, defeated = False):
         self._name = name
+        self._area = None
         self._trainerType = None
         self._gender = None
         self._pokemon = []#List of pokemon otherwise trainers can't have the same pokemon twice
         self._defeated = defeated
+        self._defeatedObservers = []
+        self._removeObservers = []
+        #check now, also checked whenever a pokemon is added
+        self.checkDefeated()
     
     @property
     def name(self):
@@ -17,6 +22,23 @@ class Trainer():
     def name(self, name):
         self._name = name
     
+    @property
+    def area(self):
+        return self._area
+    
+    @area.setter
+    def area(self, areaObject):
+        self._area = areaObject
+    
+    def removeTrainer(self) -> bool:
+        if self.area == None:
+            logger.error("Trainer has no Area")
+            return 0
+        if self.area.removeTrainer(self):
+            self.notifyRemoveObservers()
+            return 1
+        return 0
+
     @property
     def trainerType(self):
         return self._trainerType
@@ -39,7 +61,7 @@ class Trainer():
             if gender == "F" or gender == "M":
                 self._gender = gender
             else:
-                print("enter valid gender, options are M or F")
+                logger.error("enter valid gender, options are M or F")
     
     @property
     def pokemon(self):
@@ -51,6 +73,7 @@ class Trainer():
         if len(self._pokemon) < 6:
             pokemon.trainer = self
             self._pokemon.append(pokemon)
+            self.checkDefeated()
             logger.debug(f"added {pokemon} to {self._name}")
         else:
             logger.error(f"{self._name} already has 6 pokemon")
@@ -72,7 +95,21 @@ class Trainer():
     @defeated.setter
     def defeated(self, bool):
         self._defeated = bool
-
+        self.notifyDefeatedObservers()
+    
+    def getNumberOfDefeatedPokemon(self) -> list:
+        """returns a list of bool values"""
+        return [pokemon.defeated for pokemon in self.pokemon if pokemon.defeated]
+    
+    def checkDefeated(self) -> bool:
+        """function that checks if all pokemon have been defeated, changes self.defeated and return True or False"""
+        if len(self.pokemon) == len(self.getNumberOfDefeatedPokemon()):
+            #all pokemon have been defeated
+            self.defeated = True
+            return 1
+        self.defeated = False
+        return 0
+        
     def storeToDataFile(self):
         variableDict = {"_name": self.name, "_trainerType": self.trainerType, "_gender": self.gender, "_pokemon": [pokemon.storeToDataFile() for pokemon in self.pokemon]}
         return variableDict
@@ -81,14 +118,10 @@ class Trainer():
         """checks whether the trainer needs to be stored in the saveFile, if it is not defeated, or no pokemon are defeated It shouldn't"""
         #get a list of True or False
         logger.debug(f"saving {self._name}")
-        numberOfDefeatedPokemon = [pokemon.defeated for pokemon in self.pokemon]
+        
         variableDict = {"_name": self.name}
         
-        #all checks for boolean values
-        if all(numberOfDefeatedPokemon):
-            #all pokemon have been defeated
-            logger.debug(f"all pokemon have been defeated, changing trainers defeated status to True")
-            self._defeated = True
+        self.checkDefeated()
 
         #add defeated status to json
         variableDict["_defeated"] = self.defeated
@@ -98,7 +131,7 @@ class Trainer():
             logger.debug(f"trainer has been defeated, only saving name and defeatedStatus")
             return variableDict
         
-        if any(numberOfDefeatedPokemon):
+        if self.getNumberOfDefeatedPokemon() >= 1:
             #add pokemon to variable list as at least one pokemon has been defeated but the trainer hasn't
             logger.debug("adding pokemon to saveFile")
             variableDict["_pokemon"] = [pokemonJson for pokemon in self._pokemon if (pokemonJson := pokemon.storeToSaveFile()) is not None]
@@ -113,6 +146,27 @@ class Trainer():
         for pokemon in self._pokemon:
             returnString += pokemon.__str__() + "\n"
         return returnString
+    
+    def addObserver(self, callback, list) -> None:
+        if callback not in list:
+            list.append(callback)
+    
+    def notifyObservers(self, list)-> None:
+        for callback in list:
+            callback()
+
+
+    def addDefeatedObserver(self, callback) -> None:
+        self.addObserver(callback, self._defeatedObservers)
+    
+    def notifyDefeatedObservers(self) -> None:
+        self.notifyObservers(self._defeatedObservers)
+    
+    def addRemoveObserver(self, callback) -> None:
+        self.addObserver(callback, self._removeObservers)
+    
+    def notifyRemoveObservers(self) -> None:
+        self.notifyObservers(self._removeObservers)
     
 """example json trainer
 "Larry": {
