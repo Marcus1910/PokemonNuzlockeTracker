@@ -63,7 +63,7 @@ class TrainerScreen(NuzlockeScreen):
         self.clearTrainerBox()
 
         for trainer in self.trainers.values():
-            box = ExpandableTrainerBox(trainer)
+            box = ExpandableTrainerBox(trainer, self.removeTrainer)
             self.trainerBox.add_widget(box)
         
         """code below should not have an effect, leftover if something where to happen to the scrollbar"""

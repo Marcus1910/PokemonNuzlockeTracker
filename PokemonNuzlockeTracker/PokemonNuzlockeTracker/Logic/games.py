@@ -1,6 +1,6 @@
 from area import EncounterArea
 from trainer import Trainer
-from trainerPokemon import TrainerPokemon, EncounteredPokemon
+from pokemon import TrainerPokemon, EncounteredPokemon
 from item import Item
 from readFormattedData import readFormattedData
 from fileRetriever import FileRetriever
@@ -124,11 +124,11 @@ class MainGame():
 
     def writeToFile(self):
         logger.info("saving game")
-        dataareaList = []
+        dataAreaList = []
         saveFileList = [{"_badge": 6}]
         #fill lists with all the data to save
         for area in self.areaList:
-            dataareaList.append(area.storeToDataFile())
+            dataAreaList.append(area.storeToDataFile())
             saveFileList.append(area.storeToSaveFile())
 
         #savefile location has been edited if there was an error reading from it
@@ -138,7 +138,7 @@ class MainGame():
 
         with open(self.dataFile, "w") as file:
             file.truncate()
-            file.write(json.dumps(dataareaList, default = vars, indent = 1))  
+            file.write(json.dumps(dataAreaList, default = vars, indent = 1))  
         
         self.fileRetriever.saveGameFiles(self.gameName)
     

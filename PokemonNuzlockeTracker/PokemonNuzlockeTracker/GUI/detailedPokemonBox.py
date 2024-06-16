@@ -9,7 +9,7 @@ from deleteDialog import DeleteTrainerPokemonPopup
 # from popup import RemovePokemonPopup
 from games import pokemonSprites, trainerSprites, itemSprites
 from utilityFunctions import validateTextInput
-from trainerPokemon import TrainerPokemon
+from pokemon import TrainerPokemon
 import os
 
 class DetailedPokemonBox(BoxLayout):
@@ -119,7 +119,7 @@ class DetailedPokemonBox(BoxLayout):
         pokemonMove = validateTextInput(input.text)
         if pokemonMove == None:
             return        
-        self.pokemonObject.moves = pokemonMove
+        self.pokemonObject.learnedMoves = pokemonMove
         self.clearMoveBox()
         self.fillMoveBox()
         self.updateHeader()
@@ -133,7 +133,7 @@ class DetailedPokemonBox(BoxLayout):
     
     def deletePokemonPopup(self, instance):
         """dialog that asks whether you want to delete the pokemon or cancel deletion"""
-        dialog = DeleteTrainerPokemonPopup()
+        dialog = DeleteTrainerPokemonPopup(self.pokemonObject.name, self.pokemonObject.trainer.name)
         dialog.open()
         dialog.bind(on_dismiss = self.removePokemon)
     
@@ -210,7 +210,7 @@ class DetailedPokemonBox(BoxLayout):
         self.additionalInfoBox.add_widget(self.possibleMovesBox)
     
     def fillMoveBox(self) -> None:
-        for index, move in enumerate(self.pokemonObject.moves):
+        for index, move in enumerate(self.pokemonObject.learnedMoves):
             self.moveBox.add_widget(TransparentButton(text = move, on_release = self.removeMove))
         moveInput = TextInput(hint_text = f"enter new move", multiline = False)
         moveInput.bind(focus = self.updateMoves)

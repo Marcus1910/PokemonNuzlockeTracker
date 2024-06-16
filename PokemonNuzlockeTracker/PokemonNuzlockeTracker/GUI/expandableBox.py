@@ -56,15 +56,15 @@ class ExpandableBox(BoxLayout):
         #TODO error handling, label
         #or change header to boxlayout if not already boxlayout
         if isinstance(self.header, Button):
-            logger.debug("header is button, appending function")
+            # logger.debug("header is button, appending function")
             self.header.on_release = self.open
         elif isinstance(self.header, BoxLayout):
-            logger.debug("header is Boxlayout")
+            # logger.debug("header is Boxlayout")
             if self.button != None:
-                logger.debug("button provided, appending open function")
+                # logger.debug("button provided, appending open function")
                 self.button.on_release = self.open
             else:
-                logger.debug("adding button")
+                # logger.debug("adding button")
                 bttn = Button(text = "open", on_release = self.open)
                 self.header.add_widget(bttn)
         else:
@@ -82,10 +82,10 @@ class ExpandableBox(BoxLayout):
         #reverse opened, starts at False
         self.opened = not self.opened 
         if not self.opened:
-            logger.debug("closing")
+            # logger.debug("closing")
             self.close()
             return
-        logger.debug("opening")
+        # logger.debug("opening")
         self.adjustSizes(self.headerOpen, self.contentOpen)
         self.updateContent()
 
@@ -116,9 +116,10 @@ class ExpandableBox(BoxLayout):
         return BoxLayout()
 
 class ExpandableTrainerBox(ExpandableBox):
-    def __init__(self, trainerObject, **kwargs):
+    def __init__(self, trainerObject, removeTrainer, **kwargs):
         """works with height and width rather than size_hint"""
         self.trainerObject = trainerObject
+        self.removeTrainer = removeTrainer
         self.headerClosed = 300
         self.headerOpen = 300
         header = self.createHeader()
@@ -130,7 +131,7 @@ class ExpandableTrainerBox(ExpandableBox):
     def createHeader(self) -> Widget:
         """creates and returns header, also creates self.button"""
         #TODO add edit trainer button
-        nameButton = TransparentButton(text = self.trainerObject.name, size_hint_y = 0.3)
+        nameButton = TransparentButton(text = self.trainerObject.name, size_hint_y = 0.3, on_release = lambda btn: self.removeTrainer(self.trainerObject))
         trainerPic = os.path.join(trainerSprites, f"{self.trainerObject.trainerType}.png" if self.trainerObject.trainerType is not None else "hiker.png")
         trainerImage = Image(source = trainerPic, fit_mode = "contain", pos_hint = {"left": 1}, size_hint_y = 0.7)
         self.button = TransparentButton(text = f"show {self.trainerObject.name}'s pokemon")
@@ -160,7 +161,7 @@ class ExpandableTrainerBox(ExpandableBox):
         if pokemonAmount < 6:  
             addPokemonButton = TransparentButton(text = f"Add pokemon to {self.trainerObject.name}", on_release = self.addPokemonPopup, size_hint_y = None) 
             content.add_widget(addPokemonButton)
-            self.contentOpen += 250
+            self.contentOpen += 300
 
         contentScroller.add_widget(content)
         return contentScroller
@@ -208,7 +209,7 @@ class ExpandablePokemonBox(ExpandableBox):
         pokemonMoves = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
         for index in range(4):
             try: 
-                move = self.pokemonObject.moves[index]
+                move = self.pokemonObject.learnedMoves[index]
             except IndexError as e:
                 move = ""
             pokemonMoves.add_widget(Label(text = move))

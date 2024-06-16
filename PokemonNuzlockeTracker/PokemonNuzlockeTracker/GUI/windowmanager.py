@@ -3,7 +3,7 @@ from kivy.uix.screenmanager import ScreenManager
 from loggerConfig import logger
 import games as gm
 from trainer import Trainer
-from trainerPokemon import TrainerPokemon
+from pokemon import TrainerPokemon
 
 class WindowManager(ScreenManager):
     attempt = None

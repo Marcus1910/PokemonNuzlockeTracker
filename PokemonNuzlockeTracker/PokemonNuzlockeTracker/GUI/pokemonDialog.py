@@ -7,7 +7,7 @@ from kivymd.uix.selectioncontrol import MDSwitch
 
 from utilityFunctions import checkString, validateTextInput
 from loggerConfig import logger
-from trainerPokemon import TrainerPokemon
+from pokemon import TrainerPokemon
 
 class AddPokemonDialog(MDDialog):
     def __init__(self, trainerObject, trainerBox, **kwargs):

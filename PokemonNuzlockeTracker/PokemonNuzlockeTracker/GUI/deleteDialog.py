@@ -9,9 +9,7 @@ class DeletePopup(MDDialog):
         self.type = "custom" 
         self.result = 0
         self.pos_hint = {"center_x": 0.5, "center_y": 0.65}
-        self.buttons = [MDFlatButton(text = "yes", on_release = self.yes), MDFlatButton(text = "no", on_release = self.no)]
-
-
+        self.buttons = [MDFlatButton(text = "yes", md_bg_color = "red" ,on_release = self.yes), MDFlatButton(text = "no", on_release = self.no)]
         super().__init__(**kwargs)
     
     def yes(self, instance):
@@ -23,11 +21,11 @@ class DeletePopup(MDDialog):
         self.dismiss()
 
 class DeleteTrainerPopup(DeletePopup):
-    def __init__(self, **kwargs):
-
+    def __init__(self, trainerName, areaName, **kwargs):
+        self.title = f"Delete {trainerName} for {areaName}?"
         super().__init__(**kwargs)
 
 class DeleteTrainerPokemonPopup(DeletePopup):
-    def __init__(self, **kwargs):
-        self.title = "Delete trainer pokemon"
+    def __init__(self, pokemonName, trainerName, **kwargs):
+        self.title = f"Delete {pokemonName} from {trainerName}?"
         super().__init__(**kwargs)

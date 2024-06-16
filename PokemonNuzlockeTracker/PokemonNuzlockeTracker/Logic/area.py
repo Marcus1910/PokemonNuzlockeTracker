@@ -43,7 +43,6 @@ class Area():
         return {"_name": self.name, "_accessible": self.accessible}
 
 class EncounterArea(Area):
-
     pokemonCatchLimit = 1 #TODO get from settings.py
     defaultCanCatchPokemon = False
     def __init__(self, name):
@@ -107,13 +106,14 @@ class EncounterArea(Area):
         logger.info(f"changed {oldName} to {newTrainerName} and updated its content")
         return 1
     
-    def removeTrainer(self, trainerName):
+    def removeTrainer(self, trainerObject):
         """removes trainerObject from trainer dict, return 1 on succes, 0 on failure"""
-        if trainerName in self._trainers.keys():
-            self._trainers.pop(trainerName)
-            logger.info(f"removed {trainerName} from {self._name}")
+        if trainerObject in self._trainers.values():
+            #change to ID
+            self._trainers.pop(trainerObject.name)
+            logger.info(f"removed {trainerObject.name} from {self._name}")
             return 1
-        logger.error(f"{trainerName} does not exist and cannot be removed")
+        logger.error(f"{trainerObject.name} does not exist and cannot be removed")
         return 0
 
     @property
@@ -159,7 +159,16 @@ class EncounterArea(Area):
     @property
     def canCatchPokemon(self):
         return self._canCatchPokemon
-    
+
+    def createEncounterDictForSaving(self, dictionary):
+        saveDict = {}
+        for encounterType, encounterList in dictionary.items():
+            pokemonList = []
+            for pokemonObject in encounterList:
+                pokemonList.append(pokemonObject.storeToDataFile())
+            saveDict[encounterType] = pokemonList
+        return saveDict
+        
     def storeToSaveFile(self):
         """function that will return a dictionary which stores all the variables meant to be stored into the savefile"""
         previousDict = super().storeToSaveFile()
@@ -172,7 +181,7 @@ class EncounterArea(Area):
         previousDict = super().storeToDataFile()
         previousDict["_trainers"] = self.createDictForSaving(self.trainers, 1)
         previousDict["_items"] = self.createDictForSaving(self.items, 1)
-        previousDict["_encounters"] = self.encounters
+        previousDict["_encounters"] = self.createEncounterDictForSaving(self.encounters)
         return previousDict
     
     def __str__(self):

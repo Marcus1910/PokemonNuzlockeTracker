@@ -1,8 +1,8 @@
 from games import MainGame
 from trainer import Trainer
-from trainerPokemon import TrainerPokemon
+from pokemon import TrainerPokemon
 from item import Item
-from trainerPokemon import Pokemon
+from pokemon import Pokemon
 from loggerConfig import logicLogger as logger
 from fileRetriever import FileRetriever
 

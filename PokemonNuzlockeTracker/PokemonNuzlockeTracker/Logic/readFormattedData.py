@@ -1,5 +1,5 @@
 from area import ReadArea, EncounterArea
-from trainerPokemon import EncounteredPokemon
+from pokemon import EncounteredPokemon
 from loggerConfig import logicLogger as logger
 import copy
 
@@ -72,11 +72,11 @@ class readFormattedData():
                 separatedLine = currentLine.split(':')
                 terrainType = separatedLine[0]
                 if "Wild Level" in separatedLine[0]:
-                    level = separatedLine[1]
-                    if "ï¿½" in level:
-                        level = level.replace(" ï¿½ " , " - " )
+                    levels = separatedLine[1]
+                    if "ï¿½" in levels:
+                        levels = levels.replace(" ï¿½ " , " - " )
                     else:
-                        level = "N/A"
+                        levels = "N/A"
                     #continue otherwise wild levels will be seen as an encounter type
                     continue
 
@@ -90,7 +90,7 @@ class readFormattedData():
                         percentage = pokemon[1].split(')')[0].strip()
                     except IndexError:
                         percentage = "n/a"
-                    encounter = EncounteredPokemon(pokemonName, level = level, percentage = percentage)
+                    encounter = EncounteredPokemon(pokemonName, levels = levels, percentage = percentage)
                     encounterList.append(encounter)
                 formattedDict[terrainType] = encounterList
             self._areaList[areaNumber]._encounters = copy.deepcopy(formattedDict) 

@@ -28,39 +28,13 @@
  },
  {
   "_name": "Route 29",
-  "_trainers": {
-   "Morty": {
-    "_name": "Morty",
-    "_defeated": true
-   },
-   "Guts": {
-    "_name": "Guts",
-    "_defeated": true
-   },
-   "Joey": {
-    "_name": "Joey",
-    "_defeated": true
-   },
-   "Umbreon": {
-    "_name": "Umbreon",
-    "_defeated": true
-   },
-   "Anouska": {
-    "_name": "Anouska",
-    "_defeated": true
-   }
-  },
+  "_trainers": {},
   "_items": {},
   "_encounteredPokemon": {}
  },
  {
   "_name": "Route 46",
-  "_trainers": {
-   "Maarten": {
-    "_name": "Maarten",
-    "_defeated": true
-   }
-  },
+  "_trainers": {},
   "_items": {},
   "_encounteredPokemon": {}
  },
