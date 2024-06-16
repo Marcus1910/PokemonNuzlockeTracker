@@ -155,7 +155,7 @@ class ExpandableTrainerBox(ExpandableBox):
         pokemonAmount = len(self.trainerObject.pokemon)
         self.contentOpen = 0
         for pokemon in self.trainerObject.pokemon:
-            pokemonBox = ExpandablePokemonBox(pokemon, self)
+            pokemonBox = ExpandablePokemonBox(pokemon)
             content.add_widget(pokemonBox)
             self.contentOpen += pokemonBox.headerClosed + 1 #contentclosed is 1
 
@@ -173,9 +173,9 @@ class ExpandableTrainerBox(ExpandableBox):
         dia.open()
 
 class ExpandablePokemonBox(ExpandableBox):
-    def __init__(self, pokemonObject, trainerBox, **kwargs):
+    def __init__(self, pokemonObject, **kwargs):
         self.pokemonObject = pokemonObject
-        self.trainerBox = trainerBox
+        self.pokemonObject.addAttributeObserver(self.updateHeader)
         self.headerClosed = 250
         self.headerOpen = 250
         self.contentOpen = 700
@@ -186,7 +186,7 @@ class ExpandablePokemonBox(ExpandableBox):
     
     def createHeader(self) -> Widget:
         header = BoxLayout(orientation = "horizontal")
-        defeatedButton = TransparentButton(size_hint_x = 0.1, on_release = lambda btn: [self.changeDefeated(btn), self.trainerBox.updateHeader()], background_color = "white")
+        defeatedButton = TransparentButton(size_hint_x = 0.1, on_release = lambda btn: [self.changeDefeated(btn)], background_color = "white")
         #change button color
         self.changeWidgetColor(defeatedButton)
         pokemonImage = Image(source = os.path.join(pokemonSprites, f"{self.pokemonObject.name.lower()}.png"), fit_mode = "contain", size_hint_x = 0.2)
@@ -224,7 +224,7 @@ class ExpandablePokemonBox(ExpandableBox):
         return header
 
     def createContent(self) -> Widget:
-        content = DetailedPokemonBox(self.pokemonObject, self.updateHeader, self.trainerBox.updateContent)
+        content = DetailedPokemonBox(self.pokemonObject)
         return content
 
     def changeDefeated(self, instance) -> None:

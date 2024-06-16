@@ -14,12 +14,11 @@ import os
 
 class DetailedPokemonBox(BoxLayout):
     pokemonSpritesFolder = pokemonSprites
-    def __init__(self, pokemonObject, updateHeader, updateTrainerContent, *args, **kwargs):
+    def __init__(self, pokemonObject, *args, **kwargs):
         """DetailedPokemonBox used to give more info about a pokemon, buildlayout to build it, if given an pokemonObject it will fill it"""
         super().__init__(*args, **kwargs)
+        print(type(pokemonObject))
         self.pokemonObject = pokemonObject
-        self.updateHeader = updateHeader
-        self.updateTrainerContent = updateTrainerContent
         self.moveList = [] #used for storing moves
 
         #forward declarations for clear_layout function
@@ -38,6 +37,8 @@ class DetailedPokemonBox(BoxLayout):
         #create Name label and input
         self.nameInput = TextInput(hint_text = "Name", multiline = False, size_hint_x = 0.7)
         self.nameInput.bind(focus = self.updatePokemonName)
+        self.pokemonObject.addNameObserver(self.updatePokemonImage)
+
         self.levelInput = TextInput(hint_text = "Level", multiline = False, size_hint_x = 0.3)
         self.levelInput.bind(focus = self.updateLevel)
         self.nameLevelBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.15)
@@ -58,6 +59,7 @@ class DetailedPokemonBox(BoxLayout):
         self.typing2Input = TextInput(hint_text = "typing 2", multiline = False)
 
         self.moveBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3, pos_hint = {"top": 1})
+        self.pokemonObject.addLearnedMoveObserver(self.updateMoveBox)
 
         #code for removeButton
         self.removeButton = Button(text = "Remove Pokemon", size_hint_y = 0.1, on_release = self.deletePokemonPopup)
@@ -81,7 +83,7 @@ class DetailedPokemonBox(BoxLayout):
         self.pokemonBox.add_widget(self.pokemonInfoBox)
         self.pokemonBox.add_widget(self.moveBox)
     
-    def updatePokemonName(self, label, focus):
+    def updatePokemonName(self, label, focus) -> None:
         """updates the pokemon Image and object name"""
         if focus:
             #entering text
@@ -89,11 +91,13 @@ class DetailedPokemonBox(BoxLayout):
         pokemonName = validateTextInput(label.text)
         if pokemonName == None:
             return
-        image = self.retrievePokemonImage(label.text)
-        self.pokemonImage.source = image
         self.pokemonObject.name = pokemonName
-        #update header so name and image are updated
-        self.updateHeader()
+        
+
+    def updatePokemonImage(self) -> None:
+        """updates pokemon Image"""
+        image = self.retrievePokemonImage(self.pokemonObject.name)
+        self.pokemonImage.source = image
  
     def updatePokemonAttribute(self, input, focus, attribute):
         if focus:
@@ -102,7 +106,6 @@ class DetailedPokemonBox(BoxLayout):
         if attributeValue == None:
             return 
         setattr(self.pokemonObject, attribute, attributeValue)
-        self.updateHeader()
 
     def updateLevel(self, input, focus):
         self.updatePokemonAttribute(input, focus, "level")
@@ -120,16 +123,12 @@ class DetailedPokemonBox(BoxLayout):
         if pokemonMove == None:
             return        
         self.pokemonObject.learnedMoves = pokemonMove
-        self.clearMoveBox()
-        self.fillMoveBox()
-        self.updateHeader()
     
     def removeMove(self, instance):
         move = instance.text
-        self.pokemonObject.deleteMove(move)
+        self.pokemonObject.deleteLearnedMove(move)
         #remove button
         self.moveBox.remove_widget(instance)
-        self.updateHeader()
     
     def deletePokemonPopup(self, instance):
         """dialog that asks whether you want to delete the pokemon or cancel deletion"""
@@ -208,6 +207,10 @@ class DetailedPokemonBox(BoxLayout):
         self.additionalInfoBox.add_widget(self.baseStatBox)
         self.additionalInfoBox.add_widget(self.possibleAbilitiesBox)
         self.additionalInfoBox.add_widget(self.possibleMovesBox)
+    
+    def updateMoveBox(self) -> None:
+        self.clearMoveBox()
+        self.fillMoveBox()
     
     def fillMoveBox(self) -> None:
         for index, move in enumerate(self.pokemonObject.learnedMoves):

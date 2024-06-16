@@ -155,7 +155,6 @@ class Trainer():
         for callback in list:
             callback()
 
-
     def addDefeatedObserver(self, callback) -> None:
         self.addObserver(callback, self._defeatedObservers)
     

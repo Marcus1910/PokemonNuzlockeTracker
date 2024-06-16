@@ -8,6 +8,10 @@ class BasePokemon():
         
         #used for display of moves that it can learn, lvl: move
         self._levelupMoves = {}
+        #observers that get called when a variable gets changed
+        self.attributeObservers = []
+        self.nameObservers = []
+        
     
     #getters and setters
     @property
@@ -17,6 +21,8 @@ class BasePokemon():
     @name.setter
     def name(self, name):
         self._name = name.title()
+        self.notifyNameobservers()
+        self.notifyAttributeObservers()
 
     @property
     def dexNo(self):
@@ -25,6 +31,26 @@ class BasePokemon():
     @dexNo.setter
     def dexNo(self, dexNo):
         self._dexNo = dexNo
+
+    def addObserver(self, callback, list) -> None:
+        if callback not in list:
+            list.append(callback)
+    
+    def notifyObservers(self, list)-> None:
+        for callback in list:
+            callback()
+    
+    def addNameObserver(self, callback) -> None:
+        self.addObserver(callback, self.nameObservers)
+    
+    def notifyNameobservers(self) -> None:
+        self.notifyObservers(self.nameObservers)
+
+    def addAttributeObserver(self, callback):
+        self.addObserver(callback, self.attributeObservers)
+
+    def notifyAttributeObservers(self) -> None:
+        self.notifyObservers(self.attributeObservers)
 
     def storeToDataFile(self):
         """returns a dictionary consisting of the name, dexno and gender of the pokemon"""
@@ -42,6 +68,7 @@ class Pokemon(BasePokemon):
         self._level = level
         self._gender = None
         self._learnedMoves = []
+        self.learnedMoveObservers = []
         self._ability = None
         self._heldItem = None
     
@@ -52,6 +79,7 @@ class Pokemon(BasePokemon):
     @level.setter
     def level(self, level):
         self._level = level
+        self.notifyAttributeObservers()
 
     @property
     def gender(self):
@@ -61,10 +89,12 @@ class Pokemon(BasePokemon):
     def gender(self, gender):
         if gender is None:
             self._gender = None
+            self.notifyAttributeObservers()
         else:
             gender = str(gender).upper()
             if gender == "F" or gender == "M":
                 self._gender = gender
+                self.notifyAttributeObservers()
             else:
                 logger.error("enter valid gender, options are M or F")
 
@@ -76,6 +106,8 @@ class Pokemon(BasePokemon):
     def learnedMoves(self, move):
         if len(self.learnedMoves) < 4 and move not in self.learnedMoves:
             self._learnedMoves.append(move)
+            self.notifyLearnedMoveObservers()
+            self.notifyAttributeObservers()
         else:
             logger.error("This pokemon already has this move")
 
@@ -84,6 +116,8 @@ class Pokemon(BasePokemon):
         if move in self.learnedMoves:
             self.learnedMoves.remove(move)
             logger.info(f"removed {move} from {self._name}")
+            self.notifyLearnedMoveObservers()
+            self.notifyAttributeObservers()
         else:
             logger.error(f"{self._name} has no move {move}")
 
@@ -94,6 +128,7 @@ class Pokemon(BasePokemon):
     @ability.setter
     def ability(self, ability):
         self._ability = ability
+        self.notifyAttributeObservers()
 
     @property
     def heldItem(self):
@@ -102,6 +137,13 @@ class Pokemon(BasePokemon):
     @heldItem.setter
     def heldItem(self, heldItem):
         self._heldItem = heldItem
+        self.notifyAttributeObservers()
+
+    def addLearnedMoveObserver(self, callback) -> None:
+        self.addObserver(callback, self.learnedMoveObservers)
+
+    def notifyLearnedMoveObservers(self) -> None:
+        self.notifyObservers(self.learnedMoveObservers)
     
     def storeToDataFile(self):
         variableDict = super().storeToDataFile()
