@@ -49,18 +49,24 @@ class DetailedPokemonBox(BoxLayout):
         
         #add information about pokemon, ability, held item, typing
         self.pokemonInfoBox = BoxLayout(orientation= "vertical", size_hint_x = 0.3, pos_hint = {"top": 1})
+        self.abilityBox = BoxLayout(orientation = "vertical", size_hint_y = 0.2)
         self.abilityInput = TextInput(hint_text = "ability", multiline = False)
         self.abilityInput.bind(focus = self.updateAbility)
-        self.heldItemInput = TextInput(hint_text = "held item", multiline = False)
-        self.heldItemInput.bind(focus = self.updateHeldItem)
-        self.typing1Input = TextInput(hint_text = "typing 1", multiline = False)
-        self.typing2Input = TextInput(hint_text = "typing 2", multiline = False)
+        self.abilityBox.add_widget(self.abilityInput)
 
-        self.moveBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3, pos_hint = {"top": 1})
+        self.heldItemInput = TextInput(hint_text = "held item", multiline = False, size_hint_y = 0.1)
+        self.heldItemInput.bind(focus = self.updateHeldItem)
+
+        self.typing1Input = TextInput(hint_text = "typing 1", multiline = False, size_hint_y = 0.1)
+        self.typing2Input = TextInput(hint_text = "typing 2", multiline = False, size_hint_y = 0.1)
+
+        self.moveBox = BoxLayout(orientation = "vertical", size_hint_y = 0.5)
         self.pokemonObject.addLearnedMoveObserver(self.updateMoveBox)
 
-        #code for removeButton
-        self.removeButton = Button(text = "Remove Pokemon", size_hint_y = 0.1, on_release = self.deletePokemonPopup)
+        self.possibleMoveBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3, pos_hint = {"top": 1})
+    
+        self.removeButton = TransparentButton(text = "Remove Pokemon", size_hint_y = 0.1, on_release = self.deletePokemonPopup)
+        self.removeButton.redColor()
         
         #add everything to correct widgets
         self.nameLevelBox.add_widget(self.nameInput)
@@ -72,14 +78,67 @@ class DetailedPokemonBox(BoxLayout):
         self.nameImageBox.add_widget(self.imageBox)
         self.nameImageBox.add_widget(self.removeButton)
 
-        self.pokemonInfoBox.add_widget(self.abilityInput)
+        self.pokemonInfoBox.add_widget(self.abilityBox)
         self.pokemonInfoBox.add_widget(self.heldItemInput)
         self.pokemonInfoBox.add_widget(self.typing1Input)
         self.pokemonInfoBox.add_widget(self.typing2Input)
+        self.pokemonInfoBox.add_widget(self.moveBox)
 
         self.pokemonBox.add_widget(self.nameImageBox)
         self.pokemonBox.add_widget(self.pokemonInfoBox)
-        self.pokemonBox.add_widget(self.moveBox)
+        self.pokemonBox.add_widget(self.possibleMoveBox)
+
+    def fillPokemonLayout(self):
+        """fills in the layout made by buildPokemonLayout function, needs pokemon object to do so"""
+        self.nameInput.text = self.pokemonObject.name
+        self.levelInput.text = str(self.pokemonObject.level)
+        self.pokemonImage.source = self.retrievePokemonImage(self.pokemonObject.name)
+        
+        self.updateAbilities()
+        if self.pokemonObject.heldItem != "n/a" and self.pokemonObject.heldItem != None:
+            self.heldItemInput.text = self.pokemonObject.heldItem
+        self.fillMoveBox()
+        self.fillPossibleMoveBox()
+    
+    def updateMoveBox(self) -> None:
+        self.clearMoveBox()
+        self.fillMoveBox()
+    
+    def updateAbilities(self) -> None:
+        abilities = self.pokemonObject.getAbilities()
+        for ability in abilities:
+            abilityButton = TransparentButton(text = ability, on_release = lambda btn, ability = ability: self.addAbility(ability))
+            self.abilityBox.add_widget(abilityButton)
+    
+    def addAbility(self, ability) -> None:
+        self.pokemonObject.ability = ability
+
+    def fillMoveBox(self) -> None:
+        for index, move in enumerate(self.pokemonObject.learnedMoves):
+            self.moveBox.add_widget(TransparentButton(text = move, on_release = self.removeMove))
+    
+    def fillPossibleMoveBox(self) -> None:
+        self.possibleMoveBox.clear_widgets()
+        possibleMoves = self.pokemonObject.getLevelupMoves()
+        for level, move in possibleMoves.items():
+            #create level label and move button
+            moveBox = BoxLayout(orientation = "horizontal")
+            levelLabel = Label(text = str(level), size_hint_x = 0.2)
+            moveButton = TransparentButton(text = move, size_hint_x = 0.8, on_release = lambda btn, move=move: self.addLearnedMove(move))
+            moveBox.add_widget(levelLabel)
+            moveBox.add_widget(moveButton)
+            self.possibleMoveBox.add_widget(moveBox)
+        moveInput = TextInput(hint_text = f"enter new move", multiline = False)
+        moveInput.bind(focus = self.updateMoves)
+        self.possibleMoveBox.add_widget(moveInput)
+        
+
+    
+    def clearMoveBox(self) -> None:
+        self.moveBox.clear_widgets()
+
+    def changeBaseStats(self, instance):
+        logger.info("changing BaseStat graph")
     
     def updatePokemonName(self, label, focus) -> None:
         """updates the pokemon Image and object name"""
@@ -120,7 +179,10 @@ class DetailedPokemonBox(BoxLayout):
         pokemonMove = validateTextInput(input.text)
         if pokemonMove == None:
             return        
-        self.pokemonObject.learnedMoves = pokemonMove
+        self.addLearnedMove(pokemonMove)
+    
+    def addLearnedMove(self, move) -> None:
+        self.pokemonObject.learnedMoves = move
     
     def removeMove(self, instance):
         move = instance.text
@@ -156,86 +218,7 @@ class DetailedPokemonBox(BoxLayout):
             logger.debug(f"could not find image for {name}")
             return os.path.join(self.pokemonSpritesFolder, f"0.png")
 
-    def fillPokemonLayout(self):
-        """fills in the layout made by buildPokemonLayout function, needs pokemon object to do so"""
-        self.nameInput.text = self.pokemonObject.name
-        self.levelInput.text = str(self.pokemonObject.level)
-        self.pokemonImage.source = self.retrievePokemonImage(self.pokemonObject.name)
-        
-        if self.pokemonObject.ability is not None:
-            self.abilityInput.text = self.pokemonObject.ability
-        if self.pokemonObject.heldItem != "n/a" and self.pokemonObject.heldItem != None:
-            self.heldItemInput.text = self.pokemonObject.heldItem
-        self.fillMoveBox()
-        
-    def buildAdditionalInfoLayout(self, pokemonObject = None):
-        """builds layout in self.additionalInfoBox if pokemonObject is given, otherwise only takes up space to keep the ratio the same"""
-        #create basestats + possible abilities / move box
-        self.baseStatBox = BoxLayout(orientation = "vertical", size_hint_x = 0.45)
-        self.basestatGraph = BoxLayout(orientation = "vertical", size_hint_y = 0.9)
 
-        self.changeStatsBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.1)
-        #self.currentBaseStatsLabel = Label(text = "current stats shown: ", size_hint_x = 0.7)
-        self.switchBaseStatsButton = Button(text = "show 'original' stats", size_hint_x = 1, on_press = self.changeBaseStats)
-
-        self.possibleAbilitiesBox = BoxLayout(orientation = "vertical",size_hint_x = 0.25)
-        self.possibleMovesBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
-
-        for x in range(2):
-            self.possibleAbilitiesBox.add_widget(Button(text = f"Ability {x+1}"))
-        
-        for x in range(4):
-            self.possibleMovesBox.add_widget(Button(text = f"Move {x+1}"))
-
-        self.testButton = Button(text = "baseStats")
-
-        self.basestatGraph.add_widget(self.testButton)
-        self.changeStatsBox.add_widget(self.switchBaseStatsButton)
-        self.baseStatBox.add_widget(self.basestatGraph)
-        self.baseStatBox.add_widget(self.changeStatsBox)
-
-        
-        self.additionalInfoBox.add_widget(self.baseStatBox)
-        self.additionalInfoBox.add_widget(self.possibleAbilitiesBox)
-        self.additionalInfoBox.add_widget(self.possibleMovesBox)
-    
-    def updateMoveBox(self) -> None:
-        self.clearMoveBox()
-        self.fillMoveBox()
-    
-    def fillMoveBox(self) -> None:
-        for index, move in enumerate(self.pokemonObject.learnedMoves):
-            self.moveBox.add_widget(TransparentButton(text = move, on_release = self.removeMove))
-        moveInput = TextInput(hint_text = f"enter new move", multiline = False)
-        moveInput.bind(focus = self.updateMoves)
-        self.moveBox.add_widget(moveInput)
-    
-    def clearMoveBox(self) -> None:
-        self.moveBox.clear_widgets()
-
-    def buildAndFillButtonLayout(self):
-        """creates the button at the bottom of the page that switches which pokemon is shown, places everything in self.pokemonChoice"""
-
-        pokemonAmount = len(self.trainerObject.pokemon)
-
-        for number in range(6):
-            #default text settings
-            buttonText = "add new\nPokemon"
-            pokemonObject = None
-
-            if number < pokemonAmount:
-                #add pokemon details to buttons if there is a pokemon
-                pokemonObject = self.trainerObject.pokemon[number]
-                buttonText = pokemonObject.name
-
-            pokemonButton = Button(text = buttonText)
-            #pokemonObject is None or a pokemon object and gets given to showDetailedPokemon
-            pokemonButton.bind(on_press = lambda instance, number= number, pokemonObject = pokemonObject: self.showPokemon(number, pokemonObject))
-
-            self.pokemonChoice.add_widget(pokemonButton)
-
-    def changeBaseStats(self, instance):
-        logger.info("changing BaseStat graph")
 
         
     

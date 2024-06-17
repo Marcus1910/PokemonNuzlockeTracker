@@ -1,3 +1,4 @@
 Trainerscreen bugs
     when switching from trainerdetails to pokemon details, if trainer details is opened trying to open the pokemon details will close the content instead
     When changing the trainer status from defeated to not defeated it will display red even though all other pokemon are defeated
+    when trainer name is long a keyerror will occur when trying to remove it

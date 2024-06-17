@@ -384,11 +384,9 @@ def validateFile(file: str) -> bool:
   
 def getSprite(folder, name, default) -> str:
     path = os.path.join(folder, f"{name}.png")
-    try:
-        validateFile(path)
-    except FileNotFoundError as e:
+    if not validateFile(path):
         logger.info(f"could not find image for {name}")
-        path = os.path.join(pokemonSprites, f"{default}.png")
+        path = os.path.join(folder, f"{default}.png")
     return path
 
     

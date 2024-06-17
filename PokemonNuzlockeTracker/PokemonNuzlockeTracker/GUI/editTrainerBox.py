@@ -28,7 +28,7 @@ class EditTrainerBox(BoxLayout):
         self.trainerGender = TextInput(hint_text = "Gender: M/F", size_hint_y = 0.2, multiline = False)
         self.trainerGender.bind(focus = self.updateGender)
         self.trainerDefeatedButton = TransparentButton(text = "defeated", on_press = self.setDefeated, size_hint_y = 0.6)
-        self.removeTrainerButton = TransparentButton(text = "remove trainer", bold = True, on_press = lambda btn: self.trainerObject.removeTrainer())
+        self.removeTrainerButton = TransparentButton(text = "remove trainer", bold = True, on_press = lambda btn: self.deleteTrainerPopup())
         self.removeTrainerButton.redColor()
         self.trainerImageBox= BoxLayout(size_hint_y = 0.8)
         self.trainerImage = Image(fit_mode = "contain")
@@ -98,6 +98,20 @@ class EditTrainerBox(BoxLayout):
 
     def updateGender(self, input, focus):
         self.updateTrainerAttribute(input, focus, "gender")
+    
+    def deleteTrainerPopup(self) -> None:
+        dia = DeleteTrainerPopup(self.trainerObject.name, self.trainerObject.area.name)
+        dia.open()
+        dia.bind(on_dismiss = self.removeTrainer)
+    
+    def removeTrainer(self, instance):
+        if instance.result:
+            if self.trainerObject.removeTrainer():
+                return
+            return
+        logger.debug(f"not removing {self.trainerObject.name}")
+        
+
 
 
         

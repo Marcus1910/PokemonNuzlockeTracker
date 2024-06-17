@@ -47,6 +47,10 @@ KIVY
     TrainerScreen
         Add observers for trainer detail screen
         edit trainerPOkemon detailed view to show possible abilities and moves, dummy data
+        add bossTrainer to edit trainer box
+        popup delete trainer
+        kivy bubble move accuracy and power + secondary effect
+        kivy bubble ability information
     
     encounterScreen
         catch pokemon -> create playerpokemon -> arena

@@ -8,6 +8,9 @@ class BasePokemon():
         
         #used for display of moves that it can learn, lvl: move
         self._levelupMoves = {}
+        #place elsewhere
+        self._abilities = []
+        self._typing = {"typing1": "fire", "typing2": "grass"}
         #observers that get called when a variable gets changed
         self.attributeObservers = []
         self.nameObservers = []
@@ -31,6 +34,27 @@ class BasePokemon():
     @dexNo.setter
     def dexNo(self, dexNo):
         self._dexNo = dexNo
+    
+    def getTyping(self) -> dict:
+        return self._typing
+
+    def readLevelupMoves(self) -> None:
+        """get levelup Moves from documentation, TODO now dummy data"""
+        levelup = {5: "tackle", 11: "growl", 16: "flame wheel", 25: "hyper beam"}
+        self._levelupMoves = levelup
+
+    def getLevelupMoves(self) -> dict:
+        """return levelupMoves that the pokemon can learn"""
+        self.readLevelupMoves()
+        return self._levelupMoves
+
+    def readAbilities(self) -> None:
+        abilities = ["drougth", "drizzle", "sandstorm"]
+        self._abilities = abilities
+
+    def getAbilities(self) -> dict:
+        self.readAbilities()
+        return self._abilities
 
     def addObserver(self, callback, list) -> None:
         if callback not in list:
