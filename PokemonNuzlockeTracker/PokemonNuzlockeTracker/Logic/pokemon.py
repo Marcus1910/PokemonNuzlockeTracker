@@ -157,6 +157,7 @@ class TrainerPokemon(Pokemon):
         super().__init__(name, level)
         self._defeated = defeated #savefile
         self._trainer = None #internal use
+        self.removeObservers = []
 
     @property
     def defeated(self):
@@ -182,6 +183,27 @@ class TrainerPokemon(Pokemon):
         self._trainer = trainerObject
         logger.info(f"{self.name} added to {trainerObject.name}")
         return 1
+
+    def removePokemon(self) -> bool:
+        if self.trainer.removePokemon(self):
+            self.notifyRemoveObservers()
+            return 1
+        return 0
+    
+    def addObserver(self, callback, list) -> None:
+        if callback not in list:
+            list.append(callback)
+    
+    def notifyObservers(self, list)-> None:
+        for callback in list:
+            callback()
+
+    def addRemoveObserver(self, callback) -> None:
+        print("adding")
+        self.addObserver(callback, self.removeObservers)
+    
+    def notifyRemoveObservers(self) -> None:
+        self.notifyObservers(self.removeObservers)
     
     def storeToSaveFile(self):
         if self.defeated != self.defaultDefeated:

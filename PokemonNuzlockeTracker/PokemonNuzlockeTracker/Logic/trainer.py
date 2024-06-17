@@ -11,6 +11,7 @@ class Trainer():
         self._defeated = defeated
         self._defeatedObservers = []
         self._removeObservers = []
+        self._attributeObservers = []
         #check now, also checked whenever a pokemon is added
         self.checkDefeated()
     
@@ -21,6 +22,7 @@ class Trainer():
     @name.setter
     def name(self, name):
         self._name = name
+        self.notifyAttributeObservers()
     
     @property
     def area(self):
@@ -46,6 +48,7 @@ class Trainer():
     @trainerType.setter
     def trainerType(self, type):
         self._trainerType = type
+        self.notifyAttributeObservers()
 
     @property
     def gender(self):
@@ -55,11 +58,13 @@ class Trainer():
     def gender(self, gender):
         if gender == None:
             self._gender = None
+            self.notifyAttributeObservers()
         else:
             gender = str(gender).upper()
             #print(f"gender: {gender}")
             if gender == "F" or gender == "M":
                 self._gender = gender
+                self.notifyAttributeObservers()
             else:
                 logger.error("enter valid gender, options are M or F")
     
@@ -95,8 +100,19 @@ class Trainer():
     @defeated.setter
     def defeated(self, bool):
         self._defeated = bool
+        #trainer is defeated, all trainers must be defeated
+        if self.defeated:
+            self.defeatAllPokemon()
         self.notifyDefeatedObservers()
     
+    def changeDefeated(self) -> None:
+        """inverts the defeated status"""
+        self.defeated = not self.defeated
+    
+    def defeatAllPokemon(self) -> None:
+        for pokemon in self.pokemon:
+            pokemon.defeated = True
+
     def getNumberOfDefeatedPokemon(self) -> list:
         """returns a list of bool values"""
         return [pokemon.defeated for pokemon in self.pokemon if pokemon.defeated]
@@ -166,6 +182,12 @@ class Trainer():
     
     def notifyRemoveObservers(self) -> None:
         self.notifyObservers(self._removeObservers)
+
+    def addAttributeObserver(self, callback) -> None:
+        self.addObserver(callback, self._attributeObservers)
+    
+    def notifyAttributeObservers(self) -> None:
+        self.notifyObservers(self._attributeObservers)
     
 """example json trainer
 "Larry": {

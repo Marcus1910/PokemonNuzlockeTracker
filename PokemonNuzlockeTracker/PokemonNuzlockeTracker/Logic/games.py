@@ -116,11 +116,6 @@ class MainGame():
             #area does not exists
             logger.debug(f"area {name} does not exists yet")
             return 0
-        
-    def validateFile(self, file: str) -> bool:
-        if os.path.isfile(file):
-            return True
-        return False
 
     def writeToFile(self):
         logger.info("saving game")
@@ -163,7 +158,7 @@ class MainGame():
 
     def retrieveGlobalGameData(self):
         """retrieves game data and saves it into readData"""
-        if not self.validateFile(self.dataFile):
+        if not validateFile(self.dataFile):
             #file does not exist
             logger.error(f"there is no GameData for {self.gameName}, collecting it from {self.gameName}CorrectData.txt")
             self.retrieveEncounterData()
@@ -180,7 +175,7 @@ class MainGame():
 
     def retrieveSaveFile(self) -> None:
         #check whether the saveFile is a correct path
-        if self._saveFile == None or not self.validateFile(self._saveFile):
+        if self._saveFile == None or not validateFile(self._saveFile):
             logger.error(f"Savefile, {self._saveFile} could not be found")
             self.saveFileError = True
             return
@@ -197,7 +192,7 @@ class MainGame():
     def retrieveEncounterData(self):
         #only needed to create the json dumps and backup if file cannot be read
         correctDataPath = os.path.join(self.dataFolder, f"{self.gameName}CorrectData.txt")
-        if not self.validateFile(correctDataPath):
+        if not validateFile(correctDataPath):
             logger.error(f"there is no correctDataFile, please make sure it is in {self.gameName}/data/. If it is the first time starting the game nad no data has been provided, this can be ignored")
             return {}
         self.areaList = readFormattedData(correctDataPath).returnAreaList()
@@ -382,6 +377,32 @@ class MainGame():
             setattr(object, attribute, attributeValue)
         return object
 
+def validateFile(file: str) -> bool:
+    if os.path.isfile(file):
+        return True
+    return False
+  
+def getSprite(folder, name, default) -> str:
+    path = os.path.join(folder, f"{name}.png")
+    try:
+        validateFile(path)
+    except FileNotFoundError as e:
+        logger.info(f"could not find image for {name}")
+        path = os.path.join(pokemonSprites, f"{default}.png")
+    return path
+
+    
+def getPokemonSprite(name) -> str:
+    return getSprite(pokemonSprites, name, "0")
+
+def getTrainerSprite(name):
+    return getSprite(trainerSprites, name, "cabbie")
+
+def getItemSprite(name):
+    return getSprite(itemSprites, name, "0")
+        
+
+        
 
 
 

@@ -3,6 +3,24 @@
   "_badge": 6
  },
  {
+  "_name": "Arena",
+  "_trainers": {},
+  "_items": {},
+  "_encounteredPokemon": {}
+ },
+ {
+  "_name": "Retirement",
+  "_trainers": {},
+  "_items": {},
+  "_encounteredPokemon": {}
+ },
+ {
+  "_name": "lost&found",
+  "_trainers": {},
+  "_items": {},
+  "_encounteredPokemon": {}
+ },
+ {
   "_name": "New Bark Town",
   "_trainers": {},
   "_items": {},

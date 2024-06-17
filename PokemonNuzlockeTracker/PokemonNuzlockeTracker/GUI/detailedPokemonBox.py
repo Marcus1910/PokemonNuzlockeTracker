@@ -17,7 +17,6 @@ class DetailedPokemonBox(BoxLayout):
     def __init__(self, pokemonObject, *args, **kwargs):
         """DetailedPokemonBox used to give more info about a pokemon, buildlayout to build it, if given an pokemonObject it will fill it"""
         super().__init__(*args, **kwargs)
-        print(type(pokemonObject))
         self.pokemonObject = pokemonObject
         self.moveList = [] #used for storing moves
 
@@ -30,7 +29,6 @@ class DetailedPokemonBox(BoxLayout):
         if self.pokemonObject != None:
             self.fillPokemonLayout()
         self.add_widget(self.pokemonBox)
-
     
     def buildPokemonLayout(self):
         """builds the layout which shows everything from the pokemon; abilities, moves, etc. places everything inside of self.pokemonBox"""
@@ -139,16 +137,9 @@ class DetailedPokemonBox(BoxLayout):
     def removePokemon(self, instance):
         """removes the pokemon from the trainer and puts it into the lost&found section"""
         if instance.result:
-            trainer = self.pokemonObject.trainer
-            logger.debug(f"removing {self.pokemonObject.name} from {trainer.name}")
-            if trainer.removePokemon(self.pokemonObject):
-                #move pokemon to lost and found area
-                #TODO
-                #update Trainer box content
-                self.updateTrainerContent()
+            if self.pokemonObject.removePokemon():
                 return
-            
-            logger.error(f"{self.pokemonObject.name} could not be removed from {trainer.name}")
+            logger.error(f"{self.pokemonObject.name} could not be removed")
             return
         else:
             logger.debug(f"not deleting pokemon")

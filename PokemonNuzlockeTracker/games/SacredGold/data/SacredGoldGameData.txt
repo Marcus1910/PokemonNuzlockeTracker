@@ -1,5 +1,26 @@
 [
  {
+  "_name": "Arena",
+  "_accessible": 0,
+  "_trainers": {},
+  "_items": {},
+  "_encounters": {}
+ },
+ {
+  "_name": "Retirement",
+  "_accessible": 0,
+  "_trainers": {},
+  "_items": {},
+  "_encounters": {}
+ },
+ {
+  "_name": "lost&found",
+  "_accessible": 0,
+  "_trainers": {},
+  "_items": {},
+  "_encounters": {}
+ },
+ {
   "_name": "New Bark Town",
   "_accessible": 0,
   "_trainers": {},
@@ -95,7 +116,7 @@
        "Giga Drain"
       ],
       "_ability": "Drizzle",
-      "heldItem": "Damp Rock",
+      "heldItem": null,
       "gender": null
      }
     ]

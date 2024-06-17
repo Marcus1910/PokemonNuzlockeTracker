@@ -1,68 +1,94 @@
 ----------------**TestRun**-----------------------------------
 
-Backend logic add new Game - fileretriever
-    -Game object
-    start game from no files
-    start game from correctdata
-    start game from gamedata
+Start pokemon changes documentation
 
-add new Area
-    update nuzlockeScreen areaChanged to show a new screen
+GAME
+    Overhaul backend object to include easier way to add observers, quite a cluster now
 
-catch pokemon
-delete catched pokemon, seperate area called lost&found?
-save encountered pokemon to savefiles and read them
-add pokemon to area, add new encountertype to area
+    AREA
+        Treat multiple floors as singular object or new Area object with multiple areas
+        Add id
 
-treat multiple floors as the same encounter - logic
+    TRAINERS
+        Add id
+        How double battles
 
-fileretriever -> dictionary with settings
+    ITEMS
+        add id
 
-grab and save items
-show items
-add new items
+    POKEMON
+        add ID
+        get possible moves from json file
+        get possible abilities from json file
 
-back button -> popup leave game, check if screen is a edit screen, message continue editing. else message save and exit or just exit
-exit without saving -> save temporary, next startup ask to save with list of adjustments
+KIVY
+    edit area
+    remove area's
+    change area spinner so dropdown is entire screen
+    update new area popup to dialog
+    change removed items location to lost&found
+    back button -> popup leave game, check if screen is a edit screen, message continue editing. else message save and exit or just exit
+    exit without saving -> save temporary, next startup ask to save with list of adjustments
+    snackbar errors / info
+    tabs for multiple floors
+    badges to display if can catch pokemon, color coded background?
 
-remove games
+    main screen
+        edit game
+        remove game
+        set direction to Settings screen
+
+    infoScreen
+        read arena and retirement and place images
+        show amount of encounters catchable
+        show badges
+        show next boss trainer
+    
+    TrainerScreen
+        Add observers for trainer detail screen
+        edit trainerPOkemon detailed view to show possible abilities and moves, dummy data
+    
+    encounterScreen
+        catch pokemon -> create playerpokemon -> arena
+        release pokemon -> retirement
+        remove pokemon from area
+        give headers standard size and use expandable box
+        edit encounter pokemon
+        see possible moves the pokemon has as well as abilities
+        add new areatype
+        
+    
+    ItemScreen
+        grab items
+        remove item
+        edit item
+        add new items
+        show more info about item, read from json
+    
+    SettingsScreen
+        edit trainerheader and content height
+        edit pokemonheader and content height
+        edit item header and content height
 
 
 ---STEPS TO TAKE FOR BETA---
-*******************************Logic*************************
-save encountered pokemon, ~~defeated trainers~~ and ~~grabbed items~~ to savefiles and read them correctly ONLY READING LEFT, TEST WRITING
-What to save to data and savefile from encounters
-
-able to create new games
-~~read trainerlist and can defeat trainers~~
-~~read itemlist and can pickup items~~
-How double battles?
-
+*******************************Further development*************************
 export/import save data
-add base stats, possible moves/abilities to base pokemon
+add base stats graph, possible moves/abilities to base pokemon
 update settings.py, also use settings.py for certain variables
 export Trainer to showdown format
 export route trainers to showdown format
 export all trainers to showdown format
     optionmenu for single trainer, route, all
 add / delete routes
-rework saving
 add game object inheritance to also allow http, keep it locally as well for crashes
-
-removing pokemon automatically displays the first, update to show new position or 1 before??
 error? if 1 or more pokemon caught same route (default on) "you have already caught pokemon x on this route"
-
 ugly solution, change saves for different phone. export to folder/over wifi to other device?, import from folder
-
-
-********************************UI*************************
-TrainerScreen picture buttons pressed -> defeat pokemon
-
 
 
 ****************************retropie**************************
 Opencv to overlay on game
-
+create sdm image
 
 
 *************************Settings*******************************
@@ -82,7 +108,7 @@ show all available items per route vanilla games
 
 use a movelist to validate moves used
 basic logic for getting encounters from rom hack documentation
-read encountertable data from rom
+read encountertable data from rom -> check if it is possible
     import pkhex file to display caught pokemon and update caught pokemon in areas
 add window to make adding games easier
 figure out how to change typings/ base stats in showdown, probably create own showdown from base showdown
@@ -90,8 +116,6 @@ add map to display encounters, in correlation with number of badges, colour codi
 add nickname, shiny, level etc from caught pokemon
 add list of moves
 check if moves are valid, option in settings
-new run option, clears all data and starts with clean slate
-popup message, x removed
 generate catchable pokemon by reading old savestates, only for blind nuzlockes. settings option, add statistics which pokemon was caught at every route
 add non-canon pokemon with name and use own sprite or ?.png
 sort route list option, own choice
@@ -100,36 +124,4 @@ When selecting areatype for encounters, use scrollview to teleport to correct po
 export import saves, files on android will be saved to internal storage and windows will exclude /games/*
 settings button on front page, settings page two tabs, general and game specific based on game chosen
 read from internal storage instead of copying everything to the program at startup
-Remove trainer from saveFile is trainer is defeated, saves space
 1 function for searching for pokemon images
-
-*****************************************Overhaul to KIVYMD**********************************************
-start screen
-    
-
-info screen
-    add next boss
-
-trainerScreen
-    tabs for global/detailed
-    cogwheel for edit trainer?
-    Button overlap for edit area
-    MD divider between pokemon, global only
-
-encounterScreen
-    tabs for encounter types, grass, fish, surf
-    static size and scroll?
-    MDdivider between encounters
-
-ItemScreen
-
-
-General
-    kivy swiper and/or Navigation bar for screens
-    SnackBar for errors
-    tabs for areas multiple floors
-    kivymd badges->number for new areas
-
-
-
-add sdm for pi images

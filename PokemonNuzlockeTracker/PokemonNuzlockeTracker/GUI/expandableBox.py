@@ -11,7 +11,8 @@ import os
 from loggerConfig import logger
 from pokemonDialog import AddPokemonDialog
 from detailedPokemonBox import DetailedPokemonBox
-from games import pokemonSprites, trainerSprites, itemSprites
+from editTrainerBox import EditTrainerBox
+from games import pokemonSprites, itemSprites, getTrainerSprite
 
 
 # class ExpandableBox(BoxLayout):
@@ -53,7 +54,7 @@ class ExpandableBox(BoxLayout):
         self.add_widget(self.contentBox)
     
     def checkHeader(self) -> None:
-        #TODO error handling, label
+        """add open functionality to given button or add own button with open functionality"""
         #or change header to boxlayout if not already boxlayout
         if isinstance(self.header, Button):
             # logger.debug("header is button, appending function")
@@ -79,25 +80,28 @@ class ExpandableBox(BoxLayout):
 
     def open(self, instance = None) -> None:
         """open the Box showing the content"""
-        #reverse opened, starts at False
-        self.opened = not self.opened 
-        if not self.opened:
-            # logger.debug("closing")
+        if self.opened:
+            logger.debug("closing")
             self.close()
             return
-        # logger.debug("opening")
+        logger.debug("opening")
         self.adjustSizes(self.headerOpen, self.contentOpen)
         self.updateContent()
+        self.opened = True
 
     def close(self) -> None:
         """removes content from contentBox, then changes sizes to make contentBox disappear"""
         self.contentBox.clear_widgets()
         self.adjustSizes(self.headerClosed, self.contentClosed)
+        self.opened = False
 
-    def updateContent(self) -> None:
+    def updateContent(self, content = None) -> None:
+        """give content function that returns a widget with the content"""
+        if content == None:
+            content = self.createContent
         logger.debug("updating content")
         self.contentBox.clear_widgets()
-        self.contentBox.add_widget(self.createContent())
+        self.contentBox.add_widget(content())
         #resize widget as the add_widget does not update the size of the area given
         self.adjustSizes(self.headerOpen, self.contentOpen)
     
@@ -105,6 +109,7 @@ class ExpandableBox(BoxLayout):
         logger.debug("updating Header")
         self.header.clear_widgets()
         self.header.add_widget(self.createHeader())
+        self.checkHeader()
     
     def createContent(self) -> Widget:
         """meant for override by child classes but used by updateContent
@@ -120,19 +125,22 @@ class ExpandableTrainerBox(ExpandableBox):
         """works with height and width rather than size_hint"""
         self.trainerObject = trainerObject
         #add updateHeader to the observer list so it gets called when defeated changes
+        self.trainerObject.addAttributeObserver(self.updateHeader)
         self.trainerObject.addDefeatedObserver(self.updateHeader)
         self.headerClosed = 300
-        self.headerOpen = 300
+        self.headerOpen = 200
         header = self.createHeader()
         content = self.createContent()
+        #used for showing trainer content
+        self.showingTrainer = False
 
         super().__init__(header = header, content = content, button = self.button, **kwargs)
 
     def createHeader(self) -> Widget:
         """creates and returns header, also creates self.button"""
         #TODO add edit trainer button
-        nameButton = TransparentButton(text = self.trainerObject.name, size_hint_y = 0.3, on_release = lambda btn: self.trainerObject.removeTrainer())
-        trainerPic = os.path.join(trainerSprites, f"{self.trainerObject.trainerType}.png" if self.trainerObject.trainerType is not None else "hiker.png")
+        nameButton = TransparentButton(text = self.trainerObject.name, size_hint_y = 0.3, on_release = lambda btn: self.showTrainerContent())
+        trainerPic = getTrainerSprite(self.trainerObject.trainerType)
         trainerImage = Image(source = trainerPic, fit_mode = "contain", pos_hint = {"left": 1}, size_hint_y = 0.7)
         self.button = TransparentButton(text = f"show {self.trainerObject.name}'s pokemon")
         #change button color based on defeated status of trainer
@@ -157,6 +165,7 @@ class ExpandableTrainerBox(ExpandableBox):
         for pokemon in self.trainerObject.pokemon:
             pokemonBox = ExpandablePokemonBox(pokemon)
             content.add_widget(pokemonBox)
+            pokemon.addRemoveObserver(self.updateContent)
             self.contentOpen += pokemonBox.headerClosed + 1 #contentclosed is 1
 
         #add button beneath pokemon
@@ -167,6 +176,28 @@ class ExpandableTrainerBox(ExpandableBox):
 
         contentScroller.add_widget(content)
         return contentScroller
+
+    def createEditTrainerContent(self):
+        trainerContent = EditTrainerBox(self.trainerObject)
+        return trainerContent
+
+    def showTrainerContent(self):
+        #content is already opened
+        if self.opened:
+            #show trainer details
+            if not self.showingTrainer:
+                self.updateContent(self.createEditTrainerContent)
+                self.showingTrainer = True
+                return
+            #close content
+            self.close()
+            self.showingTrainer = False
+            return
+        #show trainer details
+        self.open()
+        self.updateContent(self.createEditTrainerContent)
+        self.showingTrainer = True
+        return
 
     def addPokemonPopup(self, instance):
         dia = AddPokemonDialog(self.trainerObject, self)

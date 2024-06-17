@@ -30,7 +30,6 @@ class TrainerScreen(NuzlockeScreen):
         self.trainerBoxScroll = ScrollView(size = (self.trainerBox.width, self.trainerBox.height))
         self.trainerBox.bind(minimum_height = self.trainerBox.setter("height"))
         
-
         self.newTrainerButton = TransparentButton(text = "add new Trainer", on_release = self.addNewTrainer, size_hint_y = 0.1)
         #start disabled
         self.newTrainerButton.disabled = True
@@ -82,11 +81,11 @@ class TrainerScreen(NuzlockeScreen):
         logger.debug("create dialog to add new trainer")
         self.newTrainerDialog.open()
 
-    
     def addTrainerToGame(self, trainerObject) -> bool:
         """Add trainerObject to the gameObject, function called in the addtrainerDialog. returns 0 on failure, 1 on success"""
         logger.debug(f"Adding {trainerObject.name} to {self.areaObject.name}")
         if self.areaObject.addTrainer(trainerObject):
+            trainerObject.area = self.areaObject
             logger.debug("added trainer")
         else:
             logger.debug("error occured adding trainer")
