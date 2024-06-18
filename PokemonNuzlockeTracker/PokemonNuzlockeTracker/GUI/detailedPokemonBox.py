@@ -49,7 +49,7 @@ class DetailedPokemonBox(BoxLayout):
         
         #add information about pokemon, ability, held item, typing
         self.pokemonInfoBox = BoxLayout(orientation= "vertical", size_hint_x = 0.3, pos_hint = {"top": 1})
-        self.abilityBox = BoxLayout(orientation = "vertical", size_hint_y = 0.2)
+        self.abilityBox = BoxLayout(orientation = "vertical", size_hint_y = 0.5)
         self.abilityInput = TextInput(hint_text = "ability", multiline = False)
         self.abilityInput.bind(focus = self.updateAbility)
         self.abilityBox.add_widget(self.abilityInput)
@@ -60,7 +60,7 @@ class DetailedPokemonBox(BoxLayout):
         self.typing1Input = TextInput(hint_text = "typing 1", multiline = False, size_hint_y = 0.1)
         self.typing2Input = TextInput(hint_text = "typing 2", multiline = False, size_hint_y = 0.1)
 
-        self.moveBox = BoxLayout(orientation = "vertical", size_hint_y = 0.5)
+        self.moveBox = BoxLayout(orientation = "vertical", size_hint_y = 0.3)
         self.pokemonObject.addLearnedMoveObserver(self.updateMoveBox)
 
         self.possibleMoveBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3, pos_hint = {"top": 1})

@@ -1,9 +1,11 @@
 ----------------**TestRun**-----------------------------------
-
+get all pokemoninfo gen 1 - 9
+save in different folders
 Start pokemon changes documentation
 
 GAME
     Overhaul backend object to include easier way to add observers, quite a cluster now
+    give game gen attribute to read
 
     AREA
         Treat multiple floors as singular object or new Area object with multiple areas
@@ -22,6 +24,7 @@ GAME
         get possible abilities from json file
 
 KIVY
+    change when screen are added to manager
     edit area
     remove area's
     change area spinner so dropdown is entire screen
@@ -32,27 +35,25 @@ KIVY
     snackbar errors / info
     tabs for multiple floors
     badges to display if can catch pokemon, color coded background?
-
-    main screen
+    navigationbar different screens
+    MAINSCREEN
         edit game
         remove game
         set direction to Settings screen
-
-    infoScreen
+    INFOSCREEN
         read arena and retirement and place images
         show amount of encounters catchable
         show badges
         show next boss trainer
-    
-    TrainerScreen
-        Add observers for trainer detail screen
-        edit trainerPOkemon detailed view to show possible abilities and moves, dummy data
+    TRAINERSCREEN
+        ~~Add observers for trainer detail screen~~
+        ~~edit trainerPOkemon detailed view to show possible abilities and moves, dummy data~~
         add bossTrainer to edit trainer box
-        popup delete trainer
+        ~~popup delete trainer~~
         kivy bubble move accuracy and power + secondary effect
         kivy bubble ability information
-    
-    encounterScreen
+        adjust size of detailedpokemonbox so it is visible, self.trainerbox.height = x if not x
+    ENCOUNTERSCREEN
         catch pokemon -> create playerpokemon -> arena
         release pokemon -> retirement
         remove pokemon from area
@@ -60,19 +61,18 @@ KIVY
         edit encounter pokemon
         see possible moves the pokemon has as well as abilities
         add new areatype
-        
-    
-    ItemScreen
+    ITEMSCREEN
         grab items
         remove item
         edit item
         add new items
         show more info about item, read from json
-    
-    SettingsScreen
+    SETTINGSCREEN
         edit trainerheader and content height
         edit pokemonheader and content height
         edit item header and content height
+        x and y sensitivity for scrolling
+        amount of mb gameObject is
 
 
 ---STEPS TO TAKE FOR BETA---

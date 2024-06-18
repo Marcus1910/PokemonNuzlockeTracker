@@ -147,7 +147,7 @@ class Trainer():
             logger.debug(f"trainer has been defeated, only saving name and defeatedStatus")
             return variableDict
         
-        if self.getNumberOfDefeatedPokemon() >= 1:
+        if len(self.getNumberOfDefeatedPokemon()) >= 1:
             #add pokemon to variable list as at least one pokemon has been defeated but the trainer hasn't
             logger.debug("adding pokemon to saveFile")
             variableDict["_pokemon"] = [pokemonJson for pokemon in self._pokemon if (pokemonJson := pokemon.storeToSaveFile()) is not None]

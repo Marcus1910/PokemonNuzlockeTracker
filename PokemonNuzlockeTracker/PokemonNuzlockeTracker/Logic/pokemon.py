@@ -174,6 +174,8 @@ class Pokemon(BasePokemon):
         variableDict.update({"_level": self.level, "_learnedMoves": self.learnedMoves, "_ability": self.ability, "heldItem": self.heldItem, "gender": self._gender})
         return variableDict
 
+
+
 class TrainerPokemon(Pokemon):
     #different class for future additions like health, pp, ai% of move chosen etc
     defaultDefeated = False
@@ -288,6 +290,12 @@ class EncounteredPokemon(BasePokemon):
         variableDict = super().storeToDataFile()
         variableDict.update({"_levels": self.levels, "_percentage": self.percentage})
         return variableDict
+
+    def __str__(self):
+        returnString = super().__str__()
+        returnString += f", levls: {self.levels}, percentage: {self.percentage}"
+        return returnString
+    
 
     # def storeToSaveFile(self):
     #     if self.captureStatus != self.defaultCaptureStatus:

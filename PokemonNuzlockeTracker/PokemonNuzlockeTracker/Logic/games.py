@@ -389,7 +389,6 @@ def getSprite(folder, name, default) -> str:
         path = os.path.join(folder, f"{default}.png")
     return path
 
-    
 def getPokemonSprite(name) -> str:
     return getSprite(pokemonSprites, name, "0")
 

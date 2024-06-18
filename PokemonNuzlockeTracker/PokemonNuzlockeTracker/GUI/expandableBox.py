@@ -170,9 +170,10 @@ class ExpandableTrainerBox(ExpandableBox):
 
         #add button beneath pokemon
         if pokemonAmount < 6:  
-            addPokemonButton = TransparentButton(text = f"Add pokemon to {self.trainerObject.name}", on_release = self.addPokemonPopup, size_hint_y = None) 
+            addPokemonButton = TransparentButton(text = f"Add pokemon to {self.trainerObject.name}", on_release = self.addPokemonPopup, size_hint_y = None, height = 200) 
             content.add_widget(addPokemonButton)
-            self.contentOpen += 300
+            #*3 dirty for phone
+            self.contentOpen += 200 * (6 - pokemonAmount)
 
         contentScroller.add_widget(content)
         return contentScroller
@@ -209,7 +210,7 @@ class ExpandablePokemonBox(ExpandableBox):
         self.pokemonObject.addAttributeObserver(self.updateHeader)
         self.headerClosed = 250
         self.headerOpen = 250
-        self.contentOpen = 700
+        self.contentOpen = 900
 
         header = self.createHeader()
         content = self.createContent()

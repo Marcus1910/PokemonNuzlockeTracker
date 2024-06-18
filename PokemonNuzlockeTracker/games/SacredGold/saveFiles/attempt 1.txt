@@ -28,12 +28,7 @@
  },
  {
   "_name": "Route 29",
-  "_trainers": {
-   "Maarten": {
-    "_name": "Maarten",
-    "_defeated": true
-   }
-  },
+  "_trainers": {},
   "_items": {},
   "_encounteredPokemon": {}
  },

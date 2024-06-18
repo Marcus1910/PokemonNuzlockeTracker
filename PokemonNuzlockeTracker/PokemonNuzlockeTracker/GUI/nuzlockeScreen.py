@@ -2,10 +2,13 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.spinner import Spinner
 from kivy.uix.popup import Popup
+from kivy.clock import Clock
 
 from kivymd.uix.swiper import MDSwiper
 # from kivymd.uix.navigationbar import MDNavigationBar, MDNavigationItem, MDNavigationItemLabel
-
+import os
+import psutil
+from pympler import asizeof
 
 from transparentButton import TransparentButton
 from backgroundScreen import BackgroundScreen
@@ -27,6 +30,12 @@ class NuzlockeScreen(BackgroundScreen):
         screenLabel = Label(text = screenName, color = self.standardColor)
         self.screenInfoBox.add_widget(screenLabel)
 
+        self.infoBox = BoxLayout(orientation = "vertical", size_hint_y = 0.05)
+        self.objectLabel = Label(text = "")
+
+        self.infoBox.add_widget(self.objectLabel)
+        Clock.schedule_interval(lambda dt: self.updateObject(), 1)
+
         self.screenBox = BoxLayout(orientation = "vertical", size_hint_y = 0.92)
 
         self.areaSpinnerBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.04)
@@ -47,11 +56,28 @@ class NuzlockeScreen(BackgroundScreen):
         self.areaSpinnerBox.add_widget(self.editAreaButton)
 
         self.layout.add_widget(self.screenInfoBox)
-        # self.layout.add_widget(self.btnbox)
+        self.layout.add_widget(self.infoBox)
         self.layout.add_widget(self.areaSpinnerBox)
         self.layout.add_widget(self.screenBox)
 
         self.add_widget(self.layout)
+
+    # Function to get memory usage of the current process
+    def get_memory_usage(self):
+        process = psutil.Process(os.getpid())
+        memory_info = process.memory_info()
+        return memory_info.rss  # Resident Set Size: total memory used by the process
+
+    def calculate_memory_usage(self, obj):
+        return asizeof.asizeof(obj)
+    
+    def bytesToMB(self, bytes):
+        return bytes / (10**6)
+    
+    def updateObject(self) -> None:
+        totalMem = round(self.bytesToMB(self.get_memory_usage()), 1)
+        gameMem = round(self.bytesToMB(self.calculate_memory_usage(self.manager.gameObject)), 1)
+        self.objectLabel.text = f"total: {totalMem} MB, game: {gameMem} MB"
 
     def editArea(self, button):
         logger.debug("editing Area, TODO")
