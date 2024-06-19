@@ -27,6 +27,12 @@ class AttemptInfoScreen(NuzlockeScreen):
         if not super().areaChanged(spinner, text):
             #area has not been changed succesfully
             return
+        self.areaLabel.text = f"current area: {self.manager.currentArea.name}"
+    
+    def on_pre_enter(self) -> bool:
+        super().on_pre_enter()
+        self.updateBadgeLabel()
+    
+    def updateBadgeLabel(self) -> None:
         badge = self.manager.gameObject.badge
         self.badgeLabel.text = f"amount of badges: {badge}"
-        self.areaLabel.text = f"current area: {self.manager.currentArea.name}"

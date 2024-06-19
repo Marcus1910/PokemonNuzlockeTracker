@@ -7,6 +7,8 @@ from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 from transparentButton import TransparentButton
 
+from collections.abc import Callable
+
 import os
 from loggerConfig import logger
 from pokemonDialog import AddPokemonDialog
@@ -19,8 +21,8 @@ from games import pokemonSprites, itemSprites, getTrainerSprite
 #     pass
 
 class ExpandableBox(BoxLayout):
-    def __init__(self, header: Button | BoxLayout, content: Widget, button: None | Button = None, **kwargs):
-        """supply content and header. header must be a button or boxlayout. 
+    def __init__(self, header: Button | BoxLayout, button: None | Button = None, **kwargs):
+        """supply header. header must inherit from ButtonBehaviour or be a boxlayout. 
         Use the button parameter to provide a reference to the button, open call will be binded to it automatically
         set headerClose, headerOpen and contentOpen in child class otherwise defaults to default heights"""
         super().__init__(**kwargs)
@@ -40,7 +42,6 @@ class ExpandableBox(BoxLayout):
         self.header.height = self.headerClosed
 
         self.button = button
-        self.content = content
         #box that will contain the content
         self.contentBox = BoxLayout()
         self.contentBox.size_hint_y = None
@@ -130,15 +131,14 @@ class ExpandableTrainerBox(ExpandableBox):
         self.headerClosed = 300
         self.headerOpen = 200
         header = self.createHeader()
-        content = self.createContent()
         #used for showing trainer content
         self.showingTrainer = False
 
-        super().__init__(header = header, content = content, button = self.button, **kwargs)
+        super().__init__(header = header, button = self.button, **kwargs)
 
     def createHeader(self) -> Widget:
         """creates and returns header, also creates self.button"""
-        #TODO add edit trainer button
+        #TODO add edit trainer button to Image with buttonbehaviour
         nameButton = TransparentButton(text = self.trainerObject.name, size_hint_y = 0.3, on_release = lambda btn: self.showTrainerContent())
         trainerPic = getTrainerSprite(self.trainerObject.trainerType)
         trainerImage = Image(source = trainerPic, fit_mode = "contain", pos_hint = {"left": 1}, size_hint_y = 0.7)
@@ -204,6 +204,24 @@ class ExpandableTrainerBox(ExpandableBox):
         dia = AddPokemonDialog(self.trainerObject, self)
         dia.open()
 
+class EncounterTypeBox(ExpandableBox):
+    def __init__(self, encounterType, encounters, **kwargs):
+        """encounters is a dict of encounterType: encounters"""
+        self.encounterType = encounterType
+        self.encounters = encounters
+        header = self.createHeader()
+        super().__init__(header, button = self.openButton, **kwargs)
+    
+    def createHeader(self) -> Widget:
+        self.openButton = TransparentButton(text = self.encounterType)
+        return self.openButton
+
+    def createContent(self) -> Widget:
+        content = BoxLayout(orientation = "vertical")
+        for encounter in self.encounters:
+            content.add_widget(EncounterBox(encounter))
+        return content
+
 class ExpandablePokemonBox(ExpandableBox):
     def __init__(self, pokemonObject, **kwargs):
         self.pokemonObject = pokemonObject
@@ -213,8 +231,7 @@ class ExpandablePokemonBox(ExpandableBox):
         self.contentOpen = 900
 
         header = self.createHeader()
-        content = self.createContent()
-        super().__init__(header = header, content = content, button = self.pokemonName, **kwargs)
+        super().__init__(header = header, button = self.pokemonName, **kwargs)
     
     def createHeader(self) -> Widget:
         header = BoxLayout(orientation = "horizontal")
@@ -275,24 +292,7 @@ class ExpandablePokemonBox(ExpandableBox):
         self.checkHeader()
 
     
-class EncounterTypeBox(ExpandableBox):
-    def __init__(self, encounterType, encounters, **kwargs):
-        """encounters is a dict of encounterType: encounters"""
-        self.encounterType = encounterType
-        self.encounters = encounters
-        header = self.createHeader()
-        content = self.createContent()
-        super().__init__(header, content, button = self.openButton, **kwargs)
-    
-    def createHeader(self) -> Widget:
-        self.openButton = TransparentButton(text = self.encounterType)
-        return self.openButton
 
-    def createContent(self) -> Widget:
-        content = BoxLayout(orientation = "vertical")
-        for encounter in self.encounters:
-            content.add_widget(EncounterBox(encounter))
-        return content
     
 
 class EncounterBox(BoxLayout):
@@ -324,59 +324,3 @@ class EncounterBox(BoxLayout):
     
     def showMoreInfo(self, button):
         logger.debug(f"show more info, TODO")
-
-# def showGlobalView(self):
-    #     if len(self.currentTrainerObject.pokemon) == 0:
-    #         #add new pokemon by showing empty detailedpokemonBox
-    #         # addPokemonLabel = Label(text = "No pokemon found", size_hint_y = 0.6)
-    #         # addPokemonButton = Button(text = "add pokemon", on_press = self.addFirstPokemon, size_hint_y = 0.4)
-    #         # self.trainerBox.add_widget(addPokemonLabel)
-    #         # self.trainerBox.add_widget(addPokemonButton)
-    #         return
-        
-    #     for index, pokemonObject in enumerate(self.currentTrainerObject.pokemon):
-    #         #gather pokemon data and put it in Labels
-    #         pokemonBox = BoxLayout(orientation = "horizontal", size_hint_y = (1 - 0.05)/ (len(self.currentTrainerObject.pokemon)), padding = (0, 0, 0, 10))
-    #         #create Image with name underneath
-    #         imageBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
-    #         pokemonImage = Image(source = os.path.join(self.spriteFolder, f"{pokemonObject.name.lower()}.png"))
-    #         pokemonImage.fit_mode = "contain"
-    #         nameLevelLabel = MDLabel(text = f"{pokemonObject.name} lvl {pokemonObject.level}", color = self.standardColor, pos_hint = {"right": 1})
-            
-    #         itemAbilityBox = BoxLayout(orientation = "vertical", size_hint_x = 0.1)
-    #         abilityInput = MDLabel(text = f"{pokemonObject.ability}", color = self.standardColor, size_hint_y = 0.5, pos_hint = {"top" : 1})
-    #         heldItemInput = MDLabel(text = f"{pokemonObject.heldItem}", color = self.standardColor, size_hint_y = 0.5, pos_hint = {"bottom" : 1})
-            
-    #         moveBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
-
-    #         for moveIndex in range(4): 
-    #             moveSlot = MDLabel(text = f"Not revealed", color = self.standardColor)
-    #             if moveIndex < len(pokemonObject.moves):
-    #                 moveSlot.text = f"{pokemonObject.moves[moveIndex]}"
-    #             moveBox.add_widget(moveSlot)
-
-    #         imageBox.add_widget(pokemonImage)
-    #         imageBox.add_widget(nameLevelLabel)
-    #         pokemonBox.add_widget(imageBox)
-
-    #         itemAbilityBox.add_widget(abilityInput)
-    #         itemAbilityBox.add_widget(heldItemInput)
-
-    #         pokemonBox.add_widget(itemAbilityBox)
-    #         pokemonBox.add_widget(moveBox)
-        
-    #         self.trainerBox.add_widget(pokemonBox)
-    #     logger.debug("created global view")
-    
-    # def showDetailedView(self):
-    #     self.detailedPokemonBox.buildLayout(self.currentTrainerObject)
-    #     self.trainerBox.add_widget(self.detailedPokemonBox)
-
-    # def editTrainer(self, *args):
-    #     """gives trainerobject to self.editTrainerBox for editing"""
-    #     logger.debug(f"editing {self.currentTrainerObject.name}")
-    #     self.editTrainerBox.buildLayout(self.currentTrainerObject)
-    #     #clear the previous layout
-    #     self.clearTrainerBox()
-    #     #show new layout
-    #     self.trainerBox.add_widget(self.editTrainerBox)

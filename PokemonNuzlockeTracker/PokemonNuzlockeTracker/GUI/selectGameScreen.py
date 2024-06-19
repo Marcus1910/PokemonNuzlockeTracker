@@ -120,6 +120,7 @@ class SelectGameScreen(BackgroundScreen):
         """create Game object and give it to windowManager"""
         #create Game Object, pass to new screen
         self.manager.attempt = self.attempt
-        self.manager.gameObject = MainGame(self.fileRetriever, self.game, self.attempt)
         logger.info(f"loading {self.game} {self.attempt}")
-        self.manager.current = "attemptInfoScreen"
+        game = MainGame(self.fileRetriever, self.game, self.attempt)
+        self.manager.startPokemonGame(game)
+        

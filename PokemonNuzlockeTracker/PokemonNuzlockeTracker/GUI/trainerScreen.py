@@ -10,7 +10,6 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scrollview import ScrollView
 
-import games as gm
 from games import pokemonSprites, trainerSprites, itemSprites
 import os
 

@@ -36,7 +36,7 @@ class EncounterScreen(NuzlockeScreen):
         self.updateEncounters()
 
     def updateEncounters(self) -> None:
-        print("adding encounters")
+        # print("adding encounters")
         for encounterType, encounters in self.encounters.items():
             self.encounterBox.add_widget(EncounterTypeBox(encounterType, encounters))
         # print(self.encounters)

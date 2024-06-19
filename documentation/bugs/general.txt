@@ -1,0 +1,1 @@
+When closing the game, route currently on gets chosen 3 times before closing

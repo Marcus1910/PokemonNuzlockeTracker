@@ -67,19 +67,27 @@ KIVY
         edit item
         add new items
         show more info about item, read from json
+    POKEMONINFOSCREEN
+        search for specific pokemon
+        display everything from pokemon
+        where it is caught
+        which trainers have it so far
     SETTINGSCREEN
-        edit trainerheader and content height
-        edit pokemonheader and content height
+        edit trainer header and content height
+        edit trainerpokemon header and content height
+        edit pokemonEncounter header and content height
         edit item header and content height
         x and y sensitivity for scrolling
-        amount of mb gameObject is
+        ~~amount of mb gameObject is~~
+        ~~amount of mb ap consumes~~
 
 
 ---STEPS TO TAKE FOR BETA---
 *******************************Further development*************************
+look at threading to gather mutiple widgets in a for loop for optimization
+create file that displays all changes made, in case saving corrupts or undo's
 export/import save data
 add base stats graph, possible moves/abilities to base pokemon
-update settings.py, also use settings.py for certain variables
 export Trainer to showdown format
 export route trainers to showdown format
 export all trainers to showdown format
