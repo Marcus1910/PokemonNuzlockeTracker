@@ -40,7 +40,7 @@ KIVY
         edit game
         remove game
         set direction to Settings screen
-    INFOSCREEN
+    ATTEMPTINFOSCREEN
         read arena and retirement and place images
         show amount of encounters catchable
         show badges
@@ -72,14 +72,19 @@ KIVY
         display everything from pokemon
         where it is caught
         which trainers have it so far
+        levelup moves
+        tm/hm
+        basestats
+        evolution line + method
     SETTINGSCREEN
         edit trainer header and content height
         edit trainerpokemon header and content height
         edit pokemonEncounter header and content height
         edit item header and content height
-        x and y sensitivity for scrolling
+        ~~x and y sensitivity for scrolling~~
         ~~amount of mb gameObject is~~
-        ~~amount of mb ap consumes~~
+        ~~amount of mb app consumes~~
+        Trust game data, remove all inputs for pokemon abilities
 
 
 ---STEPS TO TAKE FOR BETA---

@@ -163,7 +163,7 @@ class ExpandableTrainerBox(ExpandableBox):
         pokemonAmount = len(self.trainerObject.pokemon)
         self.contentOpen = 0
         for pokemon in self.trainerObject.pokemon:
-            pokemonBox = ExpandablePokemonBox(pokemon)
+            pokemonBox = ExpandableTrainerPokemonBox(pokemon)
             content.add_widget(pokemonBox)
             pokemon.addRemoveObserver(self.updateContent)
             self.contentOpen += pokemonBox.headerClosed + 1 #contentclosed is 1
@@ -204,25 +204,7 @@ class ExpandableTrainerBox(ExpandableBox):
         dia = AddPokemonDialog(self.trainerObject, self)
         dia.open()
 
-class EncounterTypeBox(ExpandableBox):
-    def __init__(self, encounterType, encounters, **kwargs):
-        """encounters is a dict of encounterType: encounters"""
-        self.encounterType = encounterType
-        self.encounters = encounters
-        header = self.createHeader()
-        super().__init__(header, button = self.openButton, **kwargs)
-    
-    def createHeader(self) -> Widget:
-        self.openButton = TransparentButton(text = self.encounterType)
-        return self.openButton
-
-    def createContent(self) -> Widget:
-        content = BoxLayout(orientation = "vertical")
-        for encounter in self.encounters:
-            content.add_widget(EncounterBox(encounter))
-        return content
-
-class ExpandablePokemonBox(ExpandableBox):
+class ExpandableTrainerPokemonBox(ExpandableBox):
     def __init__(self, pokemonObject, **kwargs):
         self.pokemonObject = pokemonObject
         self.pokemonObject.addAttributeObserver(self.updateHeader)
@@ -291,7 +273,67 @@ class ExpandablePokemonBox(ExpandableBox):
         self.button = self.pokemonName
         self.checkHeader()
 
+class EncounterTypeBox(ExpandableBox):
+    def __init__(self, encounterType, encounters, **kwargs):
+        """encounters is a dict of encounterType: encounters"""
+        self.encounterType = encounterType
+        self.encounters = encounters
+        header = self.createHeader()
+        super().__init__(header, button = self.openButton, **kwargs)
     
+    def createHeader(self) -> Widget:
+        self.openButton = TransparentButton(text = self.encounterType)
+        return self.openButton
+
+    def createContent(self) -> Widget:
+        content = GridLayout(cols = 1, size_hint_y = None)
+        contentScroller = ScrollView(size = (content.width, content.height))
+        content.bind(minimum_height = content.setter("height"))
+
+        self.contentOpen = 0
+        for encounter in self.encounters:
+            encounterBox = ExpandableEncounterPokemonBox(encounter)
+            content.add_widget(encounterBox)
+            self.contentOpen += encounterBox.contentOpen + 1
+        contentScroller.add_widget(content)
+        return contentScroller
+
+class ExpandableEncounterPokemonBox(ExpandableBox):
+    def __init__(self, pokemonObject, **kwargs):
+        self.pokemonObject = pokemonObject
+        self.contentOpen = 200
+        header = self.createHeader()
+
+        super().__init__(header = header, button = self.moreInfoButton, **kwargs)
+
+    def createHeader(self) -> Widget:
+        header = BoxLayout(orientation = "horizontal")
+        catchButton = TransparentButton(text = "catch", on_press = self.catch, size_hint_x = 0.2)
+
+        image = os.path.join(pokemonSprites, f"{self.pokemonObject.name.lower()}.png")
+        pokemonImage = Image(source = image, pos_hint = {"top": 1}, size_hint_x = 0.2)
+        pokemonImage.fit_mode = "contain"
+        infoBox = BoxLayout(orientation = "vertical", size_hint_x = 0.4)
+        percentageLabel = Label(text = f"percentage: {self.pokemonObject.percentage}")
+        levelsLabel = Label(text = f"levels: {self.pokemonObject.levels}")
+        self.moreInfoButton = TransparentButton(text = "more info", size_hint_x = 0.2)
+
+        infoBox.add_widget(percentageLabel)
+        infoBox.add_widget(levelsLabel)
+
+        header.add_widget(catchButton)
+        header.add_widget(pokemonImage)
+        header.add_widget(infoBox)
+        header.add_widget(self.moreInfoButton)
+
+        return header
+
+    def createContent(self) -> Widget:
+        content = BoxLayout()
+        return content
+
+    def catch(self, btn):
+        pass
 
     
 

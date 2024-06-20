@@ -23,27 +23,40 @@ class EncounterScreen(NuzlockeScreen):
         self.encounterScroll = ScrollView(size = (self.encounterBox.width, self.encounterBox.height))
         self.encounterBox.bind(minimum_height = self.encounterBox.setter("height"))
 
-        self.encounterScroll.add_widget(self.encounterBox)
+        self.newEncounterTypeButton = TransparentButton(text = "add new area type", size_hint_y = 0.1, on_release = lambda btn: self.addNewEncounterType())
+        self.newEncounterTypeButton.disabled = True
 
+        self.encounterScroll.add_widget(self.encounterBox)
+        
         self.screenBox.add_widget(self.encounterScroll)
+        self.screenBox.add_widget(self.newEncounterTypeButton)
     
     def areaChanged(self, spinner, text):
         if not super().areaChanged(spinner, text):
+            self.newEncounterTypeButton.disabled = True
             return 0
-        self.clearLayout()
+        
         self.encounters = self.manager.currentArea.encounters
         # update encounter boxes
         self.updateEncounters()
+        self.newEncounterTypeButton.disabled = False
 
     def updateEncounters(self) -> None:
-        # print("adding encounters")
-        for encounterType, encounters in self.encounters.items():
-            self.encounterBox.add_widget(EncounterTypeBox(encounterType, encounters))
-        # print(self.encounters)
-        # for encounterType in self.encounters:
-        #     print(encounterType)
+        self.clearLayout()
+        noEncounters = True
 
-    def addNewEncounterType(self, args):
+        for encounterType, encounters in self.encounters.items():
+            noEncounters = False
+            self.encounterBox.add_widget(EncounterTypeBox(encounterType, encounters))
+        
+        if noEncounters:
+            self.newEncounterTypeButton.greenColor()
+            return
+        
+        self.newEncounterTypeButton.resetColor()
+
+
+    def addNewEncounterType(self):
         logger.debug(f"adding new encounterType, TODO")
 
     def clearLayout(self):

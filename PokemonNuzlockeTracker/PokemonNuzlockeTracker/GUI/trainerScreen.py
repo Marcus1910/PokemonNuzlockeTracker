@@ -53,10 +53,10 @@ class TrainerScreen(NuzlockeScreen):
     def on_leave(self):
         super().on_leave()
 
-    def updateTrainers(self):
+    def updateTrainers(self) -> None:
         """reloads the expandabletrainerboxes with updated trainer dict"""
         noTrainers = True
-        self.newTrainerButton.resetColor()
+        
         self.trainers = self.areaObject.trainers
         self.clearTrainerBox()
 
@@ -69,6 +69,9 @@ class TrainerScreen(NuzlockeScreen):
         if noTrainers:
             """make the new trainer button stand out more when there are no trainers"""
             self.newTrainerButton.greenColor()
+            return
+        
+        self.newTrainerButton.resetColor()
   
     def clearTrainerBox(self):
         """removes all widgets from trainerBox"""
