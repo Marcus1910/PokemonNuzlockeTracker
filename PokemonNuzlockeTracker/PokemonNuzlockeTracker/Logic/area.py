@@ -120,6 +120,15 @@ class EncounterArea(Area):
     def items(self):
         return self._items
     
+    def addItem(self, newItem) -> bool:
+        newItemName = newItem.name
+        for item in self.items.values():
+            if item.name == newItemName:
+                logger.error(f"{newItemName} already exists on {self.name}")
+                return 0
+        self._items[newItemName] = newItem
+        return 1
+    
     def removeItem(self, item):
         for items in self._items:
             if item.name == items.name:

@@ -296,6 +296,7 @@ class MainGame():
                     #add trainers defeated status
                     for trainer in area["_trainers"]:
                         logger.debug(f"looking for {trainer} data")
+
                         #check if trainer has been defeated
                         if area["_trainers"][trainer]["_defeated"]:
                             #add defeated to the areaList
@@ -335,7 +336,6 @@ class MainGame():
                         logger.debug(f"finished gathering data for {item}")
 
                     #add encounters caught on route
-            break
 
     def checkVarExistsJsonDump(self, attribute, json, value = "n/a"):
         """checks whether a variable exists in a json else returns value or defaults to n/a"""

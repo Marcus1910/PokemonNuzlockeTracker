@@ -122,7 +122,18 @@
     ]
    }
   },
-  "_items": {},
+  "_items": {
+   "potion": {
+    "_name": "potion",
+    "_description": null,
+    "_location": null
+   },
+   "master-ball": {
+    "_name": "master-ball",
+    "_description": null,
+    "_location": null
+   }
+  },
   "_encounters": {
    "Grass, Morning / Day": [
     {

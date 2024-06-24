@@ -14,7 +14,7 @@ from loggerConfig import logger
 from pokemonDialog import AddPokemonDialog
 from detailedPokemonBox import DetailedPokemonBox
 from editTrainerBox import EditTrainerBox
-from games import pokemonSprites, itemSprites, getTrainerSprite
+from games import getPokemonSprite, getItemSprite, getTrainerSprite
 
 
 # class ExpandableBox(BoxLayout):
@@ -220,7 +220,7 @@ class ExpandableTrainerPokemonBox(ExpandableBox):
         defeatedButton = TransparentButton(size_hint_x = 0.1, on_release = lambda btn: [self.changeDefeated(btn)], background_color = "white")
         #change button color
         self.changeWidgetColor(defeatedButton)
-        pokemonImage = Image(source = os.path.join(pokemonSprites, f"{self.pokemonObject.name.lower()}.png"), fit_mode = "contain", size_hint_x = 0.2)
+        pokemonImage = Image(source = getPokemonSprite(self.pokemonObject.name), fit_mode = "contain", size_hint_x = 0.2)
 
         self.pokemonName = TransparentButton(text = self.pokemonObject.name)
         pokemonLevel = Label(text = f"Lv. {self.pokemonObject.level}")
@@ -310,8 +310,7 @@ class ExpandableEncounterPokemonBox(ExpandableBox):
         header = BoxLayout(orientation = "horizontal")
         catchButton = TransparentButton(text = "catch", on_press = self.catch, size_hint_x = 0.2)
 
-        image = os.path.join(pokemonSprites, f"{self.pokemonObject.name.lower()}.png")
-        pokemonImage = Image(source = image, pos_hint = {"top": 1}, size_hint_x = 0.2)
+        pokemonImage = Image(source = getPokemonSprite(self.pokemonObject.name), pos_hint = {"top": 1}, size_hint_x = 0.2)
         pokemonImage.fit_mode = "contain"
         infoBox = BoxLayout(orientation = "vertical", size_hint_x = 0.4)
         percentageLabel = Label(text = f"percentage: {self.pokemonObject.percentage}")
@@ -335,34 +334,43 @@ class ExpandableEncounterPokemonBox(ExpandableBox):
     def catch(self, btn):
         pass
 
-    
+class ExpandableItemBox(ExpandableBox):
+    def __init__(self, itemObject, **kwargs):
+        self.itemObject = itemObject
+        header = self.createHeader()
 
-class EncounterBox(BoxLayout):
-    #TODO get from central point
-    def __init__(self, pokemonObject, *args, **kwargs):
-        """expects pokemonObject"""
-        super().__init__(*args, **kwargs)
-        self.pokemonObject = pokemonObject
-        self.orientation = "horizontal"
-        self.catchButton = TransparentButton(text = "catch", on_press = self.catch, size_hint_x = 0.2)
-        image = os.path.join(pokemonSprites, f"{pokemonObject.name.lower()}.png")
-        self.pokemonImage = Image(source = image, pos_hint = {"top": 1}, size_hint_x = 0.2)
-        self.pokemonImage.fit_mode = "contain"
-        self.infoBox = BoxLayout(orientation = "vertical", size_hint_x = 0.4)
-        self.percentageLabel = Label(text = f"percentage: {pokemonObject.percentage}")
-        self.levelsLabel = Label(text = f"levels: {pokemonObject.levels}")
-        self.moreInfoButton = TransparentButton(text = "more info", on_press = self.showMoreInfo, size_hint_x = 0.2)
+        super().__init__(header = header, button = self.moreInfoButton,**kwargs)
+    
+    def createHeader(self) -> Widget:
+        header = BoxLayout()
+        self.moreInfoButton = TransparentButton(text = "more info")
+        return header
+
+    def createContent(self) -> Widget:
+        content = BoxLayout()
+        return content
+
+class ItemBox(BoxLayout):
+    def __init__(self, itemObject, **kwargs):
+        super().__init__(**kwargs)
+        self.itemObject = itemObject
+        self.height = 150
+
+        self.grabButton = TransparentButton(text = "grab", on_release = self.grabItem, size_hint_x = 0.2)
+        self.updateButton()
+        self.itemImage = Image(source = getItemSprite(itemObject.name), fit_mode = "contain", size_hint_x = 0.3)
+        self.itemName = Label(text = itemObject.name, size_hint_x = 0.2)
+        self.description = Label(text = itemObject.description if itemObject.description != None else " ", size_hint_x = 0.3)
+
+        self.add_widget(self.grabButton)
+        self.add_widget(self.itemImage)
+        self.add_widget(self.itemName)
+        self.add_widget(self.description)
         
-        self.infoBox.add_widget(self.percentageLabel)
-        self.infoBox.add_widget(self.levelsLabel)
+    def grabItem(self, instance):
+        pass
 
-        self.add_widget(self.catchButton)
-        self.add_widget(self.pokemonImage)
-        self.add_widget(self.infoBox)
-        self.add_widget(self.moreInfoButton)
+    def updateButton(self):
+        self.grabButton.greenColor() if self.itemObject.grabbed else self.grabButton.redColor()
 
-    def catch(self, button):
-        logger.debug(f"catching {self.pokemonObject.name}, TODO")
-    
-    def showMoreInfo(self, button):
-        logger.debug(f"show more info, TODO")
+

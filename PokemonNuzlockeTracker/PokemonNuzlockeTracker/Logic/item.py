@@ -2,6 +2,7 @@ class Item():
     defaultGrabbed = False
     def __init__(self, name, grabbed = False):
         self._name = name
+        self._area = None
         self._description = None
         self._location = None
         self._grabbed = grabbed
@@ -13,6 +14,14 @@ class Item():
     @name.setter
     def name(self, name):
         self._name = name
+    
+    @property
+    def area(self):
+        return self._area
+    
+    @area.setter
+    def area(self, area):
+        self._area = area
     
     @property
     def description(self):

@@ -1,5 +1,5 @@
 from nuzlockeScreen import NuzlockeScreen
-from trainerDialog import AddTrainerDialog
+from addDialog import AddTrainerDialog
 from loggerConfig import logger
 from expandableBox import ExpandableTrainerBox
 from transparentButton import TransparentButton
@@ -19,10 +19,7 @@ class TrainerScreen(NuzlockeScreen):
         #need areaObject to update trainers and add trainers
         self.areaObject = None
         #trainer Object for current trainer
-        self.currentTrainerObject = None
         self.trainers = None 
-
-        self.newTrainerDialog = AddTrainerDialog(self.addTrainerToGame)
 
         #box that contains all expandabletrainerboxes
         self.trainerBox = GridLayout(size_hint_y = None, cols = 1)
@@ -45,7 +42,7 @@ class TrainerScreen(NuzlockeScreen):
             #invalid area, should not be able to add new Trainer to it
             self.newTrainerButton.disabled = True
             return
-        self.currentTrainerObject = None
+
         self.areaObject = self.manager.currentArea
         self.updateTrainers()
         self.newTrainerButton.disabled = False
@@ -81,18 +78,15 @@ class TrainerScreen(NuzlockeScreen):
     def addNewTrainer(self, instance):
         """displays the edittrainerBox for a new trainer to be added"""
         logger.debug("create dialog to add new trainer")
-        self.newTrainerDialog.open()
+        dialog = AddTrainerDialog(self.addTrainerToGame)
+        dialog.open()
 
     def addTrainerToGame(self, trainerObject) -> bool:
         """Add trainerObject to the gameObject, function called in the addtrainerDialog. returns 0 on failure, 1 on success"""
         logger.debug(f"Adding {trainerObject.name} to {self.areaObject.name}")
-        if self.areaObject.addTrainer(trainerObject):
-            trainerObject.area = self.areaObject
-            logger.debug("added trainer")
-        else:
-            logger.debug("error occured adding trainer")
-            #update self.trainerobject to None, otherwise next call will execute edittrainer
-            # self.editTrainerBox.trainerObject = None
+        if not self.areaObject.addTrainer(trainerObject):
             return 0
+        
+        trainerObject.area = self.areaObject    
         self.updateTrainers()
         return 1
