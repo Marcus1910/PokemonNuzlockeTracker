@@ -14,6 +14,8 @@ class TrackerApp(MDApp):
 
     def build(self):
         #use OS to change view to that of android
+        self.game = None
+
         if self.operatingSystem == "Windows":
             logger.info("detected windows")
             Window.size = (390, 780)

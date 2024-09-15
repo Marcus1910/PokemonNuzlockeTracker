@@ -1,3 +1,4 @@
+from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager
 from kivy.clock import Clock
 
@@ -41,6 +42,7 @@ class WindowManager(ScreenManager):
     def gameObject(self, gameObject):
         self._gameObject = gameObject
         self.areaList = self._gameObject.areaList
+        MDApp.get_running_app().game = self._gameObject
     
     @property
     def screenNumber(self):
@@ -71,26 +73,15 @@ class WindowManager(ScreenManager):
             logger.error(f"{newAreaName} could not be loaded, not found in areaList")
             return
         logger.debug(f"{self._currentArea.name} Object loaded in manager")
-    
-    def addPokemonToArea(self, pokemonObject, areaName):
-        """add pokemon to encounters list of specified areaName"""
-        for area in self.areaList:
-            if area.name == areaName:
-                area.encounters = pokemonObject
-                logger.info(f"added {pokemonObject.name} to {areaName}")
-                return 1
-        else:
-            logger.error(f"{pokemonObject.name} could not be added to {areaName}")
-            return 0
-    
-    def addPokemonToArena(self, pokemonObject) -> None:
-        self.addPokemonToArea(pokemonObject, "Arena")
 
-    def addPokemonToRetirement(self, pokemonObject) -> None:
-        self.addPokemonToArea(pokemonObject, "Retirement")
+    def catchPokemon(self, pokemonObject) -> bool:
+        return self.gameObject.catchPokemon(pokemonObject)
 
-    def addPokemonToLostAndFound(self, pokemonObject) -> None:
-        self.addPokemonToArea(pokemonObject, "lost&found")
+    def releasePokemon(self, pokemonObject) -> bool:
+        return self.gameObject.releasePokemon(pokemonObject)
+        
+    def removePokemon(self, pokemonObject) -> bool:
+        return self.gameObject.removePokemon(pokemonObject)
 
     def startPokemonGame(self, gameObject):
         self.gameObject = gameObject

@@ -13,6 +13,7 @@ import os
 from loggerConfig import logger
 from pokemonDialog import AddPokemonDialog
 from detailedPokemonBox import DetailedPokemonBox
+from addDialog import ConvertEncounteredPokemonToPlayerPokemonDialog
 from editTrainerBox import EditTrainerBox
 from games import getPokemonSprite, getItemSprite, getTrainerSprite
 
@@ -78,6 +79,7 @@ class ExpandableBox(BoxLayout):
         self.header.height = headerSize
         self.contentBox.height = contentSize
         self.height = headerSize + contentSize
+        logger.debug(f"Expandable Box size {self.height} header {headerSize} content {contentSize}")
 
     def open(self, instance = None) -> None:
         """open the Box showing the content"""
@@ -142,7 +144,7 @@ class ExpandableTrainerBox(ExpandableBox):
         nameButton = TransparentButton(text = self.trainerObject.name, size_hint_y = 0.3, on_release = lambda btn: self.showTrainerContent())
         trainerPic = getTrainerSprite(self.trainerObject.trainerType)
         trainerImage = Image(source = trainerPic, fit_mode = "contain", pos_hint = {"left": 1}, size_hint_y = 0.7)
-        self.button = TransparentButton(text = f"show {self.trainerObject.name}'s pokemon")
+        self.button = TransparentButton(text = f"show {self.trainerObject.name}'s pokemon", )
         #change button color based on defeated status of trainer
         self.button.greenColor() if self.trainerObject.defeated else self.button.redColor()
 
@@ -170,10 +172,10 @@ class ExpandableTrainerBox(ExpandableBox):
 
         #add button beneath pokemon
         if pokemonAmount < 6:  
-            addPokemonButton = TransparentButton(text = f"Add pokemon to {self.trainerObject.name}", on_release = self.addPokemonPopup, size_hint_y = None, height = 200) 
+            addPokemonButton = TransparentButton(text = f"Add pokemon to {self.trainerObject.name}", on_release = self.addPokemonPopup, size_hint_y = None, height = 150) 
             content.add_widget(addPokemonButton)
-            #*3 dirty for phone
-            self.contentOpen += 200 * (6 - pokemonAmount)
+            
+            self.contentOpen += 150
 
         contentScroller.add_widget(content)
         return contentScroller
@@ -274,10 +276,11 @@ class ExpandableTrainerPokemonBox(ExpandableBox):
         self.checkHeader()
 
 class EncounterTypeBox(ExpandableBox):
-    def __init__(self, encounterType, encounters, **kwargs):
+    def __init__(self, encounterType, encounters, areaName, **kwargs):
         """encounters is a dict of encounterType: encounters"""
         self.encounterType = encounterType
         self.encounters = encounters
+        self.areaName = areaName
         header = self.createHeader()
         super().__init__(header, button = self.openButton, **kwargs)
     
@@ -292,15 +295,17 @@ class EncounterTypeBox(ExpandableBox):
 
         self.contentOpen = 0
         for encounter in self.encounters:
-            encounterBox = ExpandableEncounterPokemonBox(encounter)
+            encounterBox = ExpandableEncounterPokemonBox(encounter, self.areaName)
             content.add_widget(encounterBox)
             self.contentOpen += encounterBox.contentOpen + 1
+        print(f"{self.encounterType} {self.contentOpen} {len(self.encounters)}")
         contentScroller.add_widget(content)
         return contentScroller
 
 class ExpandableEncounterPokemonBox(ExpandableBox):
-    def __init__(self, pokemonObject, **kwargs):
+    def __init__(self, pokemonObject, areaName, **kwargs):
         self.pokemonObject = pokemonObject
+        self.areaName = areaName
         self.contentOpen = 200
         header = self.createHeader()
 
@@ -332,7 +337,8 @@ class ExpandableEncounterPokemonBox(ExpandableBox):
         return content
 
     def catch(self, btn):
-        pass
+        dialog = ConvertEncounteredPokemonToPlayerPokemonDialog(self.pokemonObject, self.areaName)
+        dialog.open()
 
 class ExpandableItemBox(ExpandableBox):
     def __init__(self, itemObject, **kwargs):

@@ -52,20 +52,28 @@ class EncounterArea(Area):
         self._items = {} # dict of item name - object
         self._encounteredPokemon = {} #dict with pokemon objects name: object
         self._canCatchPokemon = True #replace code to somewhere it isnt immediatly called : False if len(self._encounteredPokemon) >= pokemonCatchLimit else True
-    
+
     @property
     def encounters(self):
         return self._encounters
     
-    @encounters.setter
-    def encounters(self, encounter):
-        logger.error("not yet implemented")
-        # self.encounters.append(encounter)
+    def addEncounter(self, encounter, encounterType):
+        if encounter.name in self._encounters[encounterType].keys():
+            logger.error(f"{encounter.name} is already catchable here")
+            return
+        self.encounters[encounterType][encounter.name] = encounter
     
-    def removeEncounter(self, encounter):
-        #TODO remove correct encounter
-        logger.error("not yet implemented")
-        # self._encounters.remove(encounter)
+    def editEncounter(self, encounter, encounterType):
+        if encounter.name not in self._encounters[encounterType].keys():
+            logger.error(f"{encounter.name} cannot be updated, does not exist")
+            return
+        self.encounters[encounterType].update({encounter.name: encounter})
+
+    def removeEncounter(self, encounter, encounterType):
+        if encounter.name not in self._encounters[encounterType].keys():
+            logger.error(f"{encounter.name} cannot be updated, does not exist")
+            return
+        del self.encounters[encounterType][encounter.name]
 
     @property
     def trainers(self):

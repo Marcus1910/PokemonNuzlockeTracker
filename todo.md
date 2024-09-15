@@ -1,4 +1,9 @@
-----------------**TestRun**-----------------------------------
+***************************************TestRun*******************************
+
+Catch wild pokemon
+grab items
+display caught pokemon
+
 get all pokemoninfo gen 1 - 9
 save in different folders
 Start pokemon changes documentation
@@ -6,18 +11,14 @@ Start pokemon changes documentation
 GAME
     Overhaul backend object to include easier way to add observers, quite a cluster now
     give game gen attribute to read
-
     AREA
         Treat multiple floors as singular object or new Area object with multiple areas
         Add id
-
     TRAINERS
         Add id
         How double battles
-
     ITEMS
         add id
-
     POKEMON
         add ID
         get possible moves from json file
@@ -42,9 +43,10 @@ KIVY
         set direction to Settings screen
     ATTEMPTINFOSCREEN
         read arena and retirement and place images
+        tabs for info, arena, retirement and lost & found (sub tabs trainerpokemon encounterpokemon and items)
         show amount of encounters catchable
         show badges
-        show next boss trainer
+        show next boss trainer  
     TRAINERSCREEN
         ~~Add observers for trainer detail screen~~
         ~~edit trainerPOkemon detailed view to show possible abilities and moves, dummy data~~
@@ -81,10 +83,17 @@ KIVY
         edit trainerpokemon header and content height
         edit pokemonEncounter header and content height
         edit item header and content height
-        ~~x and y sensitivity for scrolling~~
+        x and y sensitivity for scrolling
         ~~amount of mb gameObject is~~
         ~~amount of mb app consumes~~
         Trust game data, remove all inputs for pokemon abilities
+    Statistics screen
+        Kills per pokemon
+        crits per pokemon
+        items used / gathered
+        Crits dealt
+        Crits taken
+        Graph when pokemon died
 
 
 ---STEPS TO TAKE FOR BETA---
@@ -142,3 +151,8 @@ export import saves, files on android will be saved to internal storage and wind
 settings button on front page, settings page two tabs, general and game specific based on game chosen
 read from internal storage instead of copying everything to the program at startup
 1 function for searching for pokemon images
+
+trainerscreen add quick view to headerbutton, sprites of pokemon / pokeball empty is less than 6
+overhaul db performance? - 2 versions for comparison
+class data importer -> import data from files
+bubble arena graveyard pokemon

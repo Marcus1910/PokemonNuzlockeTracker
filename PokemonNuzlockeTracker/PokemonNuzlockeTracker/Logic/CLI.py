@@ -2,7 +2,7 @@ from games import MainGame
 from trainer import Trainer
 from pokemon import TrainerPokemon
 from item import Item
-from pokemon import Pokemon
+from pokemon import Pokemon, PlayerPokemon
 from loggerConfig import logicLogger as logger
 from fileRetriever import FileRetriever
 
@@ -10,10 +10,18 @@ class CLI():
    def __init__(self, operatingSystem):
       fileRetriever = FileRetriever(operatingSystem)
       #set fileretriever variables correctly, TODO update earlier
-      gameName = "HisuiRed"
+      gameName = "SacredGold"
       fileRetriever.setFolderVariables(gameName)
-      fileRetriever.addNewPokemonGame(gameName)
-      game = MainGame(fileRetriever, gameName, 'new')
+      #fileRetriever.addNewPokemonGame(gameName)
+      game = MainGame(fileRetriever, gameName, "attempt 1")
+      newBark = game.areaList[0]
+      print(newBark)
+      Magikarp = PlayerPokemon("magikarp", 55)
+      Charmander = PlayerPokemon("charmander", 34)
+      game.catchPokemon(Magikarp,  "New Bark Town")
+      print(game.arena)
+      game.removeFromArena(Charmander)
+      print(game.arena)
       game.writeToFile()
 
 

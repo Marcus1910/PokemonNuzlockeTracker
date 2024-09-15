@@ -47,7 +47,7 @@ class EncounterScreen(NuzlockeScreen):
 
         for encounterType, encounters in self.encounters.items():
             noEncounters = False
-            self.encounterBox.add_widget(EncounterTypeBox(encounterType, encounters))
+            self.encounterBox.add_widget(EncounterTypeBox(encounterType, encounters, self.manager.currentArea.name))
         
         if noEncounters:
             self.newEncounterTypeButton.greenColor()

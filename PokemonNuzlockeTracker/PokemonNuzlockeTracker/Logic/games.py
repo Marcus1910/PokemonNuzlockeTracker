@@ -1,6 +1,6 @@
 from area import EncounterArea
 from trainer import Trainer
-from pokemon import TrainerPokemon, EncounteredPokemon
+from pokemon import TrainerPokemon, EncounteredPokemon, PlayerPokemon
 from item import Item
 from readFormattedData import readFormattedData
 from fileRetriever import FileRetriever
@@ -33,7 +33,12 @@ class MainGame():
         self.fileRetriever = fileRetriever
         self.gameName = gameName
 
+        self._arena = [] #[pokemon: area]
+        self._graveyard = [] #[pokemon: area: trainerLost] None
+        self._itemsGrabbed = [] #[item: area: trainerUsed] None
+
         #check whether the game can be found
+        #data importer
         if not fileRetriever.checkGameExists(gameName):
             logger.info(f"game does not exists, creating new game: {gameName}")
             fileRetriever.addNewPokemonGame(gameName)
@@ -79,16 +84,16 @@ class MainGame():
         self._badge = badge
 
     def addArea(self, name, badge = 0) -> bool:
-        logger.debug(f"adding Area: {name}")
+        """add area to area list"""        
         if checkString(name):
             return 0
-        
         if self.checkAreaExists(name):
             return 0
-        
+
         newArea = EncounterArea(name)
         newArea.badge = badge
         #replace with insert on index, also place based on badge -> new function
+        logger.debug(f"adding Area: {name}")
         self.areaList.append(newArea)
         return 1
     
@@ -116,6 +121,56 @@ class MainGame():
             #area does not exists
             logger.debug(f"area {name} does not exists yet")
             return 0
+    
+    @property
+    def arena(self):
+        return self._arena
+    
+    def addToArena(self, pokemon, areaName):
+        self._arena.append([pokemon, areaName])
+        logger.debug(f"added {pokemon.name} to {areaName}")   
+
+    def removeFromArena(self, playerPokemon):
+        for index, pokemon in enumerate(self.arena):
+            if playerPokemon == pokemon[0]:
+                logger.debug(f"removing {pokemon[0]}")
+                self.arena.pop(index)
+                return 1
+        else:
+            logger.error("pokemon not found")
+            return 0
+
+    def catchPokemon(self, playerPokemon: PlayerPokemon, areaName) -> bool:
+        self.addToArena(playerPokemon, areaName)
+        return 1
+    
+    def releasePokemon(self, pokemon: TrainerPokemon) -> bool:
+        #TODO remove pokemon from arena 
+        return self.addPokemonToArea(pokemon, "Retirement")
+    
+    def removePokemon(self, pokemonObject) -> bool:
+        #TODO remove pokemon from trainer, arena etc
+        return self.addPokemonToArea(pokemonObject, "lost&found")
+    
+    def addPokemonToArea(self, pokemonObject, areaName) -> bool:
+        """add pokemon to encounters list of specified areaName"""
+        if areaName == "Arena":
+            self.arena.append(pokemonObject.name, areaName)
+        elif areaName == "Graveyard":
+            self.graveyard.append(pokemonObject.name, areaName)
+
+        for area in self.areaList:
+            if area.name == areaName:
+                area.addEncounter(pokemonObject,)
+                return 1
+        else:
+            logger.error(f"{pokemonObject.name} could not be added to {areaName}, could not find locate {areaName}")
+            return 0
+
+
+
+
+
 
     def writeToFile(self):
         logger.info("saving game")
@@ -140,21 +195,11 @@ class MainGame():
     def retrieveGameData(self) -> list | list[EncounterArea]:
         """retrieves all information that can be found about the current game, including selected savefile, returns an empty list or a list with area objects"""
         #read from data folder correctdata, if that is not available try to read from gamedata otherwise return an empty list
-        self.addMandatoryAreas()
         self.retrieveGlobalGameData()
         logger.info("collected regular data")
 
         self.retrieveSaveFile()
         return self.areaList
-
-    def addMandatoryAreas(self):
-        logger.debug("adding Arena, Retirement and lost and found")
-        arena = EncounterArea("Arena")
-        retirement = EncounterArea("Retirement")
-        lostAndFound = EncounterArea("lost&found")
-        self.areaList.append(arena)
-        self.areaList.append(retirement)
-        self.areaList.append(lostAndFound)
 
     def retrieveGlobalGameData(self):
         """retrieves game data and saves it into readData"""
@@ -187,7 +232,7 @@ class MainGame():
             except json.JSONDecodeError as e:
                 self.saveFileError = True
                 #TODO change self.saveFileError to a different file because the original cannot be read
-                logger.error(f"Something went wrong, could not load saveFile")
+                logger.error(f"Something went wrong, could not load saveFile, {e}")
 
     def retrieveEncounterData(self):
         #only needed to create the json dumps and backup if file cannot be read
@@ -196,13 +241,6 @@ class MainGame():
             logger.error(f"there is no correctDataFile, please make sure it is in {self.gameName}/data/. If it is the first time starting the game nad no data has been provided, this can be ignored")
             return {}
         self.areaList = readFormattedData(correctDataPath).returnAreaList()
-    
-    # def checkForNormalArea(self, name : str) -> bool:
-    #     """checks if the provided name is a normal Area, retirement, arena, lost and found"""
-    #     if name == "Retirement":
-    #         #do stuff to make normal Area
-    #         return 1
-    #     return 0
     
     def addGameData(self):
         """converts all data read from the game data json file and converts it into objects"""  
@@ -377,6 +415,8 @@ class MainGame():
             setattr(object, attribute, attributeValue)
         return object
 
+   
+
 def validateFile(file: str) -> bool:
     if os.path.isfile(file):
         return True
@@ -385,12 +425,13 @@ def validateFile(file: str) -> bool:
 def getSprite(folder, name, default) -> str:
     path = os.path.join(folder, f"{name}.png")
     if not validateFile(path):
+        logger.debug(f'{path} could not be found')
         logger.info(f"could not find image for {name}")
         path = os.path.join(folder, f"{default}.png")
     return path
 
 def getPokemonSprite(name) -> str:
-    return getSprite(pokemonSprites, name, "0")
+    return getSprite(pokemonSprites, name.lower(), "0")
 
 def getTrainerSprite(name):
     return getSprite(trainerSprites, name, "cabbie")

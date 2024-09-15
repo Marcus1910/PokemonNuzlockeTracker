@@ -100,7 +100,7 @@ class Trainer():
     @defeated.setter
     def defeated(self, bool):
         self._defeated = bool
-        #trainer is defeated, all trainers must be defeated
+        #trainer is defeated, all pokemon must be defeated
         if self.defeated:
             self.defeatAllPokemon()
         self.notifyDefeatedObservers()
@@ -111,6 +111,7 @@ class Trainer():
     
     def defeatAllPokemon(self) -> None:
         for pokemon in self.pokemon:
+            logger.debug(f"set {pokemon.name} to True")
             pokemon.defeated = True
 
     def getNumberOfDefeatedPokemon(self) -> list:

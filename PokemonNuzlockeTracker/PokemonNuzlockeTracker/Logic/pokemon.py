@@ -2,15 +2,15 @@ import json
 from loggerConfig import logicLogger as logger
 class BasePokemon():
     def __init__(self, name):
-        """Minimum pokemon requirements, name, dexno and gender"""
+        """Minimum pokemon requirements, name"""
         self._name = name.title()
-        self._dexNo = None
+        self._dexNo = self.getDexNo()
         
         #used for display of moves that it can learn, lvl: move
-        self._levelupMoves = {}
+        self._levelupMoves = self.readLevelupMoves()
         #place elsewhere
-        self._abilities = []
-        self._typing = {"typing1": "fire", "typing2": "grass"}
+        self._abilities = self.readAbilities()
+        self._typing = self.readTyping()
         #observers that get called when a variable gets changed
         self.attributeObservers = []
         self.nameObservers = []
@@ -34,14 +34,23 @@ class BasePokemon():
     @dexNo.setter
     def dexNo(self, dexNo):
         self._dexNo = dexNo
+
+    def getDexNo(self):
+        #get from data
+        dexno = 23
+        return dexno    
     
+    def readTyping(self):
+        typing = {"typing1": "fire", "typing2": "grass"}
+        return typing
+
     def getTyping(self) -> dict:
         return self._typing
 
     def readLevelupMoves(self) -> None:
         """get levelup Moves from documentation, TODO now dummy data"""
         levelup = {5: "tackle", 11: "growl", 16: "flame wheel", 25: "hyper beam"}
-        self._levelupMoves = levelup
+        return levelup
 
     def getLevelupMoves(self) -> dict:
         """return levelupMoves that the pokemon can learn"""
@@ -50,7 +59,7 @@ class BasePokemon():
 
     def readAbilities(self) -> None:
         abilities = ["drougth", "drizzle", "sandstorm"]
-        self._abilities = abilities
+        return abilities
 
     def getAbilities(self) -> dict:
         self.readAbilities()
@@ -241,11 +250,6 @@ class TrainerPokemon(Pokemon):
         parentStr = super().__str__()
         childStr = f", defeated: {self._defeated}"
         return parentStr + childStr
-
-class PlayerPokemon(Pokemon):
-    def __init__(self, name, level):
-        """pokemon object caught by player"""
-        super().__init__(name, level)
     
 class EncounteredPokemon(BasePokemon):
     defaultCaptureStatus = 0
@@ -295,14 +299,17 @@ class EncounteredPokemon(BasePokemon):
         returnString = super().__str__()
         returnString += f", levls: {self.levels}, percentage: {self.percentage}"
         return returnString
-    
 
-    # def storeToSaveFile(self):
-    #     if self.captureStatus != self.defaultCaptureStatus:
-    #         variableDict = {"_name": self.name, "_levels": self.levels, "_captureStatus": self.captureStatus, "_percentage": self.percentage}
-    #         return variableDict
-    #     return None
-    
+class PlayerPokemon(Pokemon):
+    def __init__(self, name: str, level: int, nickName: str | None = None, moves: list = [], ability : str | None = None, heldItem: str | None = None, gender: str | None = None):
+        """pokemon object caught by player"""
+        super().__init__(name, level)
+        self._nickName = name if nickName == None else nickName
+        for move in moves:
+            self.learnedMoves(move)
+        self.ability = ability
+        self.heldItem = heldItem
+        self.gender = gender
 
 """
 example json encountered pokemon
