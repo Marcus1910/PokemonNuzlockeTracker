@@ -2,6 +2,7 @@
 *.log
 #ignore workspace file
 *.code-workspace
+venv/
 
 #ignore testing folder
 PokemonNuzlockeTracker/localTesting/*
