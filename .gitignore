@@ -3,6 +3,10 @@
 #ignore workspace file
 *.code-workspace
 venv/
+#pycache
+PokemonNuzlockeTracker/__pycache__
+PokemonNuzlockeTracker/GUI/__pycache__
+PokemonNuzlockeTracker/Logic/__pycache__
 
 #ignore testing folder
 PokemonNuzlockeTracker/localTesting/*
