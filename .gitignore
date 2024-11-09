@@ -9,10 +9,10 @@
 /venv/
 
 #apk
-/bin
+bin
 
 #buildozer
-/buildozer/*
+buildozer/*
 /.buildozer/*
 
 #pycache
