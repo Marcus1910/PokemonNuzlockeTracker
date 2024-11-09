@@ -8,7 +8,7 @@ requirements
     pip- sudo apt install pip
     buildozer
         git - sudo apt-get install git
-        java - sudo apt-get install openjdk-11-jdk
+        java - sudo apt-get install openjdk-17-jdk
         unzip - sudo apt-get install unzip
         zip - sudo apt-get install zip
         autoconf - sudo apt-get install autoconf
@@ -43,7 +43,7 @@ transfer APK to phone
 
 ERRORS
     Error trying to create APK gradle error message
-    Run *buildozer android clean* and try to build it again. If that does not work, uninstall java using *sudo apt remove openjdk-11-jdk* and install a newer version if applicable
+    Run *buildozer android clean* and try to build it again. If that does not work, uninstall java using *sudo apt remove openjdk-17-jdk* and install a newer version if applicable
 
     SDK error, remove the folder at /.buildozer/android/platform called android-sdk this is in the same directory where the buildozer folder is located. remove the android sdk folder by using *sudo rm -r android-sdk* and try the command again
 
