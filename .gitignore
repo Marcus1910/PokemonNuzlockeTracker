@@ -1,13 +1,27 @@
 #ignore all logfiles
 *.log
+
 #ignore workspace file
 *.code-workspace
-venv/
+.vscode/
+.idea/
+.DS_Store
+/venv/
+
+#apk
+/bin
+
+#buildozer
+/buildozer/*
+/.buildozer/*
+
 #pycache
-PokemonNuzlockeTracker/__pycache__
-PokemonNuzlockeTracker/PokemonNuzlockeTracker/GUI/__pycache__
-PokemonNuzlockeTracker/PokemonNuzlockeTracker/Logic/__pycache__
+/PokemonNuzlockeTracker/__pycache__
+/PokemonNuzlockeTracker/PokemonNuzlockeTracker/GUI/__pycache__
+/PokemonNuzlockeTracker/PokemonNuzlockeTracker/Logic/__pycache__
+*.pyc
+*.pyo
 
 #ignore testing folder
-PokemonNuzlockeTracker/localTesting/*
-/.buildozer/*
+/PokemonNuzlockeTracker/localTesting/*
+
