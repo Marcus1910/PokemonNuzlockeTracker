@@ -18,9 +18,10 @@ buildozer/*
 .buildozer/*
 
 #pycache
-PokemonNuzlockeTracker/__pycache__
-PokemonNuzlockeTracker/PokemonNuzlockeTracker/GUI/__pycache__
-PokemonNuzlockeTracker/PokemonNuzlockeTracker/Logic/__pycache__
+__pycache__/
+PokemonNuzlockeTracker/__pycache__/
+PokemonNuzlockeTracker/PokemonNuzlockeTracker/GUI/__pycache__/
+PokemonNuzlockeTracker/PokemonNuzlockeTracker/Logic/__pycache__/
 *.pyc
 *.pyo
 
