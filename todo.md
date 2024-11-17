@@ -1,4 +1,5 @@
 ***************************************TestRun*******************************
+!switch to db file
 
 Catch wild pokemon
 grab items
@@ -10,19 +11,18 @@ Start pokemon changes documentation
 
 GAME
     Overhaul backend object to include easier way to add observers, quite a cluster now
+        base object with addobserver?    
     give game gen attribute to read
     AREA
         Treat multiple floors as singular object or new Area object with multiple areas
-        Add id
+            db - parentArea
     TRAINERS
-        Add id
         How double battles
     ITEMS
-        add id
+        grab items, add items, dropdown for items
     POKEMON
-        add ID
-        get possible moves from json file
-        get possible abilities from json file
+        get possible moves from db -> input with automatic dropdown
+        get possible abilities from db -> input with automatic dropdown
 
 KIVY
     change when screen are added to manager

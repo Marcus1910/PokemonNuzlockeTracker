@@ -15,6 +15,9 @@ class NewGameDialog(MDDialog):
         self.content_cls = self.content
         super().__init__(**kwargs)
     
+    def open(self, *args, **kwargs):
+        super().open()
+    
     def createNewGame(self, instance) -> None:
         gameName = self.content.getInput()
         if self.screen.createNewGame(gameName):

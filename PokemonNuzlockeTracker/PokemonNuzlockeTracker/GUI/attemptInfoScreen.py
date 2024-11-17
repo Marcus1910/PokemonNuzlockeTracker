@@ -1,11 +1,10 @@
-from nuzlockeScreen import NuzlockeScreen
-from games import getPokemonSprite
-
 from kivymd.app import MDApp 
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.image import Image
 
+from .nuzlockeScreen import NuzlockeScreen
+from Logic.games import getPokemonSprite
 
 class AttemptInfoScreen(NuzlockeScreen):
     def __init__(self, screenName, **kwargs):

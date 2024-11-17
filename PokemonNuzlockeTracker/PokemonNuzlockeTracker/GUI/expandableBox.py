@@ -5,17 +5,18 @@ from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
-from transparentButton import TransparentButton
 
 from collections.abc import Callable
-
 import os
+
+from .transparentButton import TransparentButton
+from .pokemonDialog import AddPokemonDialog
+from .detailedPokemonBox import DetailedPokemonBox
+from .addDialog import ConvertEncounteredPokemonToPlayerPokemonDialog
+from .editTrainerBox import EditTrainerBox
+
 from loggerConfig import logger
-from pokemonDialog import AddPokemonDialog
-from detailedPokemonBox import DetailedPokemonBox
-from addDialog import ConvertEncounteredPokemonToPlayerPokemonDialog
-from editTrainerBox import EditTrainerBox
-from games import getPokemonSprite, getItemSprite, getTrainerSprite
+from Logic.games import getPokemonSprite, getItemSprite, getTrainerSprite
 
 
 # class ExpandableBox(BoxLayout):

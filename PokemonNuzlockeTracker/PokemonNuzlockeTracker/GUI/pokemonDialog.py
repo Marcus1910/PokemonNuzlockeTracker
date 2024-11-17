@@ -5,9 +5,9 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.selectioncontrol import MDSwitch
 
-from utilityFunctions import checkString, validateTextInput
+from Logic.utilityFunctions import checkString, validateTextInput
 from loggerConfig import logger
-from pokemon import TrainerPokemon
+# from pokemon import TrainerPokemon
 
 class AddPokemonDialog(MDDialog):
     def __init__(self, trainerObject, trainerBox, **kwargs):
@@ -40,8 +40,8 @@ class AddPokemonBox(MDBoxLayout):
         self.add_widget(self.pokemonName)
         self.add_widget(self.pokemonLevel)
     
-    def getInput(self):
-        name = self.pokemonName.text
-        level = self.pokemonLevel.text
-        pokemonObject = TrainerPokemon(name, level)
-        return pokemonObject
+    # def getInput(self):
+    #     name = self.pokemonName.text
+    #     level = self.pokemonLevel.text
+    #     pokemonObject = TrainerPokemon(name, level)
+    #     return pokemonObject

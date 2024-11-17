@@ -8,13 +8,13 @@ from kivymd.uix.selectioncontrol import MDSwitch
 from kivymd.uix.dropdownitem import MDDropDownItem
 from kivy.uix.image import Image
 
-from utilityFunctions import checkString, validateTextInput
+from Logic.utilityFunctions import checkString, validateTextInput
 from loggerConfig import logger
-from trainer import Trainer
-from item import Item
-from pokemon import PlayerPokemon
-from detailedPokemonBox import DetailedPokemonBox
-from games import getTrainerSprite, getItemSprite, getPokemonSprite
+# from trainer import Trainer
+# from item import Item
+# from pokemon import PlayerPokemon
+from .detailedPokemonBox import DetailedPokemonBox
+from Logic.games import getTrainerSprite, getItemSprite, getPokemonSprite
 
 class AddDialog(MDDialog):
     def __init__(self, **kwargs):

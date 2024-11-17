@@ -1,4 +1,3 @@
-from nuzlockeScreen import NuzlockeScreen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
@@ -6,12 +5,12 @@ from kivy.uix.spinner import Spinner
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
-from expandableBox import EncounterTypeBox
-from transparentButton import TransparentButton
+
+from .nuzlockeScreen import NuzlockeScreen
+from .expandableBox import EncounterTypeBox
+from .transparentButton import TransparentButton
 
 from loggerConfig import logger
-import games as gm
-import os
 
 class EncounterScreen(NuzlockeScreen):
     def __init__(self, screenName, **kwargs):

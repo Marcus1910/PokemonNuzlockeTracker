@@ -1,0 +1,114 @@
+if not .db exists -> insert base data
+
+Game
+	IDGame int, primary key autoincrement
+	Gen int
+	IDParentGame IDGame FK
+	IsPhysicalSpecialSplit Boolean
+	EncountersPerLocationinteger
+
+Attempt
+	IDAttempt PK
+	IDGame FK
+	AttemptNumber int 
+
+Typing
+	IDTyping string
+	Name string
+
+TypeMatchup
+	IDAttackingType FK
+	IDDefendingType FK
+	Effectiveness int
+
+TrainerType --gym leader e4 also
+	IDTrainerType PK
+	Name
+	ImageName
+	IDGender
+
+Abilities
+	IDAbility Integer
+	Description String
+	Effect String
+	Chance Integer
+
+Moves
+	IDMove Integer PK
+	IDTyping FK
+	IDCategory FK			
+	Basepower int
+	Accuracy int
+	PowerPoints Integer
+	Description String
+	Effect String
+
+Gender
+	IDGender PK String //M-F-NULL
+
+Category
+	IDCategorie String
+
+Location
+	IDLocation pk
+	IDParentLocation FK
+	Name String
+	NoBadgesRequired int
+	CanCatchPokemon comp field Game.EncountersPerLocation
+
+Item
+	IDItem
+	Name
+	Description
+
+FieldItem
+	IDFieldItem PK
+	IDItem FK
+	IDLocation K
+	Location String
+	Grabbed Boolean
+
+Trainer
+	IDTrainer PK
+	IDLocation FK
+	IDTrainerType
+	Name String
+	IDGender FK
+	IsDefeated Boolean
+	Pokedollars int
+	Optional Boolean
+
+BasePokemon
+	IDPokemon PK autoincrement
+	Name string
+	DexNO int
+	IDTyping1 FK
+	IDTyping2 FK
+	IDHeldItem
+
+Pokemon
+	IDPokemon
+	IDBasePokemon FK
+	IDAbility FK
+	Gender FK
+	Move1 FK
+	Move2 FK
+	Move3 FK
+	Move4 FK
+
+TrainerPokemon
+	IDBasePokemon
+	IsDefeated Boolean
+	IDTrainer FK
+
+WildPokemon
+	IDBasePokemon
+	IDLocation FK
+	CatchRate Integer
+	MinimumLevel int
+	MaximumLevel int
+
+PlayerPokemon
+	IDBasePokemon
+	Nickname String
+	ISDead Boolean

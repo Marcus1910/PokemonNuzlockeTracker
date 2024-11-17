@@ -6,20 +6,22 @@ from kivy.uix.boxlayout import BoxLayout
 
 import platform as platform
 
-import games as gm
-from backgroundScreen import BackgroundScreen
-from newGameDialog import NewGameDialog
-from transparentButton import TransparentButton
+from .backgroundScreen import BackgroundScreen
+from .newGameDialog import NewGameDialog
+from .transparentButton import TransparentButton
+
+from Logic.dataRetriever import DataRetriever
+import Logic.games as gm
+from Logic.games import newGameString, newAttemptString, opaque
+
 from loggerConfig import logger
-from fileRetriever import FileRetriever
-from games import MainGame
 
 class SelectGameScreen(BackgroundScreen):
     def __init__(self, operatingSystem, **kwargs):
         super().__init__(**kwargs)
-        self.game = None
-        self.attempt = None
-        self.fileRetriever = FileRetriever(operatingSystem)
+        self.GameRecord = None
+        self.attemptNumber = -1
+        self.dataRetriever = DataRetriever(operatingSystem)
 
         self.newGameDialog = NewGameDialog(self)
         
@@ -28,7 +30,8 @@ class SelectGameScreen(BackgroundScreen):
         layout.pos = self.pos
         #select the game
         gameSelection = BoxLayout(orientation = "vertical", size_hint_y= 0.05)
-        self.gameDDM = Spinner(text = "Select the game", values = self.fileRetriever.retrieveGameList())
+
+        self.gameDDM = Spinner(text = "Select the game", values = self.dataRetriever.retrieveGameList())
         self.gameDDM.bind(text = self.gameChanged)
         self.gameDDM.background_color = gm.opaque
 
@@ -40,6 +43,7 @@ class SelectGameScreen(BackgroundScreen):
         self.attemptSpinner.bind(text = self.attemptSelected)
         self.attemptSpinner.background_color = gm.opaque
         self.attemptSpinner.disabled = True
+        #self.attemptSpinner.text_autoupdate = True
 
         attemptSelection.add_widget(self.attemptSpinner)
 
@@ -65,14 +69,21 @@ class SelectGameScreen(BackgroundScreen):
 
         self.add_widget(layout)
 
-    def gameChanged(self, instance, game : str) -> None:
-        self.game = game
+    def gameChanged(self, instance, gameName : str) -> None:
         self.continueButton.disabled = True
-        if game == "New game":
-            logger.info("TODO, implement popup for a new game")
+        
+        if gameName == newGameString:
             self.newGameDialog.open()
+            # if newgame:
+            #     switch newGame
+            # else: 
             return
-        self.retrieveSaveFile(game)
+        self.GameRecord = self.dataRetriever.getGameRecordFromGameName(gameName)
+        if self.GameRecord == None:
+            logger.error("Game not valid")
+            return
+    
+        self.retrieveSaveFile(self.GameRecord.IDGame)
 
     def createNewGame(self, gameName: str) -> bool:
         """checks if game already exists otherwise creates the directories, updates the gameList"""
@@ -84,14 +95,14 @@ class SelectGameScreen(BackgroundScreen):
             self.newGameDialog.dismiss()
             return 0
         #create new game, folders and all
-        if self.fileRetriever.addNewPokemonGame(gameName):
+        if self.dataRetriever.addNewPokemonGame(gameName):
             self.gameDDM.text = self.getGameName(gameName)
             self.updateGameSpinnerValues()
             return 1
         return 0
 
     def updateGameSpinnerValues(self) -> None:
-        self.gameDDM.values = self.fileRetriever.retrieveGameList()
+        self.gameDDM.values = self.dataRetriever.retrieveGameList()
 
     def getGameName(self, gameName: str) -> str:
         """returns the name already present in the spinner values, returns given string if the game is not found, eg a new game"""
@@ -101,26 +112,34 @@ class SelectGameScreen(BackgroundScreen):
                 return name
         return gameName
 
-    def retrieveSaveFile(self, game : str) -> None:
+    def retrieveSaveFile(self, IDGame : int) -> None:
         """updates save file spinner"""
-        logger.debug(f"retrieving {game} savefiles")
-        self.attemptSpinner.values = self.fileRetriever.getSaveFilesList(game)
-        self.attemptSpinner.text = "select the attempt"
+        logger.debug(f"retrieving {IDGame} savefiles")
+        self.attemptSpinner.values = self.dataRetriever.getSaveFilesList(IDGame)
+        if len(self.attemptSpinner.values) > 1:
+            self.attemptSpinner.text = newAttemptString
+            return
+        else:
+            self.attemptSpinner.text = self.attemptSpinner.values[0]
         self.attemptSpinner.disabled = False
 
     def attemptSelected(self, instance, attempt: str) -> None:
         """verifies the attempt selected and disables continuebutton"""
+        print("updating attempt selected")
         if self.attemptSpinner.text == "select the attempt":
             return
         self.continueButton.disabled = False
         self.attempt = attempt
-        self.continueButton.text = f"{self.game}: {self.attempt}"
+        self.continueButton.text = f"{self.GameRecord.name}: {self.attemptNumber}"
 
     def startAttempt(self, instance) -> None:
         """create Game object and give it to windowManager"""
         #create Game Object, pass to new screen
-        self.manager.attempt = self.attempt
-        logger.info(f"loading {self.game} {self.attempt}")
-        game = MainGame(self.fileRetriever, self.game, self.attempt)
-        self.manager.startPokemonGame(game)
+        # self.manager.attemptRecord = self.attempt
+        logger.info(f"loading {self.GameRecord.name} {self.attemptNumber}")
+        attemptRecord = self.dataRetriever.getAttemptRecord(self.attemptNumber, self.GameRecord.IDgame)
+        if attemptRecord == None:
+            logger.error("Attempt not found")
+            return
+        self.manager.startPokemonGame(attemptRecord, self.dataRetriever)
         

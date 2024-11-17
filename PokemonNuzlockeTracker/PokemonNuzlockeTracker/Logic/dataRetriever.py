@@ -2,21 +2,32 @@ import os
 import shutil
 from loggerConfig import logicLogger as logger
 import time
+from contextlib import contextmanager
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
-class FileRetriever():
+from .databaseModels import Game, Attempt, Location
+from .databaseModels.game import newGameString
+
+class DataRetriever():
     def __init__(self, operatingSystem):
-        """Fileretriever takes the responsibility to move, copy, create and retrieve folders and correctly place them so the game object can adjust the files"""
+        """Dataretriever is responsible for all data transactions"""
         self.gameFolder = os.path.join(os.path.dirname(os.getcwd()), "games")
         #forward declaration
         self._gameNameFolder = None
         self._dataFolder = None
         self._saveFilesFolder = None
-        
+        self.databasePath = os.path.join("sqlite:///" + os.path.dirname(os.path.dirname(os.getcwd())),"mydb.db" )
+        self.databaseEngine = create_engine(self.databasePath, echo = True)
+        self.Session = sessionmaker(bind = self.databaseEngine)
+
         if not self.validateDirectory(self.gameFolder):
             logger.critical(f"Could not find own internal storage for games, exiting in 10 seconds")
             time.sleep(10)
             exit()
+        
+        #check database validity
 
         #boolean if the internal storage is accessible, now used for Android
         self.internalStorage = False
@@ -40,7 +51,18 @@ class FileRetriever():
             logger.info("did not detect Android, assuming Windows")
         
         #set folder variables correctly
-
+        
+    @contextmanager
+    def databaseSession(self):
+        session = self.Session()
+        try:
+            yield session
+            session.commit()
+        except Exception:
+            session.rollback()
+            raise
+        finally:
+            session.close()
 
     @property
     def gameNameFolder(self):
@@ -54,17 +76,71 @@ class FileRetriever():
     def saveFilesFolder(self):
         return self._saveFilesFolder
 
-    def retrieveGameList(self, internal: bool = False):
+    def retrieveGameList(self):
         """returns a list of the games available with an option to create a new game"""
-        #TODO read from internal storage as well? no need to copy everything at startup
-        #walks down the directory for other directories, retrieves the names and puts them in a list
-        games = [gameName for gameName in next(os.walk(self.gameFolder))[1] if gameName != "Generic"]
-        #no games found
-        if not games:
-            return ["New game"]
-        games.append("New game")
+        # with self.databaseSession() as session:
+        #     games = [game.name for game in session.query(Game).all()]
+        #     games.append(newGameString)
+        #     return game
+        games = []
+        with self.databaseSession() as session:
+            games = [game.name for game in session.query(Game).all()]
+            
+        games.append(newGameString)
         return games
 
+    def getGameRecordFromGameName(self, GameName: str) -> Game:
+        # with self.databaseSession() as session:
+        #     game = session.query(Game).filter(Game.name == GameName).first()
+        #     return game
+        session = self.Session()
+        try:
+            game = session.query(Game).filter(Game.name == GameName).first() 
+        finally:
+            session.close
+        return game
+
+    def getSaveFilesList(self, IDGame: int) -> list[str]:
+        """returns a list of the attempts made with a 'New attempt' option. Should be called after the game is selected"""
+        #creates all folders if they don't already exist
+        #TODO wanneer nieuwe game wordt aangemaakt of wanneer validatie data
+        #self.setFolderVariables(gameName)
+        #self.createGameFolders(gameName)
+        saveFiles = []
+        
+        with self.databaseSession() as session:
+            saveFiles = ["attempt " + str(saveFile.attemptNumber) for saveFile in session.query(Attempt).filter(Attempt.IDGame == IDGame).all()]
+            
+        saveFiles.append("New attempt")
+        return saveFiles
+
+    def getAttemptRecord(self, attemptNumber: int, IDGame: int):
+        attempt = None
+        session = self.Session()
+        try:
+            attempt = session.query(Attempt).filter(Attempt.attemptNumber == attemptNumber).filter(Attempt.IDGame == IDGame).first()
+        finally:
+            session.close()
+        return attempt
+
+
+    def getLocationRecord(self, IDLocation: int) -> Location:
+        session = self.Session()
+        try:
+            locationRecord = session.query(Location).filter(Location.IDGame == IDLocation).first()
+        finally:
+            session.close()
+        return locationRecord
+
+    def getLocationNames(self, IDGame: int) -> list[str]:
+        locationNames = []
+        session = self.Session()
+        try:
+            locationNames = [location.name for location in session.query(Location).filter(Location.IDGame == IDGame)]
+        finally:
+            session.close()
+        return locationNames
+        
     def validateDirectory(self, folder : str) -> bool:
         """checks if the directory exists returns 1 on success, 0 on failure"""
         if not os.path.isdir(folder):
@@ -82,22 +158,7 @@ class FileRetriever():
         logger.info(f"found path: {saveFilePath}")
         return saveFilePath
 
-    def getSaveFilesList(self, gameName : str) -> list[str]:
-        """returns a list of the attempts made with a 'New attempt' option. Should be called after the game is selected"""
-        #creates all folders if they don't already exist
-        self.setFolderVariables(gameName)
-        self.createGameFolders(gameName)
-        saveFiles = []
-        if self.validateDirectory(self._saveFilesFolder):
-            #get every file, [0] because it returns a list inside of a list
-            saveFiles = [x[2] for x in os.walk(self._saveFilesFolder)][0]
-            #keep files with attempt in its name, and remove the '.txt'
-            saveFiles = [x[:-4] for x in saveFiles if("attempt" in x)]
-        else:
-            logger.error(f"could not find savefilefolder: {self._saveFilesFolder}") 
-        #give the option to make a new saveFile
-        saveFiles.append("New attempt")
-        return saveFiles
+
 
     def moveAllFiles(self):
         """moves all files from internal storage to program folder, depending on OS"""

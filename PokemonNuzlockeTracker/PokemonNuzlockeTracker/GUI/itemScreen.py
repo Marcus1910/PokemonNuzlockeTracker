@@ -2,10 +2,10 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scrollview import ScrollView
 
-from nuzlockeScreen import NuzlockeScreen
-from expandableBox import ItemBox
-from transparentButton import TransparentButton
-from addDialog import AddItemDialog
+from .nuzlockeScreen import NuzlockeScreen
+from .expandableBox import ItemBox
+from .transparentButton import TransparentButton
+from .addDialog import AddItemDialog
 
 from loggerConfig import logger
 

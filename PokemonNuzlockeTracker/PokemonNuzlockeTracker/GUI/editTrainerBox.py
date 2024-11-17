@@ -1,13 +1,15 @@
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.image import Image
-from transparentButton import TransparentButton
-from deleteDialog import DeleteTrainerPopup
-from utilityFunctions import checkString, validateTextInput
+from .transparentButton import TransparentButton
+from .deleteDialog import DeleteTrainerPopup
+
+from Logic.utilityFunctions import checkString, validateTextInput
+from Logic.games import getTrainerSprite
 
 from loggerConfig import logger
-from trainer import Trainer
-from games import getTrainerSprite
+# from trainer import Trainer
+
 
 class EditTrainerBox(BoxLayout): 
     def __init__(self, trainerObject, *args, **kwargs):

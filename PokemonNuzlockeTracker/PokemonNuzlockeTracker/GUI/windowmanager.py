@@ -2,47 +2,63 @@ from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager
 from kivy.clock import Clock
 
-from trainerScreen import TrainerScreen
-from attemptInfoScreen import AttemptInfoScreen
-from encounterScreen import EncounterScreen
-from itemScreen import ItemScreen
-from pokemonInfoScreen import PokemonInfoScreen
-
 import os
 from pympler import asizeof
 import subprocess
 
+from .trainerScreen import TrainerScreen
+from .attemptInfoScreen import AttemptInfoScreen
+from .encounterScreen import EncounterScreen
+from .itemScreen import ItemScreen
+from .pokemonInfoScreen import PokemonInfoScreen
+
 from loggerConfig import logger
-import games as gm
-from trainer import Trainer
-from pokemon import TrainerPokemon
+import Logic.games as gm
 
 class WindowManager(ScreenManager):
 
     def __init__(self, os, **kwargs):
         super().__init__(**kwargs)
         self.os = os
-        #global game object
-        self._gameObject = None
-        self.areaList = None
-        #gets replaced with the area object as soon as it is chosen
-        self._currentArea = None
+
+        self._attemptRecord = None
+        self._locationList = []
+        self._locationRecord = None
 
         self._screenNumber = 0
         self.screenList = []
-
-        Clock.schedule_interval(self.updateObject, 5)
-
+        # Clock.schedule_interval(self.updateObject, 5)
 
     @property
-    def gameObject(self):
-        return self._gameObject
+    def attemptRecord(self):
+        return self._attemptRecord
     
-    @gameObject.setter
-    def gameObject(self, gameObject):
-        self._gameObject = gameObject
-        self.areaList = self._gameObject.areaList
-        MDApp.get_running_app().game = self._gameObject
+    @attemptRecord.setter
+    def attemptRecord(self, attemptRecord):
+        self._attemptRecord = attemptRecord
+        self.refreshLocationList()
+        #MDApp.get_running_app().game = self._gameObject
+
+    @property
+    def locationRecord(self):
+        return self._locationRecord
+    
+    @locationRecord.setter
+    def locationRecord(self, locationName):
+        """uses the locationName and IDGame to get the correct locationRecord"""
+        self.fileRetriever.getLocationRecord(locationName, self.attemptRecord.IDGame)  
+    
+    @property
+    def locationList(self):
+        return self._locationList
+    
+    @locationList.setter
+    def locationList(self, locationList: list[str]):
+        self._locationList = locationList
+    
+    def refreshLocationList(self):
+        self.locationList = self.fileRetriever.getLocationNames(self.attemptRecord.IDGame)
+        
     
     @property
     def screenNumber(self):
@@ -57,34 +73,9 @@ class WindowManager(ScreenManager):
         screenNumber = self.screenNumber % len(self.screenList)
         self.current = self.screenList[screenNumber].name
 
-    @property
-    def currentArea(self):
-        return self._currentArea
-    
-    @currentArea.setter
-    def currentArea(self, newAreaName):
-        """function expects a name, retrieves the AreaObject from the corresponding name"""
-        for areaObject in self.areaList:
-            if areaObject.name == newAreaName:
-                self._currentArea = areaObject
-                logger.debug(f"found {newAreaName} in areaList")
-                break
-        else:
-            logger.error(f"{newAreaName} could not be loaded, not found in areaList")
-            return
-        logger.debug(f"{self._currentArea.name} Object loaded in manager")
-
-    def catchPokemon(self, pokemonObject) -> bool:
-        return self.gameObject.catchPokemon(pokemonObject)
-
-    def releasePokemon(self, pokemonObject) -> bool:
-        return self.gameObject.releasePokemon(pokemonObject)
-        
-    def removePokemon(self, pokemonObject) -> bool:
-        return self.gameObject.removePokemon(pokemonObject)
-
-    def startPokemonGame(self, gameObject):
-        self.gameObject = gameObject
+    def startPokemonGame(self, attemptRecord, fileRetriever):
+        self.fileRetriever = fileRetriever
+        self.attemptRecord = attemptRecord
         attemptInfoScreen = AttemptInfoScreen(name = "attemptInfoScreen", screenName = "Info on current attempt")
         trainerScreen = TrainerScreen(name = "trainerScreen", screenName = "Trainer Screen")
         encounterScreen = EncounterScreen(name = "encounterScreen", screenName = "Encounter Screen")
@@ -107,10 +98,10 @@ class WindowManager(ScreenManager):
         self.screenList = []
         self.current = "selectGameScreen"
         #bypass setter as we don't want to update the current screen
-        self._currentArea = None
+        self._locationRecord = None
         self._screenNumber = 0
-        self._gameObject = None
-        self.areaList = None
+        self._attemptRecord = None
+        self.locationList = []
     
     # Function to get memory usage of the current process
     def get_memory_usage(self):

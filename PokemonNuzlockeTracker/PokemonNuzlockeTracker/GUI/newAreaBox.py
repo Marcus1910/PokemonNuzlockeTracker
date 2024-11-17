@@ -1,9 +1,10 @@
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
-from transparentButton import TransparentButton
+from .transparentButton import TransparentButton
+from .numberInput import NumberInput
 from loggerConfig import logger
-from numberInput import NumberInput
+
 
 class NewAreaBox(BoxLayout):
     def __init__(self, confirmCallback, **kwargs):

@@ -13,8 +13,8 @@ def changePath():
     LogicPath = os.path.join(mainPath, "Logic")
 
     #set the path and working directory to the folder where all the GUI files are so importing goes 'smoothly'
-    sys.path.append(GUIPath)
-    sys.path.append(LogicPath)
+    sys.path.append(mainPath)
+    #sys.path.append(LogicPath)
     os.chdir(mainPath)
 
 def getOS() -> str:
@@ -41,9 +41,9 @@ if __name__ == "__main__":
 
     #editor doesn't recognize it, but it is still a valid import because of the path.append(GUIPath)
     if args.cli:
-        from CLI import CLI
+        from Logic.CLI import CLI
         CLI(operatingSystem)
     else:
-        from trackerApp import TrackerApp
+        from GUI.trackerApp import TrackerApp
         TrackerApp(operatingSystem).run()
 

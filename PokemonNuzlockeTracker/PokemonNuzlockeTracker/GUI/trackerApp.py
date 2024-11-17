@@ -1,8 +1,8 @@
 from kivymd.app import MDApp
 from kivy.core.window import Window
 
-from windowmanager import WindowManager
-from selectGameScreen import SelectGameScreen
+from .windowmanager import WindowManager
+from .selectGameScreen import SelectGameScreen
 
 from loggerConfig import logger
 

@@ -6,19 +6,19 @@ from kivy.uix.popup import Popup
 from kivymd.uix.swiper import MDSwiper
 # from kivymd.uix.navigationbar import MDNavigationBar, MDNavigationItem, MDNavigationItemLabel
 
-from transparentButton import TransparentButton
-from backgroundScreen import BackgroundScreen
-from newAreaBox import NewAreaBox
+from .transparentButton import TransparentButton
+from .backgroundScreen import BackgroundScreen
+from .newAreaBox import NewAreaBox
 from loggerConfig import logger
-import games as gm
+from Logic.databaseModels.game import newLocationString, chooseLocationString, standardColor, opaque
 
 class NuzlockeScreen(BackgroundScreen):
     """Parent screen, adds the name of the screen at the top, add own widgets into screenBox which is a boxLayout."""
     
     def __init__(self, screenName, **kwargs):
         super().__init__(**kwargs)
-        self.areaSpinnerString = "choose an area"
-        self.standardColor = gm.standardColor
+        
+        self.standardColor = standardColor
         self.entered = False
 
         self.layout = BoxLayout(orientation= "vertical")
@@ -29,8 +29,8 @@ class NuzlockeScreen(BackgroundScreen):
         self.screenBox = BoxLayout(orientation = "vertical", size_hint_y = 0.92)
 
         self.areaSpinnerBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.04)
-        self.areaSpinner = Spinner(text = self.areaSpinnerString, values = ["new Area"], size_hint_x = 0.85)
-        self.areaSpinner.background_color = gm.opaque
+        self.areaSpinner = Spinner(text = chooseLocationString, values = ["new Area"], size_hint_x = 0.85)
+        self.areaSpinner.background_color = opaque
         self.areaSpinner.bind(text = self.areaChanged)
 
         # self.btnbox = MDNavigationBar(MDNavigationItem(MDNavigationItemLabel(text = "hallo")), size_hint_y=0.1)
@@ -55,47 +55,46 @@ class NuzlockeScreen(BackgroundScreen):
         logger.debug("editing Area, TODO")
     
     def addArea(self, name, badge):
-        if self.manager.gameObject.addArea(name, badge):
-            #change spinner text to new Area, area object follows due to areaChanged
-            self.areaSpinner.text = name
-            #reload area spinner
-            self.updateAreaSpinner()
-            return 1
+        # if self.manager.gameObject.addArea(name, badge):
+        #     #change spinner text to new Area, area object follows due to areaChanged
+        #     self.areaSpinner.text = name
+        #     #reload area spinner
+        #     self.updateAreaSpinner()
+        #     return 1
         return 0
     
     def setDefaultArea(self):
         """set area to default is current Area is None"""
-        if self.manager.currentArea == None:
+        if self.manager.locationRecord == None:
             logger.debug("setting area to default")
-            self.areaSpinner.text = self.areaSpinnerString
+            self.areaSpinner.text = chooseLocationString
             return
-        self.areaSpinner.text = self.manager.currentArea.name
+        self.areaSpinner.text = self.manager.locationRecord.name
         logger.debug("popup skipped and area is valid, changing spinner text to correct text")
     
     def updateAreaSpinner(self):
         """updates the values that the spinner uses"""
-        routeList = [route.name for route in self.manager.areaList]
-        routeList.insert(0, gm.newAreaString)
-        self.areaSpinner.values = routeList
+        self.manager.refreshLocationList()
+        self.areaSpinner.values = self.manager.locationList
     
     def on_pre_enter(self) -> bool:
         """adjusts areaSpinner text to area currently selected, returns 0 if area == None"""
         self.updateAreaSpinner()
-        if self.manager.currentArea == None:
+        if self.manager.locationRecord == None:
             logger.debug("No area selected")
             return 0
-        self.areaSpinner.text = self.manager.currentArea.name
+        self.areaSpinner.text = self.manager.locationRecord.name
         return 1
 
     def areaChanged(self, spinner, text) -> bool:
         """text is the areaName"""
         #gets set to default when popup is canceled, otherwise crashes if the areaObject is None
         # print(self.screenBox.size)
-        if text == self.areaSpinnerString or self.manager.gameObject == None:
+        if text == self.areaSpinnerString or self.manager.locationRecord == None:
             logger.debug("default string for Area, or area invalid not doing anything")
             return 0
         
-        if text == gm.newAreaString:
+        if text == newLocationString:
             logger.debug("creating popup to add new Area")
             self.editAreaButton.disabled = True
             newAreaBox = NewAreaBox(orientation = "vertical", confirmCallback = self.addArea)
@@ -108,7 +107,7 @@ class NuzlockeScreen(BackgroundScreen):
             areaPopup.open()
             return 0
         
-        self.manager.currentArea = text
+        self.manager.locationRecord = text
         self.editAreaButton.disabled = False
         logger.info(f"currentArea changed to {text}")
         return 1

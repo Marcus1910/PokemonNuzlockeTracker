@@ -8,6 +8,8 @@ from fileRetriever import FileRetriever
 
 class CLI():
    def __init__(self, operatingSystem):
+      logger.error("does not work currently")
+      exit()
       fileRetriever = FileRetriever(operatingSystem)
       #set fileretriever variables correctly, TODO update earlier
       gameName = "SacredGold"

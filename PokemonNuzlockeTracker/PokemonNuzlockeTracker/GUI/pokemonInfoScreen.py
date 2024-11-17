@@ -1,4 +1,4 @@
-from nuzlockeScreen import NuzlockeScreen
+from .nuzlockeScreen import NuzlockeScreen
 
 class PokemonInfoScreen(NuzlockeScreen):
     def __init__(self, screenName, **kwargs):

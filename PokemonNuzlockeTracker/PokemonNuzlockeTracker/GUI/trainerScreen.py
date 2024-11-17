@@ -1,17 +1,18 @@
-from nuzlockeScreen import NuzlockeScreen
-from addDialog import AddTrainerDialog
-from loggerConfig import logger
-from expandableBox import ExpandableTrainerBox
-from transparentButton import TransparentButton
-
 from kivy.core.window import Window
-
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scrollview import ScrollView
-
-from games import pokemonSprites, trainerSprites, itemSprites
 import os
+
+from .nuzlockeScreen import NuzlockeScreen
+from .addDialog import AddTrainerDialog
+from .expandableBox import ExpandableTrainerBox
+from .transparentButton import TransparentButton
+
+from loggerConfig import logger
+
+from Logic.games import pokemonSprites, trainerSprites, itemSprites
+
 
 class TrainerScreen(NuzlockeScreen):
     def __init__(self, screenName, **kwargs):

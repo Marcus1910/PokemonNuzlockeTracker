@@ -4,16 +4,15 @@ from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.image import Image
 from loggerConfig import logger
-from transparentButton import TransparentButton
-from deleteDialog import DeleteTrainerPokemonPopup
+from .transparentButton import TransparentButton
+from .deleteDialog import DeleteTrainerPokemonPopup
 # from popup import RemovePokemonPopup
-from games import pokemonSprites, trainerSprites, itemSprites
-from utilityFunctions import validateTextInput
-from pokemon import TrainerPokemon
+from Logic.games import getItemSprite, getPokemonSprite, getTrainerSprite
+from Logic.utilityFunctions import validateTextInput
+#from pokemon import TrainerPokemon
 import os
 
 class DetailedPokemonBox(BoxLayout):
-    pokemonSpritesFolder = pokemonSprites
     def __init__(self, pokemonObject, *args, **kwargs):
         """DetailedPokemonBox used to give more info about a pokemon, buildlayout to build it, if given an pokemonObject it will fill it"""
         super().__init__(*args, **kwargs)
@@ -42,7 +41,7 @@ class DetailedPokemonBox(BoxLayout):
         self.nameLevelBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.15)
         #add pokemon image
         self.imageBox = BoxLayout(size_hint_y = 0.75)
-        self.pokemonImage = Image(source = os.path.join(self.pokemonSpritesFolder, "0.png"), pos_hint = {"top": 1})
+        self.pokemonImage = Image(source = getPokemonSprite("0.png"), pos_hint = {"top": 1})
         self.pokemonImage.fit_mode = "contain"
 
         self.nameImageBox = BoxLayout(orientation = "vertical", size_hint_x = 0.4)
