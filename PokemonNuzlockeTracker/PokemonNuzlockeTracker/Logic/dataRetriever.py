@@ -7,25 +7,46 @@ from contextlib import contextmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from .databaseModels import Game, Attempt, Location
-from .databaseModels.game import newGameString
+
+from .databaseModels import Base
+from .databaseModels.game import Game, addGame, getGameFromGameName
+from .databaseModels.attempt import Attempt, addAttempt, getAttempt
+from .databaseModels.location import Location, getLocations, getLocationRecordByName
+from .databaseModels.trainer import Trainer, getTrainers, getTrainerRecordByName, getIDTrainerPokemon
+from Logic.databaseModels.typing import fillTypeTable, addTyping
+from Logic.games import newGameString, newAttemptString
+from Logic.reader import Reader
 
 class DataRetriever():
     def __init__(self, operatingSystem):
         """Dataretriever is responsible for all data transactions"""
+        
         self.gameFolder = os.path.join(os.path.dirname(os.getcwd()), "games")
         #forward declaration
         self._gameNameFolder = None
         self._dataFolder = None
         self._saveFilesFolder = None
         self.databasePath = os.path.join("sqlite:///" + os.path.dirname(os.path.dirname(os.getcwd())),"mydb.db" )
-        self.databaseEngine = create_engine(self.databasePath, echo = True)
+        
+        rePopulateDatabase = False
+        
+        recreateDB = not self.validateDatabasePath(self.getTrueDBPath(self.databasePath))
+        if recreateDB:
+            logger.critical("Not able to find database file, recreating it")
+            
+        self.databaseEngine = create_engine(self.databasePath)
+        if recreateDB:
+            Base.metadata.create_all(self.databaseEngine)
+        
         self.Session = sessionmaker(bind = self.databaseEngine)
+        
+        if rePopulateDatabase:
+            self.insertBasePokemonTypes()
 
-        if not self.validateDirectory(self.gameFolder):
-            logger.critical(f"Could not find own internal storage for games, exiting in 10 seconds")
-            time.sleep(10)
-            exit()
+        # if not self.validateDirectory(self.gameFolder):
+        #     logger.critical(f"Could not find own internal storage for games, exiting in 10 seconds")
+        #     time.sleep(10)
+        #     exit()
         
         #check database validity
 
@@ -37,32 +58,39 @@ class DataRetriever():
         self.internalGameStoragePath = None
         self.operatingSystem = operatingSystem
 
-        #call correct functions to setup filesystem inside program correctly or continue with leftover files
-        if self.operatingSystem == "Android":
-            self.internalStoragePath = self.getStoragePath()
-            logger.info(f"storage phone: {self.internalStoragePath}")
-            # self.printDirectory(self.internalStoragePath)
-            if self.validateDirectory(self.internalStoragePath):
-                self.internalGameStoragePath = self.getInternalGameStoragePath()
-                self.moveAllFiles()
-            else:
-                logger.warning(f"could not access internal storage, has it been removed?\ncontinuing with local files inside program")
-        else:
-            logger.info("did not detect Android, assuming Windows")
+        # #call correct functions to setup filesystem inside program correctly or continue with leftover files
+        # if self.operatingSystem == "Android":
+        #     self.internalStoragePath = self.getStoragePath()
+        #     logger.info(f"storage phone: {self.internalStoragePath}")
+        #     # self.printDirectory(self.internalStoragePath)
+        #     if self.validateDirectory(self.internalStoragePath):
+        #         self.internalGameStoragePath = self.getInternalGameStoragePath()
+        #         self.moveAllFiles()
+        #     else:
+        #         logger.warning(f"could not access internal storage, has it been removed?\ncontinuing with local files inside program")
+        # else:
+        #     logger.info("did not detect Android, assuming Windows")
         
         #set folder variables correctly
         
     @contextmanager
     def databaseSession(self):
+        """Use for a single unit of work, use refresh before return object so it is fully loaded in memory, only after an insert"""
         session = self.Session()
         try:
             yield session
             session.commit()
-        except Exception:
+        except Exception as e:
             session.rollback()
-            raise
+            logger.error(f"exception occurred: {e}")
         finally:
             session.close()
+    
+    def readData(self, IDGame):
+        with self.databaseSession() as session:
+            reader = Reader(IDGame, session)
+            reader.readBasePokedexData(session)
+            session.commit()
 
     @property
     def gameNameFolder(self):
@@ -75,13 +103,21 @@ class DataRetriever():
     @property
     def saveFilesFolder(self):
         return self._saveFilesFolder
-
+    
+    def getTrueDBPath(self, databasePath: str):
+        """function that removes sqlite:/// from the databasepath"""
+        return databasePath.replace("sqlite:///", "", 1)
+    
+    def validateDatabasePath(self, databasePath: str):
+        return os.path.exists(databasePath)
+    
+    def gameExists(self, gameName: str) -> bool:
+        with self.databaseSession() as session:
+            exists = False if session.query(Game).filter(Game.name == gameName).first() == None else True
+        return exists
+    
     def retrieveGameList(self):
         """returns a list of the games available with an option to create a new game"""
-        # with self.databaseSession() as session:
-        #     games = [game.name for game in session.query(Game).all()]
-        #     games.append(newGameString)
-        #     return game
         games = []
         with self.databaseSession() as session:
             games = [game.name for game in session.query(Game).all()]
@@ -89,15 +125,24 @@ class DataRetriever():
         games.append(newGameString)
         return games
 
-    def getGameRecordFromGameName(self, GameName: str) -> Game:
-        # with self.databaseSession() as session:
-        #     game = session.query(Game).filter(Game.name == GameName).first()
-        #     return game
-        session = self.Session()
-        try:
-            game = session.query(Game).filter(Game.name == GameName).first() 
-        finally:
-            session.close
+    def getGameRecordFromGameName(self, gameName: str) -> Game | None:
+        with self.databaseSession() as session:
+            game = getGameFromGameName(session, gameName)
+            if not game:
+                return None
+            session.expunge(game)
+        return game
+    
+    def addGame(self, gameName: str, gameGen: int) -> Game:
+        """checks if game already exists otherwise creates game and needed directories"""
+        if self.gameExists(gameName):
+            logger.error(f"{gameName} already exists")
+            return None
+        
+        with self.databaseSession() as session:
+            game = addGame(session, gameName, gameGen)
+            session.refresh(game)
+            session.expunge(game)
         return game
 
     def getSaveFilesList(self, IDGame: int) -> list[str]:
@@ -111,35 +156,85 @@ class DataRetriever():
         with self.databaseSession() as session:
             saveFiles = ["attempt " + str(saveFile.attemptNumber) for saveFile in session.query(Attempt).filter(Attempt.IDGame == IDGame).all()]
             
-        saveFiles.append("New attempt")
+        saveFiles.append(newAttemptString)
         return saveFiles
 
-    def getAttemptRecord(self, attemptNumber: int, IDGame: int):
-        attempt = None
-        session = self.Session()
-        try:
-            attempt = session.query(Attempt).filter(Attempt.attemptNumber == attemptNumber).filter(Attempt.IDGame == IDGame).first()
-        finally:
-            session.close()
+    def newAttempt(self, IDGame: int) -> Attempt:
+        with self.databaseSession() as session:
+            attempt = addAttempt(session, IDGame)
+            session.refresh(attempt)
+            session.expunge(attempt)
         return attempt
-
-
-    def getLocationRecord(self, IDLocation: int) -> Location:
-        session = self.Session()
-        try:
-            locationRecord = session.query(Location).filter(Location.IDGame == IDLocation).first()
-        finally:
-            session.close()
+    
+    def getAttemptRecord(self, IDGame: int, attemptNumber: int) -> Attempt | None:
+        attempt = None
+        with self.databaseSession() as session:
+            attempt = getAttempt(session, IDGame, attemptNumber)
+            session.refresh(attempt)
+            session.expunge(attempt)
+        return attempt
+        
+    def getLocationRecord(self, locationName: str, IDGame: int) -> Location:
+        with self.databaseSession() as session:
+            locationRecord = getLocationRecordByName(session, locationName, IDGame)
+            session.refresh(locationRecord)
+            session.expunge(locationRecord)
         return locationRecord
 
-    def getLocationNames(self, IDGame: int) -> list[str]:
-        locationNames = []
-        session = self.Session()
-        try:
-            locationNames = [location.name for location in session.query(Location).filter(Location.IDGame == IDGame)]
-        finally:
-            session.close()
-        return locationNames
+    def getLocationNames(self, gameRecord: Game) -> list[str]:
+        with self.databaseSession() as session:
+            locationList = getLocations(session, gameRecord)
+        return locationList
+    
+    def getTrainerNames(self, locationRecord: Location) -> list[str]:
+        with self.databaseSession() as session:
+            trainerNames = getTrainers(session, locationRecord)
+        return trainerNames
+    
+    def getTrainerRecordByName(self, locationRecord: Location, trainerName: str):
+        with self.databaseSession() as session:
+            trainerRecord = getTrainerRecordByName(session, locationRecord, trainerName)
+            session.refresh(trainerRecord)
+            session.expunge(trainerRecord)
+        return trainerRecord
+
+    def getIDTrainerPokemon(self, IDTrainer: int, IDLocation: int):
+        """returns a list of all the IDS of the trainerpokemon that trainer has"""
+        with self.databaseSession() as session:
+            IDList = getIDTrainerPokemon(session, IDTrainer, IDLocation)
+        return IDList
+            
+    
+    def updateRecord(self, record):
+        with self.databaseSession() as session:
+            session.merge(record)
+            session.commit()
+        
+    def insertRecord(self, record) -> bool:
+        success = True
+        with self.databaseSession() as session:
+            session.add(record)
+            try:
+                session.commit()
+            except Exception as e:
+                logger.error(f"error during insert: {e}")
+                success = False
+            finally:
+                return success
+    
+    def insertBasePokemonTypes(self):
+        typings = ["Fire", "Water", "Dragon", "Grass", "Flying", "Ice", "Rock", "Ground", "Poison", "Bug", "Psychic", "Dark", "Fairy", "Steel", "electric", "Ghost", "Fighting", "Normal", "Typeless"]
+        with self.databaseSession() as session:
+            fillTypeTable(session, typings)
+            session.commit()
+    
+    def insertType(self, IDTyping):
+        with self.databaseSession() as session:
+            addTyping(session, IDTyping)
+            session.commit()
+
+                
+                
         
     def validateDirectory(self, folder : str) -> bool:
         """checks if the directory exists returns 1 on success, 0 on failure"""
@@ -304,6 +399,12 @@ class DataRetriever():
             logger.info(f"creating {path}")
             os.mkdir(path)
 
+    def printFiles(self, path):
+        for filename in os.listdir(path):
+            file_path = os.path.join(path, filename)
+            if os.path.isfile(file_path):  # Check if it's a file
+                print(filename)
+            
     def printDirectory(self, path: str):
         """prints all files and subdirectories from given path"""
         if not os.path.isdir(path) or path == None:
@@ -326,14 +427,7 @@ class DataRetriever():
         #remove 'new' option
         return 1 if gameName in self.retrieveGameList()[:-1] else 0
 
-    def addNewPokemonGame(self, gameName: str) -> bool:
-        """checks if game already exists otherwise creates game and needed directories"""
-        if self.checkGameExists(gameName):
-            logger.error(f"{gameName} already exists")
-            return 0
-        if not self.createGameFolders(gameName):
-            return 0
-        return 1
+
     
     def createNewSaveFile(self, gameName: str, attempt: str) -> bool:
         self.setFolderVariables(gameName)

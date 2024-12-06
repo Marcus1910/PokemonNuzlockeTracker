@@ -1,8 +1,8 @@
 from kivymd.app import MDApp
 from kivy.core.window import Window
 
-from .windowmanager import WindowManager
-from .selectGameScreen import SelectGameScreen
+from GUI.windowmanager import WindowManager
+from GUI.selectGameScreen import SelectGameScreen
 
 from loggerConfig import logger
 
@@ -11,6 +11,7 @@ class TrackerApp(MDApp):
     def __init__(self, operatingSystem, **kwargs):
         super().__init__(**kwargs)
         self.operatingSystem = operatingSystem
+        self.dataRetriever = None
 
     def build(self):
         #use OS to change view to that of android

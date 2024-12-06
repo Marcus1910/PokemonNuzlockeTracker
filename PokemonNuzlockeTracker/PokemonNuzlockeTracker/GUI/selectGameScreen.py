@@ -6,13 +6,13 @@ from kivy.uix.boxlayout import BoxLayout
 
 import platform as platform
 
-from .backgroundScreen import BackgroundScreen
-from .newGameDialog import NewGameDialog
-from .transparentButton import TransparentButton
+from GUI.backgroundScreen import BackgroundScreen
+from GUI.Dialog.newGameDialog import NewGameDialog
+from GUI.transparentButton import TransparentButton
 
 from Logic.dataRetriever import DataRetriever
 import Logic.games as gm
-from Logic.games import newGameString, newAttemptString, opaque
+from Logic.games import newGameString, selectGameString, selectAttemptString, newAttemptString, opaque
 
 from loggerConfig import logger
 
@@ -31,7 +31,7 @@ class SelectGameScreen(BackgroundScreen):
         #select the game
         gameSelection = BoxLayout(orientation = "vertical", size_hint_y= 0.05)
 
-        self.gameDDM = Spinner(text = "Select the game", values = self.dataRetriever.retrieveGameList())
+        self.gameDDM = Spinner(text = selectGameString, values = self.dataRetriever.retrieveGameList())
         self.gameDDM.bind(text = self.gameChanged)
         self.gameDDM.background_color = gm.opaque
 
@@ -39,7 +39,7 @@ class SelectGameScreen(BackgroundScreen):
         
         #select attempt, gets filled as soon as the gameselection is filled in
         attemptSelection = BoxLayout(orientation= "vertical", size_hint_y= 0.05)
-        self.attemptSpinner = Spinner(text = "Select Attempt")
+        self.attemptSpinner = Spinner(text = selectAttemptString)
         self.attemptSpinner.bind(text = self.attemptSelected)
         self.attemptSpinner.background_color = gm.opaque
         self.attemptSpinner.disabled = True
@@ -69,37 +69,47 @@ class SelectGameScreen(BackgroundScreen):
 
         self.add_widget(layout)
 
-    def gameChanged(self, instance, gameName : str) -> None:
+    def gameChanged(self, instance, gameName: str) -> None:
         self.continueButton.disabled = True
         
         if gameName == newGameString:
             self.newGameDialog.open()
-            # if newgame:
-            #     switch newGame
-            # else: 
             return
+        
         self.GameRecord = self.dataRetriever.getGameRecordFromGameName(gameName)
+        print(self.GameRecord)
         if self.GameRecord == None:
             logger.error("Game not valid")
             return
-    
+        
         self.retrieveSaveFile(self.GameRecord.IDGame)
 
     def createNewGame(self, gameName: str) -> bool:
         """checks if game already exists otherwise creates the directories, updates the gameList"""
-        spinnerGame = self.getGameName(gameName)
+        newGameName = self.getGameName(gameName)
+        
         #check if game is already present
-        if spinnerGame != gameName:
-            logger.error(f"{gameName} is already a game but has different capitalization")
-            self.gameDDM.text = spinnerGame
+        if self.gameExists(newGameName):
+            logger.info(f"{gameName} is already a game")
+            self.gameDDM.text = newGameName
             self.newGameDialog.dismiss()
             return 0
+            
         #create new game, folders and all
-        if self.dataRetriever.addNewPokemonGame(gameName):
-            self.gameDDM.text = self.getGameName(gameName)
+        gameRecord = self.dataRetriever.addGame(gameName, self.newGameDialog.content.getNewGameGenerationInput())
+        print(gameRecord)
+        if gameRecord != None:
+            self.GameRecord = gameRecord
+            self.gameDDM.text = self.getGameName(gameRecord.name)
             self.updateGameSpinnerValues()
+            self.continueButton.disabled = False
             return 1
+        
         return 0
+
+    def gameExists(self, gameName: str) -> bool:
+        """returns is the game exists using a database call"""
+        return self.dataRetriever.gameExists(gameName)
 
     def updateGameSpinnerValues(self) -> None:
         self.gameDDM.values = self.dataRetriever.retrieveGameList()
@@ -114,30 +124,29 @@ class SelectGameScreen(BackgroundScreen):
 
     def retrieveSaveFile(self, IDGame : int) -> None:
         """updates save file spinner"""
-        logger.debug(f"retrieving {IDGame} savefiles")
+        logger.debug(f"retrieving IDGame:{IDGame} savefiles")
         self.attemptSpinner.values = self.dataRetriever.getSaveFilesList(IDGame)
-        if len(self.attemptSpinner.values) > 1:
-            self.attemptSpinner.text = newAttemptString
-            return
-        else:
-            self.attemptSpinner.text = self.attemptSpinner.values[0]
+        self.attemptSpinner.text = self.attemptSpinner.values[0]
         self.attemptSpinner.disabled = False
+        self.continueButton.disabled = False
 
     def attemptSelected(self, instance, attempt: str) -> None:
-        """verifies the attempt selected and disables continuebutton"""
+        """verifies the attempt selected and updates continuebutton text"""
         print("updating attempt selected")
         if self.attemptSpinner.text == "select the attempt":
             return
-        self.continueButton.disabled = False
-        self.attempt = attempt
-        self.continueButton.text = f"{self.GameRecord.name}: {self.attemptNumber}"
+        self.attemptNumber = -1 if attempt == newAttemptString else int(attempt.strip("attempt "))
+        self.continueButton.text = f"{self.GameRecord.name}: {newAttemptString if self.attemptNumber == -1 else attempt}"
 
     def startAttempt(self, instance) -> None:
         """create Game object and give it to windowManager"""
-        #create Game Object, pass to new screen
-        # self.manager.attemptRecord = self.attempt
         logger.info(f"loading {self.GameRecord.name} {self.attemptNumber}")
-        attemptRecord = self.dataRetriever.getAttemptRecord(self.attemptNumber, self.GameRecord.IDgame)
+        
+        if self.attemptNumber == -1:
+            attemptRecord = self.dataRetriever.newAttempt(self.GameRecord.IDGame)
+        else:
+            attemptRecord = self.dataRetriever.getAttemptRecord(self.GameRecord.IDGame, self.attemptNumber)
+        
         if attemptRecord == None:
             logger.error("Attempt not found")
             return

@@ -1,3 +1,4 @@
+from kivymd.app import MDApp
 from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
@@ -6,21 +7,15 @@ from kivy.uix.image import Image
 from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 
-from collections.abc import Callable
-import os
+from GUI.transparentButton import TransparentButton
+from GUI.Dialog.pokemonDialog import AddPokemonDialog
+from GUI.detailedPokemonBox import DetailedPokemonBox
+from GUI.Dialog.addDialog import ConvertEncounteredPokemonToPlayerPokemonDialog
+from GUI.editTrainerBox import EditTrainerBox
 
-from .transparentButton import TransparentButton
-from .pokemonDialog import AddPokemonDialog
-from .detailedPokemonBox import DetailedPokemonBox
-from .addDialog import ConvertEncounteredPokemonToPlayerPokemonDialog
-from .editTrainerBox import EditTrainerBox
-
-from loggerConfig import logger
 from Logic.games import getPokemonSprite, getItemSprite, getTrainerSprite
+from loggerConfig import logger
 
-
-# class ExpandableBox(BoxLayout):
-#     pass
 
 class ExpandableBox(BoxLayout):
     def __init__(self, header: Button | BoxLayout, button: None | Button = None, **kwargs):
@@ -125,12 +120,10 @@ class ExpandableBox(BoxLayout):
         return BoxLayout()
 
 class ExpandableTrainerBox(ExpandableBox):
-    def __init__(self, trainerObject, **kwargs):
+    def __init__(self, manager, trainerRecord, **kwargs):
         """works with height and width rather than size_hint"""
-        self.trainerObject = trainerObject
-        #add updateHeader to the observer list so it gets called when defeated changes
-        self.trainerObject.addAttributeObserver(self.updateHeader)
-        self.trainerObject.addDefeatedObserver(self.updateHeader)
+        self.manager = manager
+        self.trainerRecord = trainerRecord
         self.headerClosed = 300
         self.headerOpen = 200
         header = self.createHeader()
@@ -142,12 +135,12 @@ class ExpandableTrainerBox(ExpandableBox):
     def createHeader(self) -> Widget:
         """creates and returns header, also creates self.button"""
         #TODO add edit trainer button to Image with buttonbehaviour
-        nameButton = TransparentButton(text = self.trainerObject.name, size_hint_y = 0.3, on_release = lambda btn: self.showTrainerContent())
-        trainerPic = getTrainerSprite(self.trainerObject.trainerType)
+        nameButton = TransparentButton(text = self.trainerRecord.name, size_hint_y = 0.3, on_release = lambda btn: self.showTrainerContent())
+        trainerPic = getTrainerSprite(self.trainerRecord.IDTrainerType)
         trainerImage = Image(source = trainerPic, fit_mode = "contain", pos_hint = {"left": 1}, size_hint_y = 0.7)
-        self.button = TransparentButton(text = f"show {self.trainerObject.name}'s pokemon", )
+        self.button = TransparentButton(text = f"show {self.trainerRecord.name}'s pokemon", )
         #change button color based on defeated status of trainer
-        self.button.greenColor() if self.trainerObject.defeated else self.button.redColor()
+        self.button.greenColor() if self.trainerRecord.isDefeated else self.button.redColor()
 
         nameImageBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3)
         nameImageBox.add_widget(trainerImage)
@@ -163,17 +156,17 @@ class ExpandableTrainerBox(ExpandableBox):
         content = GridLayout(cols = 1, size_hint_y = None)
         contentScroller = ScrollView(size = (content.width, content.height))
         content.bind(minimum_height = content.setter("height"))
-        pokemonAmount = len(self.trainerObject.pokemon)
+        IDTrainerPokemonList = self.manager.dataRetriever.getIDTrainerPokemon(self.trainerRecord.IDTrainer, self.manager.locationRecord.IDLocation)
+        pokemonAmount = len(IDTrainerPokemonList)
         self.contentOpen = 0
-        for pokemon in self.trainerObject.pokemon:
-            pokemonBox = ExpandableTrainerPokemonBox(pokemon)
+        for IDTrainerPokemon in IDTrainerPokemonList:
+            pokemonBox = ExpandableTrainerPokemonBox(IDTrainerPokemon)
             content.add_widget(pokemonBox)
-            pokemon.addRemoveObserver(self.updateContent)
             self.contentOpen += pokemonBox.headerClosed + 1 #contentclosed is 1
 
         #add button beneath pokemon
         if pokemonAmount < 6:  
-            addPokemonButton = TransparentButton(text = f"Add pokemon to {self.trainerObject.name}", on_release = self.addPokemonPopup, size_hint_y = None, height = 150) 
+            addPokemonButton = TransparentButton(text = f"Add pokemon to {self.trainerRecord.name}", on_release = self.addPokemonPopup, size_hint_y = None, height = 150) 
             content.add_widget(addPokemonButton)
             
             self.contentOpen += 150
@@ -182,7 +175,7 @@ class ExpandableTrainerBox(ExpandableBox):
         return contentScroller
 
     def createEditTrainerContent(self):
-        trainerContent = EditTrainerBox(self.trainerObject)
+        trainerContent = EditTrainerBox(self.trainerRecord)
         return trainerContent
 
     def showTrainerContent(self):
@@ -204,7 +197,7 @@ class ExpandableTrainerBox(ExpandableBox):
         return
 
     def addPokemonPopup(self, instance):
-        dia = AddPokemonDialog(self.trainerObject, self)
+        dia = AddPokemonDialog(self.trainerRecord, self)
         dia.open()
 
 class ExpandableTrainerPokemonBox(ExpandableBox):

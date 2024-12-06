@@ -13,10 +13,10 @@ package.domain = org.NuzlockeTracker
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg
+source.include_exts = py,png,jpg,kv, db
 
 # (list) List of inclusions using pattern matching
-source.include_patterns = assets/*,images/*.png
+source.include_patterns = assets/*,images/*.png,.kivy/**/*
 
 # (list) Source files to exclude (let empty to not exclude anything)
 #source.exclude_exts = spec, txt, md, code-workspace
@@ -29,7 +29,7 @@ source.exclude_dirs = documentation, bin, feedback, .buildozer
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 0.6
+version = 0.7
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
@@ -37,7 +37,7 @@ version = 0.6
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,python-for-android,kivymd==1.1.1,psutil,pympler
+requirements = python3,kivy,python-for-android,kivymd==1.1.1,psutil,pympler,sqlalchemy
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -82,6 +82,9 @@ fullscreen = 0
 # darkgray, grey, lightgrey, darkgrey, aqua, fuchsia, lime, maroon, navy,
 # olive, purple, silver, teal.
 #android.presplash_color = #FFFFFF
+
+android.keystore = keystore/my-release-key.keystore
+android.key_alias = my-key-alias
 
 # (string) Presplash animation using Lottie format.
 # see https://lottiefiles.com/ for examples and https://airbnb.design/lottie/
@@ -402,7 +405,7 @@ ios.codesign.allowed = false
 [buildozer]
 
 # (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
-log_level = 1
+log_level = 2
 
 # (int) Display warning if buildozer is run as root (0 = False, 1 = True)
 warn_on_root = 1

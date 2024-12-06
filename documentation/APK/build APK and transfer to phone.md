@@ -49,4 +49,5 @@ ERRORS
 
     streaming to phone
     Failure [INSTALL_FAILED_UPDATE_INCOMPATIBLE: Existing package org.test.nuzlocketracker signatures do not match newer version; ignoring!]
+        -> keystore maybe?
     Remove the application from your phone and retry

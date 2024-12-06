@@ -1,5 +1,15 @@
 ***************************************TestRun*******************************
 !switch to db file
+webscrape all pokemon info gen 1-10 -> only update if different -> add stats
+    check if db file present if not popup -> create new db
+    On startup check if database is up to date with python objects -> upgrade if not -> popup
+    convert all read json to database entries -> game filepath encounters
+    Game needs filepaths, movesets, abilities, pokemonchanges, encounters -> json format
+    other application that reads txt or excel and converts it into json -> use existing data to smartly do it (potion, known pokemon)
+    New game -> idparentgame not null -> copy trainers,items,location,pokemon inidivdual checkmarks. insert select where x=x
+    database phone storage ipv in data
+    encountertypes -> static, walking, gift, surfing
+    
 
 Catch wild pokemon
 grab items
@@ -8,6 +18,8 @@ display caught pokemon
 get all pokemoninfo gen 1 - 9
 save in different folders
 Start pokemon changes documentation
+
+add error message popups before game has 'started'
 
 GAME
     Overhaul backend object to include easier way to add observers, quite a cluster now
@@ -156,3 +168,4 @@ trainerscreen add quick view to headerbutton, sprites of pokemon / pokeball empt
 overhaul db performance? - 2 versions for comparison
 class data importer -> import data from files
 bubble arena graveyard pokemon
+uitvogelen hoe met screen capture software - > redis kafka etc

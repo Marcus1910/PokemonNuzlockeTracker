@@ -7,10 +7,12 @@ import platform
 def changePath():
 
     currentpath = os.getcwd()
+    print(f"currentpath: {currentpath}")
+    
     mainPath = os.path.abspath(os.path.join(currentpath, "PokemonNuzlockeTracker", "PokemonNuzlockeTracker"))
 
-    GUIPath = os.path.join(mainPath, "GUI")
-    LogicPath = os.path.join(mainPath, "Logic")
+    # GUIPath = os.path.join(mainPath, "GUI")
+    # LogicPath = os.path.join(mainPath, "Logic")
 
     #set the path and working directory to the folder where all the GUI files are so importing goes 'smoothly'
     sys.path.append(mainPath)
@@ -40,10 +42,10 @@ if __name__ == "__main__":
 
 
     #editor doesn't recognize it, but it is still a valid import because of the path.append(GUIPath)
-    if args.cli:
-        from Logic.CLI import CLI
-        CLI(operatingSystem)
-    else:
-        from GUI.trackerApp import TrackerApp
-        TrackerApp(operatingSystem).run()
+    # if args.cli:
+    #     from Logic.CLI import CLI
+    #     CLI(operatingSystem)
+    # else:
+    from GUI.trackerApp import TrackerApp
+    TrackerApp(operatingSystem).run()
 

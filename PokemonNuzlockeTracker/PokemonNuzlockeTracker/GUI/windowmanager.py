@@ -37,7 +37,7 @@ class WindowManager(ScreenManager):
     def attemptRecord(self, attemptRecord):
         self._attemptRecord = attemptRecord
         self.refreshLocationList()
-        #MDApp.get_running_app().game = self._gameObject
+        MDApp.get_running_app().dataRetriever = self.dataRetriever
 
     @property
     def locationRecord(self):
@@ -46,7 +46,7 @@ class WindowManager(ScreenManager):
     @locationRecord.setter
     def locationRecord(self, locationName):
         """uses the locationName and IDGame to get the correct locationRecord"""
-        self.fileRetriever.getLocationRecord(locationName, self.attemptRecord.IDGame)  
+        self._locationRecord = self.dataRetriever.getLocationRecord(locationName, self.attemptRecord.IDGame)  
     
     @property
     def locationList(self):
@@ -57,9 +57,20 @@ class WindowManager(ScreenManager):
         self._locationList = locationList
     
     def refreshLocationList(self):
-        self.locationList = self.fileRetriever.getLocationNames(self.attemptRecord.IDGame)
-        
+        self.locationList = self.dataRetriever.getLocationNames(self.attemptRecord)
     
+    def getTrainerNames(self):
+        return self.dataRetriever.getTrainerNames(self.locationRecord)
+
+    def getTrainerRecord(self, trainerName: str):
+        return self.dataRetriever.getTrainerRecordByName(self.locationRecord, trainerName)
+    
+    def getIDTrainerPokemon(self, IDTrainer: int) -> list:
+        return self.dataRetriever.getIDTrainerPokemon(IDTrainer, self.locationRecord.IDLocation)
+    
+    def updateRecord(self, record):
+        self.dataRetriever.updateRecord(record)
+        
     @property
     def screenNumber(self):
         return self._screenNumber
@@ -73,9 +84,11 @@ class WindowManager(ScreenManager):
         screenNumber = self.screenNumber % len(self.screenList)
         self.current = self.screenList[screenNumber].name
 
-    def startPokemonGame(self, attemptRecord, fileRetriever):
-        self.fileRetriever = fileRetriever
+    def startPokemonGame(self, attemptRecord, dataRetriever):
+        self.dataRetriever = dataRetriever
+        self.dataRetriever.readData(attemptRecord.IDGame)
         self.attemptRecord = attemptRecord
+        logger.info(f"playing game with record: {attemptRecord}")
         attemptInfoScreen = AttemptInfoScreen(name = "attemptInfoScreen", screenName = "Info on current attempt")
         trainerScreen = TrainerScreen(name = "trainerScreen", screenName = "Trainer Screen")
         encounterScreen = EncounterScreen(name = "encounterScreen", screenName = "Encounter Screen")

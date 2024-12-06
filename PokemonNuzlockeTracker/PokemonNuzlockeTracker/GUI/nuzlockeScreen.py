@@ -4,11 +4,10 @@ from kivy.uix.spinner import Spinner
 from kivy.uix.popup import Popup
 
 from kivymd.uix.swiper import MDSwiper
-# from kivymd.uix.navigationbar import MDNavigationBar, MDNavigationItem, MDNavigationItemLabel
 
-from .transparentButton import TransparentButton
-from .backgroundScreen import BackgroundScreen
-from .newAreaBox import NewAreaBox
+from GUI.transparentButton import TransparentButton
+from GUI.backgroundScreen import BackgroundScreen
+from GUI.Dialog.newAreaBox import NewAreaBox
 from loggerConfig import logger
 from Logic.databaseModels.game import newLocationString, chooseLocationString, standardColor, opaque
 
@@ -89,8 +88,7 @@ class NuzlockeScreen(BackgroundScreen):
     def areaChanged(self, spinner, text) -> bool:
         """text is the areaName"""
         #gets set to default when popup is canceled, otherwise crashes if the areaObject is None
-        # print(self.screenBox.size)
-        if text == self.areaSpinnerString or self.manager.locationRecord == None:
+        if text == chooseLocationString:
             logger.debug("default string for Area, or area invalid not doing anything")
             return 0
         
@@ -137,7 +135,6 @@ class NuzlockeScreen(BackgroundScreen):
         self.manager.transition.direction = "right"
     
     def saveGame(self):
-        self.manager.gameObject.writeToFile()
         self.manager.closePokemonGame()
 
     def on_touch_move(self, touch):

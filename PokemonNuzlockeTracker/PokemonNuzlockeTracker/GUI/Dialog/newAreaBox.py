@@ -1,8 +1,9 @@
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
-from kivy.uix.label import Label
-from .transparentButton import TransparentButton
-from .numberInput import NumberInput
+
+from GUI.transparentButton import TransparentButton
+from GUI.numberInput import NumberInput
+
 from loggerConfig import logger
 
 

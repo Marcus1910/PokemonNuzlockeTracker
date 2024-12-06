@@ -34,7 +34,7 @@ class AttemptInfoScreen(NuzlockeScreen):
         if not super().areaChanged(spinner, text):
             #area has not been changed succesfully
             return
-        self.areaLabel.text = f"current area: {self.manager.currentArea.name}"
+        self.areaLabel.text = f"current area: {self.manager.locationRecord.name}"
     
     def on_pre_enter(self) -> bool:
         super().on_pre_enter()
@@ -43,50 +43,52 @@ class AttemptInfoScreen(NuzlockeScreen):
         self.updateGraveyard()
     
     def updateBadgeLabel(self) -> None:
-        badge = self.manager.gameObject.badge
-        self.badgeLabel.text = f"amount of badges: {badge}"
+        badges = self.manager.attemptRecord.badges
+        self.badgeLabel.text = f"amount of badges: {badges}"
     
     def updateArena(self):
-        #cleanup and garbage colection needs fixing
-        self.pokemonPcSpritesBox.clear_widgets()
-        caughtPokemon = MDApp.get_running_app().game.arena
-        amountCaughtPokemon = len(caughtPokemon)
-        self.pcLabel.text = "No pokemon caught and alive"
-        if amountCaughtPokemon > 0:
-            self.pcLabel.text = "Pokemon available"
-            box = None       
-            for index, pokemon in enumerate(caughtPokemon):    
-                if index % 6 == 0:
-                    if box:
-                        self.pokemonPcSpritesBox.add_widget(box)
-                    print("adding box")
-                    box = BoxLayout(orientation = "horizontal", size_hint_y = 1/5, size_hint_x = 1)
-                pokemonImage = Image(source = getPokemonSprite(pokemon[0].name), fit_mode = "contain")
-                box.add_widget(pokemonImage)
-                #pokemonImage.source = getPokemonSprite(pokemon[0].name)
-                print(f"adding {pokemon[0].name} to box")
-            if box:
-                self.pokemonPcSpritesBox.add_widget(box)
+        pass
+        # #cleanup and garbage colection needs fixing
+        # self.pokemonPcSpritesBox.clear_widgets()
+        # #caughtPokemon = MDApp.get_running_app().game.arena
+        # #amountCaughtPokemon = len(caughtPokemon)
+        # self.pcLabel.text = "No pokemon caught and alive"
+        # if amountCaughtPokemon > 0:
+        #     self.pcLabel.text = "Pokemon available"
+        #     box = None       
+        #     for index, pokemon in enumerate(caughtPokemon):    
+        #         if index % 6 == 0:
+        #             if box:
+        #                 self.pokemonPcSpritesBox.add_widget(box)
+        #             print("adding box")
+        #             box = BoxLayout(orientation = "horizontal", size_hint_y = 1/5, size_hint_x = 1)
+        #         pokemonImage = Image(source = getPokemonSprite(pokemon[0].name), fit_mode = "contain")
+        #         box.add_widget(pokemonImage)
+        #         #pokemonImage.source = getPokemonSprite(pokemon[0].name)
+        #         print(f"adding {pokemon[0].name} to box")
+        #     if box:
+        #         self.pokemonPcSpritesBox.add_widget(box)
     
     def updateGraveyard(self):
-        self.pokemonGraveyardSpritesBox.clear_widgets()
-        caughtPokemon = MDApp.get_running_app().game._graveyard
-        amountCaughtPokemon = len(caughtPokemon)
-        self.graveyardLabel.text = "No pokemon caught and alive"
-        if amountCaughtPokemon > 0:
-            self.graveyardLabel.text = "Pokemon available"
-            box = None
-            for index, pokemon in enumerate(caughtPokemon):    
-                if index % 6 == 0:
-                    if box:
-                        self.pokemonGraveyardSpritesBox.add_widget(box)
-                    print("adding box")
-                    box = BoxLayout(orientation = "horizontal", size_hint_y = 1/5, size_hint_x = 1)
-                pokemonImage = Image(source = getPokemonSprite(pokemon[0].name), fit_mode = "contain")
-                box.add_widget(pokemonImage)
-                #pokemonImage.source = getPokemonSprite(pokemon[0].name)
-                print(f"adding {pokemon[0].name} to box")
-            if box:
-                self.pokemonGraveyardSpritesBox.add_widget(box)       
+        pass
+    #     self.pokemonGraveyardSpritesBox.clear_widgets()
+    #     caughtPokemon = MDApp.get_running_app().game._graveyard
+    #     amountCaughtPokemon = len(caughtPokemon)
+    #     self.graveyardLabel.text = "No pokemon caught and alive"
+    #     if amountCaughtPokemon > 0:
+    #         self.graveyardLabel.text = "Pokemon available"
+    #         box = None
+    #         for index, pokemon in enumerate(caughtPokemon):    
+    #             if index % 6 == 0:
+    #                 if box:
+    #                     self.pokemonGraveyardSpritesBox.add_widget(box)
+    #                 print("adding box")
+    #                 box = BoxLayout(orientation = "horizontal", size_hint_y = 1/5, size_hint_x = 1)
+    #             pokemonImage = Image(source = getPokemonSprite(pokemon[0].name), fit_mode = "contain")
+    #             box.add_widget(pokemonImage)
+    #             #pokemonImage.source = getPokemonSprite(pokemon[0].name)
+    #             print(f"adding {pokemon[0].name} to box")
+    #         if box:
+    #             self.pokemonGraveyardSpritesBox.add_widget(box)       
 
             

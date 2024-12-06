@@ -16,9 +16,17 @@ logicLogger = logging.getLogger('PokemonNuzlockeTracker logic')
 logicLogger.setLevel(logging.DEBUG)
 logicLogger.propagate = False
 logicHandler = logging.StreamHandler()
-logicHandler.setLevel(logging.INFO)
+logicHandler.setLevel(logging.DEBUG)
 logicHandler.setFormatter(formatter)
 logicLogger.addHandler(logicHandler)
+
+sqlLogger = logging.getLogger('sqlalchemy')
+sqlLogger.setLevel(logging.ERROR)
+sqlLogger.propagate = False
+sqlHandler = logging.StreamHandler()
+sqlHandler.setLevel(logging.ERROR)
+sqlHandler.setFormatter(formatter)
+sqlLogger.addHandler(sqlHandler)
 
 fileHandler= logging.FileHandler("trackerLogic.log")
 fileHandler.setLevel(logging.DEBUG)

@@ -3,14 +3,15 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.image import Image
-from loggerConfig import logger
-from .transparentButton import TransparentButton
-from .deleteDialog import DeleteTrainerPokemonPopup
-# from popup import RemovePokemonPopup
+
+import os
+
+from GUI.transparentButton import TransparentButton
+from GUI.Dialog.deleteDialog import DeleteTrainerPokemonPopup
+
 from Logic.games import getItemSprite, getPokemonSprite, getTrainerSprite
 from Logic.utilityFunctions import validateTextInput
-#from pokemon import TrainerPokemon
-import os
+from loggerConfig import logger
 
 class DetailedPokemonBox(BoxLayout):
     def __init__(self, pokemonObject, *args, **kwargs):

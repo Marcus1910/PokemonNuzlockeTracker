@@ -5,7 +5,7 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.selectioncontrol import MDSwitch
 
-from Logic.utilityFunctions import checkString, validateTextInput
+from Logic.utilityFunctions import validateTextInput
 from loggerConfig import logger
 # from pokemon import TrainerPokemon
 
