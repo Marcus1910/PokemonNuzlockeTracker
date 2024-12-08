@@ -1,3 +1,4 @@
+from kivymd.app import MDApp
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.image import Image
@@ -12,13 +13,13 @@ from loggerConfig import logger
 
 
 class EditTrainerBox(BoxLayout): 
-    def __init__(self, trainerObject, *args, **kwargs):
+    def __init__(self, trainerRecord, *args, **kwargs):
         """creates a boxlayout, use buildlayout fill in the layout"""
         super().__init__(*args, **kwargs)
-        self.trainerObject = trainerObject
-        self.trainerObject.addDefeatedObserver(self.changeDefeatedButton)
-        self.trainerObject.addAttributeObserver(self.fillLayout)
-        self.trainerObject.addAttributeObserver(self.updateTrainerImage)
+        self.trainerRecord = trainerRecord
+        # self.trainerRecord.addDefeatedObserver(self.changeDefeatedButton)
+        # self.trainerRecord.addAttributeObserver(self.fillLayout)
+        # self.trainerRecord.addAttributeObserver(self.updateTrainerImage)
         self.buildLayout()
 
     def buildLayout(self):
@@ -62,24 +63,24 @@ class EditTrainerBox(BoxLayout):
         self.fillLayout()
     
     def updateTrainerImage(self) -> Image:
-        self.trainerImage.source = getTrainerSprite(self.trainerObject.trainerType)
+        self.trainerImage.source = getTrainerSprite(self.trainerRecord.IDTrainerType)
     
     def fillLayout(self):
-        """fills the layout build by buildlayout with information from the trainerobject"""
-        self.trainerName.text = self.trainerObject.name
+        """fills the layout build by buildlayout with information from the trainerRecord"""
+        self.trainerName.text = self.trainerRecord.name
         self.updateTrainerImage()
-        if self.trainerObject.gender != "n/a" and self.trainerObject.gender != None:
-            self.trainerGender.text = self.trainerObject.gender
-        if self.trainerObject.trainerType != "n/a" and self.trainerObject.trainerType != None:
-            self.trainerType.text = self.trainerObject.trainerType
+        if self.trainerRecord.IDGender != None:
+            self.trainerGender.text = self.trainerRecord.IDGender
+        if self.trainerRecord.IDTrainerType != None:
+            self.trainerType.text = self.trainerRecord.IDTrainerType
         self.changeDefeatedButton()
 
     def setDefeated(self, button):
-        logger.info(f"button: {button} pressed to defeat {self.trainerObject.name}")
-        self.trainerObject.changeDefeated()
+        logger.info(f"button: {button} pressed to defeat {self.trainerRecord.name}")
+        self.trainerRecord.changeDefeated()
     
     def changeDefeatedButton(self):
-        if self.trainerObject.defeated:
+        if self.trainerRecord.isDefeated:
             self.trainerDefeatedButton.greenColor()
         else:
             self.trainerDefeatedButton.redColor()
@@ -90,28 +91,28 @@ class EditTrainerBox(BoxLayout):
         attributeValue = validateTextInput(input.text)
         if attributeValue == None:
             return 
-        setattr(self.trainerObject, attribute, attributeValue)
+        setattr(self.trainerRecord, attribute, attributeValue)
     
     def updateName(self, input, focus):
         self.updateTrainerAttribute(input, focus, "name")
 
     def updateType(self, input, focus):
-        self.updateTrainerAttribute(input, focus, "trainerType")
+        self.updateTrainerAttribute(input, focus, "IDTrainerType")
 
     def updateGender(self, input, focus):
-        self.updateTrainerAttribute(input, focus, "gender")
+        self.updateTrainerAttribute(input, focus, "IDGender")
     
     def deleteTrainerPopup(self) -> None:
-        dia = DeleteTrainerPopup(self.trainerObject.name, self.trainerObject.area.name)
+        dia = DeleteTrainerPopup(self.trainerRecord)
         dia.open()
         dia.bind(on_dismiss = self.removeTrainer)
     
     def removeTrainer(self, instance):
         if instance.result:
-            if self.trainerObject.removeTrainer():
+            if self.trainerRecord.removeTrainer():
                 return
             return
-        logger.debug(f"not removing {self.trainerObject.name}")
+        logger.debug(f"not removing {self.trainerRecord.name}")
         
 
 

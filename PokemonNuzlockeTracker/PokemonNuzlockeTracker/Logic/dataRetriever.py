@@ -4,7 +4,7 @@ from loggerConfig import logicLogger as logger
 import time
 from contextlib import contextmanager
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
 
@@ -13,7 +13,10 @@ from .databaseModels.game import Game, addGame, getGameFromGameName
 from .databaseModels.attempt import Attempt, addAttempt, getAttempt
 from .databaseModels.location import Location, getLocations, getLocationRecordByName
 from .databaseModels.trainer import Trainer, getTrainers, getTrainerRecordByName, getIDTrainerPokemon
+from Logic.databaseModels.trainer import fillTrainerTypeTable
 from Logic.databaseModels.typing import fillTypeTable, addTyping
+from Logic.databaseModels.ability import fillAbilitySlotTable, getIDAbilityByName, doesPokemonAbilitiesExist
+from Logic.databaseModels.pokemon import getIDPokemonByName, getPokemonNames
 from Logic.games import newGameString, newAttemptString
 from Logic.reader import Reader
 
@@ -41,7 +44,7 @@ class DataRetriever():
         self.Session = sessionmaker(bind = self.databaseEngine)
         
         if rePopulateDatabase:
-            self.insertBasePokemonTypes()
+            self.insertBaseData()
 
         # if not self.validateDirectory(self.gameFolder):
         #     logger.critical(f"Could not find own internal storage for games, exiting in 10 seconds")
@@ -77,6 +80,7 @@ class DataRetriever():
     def databaseSession(self):
         """Use for a single unit of work, use refresh before return object so it is fully loaded in memory, only after an insert"""
         session = self.Session()
+        session.execute(text('PRAGMA foreign_keys = ON'))
         try:
             yield session
             session.commit()
@@ -88,7 +92,7 @@ class DataRetriever():
     
     def readData(self, IDGame):
         with self.databaseSession() as session:
-            reader = Reader(IDGame, session)
+            reader = Reader(IDGame, session, self)
             reader.readBasePokedexData(session)
             session.commit()
 
@@ -181,9 +185,9 @@ class DataRetriever():
             session.expunge(locationRecord)
         return locationRecord
 
-    def getLocationNames(self, gameRecord: Game) -> list[str]:
+    def getLocationNames(self, gameRecord: Game, subName: str = "") -> list[str]:
         with self.databaseSession() as session:
-            locationList = getLocations(session, gameRecord)
+            locationList = getLocations(session, gameRecord, subName)
         return locationList
     
     def getTrainerNames(self, locationRecord: Location) -> list[str]:
@@ -203,13 +207,30 @@ class DataRetriever():
         with self.databaseSession() as session:
             IDList = getIDTrainerPokemon(session, IDTrainer, IDLocation)
         return IDList
-            
     
-    def updateRecord(self, record):
+    def insertType(self, IDTyping):
+        with self.databaseSession() as session:
+            addTyping(session, IDTyping)
+            session.commit()
+            
+    def getIDPokemonByName(self, pokemonName):
+        with self.databaseSession() as session:
+            IDPokemon = getIDPokemonByName(session, pokemonName)
+        return IDPokemon
+    
+    
+    def updateRecord(self, record) -> bool:
+        success = True
         with self.databaseSession() as session:
             session.merge(record)
-            session.commit()
-        
+            try:
+                session.commit()
+            except Exception as e:
+                logger.error(f"could not update record: {e}")
+                success = False
+            finally:
+                return success  
+              
     def insertRecord(self, record) -> bool:
         success = True
         with self.databaseSession() as session:
@@ -219,20 +240,45 @@ class DataRetriever():
             except Exception as e:
                 logger.error(f"error during insert: {e}")
                 success = False
-            finally:
-                return success
+        return success
+    
+    def insertBaseData(self):
+        self.insertBasePokemonTypes()
+        self.insertTrainerTypes()
+        self.insertAbilitySlots()
+        
     
     def insertBasePokemonTypes(self):
-        typings = ["Fire", "Water", "Dragon", "Grass", "Flying", "Ice", "Rock", "Ground", "Poison", "Bug", "Psychic", "Dark", "Fairy", "Steel", "electric", "Ghost", "Fighting", "Normal", "Typeless"]
+        typings = ["Fire", "Water", "Dragon", "Grass", "Flying", "Ice", "Rock", "Ground", "Poison", "Bug", "Psychic", "Dark", "Fairy", "Steel", "Electric", "Ghost", "Fighting", "Normal", "Typeless", "Bird"]
         with self.databaseSession() as session:
             fillTypeTable(session, typings)
             session.commit()
     
-    def insertType(self, IDTyping):
+    def insertTrainerTypes(self):
         with self.databaseSession() as session:
-            addTyping(session, IDTyping)
+            fillTrainerTypeTable(session)
             session.commit()
 
+    def insertAbilitySlots(self):
+        with self.databaseSession() as session:
+            fillAbilitySlotTable(session)
+            session.commit()
+    
+    def getIDAbilityByName(self, abilityName) -> int|None:
+        with self.databaseSession() as session:
+            IDAbility = getIDAbilityByName(session, abilityName)
+        return IDAbility 
+    
+    def doesPokemonAbilitiesExist(self, IDPokemon, IDAbility, AbilitySlot) -> bool:
+        with self.databaseSession() as session:
+            exists = doesPokemonAbilitiesExist(session, IDPokemon, IDAbility, AbilitySlot)
+        return exists
+
+    def getPokemonNames(self, subName: str = ""):
+        with self.databaseSession() as session:
+            names = getPokemonNames(session, subName)
+        return names
+               
                 
                 
         

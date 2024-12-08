@@ -11,6 +11,7 @@ from GUI.transparentButton import TransparentButton
 from GUI.Dialog.pokemonDialog import AddPokemonDialog
 from GUI.detailedPokemonBox import DetailedPokemonBox
 from GUI.Dialog.addDialog import ConvertEncounteredPokemonToPlayerPokemonDialog
+from GUI.Dialog.trainerDialog import EditTrainerDialog
 from GUI.editTrainerBox import EditTrainerBox
 
 from Logic.games import getPokemonSprite, getItemSprite, getTrainerSprite
@@ -120,9 +121,9 @@ class ExpandableBox(BoxLayout):
         return BoxLayout()
 
 class ExpandableTrainerBox(ExpandableBox):
-    def __init__(self, manager, trainerRecord, **kwargs):
+    def __init__(self, trainerRecord, **kwargs):
         """works with height and width rather than size_hint"""
-        self.manager = manager
+        self.manager = MDApp.get_running_app().windowManager
         self.trainerRecord = trainerRecord
         self.headerClosed = 300
         self.headerOpen = 200
@@ -174,27 +175,9 @@ class ExpandableTrainerBox(ExpandableBox):
         contentScroller.add_widget(content)
         return contentScroller
 
-    def createEditTrainerContent(self):
-        trainerContent = EditTrainerBox(self.trainerRecord)
-        return trainerContent
-
     def showTrainerContent(self):
-        #content is already opened
-        if self.opened:
-            #show trainer details
-            if not self.showingTrainer:
-                self.updateContent(self.createEditTrainerContent)
-                self.showingTrainer = True
-                return
-            #close content
-            self.close()
-            self.showingTrainer = False
-            return
-        #show trainer details
-        self.open()
-        self.updateContent(self.createEditTrainerContent)
-        self.showingTrainer = True
-        return
+        dia = EditTrainerDialog(self.trainerRecord)
+        dia.open()
 
     def addPokemonPopup(self, instance):
         dia = AddPokemonDialog(self.trainerRecord, self)

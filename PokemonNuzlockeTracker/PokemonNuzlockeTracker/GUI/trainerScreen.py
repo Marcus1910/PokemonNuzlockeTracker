@@ -60,7 +60,7 @@ class TrainerScreen(NuzlockeScreen):
         for trainerName in self.trainers:
             noTrainers = False
             trainerRecord = self.manager.getTrainerRecord(trainerName)
-            box = ExpandableTrainerBox(self.manager, trainerRecord)
+            box = ExpandableTrainerBox(trainerRecord)
             #trainer.addRemoveObserver(self.updateTrainers)
             self.trainerBox.add_widget(box)
 
@@ -79,5 +79,5 @@ class TrainerScreen(NuzlockeScreen):
     def addNewTrainer(self, instance):
         """displays the edittrainerBox for a new trainer to be added"""
         logger.debug("create dialog to add new trainer")
-        dialog = AddTrainerDialog(self.manager.locationRecord.IDLocation, self.updateTrainers)
+        dialog = AddTrainerDialog(self.updateTrainers)
         dialog.open()

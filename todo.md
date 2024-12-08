@@ -9,7 +9,15 @@ webscrape all pokemon info gen 1-10 -> only update if different -> add stats
     New game -> idparentgame not null -> copy trainers,items,location,pokemon inidivdual checkmarks. insert select where x=x
     database phone storage ipv in data
     encountertypes -> static, walking, gift, surfing
-    
+
+~~add Trainers~~
+edit trainers
+    AddTrainerBox -> 2 states add and edit -> picture functions as button defeated. only edit has remove trainer button
+add trainerpokemon to trainers
+edit trainerpokemon 
+    list of levelup moves with level -> onpress add to learnset -> learnset textfields allow all moves
+
+Basedata screen -> addNewBaseData -> items, moves etc
 
 Catch wild pokemon
 grab items

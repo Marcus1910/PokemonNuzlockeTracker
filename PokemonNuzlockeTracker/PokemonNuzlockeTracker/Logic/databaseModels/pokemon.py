@@ -21,6 +21,12 @@ class Pokemon(Base):
     def __repr__(self):
         return f"name: {self.name}, type1: {self.IDTyping1}, type2: {self.IDTyping2}"
 
+def getIDPokemonByName(session, pokemonName) -> int:
+    return session.query(Pokemon.IDPokemon).filter(Pokemon.name == pokemonName).scalar()
+
+def getPokemonNames(session, subname: str = ""):
+    return [pokemon.name for pokemon in session.query(Pokemon.name).filter(Pokemon.name.like(f"%{subname}%")).all()]
+
 class TrainerPokemon(Base):
     __tablename__ = "TrainerPokemon"
 

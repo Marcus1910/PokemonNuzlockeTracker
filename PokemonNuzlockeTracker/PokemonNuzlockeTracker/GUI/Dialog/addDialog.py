@@ -26,7 +26,7 @@ class AddDialog(MDDialog):
         self.buttons = [self.okButton, self.cancelButton]
         super().__init__(**kwargs)  
     
-    def onOK(self):
+    def onOK(self, instance):
         self.dismiss()
 
 

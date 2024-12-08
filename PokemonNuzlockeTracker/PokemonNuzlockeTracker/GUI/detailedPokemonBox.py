@@ -1,5 +1,5 @@
 from kivy.uix.label import Label
-from kivy.uix.boxlayout import BoxLayout
+from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.image import Image
@@ -13,7 +13,7 @@ from Logic.games import getItemSprite, getPokemonSprite, getTrainerSprite
 from Logic.utilityFunctions import validateTextInput
 from loggerConfig import logger
 
-class DetailedPokemonBox(BoxLayout):
+class DetailedPokemonBox(MDBoxLayout):
     def __init__(self, pokemonObject, *args, **kwargs):
         """DetailedPokemonBox used to give more info about a pokemon, buildlayout to build it, if given an pokemonObject it will fill it"""
         super().__init__(*args, **kwargs)
@@ -21,9 +21,9 @@ class DetailedPokemonBox(BoxLayout):
         self.moveList = [] #used for storing moves
 
         #forward declarations for clear_layout function
-        self.pokemonBox = BoxLayout(orientation = "horizontal")
-        self.additionalInfoBox = BoxLayout(orientation = "horizontal")
-        self.pokemonChoice = BoxLayout(orientation = "horizontal", size_hint_y = 0.2, pos_hint = {"bottom": 1})
+        self.pokemonBox = MDBoxLayout(orientation = "horizontal")
+        self.additionalInfoBox = MDBoxLayout(orientation = "horizontal")
+        self.pokemonChoice = MDBoxLayout(orientation = "horizontal", size_hint_y = 0.2, pos_hint = {"bottom": 1})
 
         self.buildPokemonLayout()
         if self.pokemonObject != None:

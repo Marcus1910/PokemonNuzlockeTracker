@@ -12,6 +12,7 @@ newAttemptString = "select the attempt"
 newLocationString = "New Location"
 chooseLocationString = "choose an Location"
 newTrainerString = "New trainer"
+editTrainerString = "Edit Trainer"
 chooseTrainerString = "Choose a trainer"
 
 #change to settings

@@ -11,7 +11,7 @@ class TrackerApp(MDApp):
     def __init__(self, operatingSystem, **kwargs):
         super().__init__(**kwargs)
         self.operatingSystem = operatingSystem
-        self.dataRetriever = None
+        self.windowManager = None
 
     def build(self):
         #use OS to change view to that of android
@@ -21,9 +21,9 @@ class TrackerApp(MDApp):
             logger.info("detected windows")
             Window.size = (390, 780)
 
-        sm = WindowManager(self.operatingSystem)
+        self.windowManager = WindowManager(self.operatingSystem)
         selectGameScreen = SelectGameScreen(operatingSystem = self.operatingSystem, name = "selectGameScreen")
-        sm.add_widget(selectGameScreen)
+        self.windowManager.add_widget(selectGameScreen)
 
-        sm.current = "selectGameScreen"
-        return sm
+        self.windowManager.current = "selectGameScreen"
+        return self.windowManager

@@ -37,8 +37,7 @@ class WindowManager(ScreenManager):
     def attemptRecord(self, attemptRecord):
         self._attemptRecord = attemptRecord
         self.refreshLocationList()
-        MDApp.get_running_app().dataRetriever = self.dataRetriever
-
+        
     @property
     def locationRecord(self):
         return self._locationRecord
@@ -46,7 +45,8 @@ class WindowManager(ScreenManager):
     @locationRecord.setter
     def locationRecord(self, locationName):
         """uses the locationName and IDGame to get the correct locationRecord"""
-        self._locationRecord = self.dataRetriever.getLocationRecord(locationName, self.attemptRecord.IDGame)  
+        self.refreshLocationList()
+        self._locationRecord = self.dataRetriever.getLocationRecord(locationName, self.attemptRecord.IDGame) 
     
     @property
     def locationList(self):
@@ -57,7 +57,10 @@ class WindowManager(ScreenManager):
         self._locationList = locationList
     
     def refreshLocationList(self):
-        self.locationList = self.dataRetriever.getLocationNames(self.attemptRecord)
+        self.locationList = self.dataRetriever.getLocationNames(self.attemptRecord)   
+    
+    def getLocationNames(self, subName: str = ""):
+        return self.dataRetriever.getLocationNames(self.attemptRecord, subName)    
     
     def getTrainerNames(self):
         return self.dataRetriever.getTrainerNames(self.locationRecord)
@@ -68,8 +71,14 @@ class WindowManager(ScreenManager):
     def getIDTrainerPokemon(self, IDTrainer: int) -> list:
         return self.dataRetriever.getIDTrainerPokemon(IDTrainer, self.locationRecord.IDLocation)
     
-    def updateRecord(self, record):
-        self.dataRetriever.updateRecord(record)
+    def getPokemonNames(self, subName: str = ""):
+        return self.dataRetriever.getPokemonNames(subName)
+    
+    def updateRecord(self, record) -> bool:
+        return self.dataRetriever.updateRecord(record)
+    
+    def insertRecord(self, record) -> bool:
+        return self.dataRetriever.insertRecord(record)
         
     @property
     def screenNumber(self):

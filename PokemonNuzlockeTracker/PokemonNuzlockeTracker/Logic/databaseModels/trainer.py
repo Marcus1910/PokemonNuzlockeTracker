@@ -13,8 +13,13 @@ class TrainerType(Base):
 
     def __init__(self, name, imageName, IDGender):
         self.name = name
-        self.imageName =imageName
+        self.imageName = imageName
         self.IDGender = IDGender
+
+def fillTrainerTypeTable(session):
+    session.add(TrainerType("Cynthia", "Cynthia.png", "F"))
+    session.add(TrainerType("Alder", "Alder.png", "M"))
+    
 
 class Trainer(Base):
     __tablename__ = "Trainer"
@@ -37,8 +42,13 @@ class Trainer(Base):
         self.pokeDollars = pokeDollars
         self.isOptional = isOptional  
     
+    def changeDefeated(self) -> None:
+        """inverts the defeated status"""
+        self.isDefeated = not self.isDefeated
+    
     def __repr__(self):
         return f"IDLocation: {self.IDLocation}, name: {self.name}, trainerType: {self.IDTrainerType}, gender: {self.IDGender}, defeated: {self.isDefeated}, dollars: {self.pokeDollars}, optional: {self.isOptional}" 
+    
 
 def getTrainers(session, locationRecord: Location):  
     trainerNames = [trainer.name for trainer in session.query(Trainer).filter(Trainer.IDLocation == locationRecord.IDLocation).all()]

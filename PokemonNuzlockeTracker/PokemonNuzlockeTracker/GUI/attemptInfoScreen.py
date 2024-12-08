@@ -31,7 +31,7 @@ class AttemptInfoScreen(NuzlockeScreen):
         self.screenBox.add_widget(self.graveBox)
     
     def areaChanged(self, spinner, text):
-        if not super().areaChanged(spinner, text):
+        if not super().spinnerValueChanged(spinner, text):
             #area has not been changed succesfully
             return
         self.areaLabel.text = f"current area: {self.manager.locationRecord.name}"

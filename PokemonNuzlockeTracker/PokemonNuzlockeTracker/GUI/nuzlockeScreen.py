@@ -2,6 +2,8 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.spinner import Spinner
 from kivy.uix.popup import Popup
+from kivy.uix.textinput import TextInput
+from kivy.uix.dropdown import DropDown
 
 from kivymd.uix.swiper import MDSwiper
 
@@ -17,32 +19,33 @@ class NuzlockeScreen(BackgroundScreen):
     def __init__(self, screenName, **kwargs):
         super().__init__(**kwargs)
         
+        self.currentPokemon = ""
+        self.spinnerValues = []
         self.standardColor = standardColor
         self.entered = False
-
+        self.screenName = screenName
+        
         self.layout = BoxLayout(orientation= "vertical")
         self.screenInfoBox = BoxLayout(orientation = "vertical", size_hint_y = 0.04)
-        screenLabel = Label(text = screenName, color = self.standardColor)
+        screenLabel = Label(text = self.screenName, color = self.standardColor)
         self.screenInfoBox.add_widget(screenLabel)
 
-        self.screenBox = BoxLayout(orientation = "vertical", size_hint_y = 0.92)
+        self.screenBox = BoxLayout(orientation = "vertical", size_hint_y = 0.88)
 
-        self.areaSpinnerBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.04)
-        self.areaSpinner = Spinner(text = chooseLocationString, values = ["new Area"], size_hint_x = 0.85)
-        self.areaSpinner.background_color = opaque
-        self.areaSpinner.bind(text = self.areaChanged)
-
-        # self.btnbox = MDNavigationBar(MDNavigationItem(MDNavigationItemLabel(text = "hallo")), size_hint_y=0.1)
-        # self.btnbox.add_widget(MDNavigationItem(MDNavigationItemLabel(text = "trainers")))
-        # self.btnbox.add_widget(MDNavigationItem(MDNavigationItemLabel(text = "encounters")))
-        # self.btnbox.add_widget(MDNavigationItem(MDNavigationItemLabel(text = "items")))
-
+        self.areaSpinnerBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.08)
+        self.spinnerTextInput = TextInput(multiline = False, size_hint_x = 0.85, background_color = opaque)
+        self.spinnerTextInput.bind(focus = self.spinnerTextFocus)
+        self.spinnerTextInput.bind(text = self.onTextEntered)
+        
+        self.spinnerDropDown = DropDown()
 
         self.editAreaButton = TransparentButton(text = "edit area", size_hint_x = 0.15, on_release = self.editArea)
         self.editAreaButton.disabled = True
 
-        self.areaSpinnerBox.add_widget(self.areaSpinner)
-        self.areaSpinnerBox.add_widget(self.editAreaButton)
+        self.areaSpinnerBox.add_widget(self.spinnerTextInput)
+        
+        if not self.screenName == "Pokemon Info Screen":
+            self.areaSpinnerBox.add_widget(self.editAreaButton)
 
         self.layout.add_widget(self.screenInfoBox)
         self.layout.add_widget(self.areaSpinnerBox)
@@ -64,35 +67,53 @@ class NuzlockeScreen(BackgroundScreen):
     
     def setDefaultArea(self):
         """set area to default is current Area is None"""
-        if self.manager.locationRecord == None:
-            logger.debug("setting area to default")
-            self.areaSpinner.text = chooseLocationString
+        if self.screenName == "Pokemon Info Screen":
             return
-        self.areaSpinner.text = self.manager.locationRecord.name
+        if self.manager.locationRecord == None:
+            self.spinnerTextInput.hint_text = chooseLocationString
+            return
+        self.spinnerTextInput.hint_text = self.manager.locationRecord.name
         logger.debug("popup skipped and area is valid, changing spinner text to correct text")
     
-    def updateAreaSpinner(self):
+    def spinnerTextFocus(self, instance, focused):
+        if focused:
+            self.spinnerDropDown.open(self.spinnerTextInput)
+    
+    def populateDropDown(self):
+        print(f"populating dropdown")
+        self.spinnerDropDown.clear_widgets()
+        print(len(self.spinnerValues))
+        for spinnerValue in self.spinnerValues:
+            btn = TransparentButton(text = spinnerValue, size_hint_y = None, height = 20, on_release = self.spinnerValueChanged)
+            self.spinnerDropDown.add_widget(btn)
+                
+    def onTextEntered(self, instance, text):
+        self.updateSpinnerValues(text)    
+    
+    def updateSpinnerValues(self, text = ""):
         """updates the values that the spinner uses"""
-        self.manager.refreshLocationList()
-        self.areaSpinner.values = self.manager.locationList
+        print(f"updating spinner: {text}")
+        if self.screenName == "Pokemon Info Screen":
+            self.spinnerValues = self.manager.getPokemonNames(text)
+        else:
+            print("updating locations")
+            self.spinnerValues = self.manager.getLocationNames(text)
+        self.populateDropDown()
     
     def on_pre_enter(self) -> bool:
-        """adjusts areaSpinner text to area currently selected, returns 0 if area == None"""
-        self.updateAreaSpinner()
-        if self.manager.locationRecord == None:
-            logger.debug("No area selected")
-            return 0
-        self.areaSpinner.text = self.manager.locationRecord.name
-        return 1
+        """adjusts Spinner text to area currently selected for regular screens, returns 0 if area == None"""
+        self.updateSpinnerValues()
+        self.setDefaultArea()
 
-    def areaChanged(self, spinner, text) -> bool:
+    def spinnerValueChanged(self, button) -> bool:
         """text is the areaName"""
+        newValue = button.text
         #gets set to default when popup is canceled, otherwise crashes if the areaObject is None
-        if text == chooseLocationString:
+        if newValue == chooseLocationString:
             logger.debug("default string for Area, or area invalid not doing anything")
             return 0
         
-        if text == newLocationString:
+        if newValue == newLocationString:
             logger.debug("creating popup to add new Area")
             self.editAreaButton.disabled = True
             newAreaBox = NewAreaBox(orientation = "vertical", confirmCallback = self.addArea)
@@ -104,10 +125,10 @@ class NuzlockeScreen(BackgroundScreen):
             
             areaPopup.open()
             return 0
-        
-        self.manager.locationRecord = text
-        self.editAreaButton.disabled = False
-        logger.info(f"currentArea changed to {text}")
+        if not self.screenName == "Pokemon Info Screen":
+            self.manager.locationRecord = newValue
+            self.editAreaButton.disabled = False
+            logger.info(f"currentArea changed to {newValue}")
         return 1
         
     def on_enter(self):
