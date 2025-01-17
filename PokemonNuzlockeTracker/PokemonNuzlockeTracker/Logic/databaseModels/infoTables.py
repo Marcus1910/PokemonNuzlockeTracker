@@ -9,3 +9,6 @@ class Gender(Base):
     def __init__(self, IDGender):
         self.IDGender = IDGender
 
+def getGenders(session):
+    return {gender.IDGender: gender.IDGender for gender in session.query(Gender).all()}
+

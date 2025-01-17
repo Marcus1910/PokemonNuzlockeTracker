@@ -47,5 +47,9 @@ if __name__ == "__main__":
     #     CLI(operatingSystem)
     # else:
     from GUI.trackerApp import TrackerApp
-    TrackerApp(operatingSystem).run()
+    
+    try:
+        TrackerApp(operatingSystem).run()
+    except Exception as e:
+        print(f"exception occurred: {e}")
 

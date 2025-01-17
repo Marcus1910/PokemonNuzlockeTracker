@@ -20,6 +20,14 @@ def fillTrainerTypeTable(session):
     session.add(TrainerType("Cynthia", "Cynthia.png", "F"))
     session.add(TrainerType("Alder", "Alder.png", "M"))
     
+def getTrainerTypeRecordByID(session, IDTrainerType: int) -> TrainerType:
+    return session.query(TrainerType).get(IDTrainerType)
+
+def getTrainerTypes(session, text: str = "") -> dict[int: str]:
+    """returns trainertype dict {id: name}"""
+    trainerTypes = {trainerType.IDTrainerType: trainerType.name for trainerType in session.query(TrainerType).filter(TrainerType.name.like(f"%{text}%")).all()}
+    print(trainerTypes)
+    return trainerTypes
 
 class Trainer(Base):
     __tablename__ = "Trainer"

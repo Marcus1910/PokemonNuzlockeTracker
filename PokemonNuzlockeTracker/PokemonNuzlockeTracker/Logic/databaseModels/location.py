@@ -23,10 +23,12 @@ class Location(Base):
         return f"ID: {self.IDLocation}, IDGame: {self.IDGame}, parentLocation: {self.IDParentLocation}, name: {self.name}"
 
 
-def getLocations(session, gameRecord, subName:str):
-    locationNames = [location.name for location in session.query(Location).filter(Location.IDGame == gameRecord.IDGame).filter(Location.name.like(f"%{subName}%")).all()]
-    locationNames.insert(0, newLocationString)
-    return locationNames
+def getLocations(session, attemptRecord, subName:str):
+    locations = {location.IDLocation: location.name for location in session.query(Location).filter(Location.IDGame == attemptRecord.IDGame).filter(Location.name.like(f"%{subName}%")).all()}
+    #locationNames = [location.name for location in session.query(Location).filter(Location.IDGame == attemptRecord.IDGame).filter(Location.name.like(f"%{subName}%")).all()]
+    locations[0] = newLocationString
+    print(locations)
+    return locations
 
 def getLocationRecordByName(session, name: str, IDGame: int):
     return session.query(Location).filter(Location.IDGame == IDGame).filter(Location.name == name).first()

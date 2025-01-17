@@ -13,6 +13,7 @@ from GUI.detailedPokemonBox import DetailedPokemonBox
 from GUI.Dialog.addDialog import ConvertEncounteredPokemonToPlayerPokemonDialog
 from GUI.Dialog.trainerDialog import EditTrainerDialog
 from GUI.editTrainerBox import EditTrainerBox
+from GUI.clickableImage import ClickableImage
 
 from Logic.games import getPokemonSprite, getItemSprite, getTrainerSprite
 from loggerConfig import logger
@@ -138,8 +139,8 @@ class ExpandableTrainerBox(ExpandableBox):
         #TODO add edit trainer button to Image with buttonbehaviour
         nameButton = TransparentButton(text = self.trainerRecord.name, size_hint_y = 0.3, on_release = lambda btn: self.showTrainerContent())
         trainerPic = getTrainerSprite(self.trainerRecord.IDTrainerType)
-        trainerImage = Image(source = trainerPic, fit_mode = "contain", pos_hint = {"left": 1}, size_hint_y = 0.7)
-        self.button = TransparentButton(text = f"show {self.trainerRecord.name}'s pokemon", )
+        trainerImage = ClickableImage(source = trainerPic, fit_mode = "contain", pos_hint = {"left": 1}, size_hint_y = 0.7, on_release = self.trainerDefeated)
+        self.button = TransparentButton(text = f"show {self.trainerRecord.name}'s pokemon")
         #change button color based on defeated status of trainer
         self.button.greenColor() if self.trainerRecord.isDefeated else self.button.redColor()
 
@@ -182,6 +183,12 @@ class ExpandableTrainerBox(ExpandableBox):
     def addPokemonPopup(self, instance):
         dia = AddPokemonDialog(self.trainerRecord, self)
         dia.open()
+    
+    def trainerDefeated(self, instance):
+        if self.trainerRecord != None:
+            self.trainerRecord.isDefeated = not self.trainerRecord.isDefeated
+            self.button.greenColor() if self.trainerRecord.isDefeated else self.button.redColor()
+            self.manager.updateRecord(self.trainerRecord)
 
 class ExpandableTrainerPokemonBox(ExpandableBox):
     def __init__(self, pokemonObject, **kwargs):

@@ -13,21 +13,40 @@ from .itemScreen import ItemScreen
 from .pokemonInfoScreen import PokemonInfoScreen
 
 from loggerConfig import logger
+from Logic.databaseModels.game import NLS
 import Logic.games as gm
+from Logic.dataRetriever import DataRetriever
+
 
 class WindowManager(ScreenManager):
-
-    def __init__(self, os, **kwargs):
+    def __init__(self, dataRetriever: DataRetriever, **kwargs):
         super().__init__(**kwargs)
-        self.os = os
-
+        # self.os = os
+        self.dataRetriever = dataRetriever
+        
         self._attemptRecord = None
-        self._locationList = []
         self._locationRecord = None
 
         self._screenNumber = 0
         self.screenList = []
         # Clock.schedule_interval(self.updateObject, 5)
+
+    #region Game + Attempt
+    def newAttempt(self, IDGame: int):
+        return self.dataRetriever.newAttempt(IDGame)
+    
+    def getAttemptRecord(self, IDAttempt):
+        return self.dataRetriever.getAttemptRecord(IDAttempt)
+    
+    def gameExists(self, gameName: str):
+        return self.dataRetriever.gameExists(gameName)
+    
+    def addGame(self, gameName: str, gameGen: int):
+        return self.dataRetriever.addGame(gameName, gameGen)
+    
+    def getGameRecord(self, IDGame: int):
+        return self.dataRetriever.getGameRecord(IDGame)
+    #endregion
 
     @property
     def attemptRecord(self):
@@ -36,7 +55,7 @@ class WindowManager(ScreenManager):
     @attemptRecord.setter
     def attemptRecord(self, attemptRecord):
         self._attemptRecord = attemptRecord
-        self.refreshLocationList()
+
         
     @property
     def locationRecord(self):
@@ -45,19 +64,8 @@ class WindowManager(ScreenManager):
     @locationRecord.setter
     def locationRecord(self, locationName):
         """uses the locationName and IDGame to get the correct locationRecord"""
-        self.refreshLocationList()
         self._locationRecord = self.dataRetriever.getLocationRecord(locationName, self.attemptRecord.IDGame) 
     
-    @property
-    def locationList(self):
-        return self._locationList
-    
-    @locationList.setter
-    def locationList(self, locationList: list[str]):
-        self._locationList = locationList
-    
-    def refreshLocationList(self):
-        self.locationList = self.dataRetriever.getLocationNames(self.attemptRecord)   
     
     def getLocationNames(self, subName: str = ""):
         return self.dataRetriever.getLocationNames(self.attemptRecord, subName)    
@@ -79,6 +87,12 @@ class WindowManager(ScreenManager):
     
     def insertRecord(self, record) -> bool:
         return self.dataRetriever.insertRecord(record)
+    
+    def deleteRecord(self, record) -> bool:
+        return self.dataRetriever.deleteRecord(record)
+
+    def getLookupValues(self, nlsType: NLS, text: str, IDParam1 = None) -> list[str]:
+        return self.dataRetriever.getLookupValues(nlsType, self.attemptRecord, text, IDParam1)
         
     @property
     def screenNumber(self):
@@ -93,8 +107,7 @@ class WindowManager(ScreenManager):
         screenNumber = self.screenNumber % len(self.screenList)
         self.current = self.screenList[screenNumber].name
 
-    def startPokemonGame(self, attemptRecord, dataRetriever):
-        self.dataRetriever = dataRetriever
+    def startPokemonGame(self, attemptRecord):
         self.dataRetriever.readData(attemptRecord.IDGame)
         self.attemptRecord = attemptRecord
         logger.info(f"playing game with record: {attemptRecord}")
@@ -123,37 +136,36 @@ class WindowManager(ScreenManager):
         self._locationRecord = None
         self._screenNumber = 0
         self._attemptRecord = None
-        self.locationList = []
     
-    # Function to get memory usage of the current process
-    def get_memory_usage(self):
-        if self.os == "Windows":
-            import psutil
+    # # Function to get memory usage of the current process
+    # def get_memory_usage(self):
+    #     if self.os == "Windows":
+    #         import psutil
             
-            process = psutil.Process(os.getpid())
-            memory_info = process.memory_info()
-        else:
-            process = subprocess.Popen(['cat', '/proc/meminfo'], stdout=subprocess.PIPE)
-            stdout, _ = process.communicate()
-            meminfo = stdout.decode('utf-8')
-            lines = meminfo.split('\n')
-            for line in lines:
-                # print(line)
-                if line.startswith("Active"):
-                    return int(line.split()[1]) * 100
-            # return meminfo
-        return memory_info.rss  # Resident Set Size: total memory used by the process
+    #         process = psutil.Process(os.getpid())
+    #         memory_info = process.memory_info()
+    #     else:
+    #         process = subprocess.Popen(['cat', '/proc/meminfo'], stdout=subprocess.PIPE)
+    #         stdout, _ = process.communicate()
+    #         meminfo = stdout.decode('utf-8')
+    #         lines = meminfo.split('\n')
+    #         for line in lines:
+    #             # print(line)
+    #             if line.startswith("Active"):
+    #                 return int(line.split()[1]) * 100
+    #         # return meminfo
+    #     return memory_info.rss  # Resident Set Size: total memory used by the process
 
-    def calculate_memory_usage(self, obj):
-        return asizeof.asizeof(obj)
+    # def calculate_memory_usage(self, obj):
+    #     return asizeof.asizeof(obj)
     
-    def bytesToMB(self, bytes):
-        return int(bytes) / (10**6)
+    # def bytesToMB(self, bytes):
+    #     return int(bytes) / (10**6)
     
-    def updateObject(self, dt) -> None:
-        totalMem = round(self.bytesToMB(self.get_memory_usage()), 1)
-        string = f"total: {totalMem}"
-        if self.gameObject != None:
-            gameMem = round(self.bytesToMB(self.calculate_memory_usage(self.gameObject)), 1)
-            string += f", game: {gameMem}"
-        print(string)
+    # def updateObject(self, dt) -> None:
+    #     totalMem = round(self.bytesToMB(self.get_memory_usage()), 1)
+    #     string = f"total: {totalMem}"
+    #     if self.gameObject != None:
+    #         gameMem = round(self.bytesToMB(self.calculate_memory_usage(self.gameObject)), 1)
+    #         string += f", game: {gameMem}"
+    #     print(string)

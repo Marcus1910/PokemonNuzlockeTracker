@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey, Column, Integer
+from sqlalchemy import ForeignKey, Column, desc
 from sqlalchemy.orm import Session, relationship, joinedload
 from .base import Base, StrictInteger
 
@@ -38,7 +38,10 @@ def getNextAttemptNumber(session: Session, IDGame: int)-> int:
     logger.debug(f"new attempt: {attemptNumber}")    
     return attemptNumber
 
-def getAttempt(session: Session, IDGame: int, attemptNumber: int) -> Attempt | None:
-    attempt = session.query(Attempt).filter(Attempt.attemptNumber == attemptNumber).filter(Attempt.IDGame == IDGame).first()
+def getAttempt(session: Session, IDAttempt: int) -> Attempt | None:
+    attempt = session.query(Attempt).get(IDAttempt)
     return attempt
+
+def getAttempts(session: Session, IDGame: int):
+    return {attempt.IDAttempt: "attempt " + str(attempt.attemptNumber) for attempt in session.query(Attempt).filter(Attempt.IDGame == IDGame).order_by(desc(Attempt.IDAttempt)).all()}
     

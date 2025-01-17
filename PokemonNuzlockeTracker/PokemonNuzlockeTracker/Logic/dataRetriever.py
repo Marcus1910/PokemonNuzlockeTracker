@@ -7,16 +7,16 @@ from contextlib import contextmanager
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
-
-from .databaseModels import Base
-from .databaseModels.game import Game, addGame, getGameFromGameName
-from .databaseModels.attempt import Attempt, addAttempt, getAttempt
-from .databaseModels.location import Location, getLocations, getLocationRecordByName
-from .databaseModels.trainer import Trainer, getTrainers, getTrainerRecordByName, getIDTrainerPokemon
-from Logic.databaseModels.trainer import fillTrainerTypeTable
+from Logic.databaseModels import Base
+from Logic.databaseModels.game import Game, addGame, getGameRecord, NLS, getGames, gameExists
+from Logic.databaseModels.attempt import Attempt, addAttempt, getAttempt, getAttempts
+from Logic.databaseModels.location import Location, getLocations, getLocationRecordByName
+from Logic.databaseModels.trainer import Trainer, getTrainers, getTrainerRecordByName, getIDTrainerPokemon
+from Logic.databaseModels.trainer import fillTrainerTypeTable, getTrainerTypeRecordByID, getTrainerTypes
 from Logic.databaseModels.typing import fillTypeTable, addTyping
 from Logic.databaseModels.ability import fillAbilitySlotTable, getIDAbilityByName, doesPokemonAbilitiesExist
-from Logic.databaseModels.pokemon import getIDPokemonByName, getPokemonNames
+from Logic.databaseModels.pokemon import getIDPokemonByName, getPokemons
+from Logic.databaseModels.infoTables import getGenders
 from Logic.games import newGameString, newAttemptString
 from Logic.reader import Reader
 
@@ -114,26 +114,25 @@ class DataRetriever():
     
     def validateDatabasePath(self, databasePath: str):
         return os.path.exists(databasePath)
+#region game
     
     def gameExists(self, gameName: str) -> bool:
         with self.databaseSession() as session:
-            exists = False if session.query(Game).filter(Game.name == gameName).first() == None else True
+            exists = gameExists(session, gameName)
         return exists
     
-    def retrieveGameList(self):
+    def getGames(self, text: str = ""):
         """returns a list of the games available with an option to create a new game"""
-        games = []
+        games = {}
         with self.databaseSession() as session:
-            games = [game.name for game in session.query(Game).all()]
-            
-        games.append(newGameString)
+            games = getGames(session, text)
+        games[0] = newGameString
         return games
 
-    def getGameRecordFromGameName(self, gameName: str) -> Game | None:
+    def getGameRecord(self, IDGame: int) -> Game | None:
         with self.databaseSession() as session:
-            game = getGameFromGameName(session, gameName)
-            if not game:
-                return None
+            game = getGameRecord(session, IDGame)
+            session.refresh(game)
             session.expunge(game)
         return game
     
@@ -149,34 +148,32 @@ class DataRetriever():
             session.expunge(game)
         return game
 
-    def getSaveFilesList(self, IDGame: int) -> list[str]:
-        """returns a list of the attempts made with a 'New attempt' option. Should be called after the game is selected"""
+    def getAttempts(self, IDGame: int) -> list[str]:
+        attempts = {}
+        with self.databaseSession() as session:
+            attempts = getAttempts(session, IDGame)
+        attempts[0] = newAttemptString
+        return attempts
+
+    def newAttempt(self, IDGame: int) -> Attempt:
         #creates all folders if they don't already exist
         #TODO wanneer nieuwe game wordt aangemaakt of wanneer validatie data
         #self.setFolderVariables(gameName)
         #self.createGameFolders(gameName)
-        saveFiles = []
-        
-        with self.databaseSession() as session:
-            saveFiles = ["attempt " + str(saveFile.attemptNumber) for saveFile in session.query(Attempt).filter(Attempt.IDGame == IDGame).all()]
-            
-        saveFiles.append(newAttemptString)
-        return saveFiles
-
-    def newAttempt(self, IDGame: int) -> Attempt:
         with self.databaseSession() as session:
             attempt = addAttempt(session, IDGame)
             session.refresh(attempt)
             session.expunge(attempt)
         return attempt
     
-    def getAttemptRecord(self, IDGame: int, attemptNumber: int) -> Attempt | None:
+    def getAttemptRecord(self, IDAttempt: int) -> Attempt | None:
         attempt = None
         with self.databaseSession() as session:
-            attempt = getAttempt(session, IDGame, attemptNumber)
+            attempt = getAttempt(session, IDAttempt)
             session.refresh(attempt)
             session.expunge(attempt)
         return attempt
+#endregion
         
     def getLocationRecord(self, locationName: str, IDGame: int) -> Location:
         with self.databaseSession() as session:
@@ -184,11 +181,6 @@ class DataRetriever():
             session.refresh(locationRecord)
             session.expunge(locationRecord)
         return locationRecord
-
-    def getLocationNames(self, gameRecord: Game, subName: str = "") -> list[str]:
-        with self.databaseSession() as session:
-            locationList = getLocations(session, gameRecord, subName)
-        return locationList
     
     def getTrainerNames(self, locationRecord: Location) -> list[str]:
         with self.databaseSession() as session:
@@ -218,6 +210,49 @@ class DataRetriever():
             IDPokemon = getIDPokemonByName(session, pokemonName)
         return IDPokemon
     
+    def getPokemons(self, subName: str = ""):
+        with self.databaseSession() as session:
+            pokemonDict = getPokemons(session, subName)
+        return pokemonDict
+
+    def getLocations(self, attemptRecord: Attempt, text: str = "") -> dict[int: str]:
+        with self.databaseSession() as session:
+            locations = getLocations(session, attemptRecord, text)
+        return locations
+    
+    def getTrainerTypes(self, attemptRecord: Attempt, text: str = ""):
+        with self.databaseSession() as session:
+            trainerTypes = getTrainerTypes(session, text) # attemptRecord, text)
+        return trainerTypes
+    
+    def getTrainerTypeRecordByID(self, IDtrainerType: int):
+        with self.databaseSession() as session:
+            trainerTypeRecord = getTrainerTypeRecordByID(session, IDtrainerType)
+            session.refresh(trainerTypeRecord)
+            session.expunge(trainerTypeRecord)
+        return trainerTypeRecord
+
+    def getGenders(self):
+        with self.databaseSession() as session:
+            genders = getGenders(session)
+        return genders
+
+    def getLookupValues(self, nlsType: NLS, attemptRecord: Attempt, text: str = "", IDParam1 = None) -> dict:
+        """retuns dictionary of lookup table, ID: name"""
+        match nlsType:
+            case NLS.GENDER:
+                return self.getGenders()
+            case NLS.TRAINERTYPE:
+                return self.getTrainerTypes(attemptRecord, text)
+            case NLS.POKEMON:
+                return self.getPokemons(text)
+            case NLS.LOCATION:
+                return self.getLocations(attemptRecord, text)
+            case NLS.GAME:
+                return self.getGames(text)
+            case NLS.ATTEMPT:
+                return self.getAttempts(IDParam1) #IDGame
+    
     
     def updateRecord(self, record) -> bool:
         success = True
@@ -241,7 +276,18 @@ class DataRetriever():
                 logger.error(f"error during insert: {e}")
                 success = False
         return success
-    
+
+    def deleteRecord(self, record):
+        success = True
+        with self.databaseSession() as session:
+            session.delete(record)
+            try:
+                session.commit()
+            except Exception as e:
+                logger.error(f"error during insert: {e}")
+                success = False
+        return success
+
     def insertBaseData(self):
         self.insertBasePokemonTypes()
         self.insertTrainerTypes()

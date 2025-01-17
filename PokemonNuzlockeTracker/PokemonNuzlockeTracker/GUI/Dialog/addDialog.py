@@ -21,13 +21,26 @@ class AddDialog(MDDialog):
         self.auto_dismiss = False
         self.type = "custom"
         self.pos_hint = {"center_x": 0.5, "center_y": 0.65}
-        self.okButton = MDFlatButton(text = "apply", on_release = self.onOK)
+        self.okButton = MDFlatButton(text = "add", on_release = self.onOK)
         self.cancelButton = MDFlatButton(text = "discard", on_release = self.dismiss)
-        self.buttons = [self.okButton, self.cancelButton]
+        self.deleteButton = MDFlatButton(text = "delete", md_bg_color = "red", opacity = 0, disabled = False)
+        self.buttons = [self.deleteButton,self.okButton, self.cancelButton]
         super().__init__(**kwargs)  
     
     def onOK(self, instance):
         self.dismiss()
+
+class EditDialog(AddDialog):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.okButton.text = "save changes"
+        self.cancelButton.text = "discard changes"
+        self.deleteButton.opacity = 1
+        self.deleteButton.disabled = False
+        self.deleteButton.bind(on_release = self.onDelete)
+    
+    def onDelete(self, instance):
+        self.onOK(instance)
 
 
 class AddItemDialog(AddDialog):

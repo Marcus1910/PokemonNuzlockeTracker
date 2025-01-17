@@ -24,8 +24,9 @@ class Pokemon(Base):
 def getIDPokemonByName(session, pokemonName) -> int:
     return session.query(Pokemon.IDPokemon).filter(Pokemon.name == pokemonName).scalar()
 
-def getPokemonNames(session, subname: str = ""):
-    return [pokemon.name for pokemon in session.query(Pokemon.name).filter(Pokemon.name.like(f"%{subname}%")).all()]
+def getPokemons(session, subname: str = ""):
+    return {pokemon.IDPokemon: pokemon.name for pokemon in session.query(Pokemon).filter(Pokemon.name.like(f"%{subname}%")).order_by(Pokemon.dexNo).limit(100).all()}
+
 
 class TrainerPokemon(Base):
     __tablename__ = "TrainerPokemon"

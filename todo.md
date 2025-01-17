@@ -1,113 +1,107 @@
-***************************************TestRun*******************************
-!switch to db file
-webscrape all pokemon info gen 1-10 -> only update if different -> add stats
-    check if db file present if not popup -> create new db
-    On startup check if database is up to date with python objects -> upgrade if not -> popup
-    convert all read json to database entries -> game filepath encounters
-    Game needs filepaths, movesets, abilities, pokemonchanges, encounters -> json format
-    other application that reads txt or excel and converts it into json -> use existing data to smartly do it (potion, known pokemon)
-    New game -> idparentgame not null -> copy trainers,items,location,pokemon inidivdual checkmarks. insert select where x=x
-    database phone storage ipv in data
-    encountertypes -> static, walking, gift, surfing
+__TestRun__
+    __NuzlockeScreen__
+    __trainerscreen__
+        ~~add Trainers~~
+            ~~NuzlockeSpinner -> NLS -> app.get_running_app.manager.getLUValues(NLSType, param 2, param3)~~
+        ~~edit trainers~~
+            ~~add editdialog~~
+            ~~AddTrainerBox -> 2 states add and edit ->~~ picture functions as button defeated. ~~only edit has remove trainer button~~
+        add trainerpokemon to trainers -> empty boxlayout -> check before you can swipe
+        edit trainerpokemon
+            change box(header) to editBox 
+            more info -> pokemonInfoScreen -> give trainerPokemonID to Box. Show all data 
+            list of levelup moves with level -> onpress add to learnset -> learnset textfields allow all moves
+    __encounter screen__
+        catch encounters
+        add new encounters
+        edit encounters
+        add new locationTypes (dark grass, surfing) per location
+        more info -> pokemonInfoScreen
+        dbcompLocation -> canCatch -> trigger?
+    __attemptInfoScreen__
+        continue graveyard
+        continue arena
+        continue lost and found
+    __ITEMSCREEN__
+        add items
+        remove items
+        edit items
+    __basedata screen__
+        Add all basedate -> new pokemon, new trainertype, new typing, alter typechart. all options in nuzlockespinner
+        Basedata screen -> addNewBaseData -> items, moves etc
+    __location__
+        Remove locations
+        update new location popup to dialog
+        Getlocation -> returns dictionary {name: canCatch} -> display green/ red
+        tabs for multiple floors
+    __general__
+        add error message popups before game has 'started'
+        ~~Class NuzlockeSpinner -> textfield + dropdown already in nuzlockescreen~~
+        Rethink scrollview
+        exit game popup
 
-~~add Trainers~~
-edit trainers
-    AddTrainerBox -> 2 states add and edit -> picture functions as button defeated. only edit has remove trainer button
-add trainerpokemon to trainers
-edit trainerpokemon 
-    list of levelup moves with level -> onpress add to learnset -> learnset textfields allow all moves
-
-Basedata screen -> addNewBaseData -> items, moves etc
-
-Catch wild pokemon
-grab items
-display caught pokemon
-
-get all pokemoninfo gen 1 - 9
-save in different folders
-Start pokemon changes documentation
-
-add error message popups before game has 'started'
-
-GAME
-    Overhaul backend object to include easier way to add observers, quite a cluster now
-        base object with addobserver?    
-    give game gen attribute to read
-    AREA
-        Treat multiple floors as singular object or new Area object with multiple areas
-            db - parentArea
-    TRAINERS
-        How double battles
-    ITEMS
-        grab items, add items, dropdown for items
-    POKEMON
-        get possible moves from db -> input with automatic dropdown
-        get possible abilities from db -> input with automatic dropdown
-
-KIVY
-    change when screen are added to manager
-    edit area
-    remove area's
-    change area spinner so dropdown is entire screen
-    update new area popup to dialog
-    change removed items location to lost&found
-    back button -> popup leave game, check if screen is a edit screen, message continue editing. else message save and exit or just exit
-    exit without saving -> save temporary, next startup ask to save with list of adjustments
-    snackbar errors / info
-    tabs for multiple floors
-    badges to display if can catch pokemon, color coded background?
-    navigationbar different screens
-    MAINSCREEN
-        edit game
-        remove game
-        set direction to Settings screen
-    ATTEMPTINFOSCREEN
-        read arena and retirement and place images
-        tabs for info, arena, retirement and lost & found (sub tabs trainerpokemon encounterpokemon and items)
+__nice to have__
+    Own eventDispatcher -> can integrate APi calls to screen software
+    optimize lookup -> more characters added, filter memory instead of new query
+    when adding new games -> "selects" game, only sets text
+    How handle editing rights, screen capture -> mistake -> manual edit -> at same time?
+    __screenCapture__
+        Script that records gameplay -> saves it to folder
+        Convert recorded gameplay to database records -> ai?
+        Keep track of changes -> replay battles using pokemonShowdown?
+        redis kafka for database
+        autosave game every x minutes -> needed?
+    __general__
+        __database__
+            check if db file present if not popup -> create new db -> no databse detected -> first time (tutorial)
+            On startup check if database is up to date with python objects -> upgrade if not -> popup
+            database phone storage ipv in data
+            DB how real time update without polling, if needed?
+            Database location outside phone
+        __settings__ 
+            settings per game / global settings
+            settings -> read from outside
+            duplicate clause and evolutionary clause (default on)
+            shiny clause (on)
+            option to change wallpaper
+                check standard image(s) for copyright
+            check if moves are valid, option in settings
+            sort route list option, own choice
+        __pokemonData__
+            add trainertype data
+            webscrape all pokemon info gen 1-10 -> only update if different -> add stats
+            Other application that reads txt or excel and converts it into json which inserts it into database -> use existing data to smartly do it (potion, known pokemon) 
+        __layout__
+            every screen has its own spinner for area -> one central spinner
+            change nuzlockespinner so dropdown is entire screen 
+            navigationbar different screens
+            When selecting route, automatically center route chosen when choosing other route  
+        Lost&Found
+        back button -> popup leave game, check if screen is a edit screen, message continue editing. else message save and exit or just exit
+        kivy bubbles
+        create file that displays all changes made, in case saving corrupts or undo's
+        export/import save data -> game data
+        export showdown
+    __game__
+        New game -> idparentgame not null -> copy trainers,items,location,pokemon inidivdual checkmarks. insert select where x=x
+        Option remove / edit game
+    __trainerscreen__
+        add all database fields -> trainer dialogs -> boxes
+        How double battles?
+        pokeballs / sprites to quickly show how many pokemon
+        dialog -> add nuzlockespinner -> images (popup)
+    __atemptInfoScreen__
         show amount of encounters catchable
-        show badges
-        show next boss trainer  
-    TRAINERSCREEN
-        ~~Add observers for trainer detail screen~~
-        ~~edit trainerPOkemon detailed view to show possible abilities and moves, dummy data~~
-        add bossTrainer to edit trainer box
-        ~~popup delete trainer~~
-        kivy bubble move accuracy and power + secondary effect
-        kivy bubble ability information
-        adjust size of detailedpokemonbox so it is visible, self.trainerbox.height = x if not x
-    ENCOUNTERSCREEN
-        catch pokemon -> create playerpokemon -> arena
-        release pokemon -> retirement
-        remove pokemon from area
-        give headers standard size and use expandable box
-        edit encounter pokemon
-        see possible moves the pokemon has as well as abilities
-        add new areatype
-    ITEMSCREEN
-        grab items
-        remove item
-        edit item
-        add new items
-        show more info about item, read from json
-    POKEMONINFOSCREEN
-        search for specific pokemon
-        display everything from pokemon
-        where it is caught
-        which trainers have it so far
-        levelup moves
-        tm/hm
-        basestats
-        evolution line + method
-    SETTINGSCREEN
-        edit trainer header and content height
-        edit trainerpokemon header and content height
-        edit pokemonEncounter header and content height
-        edit item header and content height
-        x and y sensitivity for scrolling
-        ~~amount of mb gameObject is~~
-        ~~amount of mb app consumes~~
-        Trust game data, remove all inputs for pokemon abilities
-    Statistics screen
+        show next boss trainer 
+        click on pokemon -> pokemonInfo -> display where caught and where died if applicable
+    __pokemonInfoScreen__
+        pokemonInfo (standard readonly)
+            Types -> Base, trainer, location, player
+            name, image, dexno, parentPokemon (base), level(not base),  learnedmoves (not Base/ add/remove), levelupmoves (add/remove), typing (add/remove), origin (trainer, location, player), 
+            helditem (not base), abilities (active ability bold/green whatever), gender (trainer, player), defeated (trainer), nickname (player), encounterRate(encounter), tms hms (Base, encounter, player)    
+        edit pokemon -> editbutton
+        add non-canon pokemon with name and use own sprite or ?.png
+    __Statistics screen__
         Kills per pokemon
         crits per pokemon
         items used / gathered
@@ -115,65 +109,8 @@ KIVY
         Crits taken
         Graph when pokemon died
 
-
----STEPS TO TAKE FOR BETA---
-*******************************Further development*************************
-look at threading to gather mutiple widgets in a for loop for optimization
-create file that displays all changes made, in case saving corrupts or undo's
-export/import save data
-add base stats graph, possible moves/abilities to base pokemon
-export Trainer to showdown format
-export route trainers to showdown format
-export all trainers to showdown format
-    optionmenu for single trainer, route, all
-add / delete routes
-add game object inheritance to also allow http, keep it locally as well for crashes
-error? if 1 or more pokemon caught same route (default on) "you have already caught pokemon x on this route"
-ugly solution, change saves for different phone. export to folder/over wifi to other device?, import from folder
-
-
-****************************retropie**************************
-Opencv to overlay on game
-create sdm image
-
-
-*************************Settings*******************************
-settings button front page
-    show available areas per badge - option on or off (default off)
-    
-    checkmark after route name if pokemon already caught that route (default on)
-    duplicate clause and evolutionary clause (default on)
-    shiny clause (on)
-    option to change wallpaper
-        check standard image(s) for copyright
-
-*****************************extras***************************
-show all available pokemon per route vanilla games
-show all available trainer data vanilla games
-show all available items per route vanilla games
-
-use a movelist to validate moves used
-basic logic for getting encounters from rom hack documentation
-read encountertable data from rom -> check if it is possible
-    import pkhex file to display caught pokemon and update caught pokemon in areas
-add window to make adding games easier
-figure out how to change typings/ base stats in showdown, probably create own showdown from base showdown
-add map to display encounters, in correlation with number of badges, colour coding
-add nickname, shiny, level etc from caught pokemon
-add list of moves
-check if moves are valid, option in settings
-generate catchable pokemon by reading old savestates, only for blind nuzlockes. settings option, add statistics which pokemon was caught at every route
-add non-canon pokemon with name and use own sprite or ?.png
-sort route list option, own choice
-When selecting route, automatically center route chosen when choosing other route
-When selecting areatype for encounters, use scrollview to teleport to correct position and have all pokemon visible in a large layout
-export import saves, files on android will be saved to internal storage and windows will exclude /games/*
-settings button on front page, settings page two tabs, general and game specific based on game chosen
-read from internal storage instead of copying everything to the program at startup
-1 function for searching for pokemon images
-
-trainerscreen add quick view to headerbutton, sprites of pokemon / pokeball empty is less than 6
-overhaul db performance? - 2 versions for comparison
-class data importer -> import data from files
-bubble arena graveyard pokemon
-uitvogelen hoe met screen capture software - > redis kafka etc
+__Finishingtouches__(2026)
+    read encountertable data from rom -> check if it is possible
+    figure out how to change typings/ base stats in showdown, probably create own showdown from base showdown -> custom calculator
+    add map to display encounters, in correlation with number of badges, colour coding
+    generate catchable pokemon by reading old savestates, only for blind nuzlockes. settings option, add statistics which pokemon was caught at every route

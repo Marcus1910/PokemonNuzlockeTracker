@@ -7,6 +7,7 @@ from GUI.Dialog.trainerDialog import AddTrainerDialog
 from GUI.nuzlockeScreen import NuzlockeScreen
 from GUI.expandableBox import ExpandableTrainerBox
 from GUI.transparentButton import TransparentButton
+from GUI.eventBus import eventBus
 
 from loggerConfig import logger
 
@@ -20,7 +21,7 @@ class TrainerScreen(NuzlockeScreen):
         self.locationRecord = None
         #trainer Object for current trainer
         self.trainers = None 
-
+        self.spinner.valueChangedFunction = self.spinnerValueChanged
         #box that contains all expandabletrainerboxes
         self.trainerBox = GridLayout(size_hint_y = None, cols = 1)
         self.trainerBoxScroll = ScrollView(size = (self.trainerBox.width, self.trainerBox.height))
@@ -37,20 +38,26 @@ class TrainerScreen(NuzlockeScreen):
         self.screenBox.add_widget(self.trainerBoxScroll)
         self.screenBox.add_widget(self.newTrainerButton)
     
-    def areaChanged(self, spinner, text) -> None:
-        if not super().areaChanged(spinner, text):
-            #invalid area, should not be able to add new Trainer to it
+    def updateLayout(self, validLocation: bool):
+        if not validLocation:
             self.newTrainerButton.disabled = True
             return
-
         self.locationRecord = self.manager.locationRecord
         self.updateTrainers()
         self.newTrainerButton.disabled = False
     
+    def spinnerValueChanged(self, text) -> None:
+        self.updateLayout(super().spinnerValueChanged(text))
+
+    def on_pre_enter(self):
+        eventBus.bind(on_updateTrainer = self.updateTrainers)
+        self.updateLayout(super().on_pre_enter())
+    
     def on_leave(self):
+        eventBus.unbind(on_updateTrainer = self.updateTrainers)
         super().on_leave()
 
-    def updateTrainers(self) -> None:
+    def updateTrainers(self, *args) -> None:
         """reloads the expandabletrainerboxes with updated trainer dict"""
         noTrainers = True
         
@@ -61,7 +68,6 @@ class TrainerScreen(NuzlockeScreen):
             noTrainers = False
             trainerRecord = self.manager.getTrainerRecord(trainerName)
             box = ExpandableTrainerBox(trainerRecord)
-            #trainer.addRemoveObserver(self.updateTrainers)
             self.trainerBox.add_widget(box)
 
         if noTrainers:
@@ -79,5 +85,5 @@ class TrainerScreen(NuzlockeScreen):
     def addNewTrainer(self, instance):
         """displays the edittrainerBox for a new trainer to be added"""
         logger.debug("create dialog to add new trainer")
-        dialog = AddTrainerDialog(self.updateTrainers)
+        dialog = AddTrainerDialog()
         dialog.open()

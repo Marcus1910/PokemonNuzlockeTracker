@@ -39,17 +39,17 @@ class DetailedPokemonBox(MDBoxLayout):
 
         self.levelInput = TextInput(hint_text = "Level", multiline = False, size_hint_x = 0.3)
         self.levelInput.bind(focus = self.updateLevel)
-        self.nameLevelBox = BoxLayout(orientation = "horizontal", size_hint_y = 0.15)
+        self.nameLevelBox = MDBoxLayout(orientation = "horizontal", size_hint_y = 0.15)
         #add pokemon image
-        self.imageBox = BoxLayout(size_hint_y = 0.75)
+        self.imageBox = MDBoxLayout(size_hint_y = 0.75)
         self.pokemonImage = Image(source = getPokemonSprite("0.png"), pos_hint = {"top": 1})
         self.pokemonImage.fit_mode = "contain"
 
-        self.nameImageBox = BoxLayout(orientation = "vertical", size_hint_x = 0.4)
+        self.nameImageBox = MDBoxLayout(orientation = "vertical", size_hint_x = 0.4)
         
         #add information about pokemon, ability, held item, typing
-        self.pokemonInfoBox = BoxLayout(orientation= "vertical", size_hint_x = 0.3, pos_hint = {"top": 1})
-        self.abilityBox = BoxLayout(orientation = "vertical", size_hint_y = 0.5)
+        self.pokemonInfoBox = MDBoxLayout(orientation= "vertical", size_hint_x = 0.3, pos_hint = {"top": 1})
+        self.abilityBox = MDBoxLayout(orientation = "vertical", size_hint_y = 0.5)
         self.abilityInput = TextInput(hint_text = "ability", multiline = False)
         self.abilityInput.bind(focus = self.updateAbility)
         self.abilityBox.add_widget(self.abilityInput)
@@ -60,10 +60,10 @@ class DetailedPokemonBox(MDBoxLayout):
         self.typing1Input = TextInput(hint_text = "typing 1", multiline = False, size_hint_y = 0.1)
         self.typing2Input = TextInput(hint_text = "typing 2", multiline = False, size_hint_y = 0.1)
 
-        self.moveBox = BoxLayout(orientation = "vertical", size_hint_y = 0.3)
+        self.moveBox = MDBoxLayout(orientation = "vertical", size_hint_y = 0.3)
         self.pokemonObject.addLearnedMoveObserver(self.updateMoveBox)
 
-        self.possibleMoveBox = BoxLayout(orientation = "vertical", size_hint_x = 0.3, pos_hint = {"top": 1})
+        self.possibleMoveBox = MDBoxLayout(orientation = "vertical", size_hint_x = 0.3, pos_hint = {"top": 1})
     
         self.removeButton = TransparentButton(text = "Remove Pokemon", size_hint_y = 0.1, on_release = self.deletePokemonPopup)
         self.removeButton.redColor()
@@ -122,7 +122,7 @@ class DetailedPokemonBox(MDBoxLayout):
         possibleMoves = self.pokemonObject.getLevelupMoves()
         for level, move in possibleMoves.items():
             #create level label and move button
-            moveBox = BoxLayout(orientation = "horizontal")
+            moveBox = MDBoxLayout(orientation = "horizontal")
             levelLabel = Label(text = str(level), size_hint_x = 0.2)
             moveButton = TransparentButton(text = move, size_hint_x = 0.8, on_release = lambda btn, move=move: self.addLearnedMove(move))
             moveBox.add_widget(levelLabel)

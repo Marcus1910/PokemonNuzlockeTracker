@@ -30,6 +30,8 @@ transfer APK to phone
     There are multiple ways to transfer the APK to your phone, one is to manually connect your phone to your computer through a USB cable and drag the APK to your phone. Then you can install it to your phone.
     This way however is, in my opinion, tedious for multiple deployments. So I opt for using adb which can install it to your phone through a wifi connection. Both machine and phone need to be connected to the same wifi network for this to work.
 
+    completely wireless: https://www.androidpolice.com/use-wireless-adb-android-phone/
+
     To use adb, first connect your phone to your machine through USB, if asked to allow access to your phone, press yes. Unlock developer options on your phone, usually done by tapping build number 7 times in the settings menu. Then enable usb debugging and wireless debugging. Also take note of the IP address your phone has as we'll need it later.
     On windows unzip the platform tools folder and open a terminal (cmd) there, NO powershell as that doesn't work. Use left shift + right click in the folder to get the terminal option.
     In the terminal run *adb devices*, it should show your device connected through USB, now run *adb tcpip 5555* to start the service on port 5555 and you can remove the USB cable. The windows terminal can now be closed.
@@ -37,6 +39,8 @@ transfer APK to phone
     On Linux run *adb connect PHONE_IP:5555* to connect to your phone, this should start a new service and also ask for permission on your phone. Allow the connection.
     Navigate to PokemonNuzlockeTracker/bin, the location where the APK is and run *adb -s PHONE_IP:5555 install APK_NAME*, both PHONE_IP and APK_NAME can be autocompleted using the TAB key. It should now install to your phone. When you want to deploy again you only have to use the linux commands to connect and to install.
     use adb -s 192.168.178.227:5555 logcat *:S python:D if you want to see what the terminal displays
+
+    
 
 
 
@@ -49,5 +53,5 @@ ERRORS
 
     streaming to phone
     Failure [INSTALL_FAILED_UPDATE_INCOMPATIBLE: Existing package org.test.nuzlocketracker signatures do not match newer version; ignoring!]
-        -> keystore maybe?
+        -> If you are using a virtual environment create an own keystore to package the APK, remove the application first
     Remove the application from your phone and retry
